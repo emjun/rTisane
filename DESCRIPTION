@@ -1,0 +1,13 @@
+Package: tisaner
+Title: Tisane for R: Authoring Statistical Models via Formal Reasoning from Conceptual and Data Relationships 
+Version: 0.0.1
+Authors@R: 
+    person("Eunice", "Jun", , "eunice.m.jun@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4050-4284"))
+    person("Audrey", "Seo", , "audreyleeseo@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2928-3721"))
+Description: Specification language for generating Generalized Linear Models (with or without mixed effects) from conceptual models 
+License: Apache-2.0 License
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2.9000
