@@ -51,16 +51,18 @@ setClass("Nests", representation(base = "Unit", group = "Unit"))
 
 setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(cause, effect) 
 {
+  # create a Causes relationship obj
   relat = Causes(cause=cause, effect=effect)
-  cause.relationships <- append(cause.relationships, relat)
-  effect.relationships <- append(effect.relationships, relat)
+  # append the Causes relationship obj to both @param cause and effect variables
+  cause@relationships <- append(cause@relationships, relat)
+  effect@relationships <- append(effect@relationships, relat)
 })
 
 setMethod("associates_with", signature("AbstractVariable", "AbstractVariable"), function(lhs, rhs)
 {
   relat = Associates(lhs=lhs, rhs=rhs)
-  lhs.relationships <- append(lhs.relationships, relat)
-  rhs.relationships <- append(rhs.relationships, relat)
+  lhs@relationships <- append(lhs@relationships, relat)
+  rhs@relationships <- append(rhs@relationships, relat)
 })
 
 # Question: How to specify Union (AbstractVariable or List of Abstract Variables?)
@@ -73,10 +75,9 @@ setMethod("moderates", signature("AbstractVariable", "Union(AbstractVariable, Li
 setMethod("nests_within", signature("AbstractVariable", "AbstractVariable"), function(base, group)
 {
   relat = Nests(base=base, group=group)
-  base.relationships <- append(base.relationships, relat)
-  group.relationships <- append(group.relationships, relat)
+  base@relationships <- append(base@relationships, relat)
+  group@relationships <- append(group@relationships, relat)
 })
-
 
 # Variable types
 setClass("Unit", representation(cardinality = "int"), contains = "AbstractVariable")
