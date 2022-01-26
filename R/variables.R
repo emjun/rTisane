@@ -21,9 +21,12 @@ setClass("Nests", representation(base = "Unit", group = "Unit"))
 
 setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(cause, effect) 
 {
-
+ # create a Causes relationship obj
+ cause_relat = Causes(cause=cause, effect=effect)
+ # append the Causes relationship obj to both @param cause and effect variables
+ cause@relationships = append(cause@relationships, cause_relat)
+ effect@relationships = append(effect@relationships, cause_relat)
 })
-
 
 
 # Variable types
