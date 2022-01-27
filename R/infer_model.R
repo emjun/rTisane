@@ -7,5 +7,5 @@
 #' @examples
 #' infer_model()
 infer_model <- function(design){
-  tisaner::return infer_statistical_model_from_design(design=design)
+  tisaner::infer_statistical_model_from_design(design=design)
 }

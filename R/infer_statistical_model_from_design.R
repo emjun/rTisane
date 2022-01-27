@@ -7,5 +7,5 @@
 #' @examples
 #' infer_statistical_model_from_design()
 infer_statistical_model_from_design <- function(design){
-    return FALSE
+    FALSE
 }
