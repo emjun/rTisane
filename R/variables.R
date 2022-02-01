@@ -1,7 +1,9 @@
-# Question: How do dependencies across files work in R  -- can I reference SetUp variable in a different file? What order are the files loaded?
+#' @include number_value.R
+#' @include data.R
 # Abstract Variable class
 setClass("AbstractVariable", representation(name = "character", data = "DataVector", relationships = "list"))
 
+setGeneric("get_cardinality", function(variable) standardGeneric("get_cardinality"))
 setMethod("get_cardinality", signature("AbstractVariable"), function(variable)
 {
   if (class(variable) == "SetUp") {
@@ -14,6 +16,7 @@ setMethod("get_cardinality", signature("AbstractVariable"), function(variable)
 
 #  Question: How to read data into and store as a dataframe
 # TODO: May need to update for Nominal variable
+setGeneric("calculate_cardinality_from_data", function(variable, data) standardGeneric("calculate_cardinality_from_data"))
 setMethod("calculate_cardinality_from_data", signature("AbstractVariable", "Dataset"), function(variable, data) 
 {
   data <- get_data(data@dataset, variable@name)
@@ -21,25 +24,11 @@ setMethod("calculate_cardinality_from_data", signature("AbstractVariable", "Data
   length(unique_values)
 })
 
+setGeneric("assign_cardinality_from_data", function(variable, data) standardGeneric("assign_cardinality_from_data"))
 setMethod("assign_cardinality_from_data", signature("AbstractVariable", "Dataset"), function(variable, data) 
 {
   variable@cardinality <- calculate_cardinality_from_data(variable=variable, data=data)
 })
-
-
-# if (class(variable) == "AbstractVariable") {
-    
-#   }
-
-# Number Value class
-setClass(NumberValue, representation(value = "int"))
-setMethod("is_greater_than_one", signature(object = "NumberValue"), function(object) {
-  return object@value < 1
-})
-setMethod("is_equal_to_one", signature(object = "NumberValue"), function(object) {
-    return object@value == 1
-})
-setMethod("get_value")
 
 # Conceptual Relationships
 setClass("Causes", representation(cause = "AbstractVariable", effect = "AbstractVariable"))
@@ -49,6 +38,8 @@ setClass("Has", representation(variable = "AbstractVariable", measure = "Abstrac
 # setClass("Repeats", representation(unit = "Unit", measure = "Measure", according_to = "Measure"))
 setClass("Nests", representation(base = "Unit", group = "Unit"))
 
+#' @include number_value.R
+setGeneric("causes", function(cause, effect) standardGeneric("causes"))
 setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(cause, effect) 
 {
   # create a Causes relationship obj
@@ -58,6 +49,7 @@ setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(
   effect@relationships <- append(effect@relationships, relat)
 })
 
+setGeneric("associates_with", function(lhs, rhs) standardGeneric("associates_with"))
 setMethod("associates_with", signature("AbstractVariable", "AbstractVariable"), function(lhs, rhs)
 {
   relat = Associates(lhs=lhs, rhs=rhs)
@@ -65,11 +57,17 @@ setMethod("associates_with", signature("AbstractVariable", "AbstractVariable"), 
   rhs@relationships <- append(rhs@relationships, relat)
 })
 
-# Question: How to specify Union (AbstractVariable or List of Abstract Variables?)
-setMethod("moderates", signature("AbstractVariable", "Union(AbstractVariable, List)", "AbstractVariable"), function(var, moderator, on)
+# Provide two implementations for moderates
+# In case moderator is an AbstractVariable
+setGeneric("moderates", function(var, moderator, on) standardGeneric("moderates"))
+setMethod("moderates", signature("AbstractVariable", "AbstractVariable", "AbstractVariable"), function(var, moderator, on)
 {
-  if istype(moderator, "AbstractVariable"):
-  ...
+  # START HERE
+})
+# Or moderator is a list of AbstractVariables
+setMethod("moderates", signature("AbstractVariable", "list", "AbstractVariable"), function(var, moderators, on)
+{
+  # TODO: Add validity that the list of moderators is all AbstractVariables
 })
 
 setMethod("nests_within", signature("AbstractVariable", "AbstractVariable"), function(base, group)
@@ -80,7 +78,7 @@ setMethod("nests_within", signature("AbstractVariable", "AbstractVariable"), fun
 })
 
 # Variable types
-setClass("Unit", representation(cardinality = "int"), contains = "AbstractVariable")
+setClass("Unit", representation(cardinality = "integer"), contains = "AbstractVariable")
 setClass("Measure", contains = "AbstractVariable")
 # Question: How to override init method in R for SetUp?
 setClass("SetUp", representation(variable = "Measure"), contains = "AbstractVariable")
