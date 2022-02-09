@@ -17,7 +17,7 @@ setMethod("get_cardinality", signature("AbstractVariable"), function(variable)
 #  Question: How to read data into and store as a dataframe
 # TODO: May need to update for Nominal variable
 setGeneric("calculate_cardinality_from_data", function(variable, data) standardGeneric("calculate_cardinality_from_data"))
-setMethod("calculate_cardinality_from_data", signature("AbstractVariable", "Dataset"), function(variable, data) 
+setMethod("calculate_cardinality_from_data", signature("AbstractVariable", "Dataset"), function(variable, data)
 {
   data <- get_data(data@dataset, variable@name)
   unique_values <- get_unique_values(data)
@@ -25,7 +25,7 @@ setMethod("calculate_cardinality_from_data", signature("AbstractVariable", "Data
 })
 
 setGeneric("assign_cardinality_from_data", function(variable, data) standardGeneric("assign_cardinality_from_data"))
-setMethod("assign_cardinality_from_data", signature("AbstractVariable", "Dataset"), function(variable, data) 
+setMethod("assign_cardinality_from_data", signature("AbstractVariable", "Dataset"), function(variable, data)
 {
   variable@cardinality <- calculate_cardinality_from_data(variable=variable, data=data)
 })
@@ -34,13 +34,19 @@ setMethod("assign_cardinality_from_data", signature("AbstractVariable", "Dataset
 setClass("Causes", representation(cause = "AbstractVariable", effect = "AbstractVariable"))
 setClass("Associates", representation(lhs = "AbstractVariable", rhs = "AbstractVariable"))
 setClass("Moderates", representation(moderator = "AbstractVariable", on = "AbstractVariable"))
-setClass("Has", representation(variable = "AbstractVariable", measure = "AbstractVariable", repetitions = "NumberValue", according_to = "AbstractVariable"))
-# setClass("Repeats", representation(unit = "Unit", measure = "Measure", according_to = "Measure"))
+
+# Data Measurement Relationships
 setClass("Nests", representation(base = "Unit", group = "Unit"))
+# Specify Union type for number_of_instances
+# https://stackoverflow.com/questions/13002200/s4-classes-multiple-types-per-slot
+setClassUnion("integerORAbstractVariableORAtMostORPer", c("integer", "AbstractVariable", "AtMost", "Per"))
+setClass("Has", representation(unit = "Unit", measure = "AbstractVariable", number_of_instances = "integerORAbstractVariableORAtMostORPer"))
+
+
 
 #' @include number_value.R
 setGeneric("causes", function(cause, effect) standardGeneric("causes"))
-setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(cause, effect) 
+setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(cause, effect)
 {
   # create a Causes relationship obj
   relat = Causes(cause=cause, effect=effect)
@@ -62,14 +68,27 @@ setMethod("associates_with", signature("AbstractVariable", "AbstractVariable"), 
 setGeneric("moderates", function(var, moderator, on) standardGeneric("moderates"))
 setMethod("moderates", signature("AbstractVariable", "AbstractVariable", "AbstractVariable"), function(var, moderator, on)
 {
-  # START HERE
+  mods = list(var, moderator)
+  relat = Moderates(moderator=mods, on=on)
+  var@relationships <- append(var@relationships, relat)
+  moderator@relationships <- append(moderator@relationships, relat)
+  on@relationships <- append(on@relationships, relat)
 })
 # Or moderator is a list of AbstractVariables
-setMethod("moderates", signature("AbstractVariable", "list", "AbstractVariable"), function(var, moderators, on)
+setMethod("moderates", signature("AbstractVariable", "list", "AbstractVariable"), function(var, moderator, on)
 {
   # TODO: Add validity that the list of moderators is all AbstractVariables
+  mods = append(moderator, var)
+  relat = Moderates(moderator=mods, on=on)
+  var@relationships <- append(var@relationships, relat)
+  # Add Moderates relationship to all the moderating variables
+  for (m in moderator) {
+    m@relationships <- append(moderator@relationships, relat)
+  }
+  on@relationships <- append(on@relationships, relat)
 })
 
+setGeneric("nests_within", function(base, group) standardGeneric("nests_within"))
 setMethod("nests_within", signature("AbstractVariable", "AbstractVariable"), function(base, group)
 {
   relat = Nests(base=base, group=group)
@@ -86,12 +105,67 @@ setClass("SetUp", representation(variable = "Measure"), contains = "AbstractVari
 
 
 # Measure sub-types
-setClass("Nominal", representation(categories = "list"), contains = "Measure")
+setClass("Nominal", representation(name = "character", cardinality = "integer", categories = "list"), contains = "Measure")
 setClass("Ordinal", representation(order = "list"), contains = "Measure")
 setClass("Numeric", contains = "Measure")
 
 # Question: Defult value for methods in R?
-setMethod("nominal", signature("Unit", "character", ), function(base, group)
-{
 
+# Default value for number_of_instances is 1
+setGeneric("nominal", function(unit, name, cardinality, number_of_instances=1) standardGeneric("nominal"))
+# Definition for when @param number_of_instances is an integer
+setMethod("nominal", signature("Unit", "character", "integer", "integer"), function(unit, name, cardinality, number_of_instances)
+{
+  # Create new measure
+  measure = Nominal(name=name, cardinality=cardinality)
+  # Create has relationship
+  has_relat = Has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # Add relationship to unit
+  unit@relationships <- append(unit@relationships, has_relat)
+  # Add relationship to measure
+  measure@relationships <- append(measure@relationships, has_relat)
+  # Return handle to measure
+  measure
+})
+# Definition for when @param number_of_instances is an AbstractVariable
+setMethod("nominal", signature("Unit", "character", "integer", "AbstractVariable"), function(unit, name, cardinality, number_of_instances)
+{
+  # Create new measure
+  measure = Nominal(name=name, cardinality=cardinality)
+  # Create has relationship
+  has_relat = Has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # Add relationship to unit
+  unit@relationships <- append(unit@relationships, has_relat)
+  # Add relationship to measur
+  measure@relationships <- append(measure@relationships, has_relat)
+  # Return handle to measure
+  measure
+})
+# Definition for when @param number_of_instances is AtMost
+setMethod("nominal", signature("Unit", "character", "integer", "AtMost"), function(unit, name, cardinality, number_of_instances)
+{
+  # Create new measure
+  measure = Nominal(name=name, cardinality=cardinality)
+  # Create has relationship
+  has_relat = Has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # Add relationship to unit
+  unit@relationships <- append(unit@relationships, has_relat)
+  # Add relationship to measur
+  measure@relationships <- append(measure@relationships, has_relat)
+  # Return handle to measure
+  measure
+})
+# Definition for when @param number_of_instances is Per
+setMethod("nominal", signature("Unit", "character", "integer", "Per"), function(unit, name, cardinality, number_of_instances)
+{
+  # Create new measure
+  measure = Nominal(name=name, cardinality=cardinality)
+  # Create has relationship
+  has_relat = Has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # Add relationship to unit
+  unit@relationships <- append(unit@relationships, has_relat)
+  # Add relationship to measur
+  measure@relationships <- append(measure@relationships, has_relat)
+  # Return handle to measure
+  measure
 })

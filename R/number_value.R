@@ -11,3 +11,12 @@ setMethod("is_equal_to_one", signature(object = "NumberValue"), function(object)
   object@value == 1
 })
 # setMethod("get_value")
+
+# Exactly class
+
+# AtMost class
+# Upperbound of instances
+setClass("AtMost", representation(value = "integer"), contains = "NumberValue")
+
+# Per class
+setClass("Per", representation(number = "NumberValue", variable = "AbstractVariable", cardinality = "logical", number_of_instances = "logical", value = "integer"), contains = "NumberValue")
