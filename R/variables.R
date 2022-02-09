@@ -136,7 +136,7 @@ setMethod("has", signature("Unit", "Measure", "integerORAbstractVariableORAtMost
 # Default value for number_of_instances is 1
 setGeneric("nominal", function(unit, name, cardinality, number_of_instances=1) standardGeneric("nominal"))
 # Definition for when @param number_of_instances is an integer
-setMethod("nominal", signature("Unit", "character", "integer", "integer"), function(unit, name, cardinality, number_of_instances)
+setMethod("nominal", signature("Unit", "character", "integer", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, number_of_instances)
 {
   # Create new measure
   measure = Nominal(name=name, cardinality=cardinality)
@@ -145,32 +145,28 @@ setMethod("nominal", signature("Unit", "character", "integer", "integer"), funct
   # Return handle to measure
   measure
 })
-# Definition for when @param number_of_instances is an AbstractVariable
-setMethod("nominal", signature("Unit", "character", "integer", "AbstractVariable"), function(unit, name, cardinality, number_of_instances)
+
+# Default value for number_of_instances is 1
+setGeneric("ordinal", function(unit, name, order, cardinality, number_of_instances=1) standardGeneric("ordinal"))
+# Definition for when @param number_of_instances is an integer
+setMethod("ordinal", signature("Unit", "character", "list", "integer", "integerORAbstractVariableORAtMostORPer"), function(unit, name, order, cardinality, number_of_instances)
 {
   # Create new measure
-  measure = Nominal(name=name, cardinality=cardinality)
-  # Create has relationship, add to @param unit and @param measure
+  measure = Ordinal(name=name, order=order, cardinality=cardinality)
+  # Add relationship to self and to measure
   has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return handle to measure
   measure
 })
-# Definition for when @param number_of_instances is AtMost
-setMethod("nominal", signature("Unit", "character", "integer", "AtMost"), function(unit, name, cardinality, number_of_instances)
+
+# Default value for number_of_instances is 1
+setGeneric("numeric", function(unit, name, number_of_instances=1) standardGeneric("numeric"))
+# Definition for when @param number_of_instances is an integer
+setMethod("numeric", signature("Unit", "character", "integerORAbstractVariableORAtMostORPer"), function(unit, name, number_of_instances)
 {
   # Create new measure
-  measure = Nominal(name=name, cardinality=cardinality)
-  # Create has relationship, add to @param unit and @param measure
-  has(unit=unit, measure=measure, number_of_instances=number_of_instances)
-  # Return handle to measure
-  measure
-})
-# Definition for when @param number_of_instances is Per
-setMethod("nominal", signature("Unit", "character", "integer", "Per"), function(unit, name, cardinality, number_of_instances)
-{
-  # Create new measure
-  measure = Nominal(name=name, cardinality=cardinality)
-  # Create has relationship, add to @param unit and @param measure
+  measure = Numeric(name=name)
+  # Add relationship to self and to measure
   has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return handle to measure
   measure
