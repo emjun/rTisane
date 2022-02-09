@@ -3,9 +3,11 @@ library(tisaner)
 
 test_thank("AbstractVariable created properly", {
   var <- AbstractVariable("name")
-  
+
   expect_is(var, "AbstractVariable")
 })
+
+# Write test for passing Has multiple different types to number_of_instances
 
 # test_that("Unit variable created propertly", {
 
