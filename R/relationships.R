@@ -5,10 +5,6 @@ setClass("Moderates", representation(moderator = "AbstractVariable", on = "Abstr
 
 # Data Measurement Relationships
 setClass("Nests", representation(base = "Unit", group = "Unit"))
-# Specify Union type for number_of_instances
-# https://stackoverflow.com/questions/13002200/s4-classes-multiple-types-per-slot
-setClassUnion("integerORAbstractVariableORAtMostORPer", c("integer", "AbstractVariable", "AtMost", "Per"))
-setClass("Has", representation(variable = "AbstractVariable", measure = "AbstractVariable", repetitions = "NumberValue", according_to = "AbstractVariable"))
 
 
 #' @include number_value.R
