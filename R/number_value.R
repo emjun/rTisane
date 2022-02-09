@@ -13,6 +13,7 @@ setMethod("is_equal_to_one", signature(object = "NumberValue"), function(object)
 # setMethod("get_value")
 
 # Exactly class
+setClass("Exactly", representation(value = "integer", contains = "NumberValue"))
 
 # AtMost class
 # Upperbound of instances

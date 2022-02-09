@@ -40,8 +40,7 @@ setClass("Nests", representation(base = "Unit", group = "Unit"))
 # Specify Union type for number_of_instances
 # https://stackoverflow.com/questions/13002200/s4-classes-multiple-types-per-slot
 setClassUnion("integerORAbstractVariableORAtMostORPer", c("integer", "AbstractVariable", "AtMost", "Per"))
-setClass("Has", representation(unit = "Unit", measure = "AbstractVariable", number_of_instances = "integerORAbstractVariableORAtMostORPer"))
-
+setClass("Has", representation(variable = "AbstractVariable", measure = "AbstractVariable", repetitions = "NumberValue", according_to = "AbstractVariable"))
 
 
 #' @include number_value.R
@@ -103,13 +102,36 @@ setClass("Measure", contains = "AbstractVariable")
 setClass("SetUp", representation(variable = "Measure"), contains = "AbstractVariable")
 
 
-
 # Measure sub-types
 setClass("Nominal", representation(name = "character", cardinality = "integer", categories = "list"), contains = "Measure")
 setClass("Ordinal", representation(order = "list"), contains = "Measure")
 setClass("Numeric", contains = "Measure")
 
-# Question: Defult value for methods in R?
+# Helper method
+setGeneric("has", function(unit, measure, number_of_instances=1) standardGeneric("has"))
+setMethod("has", signature("Unit", "Measure", "integerORAbstractVariableORAtMostORPer"), function(unit, measure, number_of_instances)
+{
+  # Figure out the number of times/repetitions this Unit (self) has of the measure
+  repet = None
+  according_to = None
+  if (is.integer(number_of_instances)) {
+    repet <- Exactly(number_of_instances=number_of_instances)
+  } else if (is(number_of_instances, "AbstractVariable")) {
+    repet <- Exactly(1)
+    repet <- repet.per(cardinality=number_of_instances)
+    according_to <- number_of_instances
+  } else if (is(number_of_instances, "AtMost")) {
+    repet = number_of_instances
+  } else if (is(number_of_instances, "Per")) {
+    repet = number_of_instances
+  }
+  # Create has relationship
+  has_relat = Has(variable=unit, measure=measure, repetitions=repet, according_to=according_to)
+  # Add relationship to unit
+  unit@relationships <- append(unit@relationships, has_relat)
+  # Add relationship to measure
+  measure@relationships <- append(measure@relationships, has_relat)
+})
 
 # Default value for number_of_instances is 1
 setGeneric("nominal", function(unit, name, cardinality, number_of_instances=1) standardGeneric("nominal"))
@@ -118,12 +140,8 @@ setMethod("nominal", signature("Unit", "character", "integer", "integer"), funct
 {
   # Create new measure
   measure = Nominal(name=name, cardinality=cardinality)
-  # Create has relationship
-  has_relat = Has(unit=unit, measure=measure, number_of_instances=number_of_instances)
-  # Add relationship to unit
-  unit@relationships <- append(unit@relationships, has_relat)
-  # Add relationship to measure
-  measure@relationships <- append(measure@relationships, has_relat)
+  # Create has relationship, add to @param unit and @param measure
+  has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return handle to measure
   measure
 })
@@ -132,12 +150,8 @@ setMethod("nominal", signature("Unit", "character", "integer", "AbstractVariable
 {
   # Create new measure
   measure = Nominal(name=name, cardinality=cardinality)
-  # Create has relationship
-  has_relat = Has(unit=unit, measure=measure, number_of_instances=number_of_instances)
-  # Add relationship to unit
-  unit@relationships <- append(unit@relationships, has_relat)
-  # Add relationship to measur
-  measure@relationships <- append(measure@relationships, has_relat)
+  # Create has relationship, add to @param unit and @param measure
+  has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return handle to measure
   measure
 })
@@ -146,12 +160,8 @@ setMethod("nominal", signature("Unit", "character", "integer", "AtMost"), functi
 {
   # Create new measure
   measure = Nominal(name=name, cardinality=cardinality)
-  # Create has relationship
-  has_relat = Has(unit=unit, measure=measure, number_of_instances=number_of_instances)
-  # Add relationship to unit
-  unit@relationships <- append(unit@relationships, has_relat)
-  # Add relationship to measur
-  measure@relationships <- append(measure@relationships, has_relat)
+  # Create has relationship, add to @param unit and @param measure
+  has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return handle to measure
   measure
 })
@@ -160,12 +170,8 @@ setMethod("nominal", signature("Unit", "character", "integer", "Per"), function(
 {
   # Create new measure
   measure = Nominal(name=name, cardinality=cardinality)
-  # Create has relationship
-  has_relat = Has(unit=unit, measure=measure, number_of_instances=number_of_instances)
-  # Add relationship to unit
-  unit@relationships <- append(unit@relationships, has_relat)
-  # Add relationship to measur
-  measure@relationships <- append(measure@relationships, has_relat)
+  # Create has relationship, add to @param unit and @param measure
+  has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return handle to measure
   measure
 })
