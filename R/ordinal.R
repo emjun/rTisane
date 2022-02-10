@@ -1,15 +1,3 @@
-#' Ordinal class 
-#'
-#' Class for Ordinal measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units. 
-#' @param name Name of measure, corresponds to column name in data.
-#' @param cardinality Integer for cardinality. 
-#' @param order Ordered list of categories.
-#' @keywords
-#' @examples
-#' Ordinal()
-setClass("Ordinal", representation(name = "character", cardinality = "integer", order = "list"), contains = "Measure")
-
 #' Create an ordinal measure
 #'
 #' Method for constructing an ordinal measure through a Unit.

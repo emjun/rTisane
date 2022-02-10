@@ -1,14 +1,3 @@
-#' Nests class 
-#'
-#' Class for Nesting relationships. 
-#' Not called directly.
-#' @param base AbstractVariable. Variable that is nested within another. 
-#' @param group AbstractVariable. Variable that contains multiple instances of @param base.
-#' @keywords
-#' @examples
-#' Nests()
-setClass("Nests", representation(base = "Unit", group = "Unit"))
-
 #' Specify a Nests relationship
 #'
 #' Method for constructing a nesting relationship between two variables. 

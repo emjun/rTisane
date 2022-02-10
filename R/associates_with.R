@@ -1,14 +1,3 @@
-#' Associates class 
-#'
-#' Class for Associates relationships. 
-#' Not called directly.
-#' @param lhs AbstractVariable. A variable that is associated with another. 
-#' @param rhs AbstractVariable. A variable that is associated with another. 
-#' @keywords
-#' @examples
-#' Associates()
-setClass("Associates", representation(lhs = "AbstractVariable", rhs = "AbstractVariable"))
-
 #' Specify a Associates relationship
 #'
 #' Method for constructing an associates with relationship between two variables. 

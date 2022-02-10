@@ -1,13 +1,3 @@
-#' Numeric class 
-#'
-#' Class for Numeric measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units. 
-#' @param name Character. Name of measure, corresponds to column name in data.
-#' @keywords
-#' @examples
-#' Numeric()
-setClass("Numeric", representation(name = "character"), contains = "Measure")
-
 #' Create a numeric measure
 #'
 #' Method for constructing a numeric measure through a Unit.

@@ -13,13 +13,13 @@ test_that("Unit created properly", {
     unit <- Unit("person", cardinality=40)
 })
 
-test_that("SetUp created properly"), {
-    week <- SetUp("week", order=[1,2,3,4])
+test_that("SetUp created properly", {
+    week <- SetUp("week", order=list(1,2,3,4))
 
-    week <- SetUp("week", order=[1,2,3,4], cardinality=4)
+    week <- SetUp("week", order=list(1,2,3,4), cardinality=4)
 
     # Throws an error
-    week <- SetUp("week", order=[1,2,3,4], cardinality=10)
+    week <- SetUp("week", order=list(1,2,3,4), cardinality=10)
 
 })
 
@@ -40,13 +40,13 @@ test_that("Ordinal measure created properly", {
     # Create unit
     unit <- Unit("person")
 
-    school_grade <- ordinal(unit=unit, name="school_grade", order=[1,2,3,4,5])
+    school_grade <- ordinal(unit=unit, name="school_grade", orderlist(1,2,3,4,5))
     
     # Throws error since @param order is not provided
     school_grade <- ordinal(unit=unit, name="school_grade")
 
     # Throws error since @param order and @param cardinality disagree
-    school_grade <- ordinal(unit=unit, name="school_grade", order=[1,2,3,4,5], cardinality=10)
+    school_grade <- ordinal(unit=unit, name="school_grade", orderlist(1,2,3,4,5), cardinality=10)
 })
 
 test_that("Numeric measure created properly", {
@@ -64,7 +64,7 @@ test_that("Has relationship created properly", {
     # Create unit
     unit <- Unit("person")
     # Create setup
-    week <- SetUp("week", order=[1,2,3,4])
+    week <- SetUp("week", orderlist(1,2,3,4))
 
     age <- numeric(unit=unit, name="age")
     # Verify that number of instaces == 1 (integer)

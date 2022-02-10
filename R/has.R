@@ -1,26 +1,9 @@
-# Specify Union type for number_of_instances
-# https://stackoverflow.com/questions/13002200/s4-classes-multiple-types-per-slot
-setClassUnion("integerORAbstractVariableORAtMostORPer", c("integer", "AbstractVariable", "AtMost", "Per"))
-
-#' Has class 
-#'
-#' Class for Has relationships between AbstractVariables.
-#' Not called directly. For internal purposes only.
-#' @param variable AbstractVariable. Variable that has another Variable. For example, the Unit that has a Measure. 
-#' @param measure AbstractVariable. Variable that @param variable has. For example, the Measure a Unit has.
-#' @param repetitions NumberValue. Number of times that @param variable has @param measure. 
-#' @param according_to AbstractVariable. Variable whose unique values differentiate the repeated instances of @param measure. 
-#' @keywords
-#' @examples
-#' Has()
-setClass("Has", representation(variable = "AbstractVariable", measure = "AbstractVariable", repetitions = "NumberValue", according_to = "AbstractVariable"))
-
 #' Create a has relationship
 #'
 #' Method for specifying and creating a has relationship between Unit and Measure/
 #' Not called directly. For internal purposes only.
-#' @param unit Unit. The Unit that has @param measure. 
-#' @param measure Measure. The Measure that @param unit has. 
+#' @param unit Unit. The Unit that has @param measure.
+#' @param measure Measure. The Measure that @param unit has.
 #' @param number_of_instances Integer or AbstractVariable or AtMost or Per. Number of instances of the @param measure the @param unit has. Default is 1.
 #' @keywords
 #' @examples

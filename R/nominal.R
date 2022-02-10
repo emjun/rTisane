@@ -1,16 +1,3 @@
-#' Nominal class 
-#'
-#' Class for Nominal measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units. 
-#' @param name Name of measure, corresponds to column name if assigning data.
-#' @param cardinality Integer for cardinality. 
-#' @param categories List of categories. 
-#' @param isInteraction Logical. True if variable is an interaction. False otherwise.
-#' @keywords
-#' @examples
-#' Nominal()
-setClass("Nominal", representation(name = "character", cardinality = "integer", categories = "list", isInteraction = "logical"), contains = "Measure")
-
 #' Create a nominal measure
 #'
 #' Method for constructing a nominal measure through a Unit.

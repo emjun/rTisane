@@ -1,14 +1,3 @@
-#' Causes class 
-#'
-#' Class for Causes relationships. 
-#' Not called directly.
-#' @param cause AbstractVariable. Variable that causes another. 
-#' @param effect AbstractVariable. Variable that is caused by @param cause.
-#' @keywords
-#' @examples
-#' Causes()
-setClass("Causes", representation(cause = "AbstractVariable", effect = "AbstractVariable"))
-
 #' Specify a causes relationship
 #'
 #' Method for constructing a causes relationship between two variables. 

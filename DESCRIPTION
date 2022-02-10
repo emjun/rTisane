@@ -14,3 +14,19 @@ RoxygenNote: 7.1.2.9000
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Collate: 
+    'aaa-classes.R'
+    'assign_cardinality_from_data.R'
+    'associates_with.R'
+    'calculate_cardinality.R'
+    'causes.R'
+    'get_cardinality.R'
+    'has.R'
+    'infer_model.R'
+    'infer_statistical_model_from_design.R'
+    'moderates.R'
+    'nests.R'
+    'nominal.R'
+    'number_value.R'
+    'numeric.R'
+    'ordinal.R'
