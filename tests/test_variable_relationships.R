@@ -1,37 +1,39 @@
 context("Variable Relationship")
 library(tisaner)
 
-test_thank("AbstractVariable created properly", {
-  var <- AbstractVariable("name")
+test_that("Causes created properly", {
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
 
-  expect_is(var, "AbstractVariable")
+  causes(measure_0, measure_1)
+
+  # Verify that Causes relationship in measure_0 relationships and measure_1 relationships
+
+
+  # Verify that Causes relationship created correctly
 })
 
-# Write test for passing Has multiple different types to number_of_instances
+test_that("Associates created properly", {
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
 
-# TODO:
-# student <- unit("student id")
-# school <- unit("school")
+  associates_with(measure_0, measure_1)
 
-# # Python
-# student = ts.Unit("student id")
-# test_score = student.numeric("test score", number_of_instances=2)
+  # Verify that Associates in relationships for measure_0 and measure_1
 
-# # R
-# test_score <- numeric(student, "test score", number_of_instances=2)
-# test_score <- student$numeric("test score", number_of_instances=2)
+  # Verify that Associates is created correctly
 
+  # Verify that Associates relationship are identical/the same object
+})
 
-# setClass("DataVector")
+test_that("Nests created properly", {
+  unit_0 <- Unit("person")
+  unit_1 <- Unit("group")
 
+  nests_within(measure_0, measure_1) # add to docs that can read like: first param.nests_within(second param)?
 
-# test_that("Unit variable created propertly", {
+  # Verify that....
 
-# })
-
-# test_that("Causes object created properly", {
-
-#   expect_equal(str_length("a"), 1)
-#   expect_equal(str_length("ab"), 2)
-#   expect_equal(str_length("abc"), 3)
-# })
+})
