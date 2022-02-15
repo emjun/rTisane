@@ -7,15 +7,23 @@
 #' @export AbstractVariable
 #' @examples
 #' AbstractVariable()
-AbstractVariable <- setClass("AbstractVariable", 
+AbstractVariable <- setClass("AbstractVariable",
     slots = c(
         name = "character", relationships = "list"
     ),
     prototype = list(
         name = NULL,
-        relationships = NULL
+        relationships = list()
     )
 )
+# Helper to create instances of the AbstractVariable class
+AbstractVariable <- function(name,
+                   relationships = list()) {
+  new("AbstractVariable",
+      name = name,
+      relationships = relationships
+  )
+}
 
 #' Number Value class
 #'
@@ -34,13 +42,13 @@ NumberValue <- setClass("NumberValue",
 
 #' Exactly class
 #'
-#' Wrapper class for exact number values. Extends NumberValue class. 
+#' Wrapper class for exact number values. Extends NumberValue class.
 #' @slot value Number value
 #' @keywords
 #' @export Exactly
 #' @examples
 #' Exactly(3)
-Exactly <- setClass("Exactly", 
+Exactly <- setClass("Exactly",
     slots = c(
         value = "integer", contains = "NumberValue"
     )
@@ -48,38 +56,38 @@ Exactly <- setClass("Exactly",
 
 #' AtMost class
 #'
-#' Wrapper class for upperbound of number values. Extends NumberValue class. 
+#' Wrapper class for upperbound of number values. Extends NumberValue class.
 #' @slot value Number value
 #' @keywords
 #' @export AtMost
 #' @examples
 #' AtMost(3), could be 0, 1, 2, xor 3 value!
-AtMost <- setClass("AtMost", 
+AtMost <- setClass("AtMost",
     slots = c(
         value = "integer"
-    ), 
+    ),
     contains = "NumberValue"
 )
 
 #' Per class
 #'
-#' Wrapper class for ratios between number values. Extends NumberValue class. 
+#' Wrapper class for ratios between number values. Extends NumberValue class.
 #' @slot number NumberValue
 #' @slot variable AbstractVariable that contains
 #' @slot cardinality
 #' @slot number_of_instances
 #' @slot value
-#' @keywords 
+#' @keywords
 #' @examples
 #' Per()
-Per <- setClass("Per", 
+Per <- setClass("Per",
     slots = c(
-        number = "NumberValue", 
-        variable = "AbstractVariable", 
-        cardinality = "logical", 
-        number_of_instances = "logical", 
+        number = "NumberValue",
+        variable = "AbstractVariable",
+        cardinality = "logical",
+        number_of_instances = "logical",
         value = "integer"
-    ), 
+    ),
     prototype = list(
         number = NULL,
         variable = NULL,
@@ -112,34 +120,34 @@ Dataset <- setClass("Dataset",
     )
 )
 
-#' Associates class 
+#' Associates class
 #'
-#' Class for Associates relationships. 
+#' Class for Associates relationships.
 #' Not called directly.
-#' @slot lhs AbstractVariable. A variable that is associated with another. 
-#' @slot rhs AbstractVariable. A variable that is associated with another. 
+#' @slot lhs AbstractVariable. A variable that is associated with another.
+#' @slot rhs AbstractVariable. A variable that is associated with another.
 #' @keywords
 #' @examples
 #' Associates()
-Associates <- setClass("Associates", 
+Associates <- setClass("Associates",
     slot = c(
         lhs = "AbstractVariable",
         rhs = "AbstractVariable"
     )
 )
 
-#' Causes class 
+#' Causes class
 #'
-#' Class for Causes relationships. 
+#' Class for Causes relationships.
 #' Not called directly.
-#' @slot cause AbstractVariable. Variable that causes another. 
+#' @slot cause AbstractVariable. Variable that causes another.
 #' @slot effect AbstractVariable. Variable that is caused by @slot cause.
 #' @keywords
 #' @examples
 #' Causes()
 Causes <- setClass("Causes",
     slot = c(
-        cause = "AbstractVariable", 
+        cause = "AbstractVariable",
         effect = "AbstractVariable"
     )
 )
@@ -159,17 +167,17 @@ Causes <- setClass("Causes",
 Has <- setClass("Has",
     slot = c(
         variable = "AbstractVariable",
-        measure = "AbstractVariable", 
-        repetitions = "NumberValue", 
+        measure = "AbstractVariable",
+        repetitions = "NumberValue",
         according_to = "AbstractVariable"
     )
 )
 
 
-#' Unit class 
+#' Unit class
 #'
 #' Class for Unit variables
-#' @slot name Name of Unit, corresponds to column name if assigning data 
+#' @slot name Name of Unit, corresponds to column name if assigning data
 #' @slot integer Integer for cardinality, optional. Only required if no data is assigned
 #' @keywords
 #' @export
@@ -177,28 +185,28 @@ Has <- setClass("Has",
 #' Unit()
 Unit <- setClass("Unit",
     slot = c(
-        name = "character", 
+        name = "character",
         cardinality = "integer"
-    ), 
+    ),
     contains = "AbstractVariable"
 )
 
-#' Measure class 
+#' Measure class
 #'
 #' Super class for measure variables
-#' Not called directly. Measures are declared through Units. 
+#' Not called directly. Measures are declared through Units.
 #' @keywords
 #' @examples
 #' Measure()
-Measure <- setClass("Measure", 
+Measure <- setClass("Measure",
     contains = "AbstractVariable"
 )
 
 
-#' Numeric class 
+#' Numeric class
 #'
 #' Class for Numeric measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units. 
+#' Not called directly. All measures are declared through Units.
 #' @slot name Character. Name of measure, corresponds to column name in data.
 #' @keywords
 #' @examples
@@ -206,55 +214,55 @@ Measure <- setClass("Measure",
 Numeric <- setClass("Numeric",
     slot = c(
         name = "character"
-    ), 
-    contains = "Measure"    
+    ),
+    contains = "Measure"
 )
 
-#' Nominal class 
+#' Nominal class
 #'
 #' Class for Nominal measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units. 
+#' Not called directly. All measures are declared through Units.
 #' @slot name Name of measure, corresponds to column name if assigning data.
-#' @slot cardinality Integer for cardinality. 
-#' @slot categories List of categories. 
+#' @slot cardinality Integer for cardinality.
+#' @slot categories List of categories.
 #' @slot isInteraction Logical. True if variable is an interaction. False otherwise.
 #' @keywords
 #' @examples
 #' Nominal()
-Nominal <- setClass("Nominal", 
+Nominal <- setClass("Nominal",
     slot = c(
-        name = "character", 
-        cardinality = "integer", 
-        categories = "list", 
+        name = "character",
+        cardinality = "integer",
+        categories = "list",
         isInteraction = "logical"
-    ), 
+    ),
     contains = "Measure"
 )
 
 
-#' Ordinal class 
+#' Ordinal class
 #'
 #' Class for Ordinal measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units. 
+#' Not called directly. All measures are declared through Units.
 #' @slot name Name of measure, corresponds to column name in data.
-#' @slot cardinality Integer for cardinality. 
+#' @slot cardinality Integer for cardinality.
 #' @slot order Ordered list of categories.
 #' @keywords
 #' @examples
 #' Ordinal()
 Ordinal <- setClass("Ordinal",
     slot = c(
-        name = "character", 
-        cardinality = "integer", 
+        name = "character",
+        cardinality = "integer",
         order = "list"
-    ), 
+    ),
     contains = "Measure"
 )
 
-#' SetUp class 
+#' SetUp class
 #'
 #' Class for SetUp variables
-#' @slot name Name of SetUp, corresponds to column name if assigning data 
+#' @slot name Name of SetUp, corresponds to column name if assigning data
 #' @slot order Optional. Order of categories if the SetUp variable represents an ordinal value (e.g., week of the month)
 #' @slot cardinality Optional. Cardinality of SetUp variable if itrepresents a nominal or ordinal value (e.g., trial identifier)
 #' @keywords
@@ -263,25 +271,25 @@ Ordinal <- setClass("Ordinal",
 #' SetUp()
 SetUp <- setClass("SetUp",
     slot = c(
-        name = "character", 
-        order = "list", 
+        name = "character",
+        order = "list",
         cardinality = "integer"
-    ), 
+    ),
     contains = "AbstractVariable"
 )
 
-#' Nests class 
+#' Nests class
 #'
-#' Class for Nesting relationships. 
+#' Class for Nesting relationships.
 #' Not called directly.
-#' @slot base AbstractVariable. Variable that is nested within another. 
+#' @slot base AbstractVariable. Variable that is nested within another.
 #' @slot group AbstractVariable. Variable that contains multiple instances of @slot base.
 #' @keywords
 #' @examples
 #' Nests()
 Nests <- setClass("Nests",
     slot = c(
-        base = "Unit", 
+        base = "Unit",
         group = "Unit"
     )
 )
