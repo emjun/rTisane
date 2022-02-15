@@ -11,6 +11,7 @@ test_that("AbstractVariable created properly", {
 
 
 test_that("Unit created properly", {
+<<<<<<< HEAD
   unit <- Unit("person")
   expect_is(unit, AbstractVariable) # inherits from AbstractVariable
   expect_is(unit, Unit)
@@ -20,6 +21,9 @@ test_that("Unit created properly", {
   unit <- Unit("person", cardinality=40)
   expect_match(unit@name, "person")
   expect_match(unit@cardinality, 40)
+=======
+    unit <- Unit("person")
+>>>>>>> 78d0d5b3a379f33d980d95a1f1d474a02ff790ec
 
 })
 
@@ -34,6 +38,7 @@ test_that("SetUp created properly", {
 })
 
 test_that("Nominal measure created properly", {
+<<<<<<< HEAD
   # Create unit
   unit <- Unit("person")
 
@@ -44,6 +49,18 @@ test_that("Nominal measure created properly", {
 
   # Verify that Has relationship constructed
   # Verify that number of instances is set to 1 (Integer)
+=======
+    # Create unit
+    unit <- Unit("person")
+
+    eye_color <- nominal(unit=unit, name="eye_color", cardinality=10)
+
+    # Should throw error since there is no cardinality specified
+    eye_color <- nominal(unit=unit, name="eye_color")
+
+    # Verify that Has relationship constructed
+    # Verify that number of instances is set to 1 (Integer)
+>>>>>>> 78d0d5b3a379f33d980d95a1f1d474a02ff790ec
 })
 
 test_that("Ordinal measure created properly", {
@@ -52,8 +69,15 @@ test_that("Ordinal measure created properly", {
 
   school_grade <- ordinal(unit=unit, name="school_grade", orderlist(1,2,3,4,5))
 
+<<<<<<< HEAD
   # Throws error since @param order is not provided
   school_grade <- ordinal(unit=unit, name="school_grade")
+=======
+    school_grade <- ordinal(unit=unit, name="school_grade", orderlist(1,2,3,4,5))
+
+    # Throws error since @param order is not provided
+    school_grade <- ordinal(unit=unit, name="school_grade")
+>>>>>>> 78d0d5b3a379f33d980d95a1f1d474a02ff790ec
 
   # Throws error since @param order and @param cardinality disagree
   school_grade <- ordinal(unit=unit, name="school_grade", orderlist(1,2,3,4,5), cardinality=10)
@@ -79,6 +103,12 @@ test_that("Has relationship created properly", {
   age <- numeric(unit=unit, name="age")
   # Verify that number of instaces == 1 (integer)
 
+<<<<<<< HEAD
+=======
+
+    # Integer
+    age <- numeric(unit=unit, name="age", number_of_instances=10)
+>>>>>>> 78d0d5b3a379f33d980d95a1f1d474a02ff790ec
 
   # Integer
   age <- numeric(unit=unit, name="age", number_of_instances=10)
@@ -86,6 +116,7 @@ test_that("Has relationship created properly", {
   # AbstractVariable
   age <- numeric(unit=unit, name="age", number_of_instances=week)
 
+<<<<<<< HEAD
   # AtMost
   age <- numeric(unit=unit, name="age", number_of_instances=AtMost(2))
 
@@ -94,4 +125,13 @@ test_that("Has relationship created properly", {
 
   # Per
   age <- numeric(unit=unit, name="age", number_of_instances=AtMost(1).per(week))
+=======
+    # Per
+    age <- numeric(unit=unit, name="age", number_of_instances=Exactly(1).per(week))
+    ExactlyPer(1, week)
+
+    # Per
+    age <- numeric(unit=unit, name="age", number_of_instances=AtMost(1).per(week))
+    AtMostPer(1, week)
+>>>>>>> 78d0d5b3a379f33d980d95a1f1d474a02ff790ec
 })
