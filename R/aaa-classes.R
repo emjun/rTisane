@@ -188,8 +188,21 @@ Unit <- setClass("Unit",
         name = "character",
         cardinality = "integer"
     ),
-    contains = "AbstractVariable"
+    contains = "AbstractVariable",
+    prototype = list(
+        name = NULL,
+        cardinality = as.integer(0)
+    )
+
 )
+# Helper to create instances of the Unit class
+Unit <- function(name,
+                   cardinality=as.integer(0)) {
+  new("Unit",
+      name = name,
+      cardinality = as.integer(cardinality)
+  )
+}
 
 #' Measure class
 #'
@@ -275,8 +288,34 @@ SetUp <- setClass("SetUp",
         order = "list",
         cardinality = "integer"
     ),
-    contains = "AbstractVariable"
+    contains = "AbstractVariable",
+    prototype = list(
+        name = NULL, 
+        order = list(),
+        cardinality = as.integer(0)
+    )
 )
+# Helper to create instances of the Unit class
+SetUp <- function(name,
+                    order= list(),
+                    cardinality=as.integer(-1)) {
+  if (cardinality != -1 && length(order) != cardinality) {
+      stop("If @cardinality and @order are both provided, they need to match")
+  }
+  new("SetUp",
+      name = name,
+      order = order,
+      cardinality = as.integer(length(order))
+  )
+}
+# Validator to ensure that the slots corroborate with each other
+setValidity("SetUp", function(object) {
+  if (length(object@order)   !=  object@cardinality) {
+          stop("If @cardinality and @order are both provided, they need to match")
+    } else {
+    TRUE
+    }
+})
 
 #' Nests class
 #'
