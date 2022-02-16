@@ -1,4 +1,4 @@
-context("Variable declaration and construction")
+#context("Variable declaration and construction")
 library(tisaner)
 
 test_that("AbstractVariable created properly", {
@@ -28,7 +28,7 @@ test_that("SetUp created properly", {
   expect_s4_class(week, "SetUp")
   expect_equal(week@order, list(1,2,3,4))
   expect_equal(length(week@order), 4)
-  expect_is(week@cardinality, "integer")
+  expect_type(week@cardinality, "integer")
   expect_equal(week@cardinality, as.integer(4)) # cardinality equals length of order
 
   week <- SetUp("week", order=list(1,2,3,4), cardinality=4)
@@ -36,7 +36,7 @@ test_that("SetUp created properly", {
   expect_s4_class(week, "SetUp")
   expect_equal(week@order, list(1,2,3,4))
   expect_equal(length(week@order), 4)
-  expect_is(week@cardinality, "integer")
+  expect_type(week@cardinality, "integer")
   expect_equal(week@cardinality, as.integer(4)) # cardinality equals length of order
 
   # Throws an error
