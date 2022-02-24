@@ -90,3 +90,24 @@ test_that("Ordinal measure created properly", {
   # Should throw error since there is no cardinality specified
    expect_error(ordinal(unit=unit, name="grade"), "*")
 })
+
+test_that("Numeric measure created properly", {
+  # Create unit
+  unit <- Unit("person", cardinality=40)
+
+  # Specified correctly
+  age <- numeric(unit=unit, name="age")
+  # Verify that Has relationship constructed
+  expect_s4_class(age, "Has")
+  # Verify that number of instances is set to 1 (Integer)
+  expect_s4_class(age@repetitions, "Exactly")
+
+  # Verify that number of instances is set to number greater than 1?
+  condition <- numeric(unit=unit, name="condition", number_of_instances=integer(5))
+  # Verify that Has relationship constructed
+  expect_s4_class(condition, "Has")
+  # Verify that number of instances is set to 5 (Integer)
+  expect_s4_class(condition@repetitions, "Exactly")
+  expect_type(condition@repetitions@value, "integer")
+  expect_equal(condition@repetitions@value, integer(5))
+})
