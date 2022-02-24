@@ -4,6 +4,7 @@
 #' @param unit Unit object. Unit that has/contributes the numeric measure.
 #' @param name Character. Name of measure, corresponds to column name in data.
 #' @param number_of_instances Integer or AbstractVariable or AtMost or Per. Number of instances of the measure the @param unit has. Default is 1.
+#' @return Has Relationship representing Unit having the Nominal Measure.
 #' @keywords
 #' @export
 #' @examples
@@ -13,8 +14,18 @@ setMethod("numeric", signature("Unit", "character", "integerORAbstractVariableOR
 {
   # Create new measure
   measure = Numeric(name=name)
-  # Add relationship to self and to measure
-  has(unit=unit, measure=measure, number_of_instances=number_of_instances)
-  # Return handle to measure
-  measure
+  # Create has relationship
+  has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # Return has relationship
+  has_relat
+})
+setMethod("numeric", signature("Unit", "character", "missing"), function(unit, name, number_of_instances) {
+number_of_instances = as.integer(1)
+# Create new measure
+measure = Numeric(name=name)
+# Create has relationship
+has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+# Return has relationship
+has_relat
+
 })

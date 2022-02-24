@@ -27,9 +27,12 @@ setMethod("has", signature("Unit", "Measure", "integerORAbstractVariableORAtMost
   }
   # Create has relationship
   has_relat = Has(variable=unit, measure=measure, repetitions=repet, according_to=according_to)
-  # Add relationship to unit
-  unit@relationships <- append(unit@relationships, has_relat)
-  # Add relationship to measure
-  measure@relationships <- append(measure@relationships, has_relat)
+  # # Add relationship to unit
+  # unit@relationships <- append(unit@relationships, has_relat)
+  # # Add relationship to measure
+  # measure@relationships <- append(measure@relationships, has_relat)
+
+  # Return has relationship
+  has_relat
 })
 

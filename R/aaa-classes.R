@@ -163,6 +163,8 @@ Causes <- setClass("Causes",
 )
 
 
+setClassUnion("numberValueORExactlyORAtMostORPer", c("NumberValue", "Exactly", "AtMost", "Per"))
+setClassUnion("AbstractVariableORNull", c("AbstractVariable", "NULL"))
 #' Has class
 #'
 #' Class for Has relationships between AbstractVariables.
@@ -178,8 +180,8 @@ Has <- setClass("Has",
     slot = c(
         variable = "AbstractVariable",
         measure = "AbstractVariable",
-        repetitions = c("NumberValue", "Exactly", "AtMost", "Per"),
-        according_to = "AbstractVariable"
+        repetitions = "numberValueORExactlyORAtMostORPer",
+        according_to = "AbstractVariableORNull"
     ),
     prototype = list(
         variable = NULL, 
@@ -291,8 +293,8 @@ Nominal <- setClass("Nominal",
 Ordinal <- setClass("Ordinal",
     slot = c(
         name = "character",
-        cardinality = "integer",
-        order = "list"
+        order = "list",
+        cardinality = "integer"
     ),
     contains = "Measure"
 )
