@@ -66,3 +66,27 @@ test_that("Nominal measure created properly", {
   # Should throw error since there is no cardinality specified
   expect_error(nominal(unit=unit, name="eye_color"), "*")
 })
+
+test_that("Ordinal measure created properly", {
+  # Create unit
+  unit <- Unit("person", cardinality=40)
+
+  # Specified correctly
+  grade <- ordinal(unit=unit, name="grade", order=list(1, 2, 3, 4, 5))
+  # Verify that Has relationship constructed
+  expect_s4_class(grade, "Has")
+  # Verify that number of instances is set to 1 (Integer)
+  expect_s4_class(grade@repetitions, "Exactly")
+
+  # Verify that number of instances is set to number greater than 1?
+  condition <- ordinal(unit=unit, name="condition", order=list(1, 2, 3, 4, 5), number_of_instances=integer(5))
+  # Verify that Has relationship constructed
+  expect_s4_class(condition, "Has")
+  # Verify that number of instances is set to 5 (Integer)
+  expect_s4_class(condition@repetitions, "Exactly")
+  expect_type(condition@repetitions@value, "integer")
+  expect_equal(condition@repetitions@value, integer(5))
+
+  # Should throw error since there is no cardinality specified
+   expect_error(ordinal(unit=unit, name="grade"), "*")
+})

@@ -10,14 +10,29 @@
 #' @export
 #' @examples
 #' ordinal()
-setGeneric("ordinal", function(unit, name, order, cardinality, number_of_instances=1) standardGeneric("ordinal"))
-setMethod("ordinal", signature("Unit", "character", "list", "integer", "integerORAbstractVariableORAtMostORPer"), function(unit, name, order, cardinality, number_of_instances)
+setGeneric("ordinal", function(unit, name, order, number_of_instances) standardGeneric("ordinal"))
+setMethod("ordinal", signature("Unit", "character", "list", "integerORAbstractVariableORAtMostORPer"), function(unit, name, order, number_of_instances)
 {
+  # Calculate cardinality from order
+  cardinality = length(order)
   # Create new measure
   measure = Ordinal(name=name, order=order, cardinality=cardinality)
-  # Add relationship to self and to measure
-  has(unit=unit, measure=measure, number_of_instances=number_of_instances)
-  # Return handle to measure
-  measure
+  # Create has relationship
+  has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # Return has relationship
+  has_relat
+})
+setMethod("ordinal", signature("Unit", "character", "list", "missing"), function(unit, name, order, number_of_instances) {
+  number_of_instances = as.integer(1)
+
+  # Calculate cardinality from order
+  cardinality = length(order)
+  # Create new measure
+  measure = Ordinal(name=name, order=order, cardinality=cardinality)
+  
+  # Create has relationship
+  has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # Return has relationship
+  has_relat
 })
 

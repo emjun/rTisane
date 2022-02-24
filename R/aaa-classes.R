@@ -293,8 +293,8 @@ Nominal <- setClass("Nominal",
 Ordinal <- setClass("Ordinal",
     slot = c(
         name = "character",
-        cardinality = "integer",
-        order = "list"
+        order = "list",
+        cardinality = "integer"
     ),
     contains = "Measure"
 )

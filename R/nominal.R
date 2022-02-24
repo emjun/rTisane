@@ -5,10 +5,11 @@
 #' @param name Character. Name of measure, corresponds to column name in data.
 #' @param cardinality. Integer. Optional. Only required if no data is assigned. 
 #' @param number_of_instances Integer or AbstractVariable or AtMost or Per. Number of instances of the measure the @param unit has. Default is 1.
+#' @return Has Relationship representing Unit having the Nominal Measure.
 #' @keywords
 #' @export
 #' @examples
-#' Nominal()
+#' nominal()
 setGeneric("nominal", function(unit, name, cardinality, number_of_instances) standardGeneric("nominal"))
 setMethod("nominal", signature("Unit", "character", "numeric", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, number_of_instances) {
   # Create new measure
