@@ -42,3 +42,19 @@ test_that("SetUp created properly", {
   # Throws an error
   expect_error(SetUp("week", order=list(1,2,3,4), cardinality=10), "*")
 })
+
+test_that("Nominal measure created properly", {
+  # Create unit
+  unit <- Unit("person", cardinality=40)
+
+  # Specified correctly
+  eye_color <- nominal(unit=unit, name="eye_color", cardinality=10)
+  # Verify that Has relationship constructed
+  # Verify that number of instances is set to 1 (Integer)
+
+
+  # Verify that number of instances is set to number greater than 1?
+
+  # Should throw error since there is no cardinality specified
+  expect_error(nominal(unit=unit, name="eye_color"), "*")
+})

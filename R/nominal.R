@@ -9,13 +9,17 @@
 #' @export
 #' @examples
 #' nominal()
-setGeneric("nominal", function(unit, name, cardinality, number_of_instances=1) standardGeneric("nominal"))
-setMethod("nominal", signature("Unit", "character", "integer", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, number_of_instances)
-{
+setGeneric("nominal", function(unit, name, cardinality, number_of_instances) standardGeneric("nominal"))
+setMethod("nominal", signature("Unit", "character", "numeric", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, number_of_instances) {
   # Create new measure
-  measure = Nominal(name=name, cardinality=cardinality)
+  measure = Nominal(name=name, cardinality=as.integer(cardinality))
   # Create has relationship, add to @param unit and @param measure
   has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return handle to measure
   measure
+})
+setMethod("nominal", signature("Unit", "character", "numeric", "missing"), function(unit, name, cardinality, number_of_instances) {
+  number_of_instances = as.integer(1)
+  
+  nominal(unit, name, cardinality, number_of_instances)
 })

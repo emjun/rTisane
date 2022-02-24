@@ -51,8 +51,17 @@ NumberValue <- setClass("NumberValue",
 Exactly <- setClass("Exactly",
     slots = c(
         value = "integer", contains = "NumberValue"
+    ),
+    prototype = list(
+        value = NULL
     )
 )
+# Helper to create instances of the AbstractVariable class
+Exactly <- function(value) {
+  new("Exactly",
+      value = value
+  )
+}
 
 #' AtMost class
 #'
@@ -101,6 +110,7 @@ Per <- setClass("Per",
 # Specify Union type for number_of_instances
 # https://stackoverflow.com/questions/13002200/s4-classes-multiple-types-per-slot
 setClassUnion("integerORAbstractVariableORAtMostORPer", c("integer", "AbstractVariable", "AtMost", "Per"))
+setClassUnion("missingORintegerORAbstractVariableORAtMostORPer", c("missing", "integerORAbstractVariableORAtMostORPer"))
 
 #' Dataset class
 #'
@@ -168,10 +178,25 @@ Has <- setClass("Has",
     slot = c(
         variable = "AbstractVariable",
         measure = "AbstractVariable",
-        repetitions = "NumberValue",
+        repetitions = c("NumberValue", "Exactly", "AtMost", "Per"),
         according_to = "AbstractVariable"
+    ),
+    prototype = list(
+        variable = NULL, 
+        measure = NULL, 
+        repetitions = NULL, 
+        according_to = NULL
     )
 )
+# Helper to create instances of the AbstractVariable class
+Has <- function(variable, measure, repetitions, according_to) {
+  new("Has",
+      variable = variable,
+      measure = measure,
+      repetitions = repetitions,
+      according_to = according_to
+  )
+}
 
 
 #' Unit class

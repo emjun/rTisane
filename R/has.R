@@ -12,18 +12,18 @@ setGeneric("has", function(unit, measure, number_of_instances=1) standardGeneric
 setMethod("has", signature("Unit", "Measure", "integerORAbstractVariableORAtMostORPer"), function(unit, measure, number_of_instances)
 {
   # Figure out the number of times/repetitions this Unit (self) has of the measure
-  repet = None
-  according_to = None
+  repet = NULL
+  according_to = NULL
   if (is.integer(number_of_instances)) {
-    repet <- Exactly(number_of_instances=number_of_instances)
+    repet <- Exactly(number_of_instances)
   } else if (is(number_of_instances, "AbstractVariable")) {
     repet <- Exactly(1)
-    repet <- repet.per(cardinality=number_of_instances)
+    # repet <- repet.per(cardinality=number_of_instances)
     according_to <- number_of_instances
   } else if (is(number_of_instances, "AtMost")) {
-    repet = number_of_instances
+    repet <- number_of_instances
   } else if (is(number_of_instances, "Per")) {
-    repet = number_of_instances
+    repet <- number_of_instances
   }
   # Create has relationship
   has_relat = Has(variable=unit, measure=measure, repetitions=repet, according_to=according_to)
