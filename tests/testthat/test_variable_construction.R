@@ -50,10 +50,18 @@ test_that("Nominal measure created properly", {
   # Specified correctly
   eye_color <- nominal(unit=unit, name="eye_color", cardinality=10)
   # Verify that Has relationship constructed
+  expect_s4_class(eye_color, "Has")
   # Verify that number of instances is set to 1 (Integer)
-
+  expect_s4_class(eye_color@repetitions, "Exactly")
 
   # Verify that number of instances is set to number greater than 1?
+  condition <- nominal(unit=unit, name="condition", cardinality=5, number_of_instances=integer(5))
+  # Verify that Has relationship constructed
+  expect_s4_class(condition, "Has")
+  # Verify that number of instances is set to 5 (Integer)
+  expect_s4_class(condition@repetitions, "Exactly")
+  expect_type(condition@repetitions@value, "integer")
+  expect_equal(condition@repetitions@value, integer(5))
 
   # Should throw error since there is no cardinality specified
   expect_error(nominal(unit=unit, name="eye_color"), "*")
