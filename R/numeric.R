@@ -17,7 +17,9 @@ setMethod("numeric", signature("Unit", "character", "integerORAbstractVariableOR
   # Create has relationship
   has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
-  has_relat
+  # has_relat
+  # Return handle to measure
+  measure
 })
 setMethod("numeric", signature("Unit", "character", "missing"), function(unit, name, number_of_instances) {
 number_of_instances = as.integer(1)
@@ -26,6 +28,8 @@ measure = Numeric(name=name)
 # Create has relationship
 has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
 # Return has relationship
-has_relat
+# has_relat
+# Return handle to measure
+measure
 
 })

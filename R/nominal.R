@@ -17,9 +17,10 @@ setMethod("nominal", signature("Unit", "character", "numeric", "integerORAbstrac
   # Create has relationship
   has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
-  has_relat
-  # # Return handle to measure
-  # measure
+  # has_relat
+
+  # Return handle to measure
+  measure
 })
 setMethod("nominal", signature("Unit", "character", "numeric", "missing"), function(unit, name, cardinality, number_of_instances) {
   number_of_instances = as.integer(1)
@@ -29,7 +30,9 @@ setMethod("nominal", signature("Unit", "character", "numeric", "missing"), funct
   # Create has relationship
   has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
-  has_relat
+  # has_relat
+  # Return handle to measure
+  measure
   
   # # Add has relationship to @param unit 
   # unit@relationships <- append(unit@relationships, has_relat)

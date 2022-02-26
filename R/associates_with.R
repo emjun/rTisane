@@ -14,4 +14,7 @@ setMethod("associates_with", signature("AbstractVariable", "AbstractVariable"), 
   relat = Associates(lhs=lhs, rhs=rhs)
   lhs@relationships <- append(lhs@relationships, relat)
   rhs@relationships <- append(rhs@relationships, relat)
+
+  # Return associates with relationship
+  relat
 })

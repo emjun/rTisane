@@ -21,7 +21,9 @@ setMethod("ordinal", signature("Unit", "character", "list", "integerORAbstractVa
   # Create has relationship
   has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
-  has_relat
+  # has_relat
+  # Return handle to measure
+  measure
 })
 setMethod("ordinal", signature("Unit", "character", "list", "missing"), function(unit, name, order, number_of_instances) {
   number_of_instances = as.integer(1)
@@ -34,6 +36,8 @@ setMethod("ordinal", signature("Unit", "character", "list", "missing"), function
   # Create has relationship
   has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
-  has_relat
+  # has_relat
+  # Return handle to measure
+  measure
 })
 

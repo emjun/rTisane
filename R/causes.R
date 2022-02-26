@@ -16,5 +16,8 @@ setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(
   # append the Causes relationship obj to both @param cause and effect variables
   cause@relationships <- append(cause@relationships, relat)
   effect@relationships <- append(effect@relationships, relat)
+
+  # Return cause relationship
+  relat
 })
 
