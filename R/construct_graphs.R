@@ -24,7 +24,8 @@ construct_graphs <- function(all_relationships, vars){
     # data_gr <- set_vertex_attr(data_gr, "label", value = var_names)
 
     # Specify edges
-    conceptual_edges = c()
+    causal_edges = c()
+    associative_edges = c()
     measurement_edges = c()
     nests_edges = c()
 
@@ -48,28 +49,33 @@ construct_graphs <- function(all_relationships, vars){
             #     set_edge_attr("color", value = "red")
 
             edge <- paste(r@cause@name, "->", r@effect@name)
-            conceptual_edges <- append(conceptual_edges, edge)
+            causal_edges <- append(causal_edges, edge)
         } else if (is(r, "Associates")) {
             # conceptual_gr <- add_edges(conceptual_gr, c(r@lhs@name,r@rhs@name, r@rhs@name,r@lhs@name)) %>%
             #     set_edge_attr("type", value = "black") %>%
             #     set_edge_attr("color", value = "blue")
-            edge <- paste(r@lhs@name, "<->", r@rhs@name)
-            conceptual_edges <- append(conceptual_edges, edge)
+            edge <- paste(r@lhs@name, "->", r@rhs@name)
+            associative_edges <- append(associative_edges, edge)
+            edge <- paste(r@lhs@name, "<-", r@rhs@name)
+            associative_edges <- append(associative_edges, edge)
         } else {
             stop(paste("Not an accepted relationship type: ", typeof(r)))
         }
     }
     # Combine edges
-    conceptual_edges <- paste(conceptual_edges, collapse=";")
+    causal_edges <- paste(causal_edges, collapse=";")
+    associative_edges <- paste(associative_edges, collapse=";")
     measurement_edges <- paste(measurement_edges, collapse=";")
     nests_edges <- paste(nests_edges, collapse=";")
 
     # Add edges to the graphs
-    conceptual_dag <- paste("dag{", conceptual_edges, "}")
+    causal_dag <- paste("dag{", causal_edges, "}")
+    associative_dag <- paste("dag{", associative_edges, "}")
     measurement_dag <- paste("dag{", measurement_edges, "}")
     nests_dag <- paste("dag{", nests_edges, "}")
 
-    conceptual_gr <- dagitty(conceptual_dag)
+    causal_gr <- dagitty(causal_dag)
+    associative_gr <- dagitty(associative_dag)
     measurement_gr <- dagitty(measurement_dag)
     nests_gr <- dagitty(nests_dag)
 
@@ -77,5 +83,5 @@ construct_graphs <- function(all_relationships, vars){
 
     # Return graphs
     # browser()
-    list(conceptual_gr, measurement_gr, nests_gr)
+    list(causal_gr, associative_gr, measurement_gr, nests_gr)
 }

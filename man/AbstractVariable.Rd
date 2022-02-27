@@ -18,5 +18,5 @@ Abstract super class for declaring variables
 }}
 
 \examples{
-AbstractVariable()
+AbstractVariable(name="name", relationships=list())
 }

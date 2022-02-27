@@ -6,10 +6,11 @@
 #' @keywords
 #' @export AbstractVariable
 #' @examples
-#' AbstractVariable()
+#' AbstractVariable(name="name", relationships=list())
 AbstractVariable <- setClass("AbstractVariable",
     slots = c(
-        name = "character", relationships = "list"
+        name = "character", 
+        relationships = "list"
     ),
     prototype = list(
         name = NULL,
@@ -138,13 +139,21 @@ Dataset <- setClass("Dataset",
 #' @slot rhs AbstractVariable. A variable that is associated with another.
 #' @keywords
 #' @examples
-#' Associates()
+#' Associates(measure_0, measure_1)
 Associates <- setClass("Associates",
     slot = c(
         lhs = "AbstractVariable",
         rhs = "AbstractVariable"
     )
 )
+# Helper to create instances of the Associates class
+Associates <- function(lhs,
+                   rhs) {
+  new("Associates",
+      lhs = lhs,
+      rhs = rhs
+  )
+}
 
 #' Causes class
 #'

@@ -1,4 +1,17 @@
 library("tisaner")
+
+# Helper function
+get_graphs <- function(design) {
+  # Infer has relationships
+  has_relationships <- infer_has_relationships(design=design)
+  # Combine all relationships
+  all_relationships <- append(design@relationships, has_relationships)
+
+  # Construct graph from relationships
+  vars <- get_all_vars(design=design)
+  graphs <- construct_graphs(all_relationships, vars)
+}
+
 test_that("Design created properly", {
   unit <- Unit("person")
   measure_0 <- numeric(unit=unit, name="measure_0")
@@ -46,7 +59,7 @@ test_that("Infer has relationships", {
 
 })
 
-test_that("Graphs constructed correcty", {
+test_that("Graphs constructed correctly", {
   unit <- Unit("person")
   measure_0 <- numeric(unit=unit, name="measure_0")
   measure_1 <- numeric(unit=unit, name="measure_1")
@@ -61,7 +74,85 @@ test_that("Graphs constructed correcty", {
 
   # Construct graph from relationships
   vars <- get_all_vars(design=design)
-  print(all_relationships)
   graphs <- construct_graphs(all_relationships, vars)
+
+  causal_gr <- graphs[[1]]
+  expect_equal(length(names(causal_gr)), 2)
+  expect_true(measure_0@name %in% names(causal_gr))
+  expect_true(measure_1@name %in% names(causal_gr))
+})
+
+test_that("Main effects inferred correctly", {
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+
+  ## ONLY ONE CAUSAL RELATIONSHIP
+  cause_relat <- causes(measure_0, measure_1)
+  design <- Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
+
+  graphs <- get_graphs(design)
+
+  causal_gr <- graphs[[1]]
+  associative_gr <- graphs[[2]]
+  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
+  expect_equal(length(main_effects), 1)
+  expect_true(measure_0@name %in% main_effects)
+
+  ## ONE CAUSAL ANCESTOR
+  measure_2 <- numeric(unit=unit, name="measure_2")
+  cause_ancestor <- causes(measure_2, measure_0)
+  design1 <- Design(relationships=list(cause_relat, cause_ancestor), ivs=list(measure_0), dv=measure_1)
+
+  graphs <- get_graphs(design1)
+  causal_gr <- graphs[[1]]
+  associative_gr <- graphs[[2]]
+  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design1)
+  expect_equal(length(main_effects), 2)
+  expect_true(measure_0@name %in% main_effects)
+  expect_true(measure_2@name %in% main_effects)
+
+  ## ONE CAUSAL OMISSION
+  measure_3 <- numeric(unit=unit, name="measure_3")
+  cause_omission <- causes(measure_3, measure_1)
+  design2 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission), ivs=list(measure_0), dv=measure_1)
+
+  graphs <- get_graphs(design2)
+  causal_gr <- graphs[[1]]
+  associative_gr <- graphs[[2]]
+  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design2)
+  expect_equal(length(main_effects), 3)
+  expect_true(measure_0@name %in% main_effects)
+  expect_true(measure_2@name %in% main_effects)
+  expect_true(measure_3@name %in% main_effects)
+
+  ## ONE ASSOCIATIVE RELATIONSHIP
+  measure_4 <- numeric(unit=unit, name="measure_4")
+  assoc <- associates_with(measure_0, measure_4)
+  design3 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc), ivs=list(measure_0), dv=measure_1)
+
+  graphs <- get_graphs(design3)
+  causal_gr <- graphs[[1]]
+  associative_gr <- graphs[[2]]
+  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design3)
+  expect_equal(length(main_effects), 3)
+  expect_true(measure_0@name %in% main_effects)
+  expect_true(measure_2@name %in% main_effects)
+  expect_true(measure_3@name %in% main_effects)
+
+  ## ONE ASSOCIATIVE INTERMEDIARY
+  assoc_ <- associates_with(measure_0, measure_4) # IV
+  assoc_intermediary <- associates_with(measure_1, measure_4) # DV
+  design4 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc_, assoc_intermediary), ivs=list(measure_0), dv=measure_1)
+
+  graphs <- get_graphs(design4)
+  causal_gr <- graphs[[1]]
+  associative_gr <- graphs[[2]]
+  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design4)
+  expect_equal(length(main_effects), 4)
+  expect_true(measure_0@name %in% main_effects)
+  expect_true(measure_2@name %in% main_effects)
+  expect_true(measure_3@name %in% main_effects)
+  expect_true(measure_4@name %in% main_effects)
 
 })
