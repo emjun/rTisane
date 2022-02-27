@@ -18,3 +18,6 @@ Not called directly.
 \item{\code{rhs}}{AbstractVariable. A variable that is associated with another.}
 }}
 
+\examples{
+Associates(measure_0, measure_1)
+}

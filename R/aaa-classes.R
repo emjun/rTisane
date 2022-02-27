@@ -171,6 +171,34 @@ Causes <- setClass("Causes",
     )
 )
 
+#' Moderates class
+#'
+#' Class for Associates relationships.
+#' Not called directly.
+#' @slot moderators List of AbstractVariables. 
+#' @slot on AbstractVariable that the moderators moderate each other on
+#' @keywords
+#' @examples
+#' Moderates(moderators=list(x1, x2), on=dv)
+Moderates <- setClass("Moderates",
+    slot = c(
+        moderators = "list",
+        on = "AbstractVariable"
+    ),
+    prototype = list(
+        moderators = NULL,
+        on = NULL
+    )
+)
+# Helper to create instances of the Moderates class
+Moderates <- function(moderators,
+                   on) {
+  new("Moderates",
+      moderators=moderators,
+      on = on
+  )
+}
+
 
 setClassUnion("numberValueORExactlyORAtMostORPer", c("NumberValue", "Exactly", "AtMost", "Per"))
 setClassUnion("AbstractVariableORNull", c("AbstractVariable", "NULL"))

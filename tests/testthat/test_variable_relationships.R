@@ -24,6 +24,31 @@ test_that("Associates created properly", {
   expect_equal(associates_relat@rhs, measure_1)
 })
 
+test_that("Moderates created properly", {
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_3 <- numeric(unit=unit, name="measure_3")
+
+  # Two variables moderate
+  moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
+  expect_s4_class(moderate_relat_0, "Moderates")
+  expect_type(moderate_relat_0@moderators, "list")
+  expect_true(list(measure_0) %in% moderate_relat_0@moderators)
+  expect_true(list(measure_2) %in% moderate_relat_0@moderators)
+  expect_equal(measure_1, moderate_relat_0@on)
+
+  # Three variables moderate
+  moderate_relat_1 <- moderates(var=measure_0, moderator=list(measure_2, measure_3), on=measure_1)
+  expect_s4_class(moderate_relat_1, "Moderates")
+  expect_type(moderate_relat_0@moderators, "list")
+  expect_true(list(measure_0) %in% moderate_relat_1@moderators)
+  expect_true(list(measure_2) %in% moderate_relat_1@moderators)
+  expect_true(list(measure_3) %in% moderate_relat_1@moderators)
+  expect_equal(measure_1, moderate_relat_1@on)
+})
+
 test_that("Nests created properly", {
   unit_0 <- Unit("person")
   unit_1 <- Unit("group")
