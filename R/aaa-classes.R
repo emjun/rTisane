@@ -306,7 +306,6 @@ Numeric <- setClass("Numeric",
 #' @slot name Name of measure, corresponds to column name if assigning data.
 #' @slot cardinality Integer for cardinality.
 #' @slot categories List of categories.
-#' @slot isInteraction Logical. True if variable is an interaction. False otherwise.
 #' @keywords
 #' @examples
 #' Nominal()
@@ -316,6 +315,35 @@ Nominal <- setClass("Nominal",
         cardinality = "integer",
         categories = "list",
         isInteraction = "logical"
+    ),
+    prototype = list(
+        name = "",
+        cardinality = as.integer(0),
+        categories = list(),
+        isInteraction = FALSE
+    ),
+    contains = "Measure"
+)
+
+#' Moderation Nominal class
+#'
+#' Class for representing Moderation (or Moderation) effects as nominal variables.
+#' Not called directly. All moderations are declared through moderates.
+#' @slot units List of Units, may only be one unit if the moderation is constructed from Measures from the same Unit
+#' @slot name Character name (shorthand) for the interaction/moderation effect
+#' @slot cardinality Integer for cardinality.
+#' @slot moderators List of AbstractVariables that moderate each other
+#' @slot categories List of categories that are the product of interacting the moderators.
+#' @keywords
+#' @examples
+#' Nominal()
+ModerationNominal <- setClass("ModerationNominal",
+    slot = c(
+        units = "list", # List of Units
+        name = "character",
+        cardinality = "integer",
+        # categories = "list",
+        moderators = "list" # List of AbstractVariables
     ),
     contains = "Measure"
 )

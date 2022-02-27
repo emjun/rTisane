@@ -59,7 +59,7 @@ test_that("Infer has relationships", {
 
 })
 
-test_that("Graphs constructed correctly", {
+test_that("Causal graphs constructed correctly", {
   unit <- Unit("person")
   measure_0 <- numeric(unit=unit, name="measure_0")
   measure_1 <- numeric(unit=unit, name="measure_1")
@@ -80,6 +80,64 @@ test_that("Graphs constructed correctly", {
   expect_equal(length(names(causal_gr)), 2)
   expect_true(measure_0@name %in% names(causal_gr))
   expect_true(measure_1@name %in% names(causal_gr))
+})
+
+test_that("Measurement graphs constructed correctly", {
+  # Add moderates relationship
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+
+  ## Two variables moderate
+  moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
+  design <- Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
+  # Infer has relationships
+  has_relationships <- infer_has_relationships(design=design)
+  # Combine all relationships
+  all_relationships <- append(design@relationships, has_relationships)
+
+  # Construct graph from relationships
+  vars <- get_all_vars(design=design)
+  graphs <- construct_graphs(all_relationships, vars)
+  measurement_gr <- graphs[[3]]
+
+  expect_equal(length(names(measurement_gr)), 4)
+  expect_equal(length(has_relationships), length(names(measurement_gr)))
+  for (r in has_relationships) {
+    expect_s4_class(r, "Has")
+    expect_equal(r@variable, unit)
+
+    if ("_X_" %in% r@measure@name) {
+      expect_equal(r@measure@name == "measure_0_X_measure_2")
+    }
+  }
+
+  ## Three variables moderate
+  measure_3 <- numeric(unit=unit, name="measure_3")
+  moderate_relat_1 <- moderates(var=measure_0, moderator=list(measure_2, measure_3), on=measure_1)
+  design1 <- Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
+  # Infer has relationships
+  has_relationships <- infer_has_relationships(design=design1)
+  # Combine all relationships
+  all_relationships <- append(design1@relationships, has_relationships)
+
+  # Construct graph from relationships
+  vars <- get_all_vars(design=design1)
+  graphs <- construct_graphs(all_relationships, vars)
+  measurement_gr <- graphs[[3]]
+
+  expect_equal(length(names(measurement_gr)), 4)
+  expect_equal(length(has_relationships), length(names(measurement_gr)))
+  for (r in has_relationships) {
+    expect_s4_class(r, "Has")
+    expect_equal(r@variable, unit)
+
+    if ("_X_" %in% r@measure@name) {
+      expect_equal(r@measure@name == "measure_0_X_measure_2_X_measure_3")
+    }
+  }
+
 })
 
 test_that("Main effects inferred correctly", {

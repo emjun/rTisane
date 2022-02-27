@@ -58,6 +58,51 @@ construct_graphs <- function(all_relationships, vars){
             associative_edges <- append(associative_edges, edge)
             edge <- paste(r@lhs@name, "<-", r@rhs@name)
             associative_edges <- append(associative_edges, edge)
+        } else if (is(r, "Moderates")) {
+            
+            # Construct new interaction variable
+            # Get Units
+            m_units = list()
+            for (m in r@moderators) {
+                if (is(m, "Measure")) {
+                    m_units <- append(m_units, m@unit)
+                } else {
+                    err_msg <- paste("Moderator is of type", typeof(m), collapse=" ")
+                    stop(err_msg)
+                }
+                # else if (is(m, "Unit")) {
+                #     m_units <- append(m_units, m)
+                # }
+                    
+            }
+            # Create name
+            m_names = list()
+            for (m in r@moderators) {
+                m_names <- append(m_names, m@name)
+            }
+            name = paste(m_names, collapse="_X_")
+            # Calculate cardinality
+            m_cardinality = as.integer(-1) # Need to calculate
+            # for (m in r@moderators) {
+            #     if ()
+            #     m_cardinality = m_cardinality * m@cardinality
+            # }
+        
+            var <- ModerationNominal(
+                units=m_units, name=name, cardinality=m_cardinality, moderators=r@moderators
+            )  
+
+            # Add has relationships
+            # for (u in var@units) {
+            #     edge <- paste(u@name, "->", var@name)
+            #     measurement_edges <- append(measurement_edges, edge)
+            # }
+            
+            # Associate moderation variable with on (outcome/dependent) variable
+            edge <- paste(var@name, "->", r@on@name)
+            associative_edges <- append(associative_edges, edge)
+            edge <- paste(var@name, "<-", r@on@name)
+            associative_edges <- append(associative_edges, edge)
         } else {
             stop(paste("Not an accepted relationship type: ", typeof(r)))
         }
