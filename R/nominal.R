@@ -13,9 +13,10 @@
 setGeneric("nominal", function(unit, name, cardinality, number_of_instances) standardGeneric("nominal"))
 setMethod("nominal", signature("Unit", "character", "numeric", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, number_of_instances) {
   # Create new measure
-  measure = Nominal(name=name, cardinality=as.integer(cardinality))
+  # TODO: Add unit
+  measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), number_of_instances=number_of_instances)
   # Create has relationship
-  has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
   # has_relat
 
@@ -26,9 +27,9 @@ setMethod("nominal", signature("Unit", "character", "numeric", "missing"), funct
   number_of_instances = as.integer(1)
   
   # Create new measure
-  measure = Nominal(name=name, cardinality=as.integer(cardinality))
+  measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), number_of_instances=number_of_instances)
   # Create has relationship
-  has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
   # has_relat
   # Return handle to measure

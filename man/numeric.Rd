@@ -13,6 +13,9 @@ numeric(unit, name, number_of_instances = 1)
 
 \item{number_of_instances}{Integer or AbstractVariable or AtMost or Per. Number of instances of the measure the @param unit has. Default is 1.}
 }
+\value{
+Has Relationship representing Unit having the Nominal Measure.
+}
 \description{
 Method for constructing a numeric measure through a Unit.
 }

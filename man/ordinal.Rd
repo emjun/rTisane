@@ -4,7 +4,7 @@
 \alias{ordinal}
 \title{Create an ordinal measure}
 \usage{
-ordinal(unit, name, order, cardinality, number_of_instances = 1)
+ordinal(unit, name, order, number_of_instances)
 }
 \arguments{
 \item{unit}{Unit object. Unit that has/contributes the ordinal measure.}
@@ -16,6 +16,9 @@ ordinal(unit, name, order, cardinality, number_of_instances = 1)
 \item{number_of_instances}{Integer or AbstractVariable or AtMost or Per. Number of instances of the measure the @param unit has. Default is 1.}
 
 \item{cardinality.}{Integer. Optional. Only required if no data is assigned. If provided, checked to make sure @param cardinality == length(@param order)}
+}
+\value{
+Has Relationship representing Unit having the Nominal Measure.
 }
 \description{
 Method for constructing an ordinal measure through a Unit.

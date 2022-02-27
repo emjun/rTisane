@@ -14,6 +14,7 @@ RoxygenNote: 7.1.2.9000
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Imports: dagitty
 Collate: 
     'aaa-classes.R'
     'assign_cardinality_from_data.R'
@@ -22,6 +23,8 @@ Collate:
     'causes.R'
     'get_cardinality.R'
     'has.R'
+    'get_all_vars.R'
+    'infer_has_relationships.R'
     'infer_model.R'
     'infer_statistical_model_from_design.R'
     'moderates.R'
@@ -30,3 +33,4 @@ Collate:
     'number_value.R'
     'numeric.R'
     'ordinal.R'
+    'construct_graphs.R'

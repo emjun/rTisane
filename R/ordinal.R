@@ -17,9 +17,9 @@ setMethod("ordinal", signature("Unit", "character", "list", "integerORAbstractVa
   # Calculate cardinality from order
   cardinality = length(order)
   # Create new measure
-  measure = Ordinal(name=name, order=order, cardinality=cardinality)
+  measure = Ordinal(unit=unit, name=name, order=order, cardinality=cardinality, number_of_instances=number_of_instances)
   # Create has relationship
-  has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
   # has_relat
   # Return handle to measure
@@ -31,10 +31,10 @@ setMethod("ordinal", signature("Unit", "character", "list", "missing"), function
   # Calculate cardinality from order
   cardinality = length(order)
   # Create new measure
-  measure = Ordinal(name=name, order=order, cardinality=cardinality)
+  measure = Ordinal(unit=unit, name=name, order=order, cardinality=cardinality, number_of_instances=number_of_instances)
   
   # Create has relationship
-  has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
   # has_relat
   # Return handle to measure

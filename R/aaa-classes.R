@@ -239,6 +239,10 @@ Unit <- function(name,
 #' @examples
 #' Measure()
 Measure <- setClass("Measure",
+    slot = c(
+        unit = "Unit",
+        number_of_instances = "integerORAbstractVariableORAtMostORPer"
+    ),
     contains = "AbstractVariable"
 )
 
@@ -359,3 +363,56 @@ Nests <- setClass("Nests",
         group = "Unit"
     )
 )
+
+
+setClassUnion("DF_OR_NULL", c("list", "NULL"))
+
+#' Design class
+#' 
+#' Class for Study designs.
+#' @slot relationships List of relationships between variables. 
+#' @slot ivs List of AbstractVariables. Varibale that are independent variables. 
+#' @slot dv AbstractVariable. Variable that is the dependent variable. 
+#' @slot source Data frame containing data for Design. 
+#' @keywords
+#' @examples 
+#' Design()
+Design <- setClass("Design",
+    slot = c(
+        relationships = "list",
+        ivs = "list", # list of AbstractVariables
+        dv = "AbstractVariable",
+        source = "DF_OR_NULL" # Should be a data.frame (with data) or NULL (no data)
+    ),
+    prototype = list(
+        relationships = NULL, 
+        ivs = NULL, 
+        dv = NULL, 
+        source = NULL
+    )
+)
+# Helper to create instances of Design 
+Design <- function(relationships=list(),
+                    ivs=NULL,
+                    dv=NULL,
+                    source=NULL) {
+  # Check parameters
+  if (length(relationships) == 0) {
+      stop("There are no relationships. Provide @relationship in order to infer a statistical model.")
+  } 
+  if (is.null(ivs) || length(ivs) == 0) {
+      stop("@ivs is not specified. Please provide at least one variable to model.")
+  }
+  if (is.null(dv)) {
+      stop("@dv is not specified. Please provide a variable to model.")
+  }
+
+  if (is.list(ivs)) {
+
+  }
+  new("Design",
+      relationships=relationships,
+      ivs=ivs,
+      dv=dv,
+      source=source)
+}

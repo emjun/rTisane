@@ -7,9 +7,9 @@
 nests_within(base, group)
 }
 \arguments{
-\item{base}{AbstractVariable. Variable that is nested within another.}
+\item{base}{Unit. Variable that is nested within another.}
 
-\item{group}{AbstractVariable. Variable that contains multiple instances of @param base.}
+\item{group}{Unit. Variable that contains multiple instances of @param base.}
 }
 \description{
 Method for constructing a nesting relationship between two variables.

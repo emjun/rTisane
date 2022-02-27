@@ -13,9 +13,9 @@ setGeneric("numeric", function(unit, name, number_of_instances=1) standardGeneri
 setMethod("numeric", signature("Unit", "character", "integerORAbstractVariableORAtMostORPer"), function(unit, name, number_of_instances)
 {
   # Create new measure
-  measure = Numeric(name=name)
+  measure = Numeric(unit=unit, name=name, number_of_instances=number_of_instances)
   # Create has relationship
-  has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+  # has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
   # Return has relationship
   # has_relat
   # Return handle to measure
@@ -24,9 +24,9 @@ setMethod("numeric", signature("Unit", "character", "integerORAbstractVariableOR
 setMethod("numeric", signature("Unit", "character", "missing"), function(unit, name, number_of_instances) {
 number_of_instances = as.integer(1)
 # Create new measure
-measure = Numeric(name=name)
+measure = Numeric(unit=unit, name=name, number_of_instances=number_of_instances)
 # Create has relationship
-has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
+# has_relat = has(unit=unit, measure=measure, number_of_instances=number_of_instances)
 # Return has relationship
 # has_relat
 # Return handle to measure
