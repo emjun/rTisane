@@ -37,12 +37,14 @@ infer_main_effects_with_explanations <- function(causal_gr, associative_gr, desi
         for (iv in design@ivs) {
             iv_name <- iv@name
             # Find their descendants
-            desc <- descendants(associative_gr, iv_name)
+            if (iv_name %in% names(associative_gr)) {
+                desc <- descendants(associative_gr, iv_name)
 
-            # For each descendant, is it a parent of the dv?
-            for (d in desc) {
-                if (d %in% dv_parents) {
-                    assoc_intermediaries <- append(assoc_intermediaries, d)
+                # For each descendant, is it a parent of the dv?
+                for (d in desc) {
+                    if (d %in% dv_parents) {
+                        assoc_intermediaries <- append(assoc_intermediaries, d)
+                    }
                 }
             }
         }

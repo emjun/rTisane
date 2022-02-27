@@ -226,30 +226,51 @@ test_that("Interaction effects inferred correctly", {
   cause_relat_0 <- causes(measure_0, measure_1)
   cause_relat_1 <- causes(measure_2, measure_1)
   moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
-  design <- Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_0), ivs=list(measure_0), dv=measure_1)
-
+  design <- Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_0), ivs=list(measure_0, measure_2), dv=measure_1)
   graphs <- get_graphs(design)
   causal_gr <- graphs[[1]]
   associative_gr <- graphs[[2]]
-  interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design)
+  main_effects = infer_main_effects_with_explanations(causal_gr, associative_gr, design)
+  interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design, main_effects)
   expect_equal(length(interaction_effects), 1)
 
+  ### FILTERED OUT
+  design_f <- Design(relationships=list(cause_relat_0, moderate_relat_0), ivs=list(measure_0), dv=measure_1)
+  graphs <- get_graphs(design_f)
+  causal_gr <- graphs[[1]]
+  associative_gr <- graphs[[2]]
+  main_effects_f =  infer_main_effects_with_explanations(causal_gr, associative_gr, design_f)
+  interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design_f, main_effects_f)
+  expect_equal(length(interaction_effects), 0)
+
   ## TWO 2-VARIABLE MODERATIONS
+  cause_relat_2 <- causes(measure_3, measure_1)
   moderate_relat_1 <- moderates(var=measure_0, moderator=list(measure_3), on=measure_1)
-  design1 <- Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_0, moderate_relat_1), ivs=list(measure_0), dv=measure_1)
+  design1 <- Design(relationships=list(cause_relat_0, cause_relat_1, cause_relat_2, moderate_relat_0, moderate_relat_1), ivs=list(measure_0, measure_2, measure_3), dv=measure_1)
   graphs <- get_graphs(design1)
   causal_gr <- graphs[[1]]
   associative_gr <- graphs[[2]]
-  interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design1)
+  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design1)
+  interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design1, main_effects)
   expect_equal(length(interaction_effects), 2)
 
-  ## ONE 3-VARIABLE MODERATION
+  ### FILTERED OUT
+  design1 <- Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_0, moderate_relat_1), ivs=list(measure_0, measure_2), dv=measure_1)
+  graphs <- get_graphs(design1)
+  causal_gr <- graphs[[1]]
+  associative_gr <- graphs[[2]]
+  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design1)
+  interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design1, main_effects)
+  expect_equal(length(interaction_effects), 1)
+
+  # ## ONE 3-VARIABLE MODERATION
   moderate_relat_2 <- moderates(var=measure_0, moderator=list(measure_2, measure_3), on=measure_1)
-  design2 <- Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_2), ivs=list(measure_0), dv=measure_1)
+  design2 <- Design(relationships=list(cause_relat_0, cause_relat_1, cause_relat_2, moderate_relat_2), ivs=list(measure_0), dv=measure_1)
   graphs <- get_graphs(design2)
   causal_gr <- graphs[[1]]
   associative_gr <- graphs[[2]]
-  interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design2)
+  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design2)
+  interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design2, main_effects)
   expect_equal(length(interaction_effects), 1)
-  
+
 })
