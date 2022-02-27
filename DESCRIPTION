@@ -36,3 +36,4 @@ Collate:
     'construct_graphs.R'
     'check_conceptual_relationships.R'
     'infers_main_effects_with_explanations.R'
+    'infer_interaction_effects_with_explanations.R'

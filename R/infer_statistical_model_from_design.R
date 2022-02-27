@@ -28,6 +28,7 @@ infer_statistical_model_from_design <- function(design){
     ### Step 2: Candidate statistical model inference/generation
     main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
     interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design)
+    # TODO: Filter interaction_effects to only include those that involve two or more main effects
     random_effects <- infer_random_effects_with_explanations(measurement_gr, design)
 
     family_functions <- infer_family_functions()
