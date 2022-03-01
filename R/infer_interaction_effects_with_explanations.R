@@ -1,10 +1,10 @@
 #' Infers interaction/moderation effects.
 #'
-#' This function infers main effects from a conceptual graph.
+#' This function infers interaction/moderation effects from a conceptual graph.
 #' @param causal_gr Graph representing causal relationships between variables.
 #' @param associative_gr Graph representing associative relationships between variables.
 #' @param design Design
-#' @return List of main effects and their explanations
+#' @return List of interaction/moderation effects and their explanations
 #' @import dagitty
 #' @keywords
 #' @examples
