@@ -106,10 +106,14 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "decre
 
 # Queries to issue
 ## Expressed conceptual model vs. data
+```R
 assess(conceptual_model=cm, data=data)
+```
 
 ## Expressed conceptual model --> statistical model 
+```R
 query(conceptual_model=cm, iv=[list], dv=pounds_lost)
+```
 
 # Questions
 1. Aesthetically - is it weird to not have the same gradations of specificity for interaction even though empirically we've found that interactions are difficult to reason about without (hyper-)specificity?
