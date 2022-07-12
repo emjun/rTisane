@@ -85,23 +85,31 @@ hypothesize(relates(motivation, pounds_lost), cm)
 midlife_crisis <- Unobserved()
 assume(causes(age, midlife_crisis), cm)
 assume(causes(midlife_crisis, pounds_lost), cm)
-suspect_causes(midlife_crisis, motivation, cm)
-# Could have used know_causes as well - Does not change behavior later on.
+assume(causes(midlife_crisis, motivation), cm) # Assume vs. hypothesize does not matter/change behavior later on. For latent variables, should use assume since we cannot test/hypothesize unobserved relationships.
 
 # Common ancestor
 # latent_var -> age, latent_var -> motivation
 latent_var <- Unobserved()
-causes(latent_var, age, cm)
-causes(latent_var, motivation, cm)
-
+assume(causes(latent_var, age), cm)
+assume(causes(latent_var, motivation), cm)
+assume(causes(age, motivation), cm)
 ```
 
 ## Potential interactions
+Interactions are a conjunction of multiple "conditions" + a consequence
+Why not just all conjunction?: There is an implied consequence/"directionality" of effect in interactions
 ```R
-
+suspect(when((motivation, "==high"), (age, "increases")).then(pounds_lost, "increases"), cm)
+suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "baseline"), cm) # Do we want to allow for baseline?
+suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "decreases"), cm)
 ```
 
 # Queries to issue
 ## Expressed conceptual model vs. data
+assess(conceptual_model=cm, data=data)
 
 ## Expressed conceptual model --> statistical model 
+query(conceptual_model=cm, iv=[list], dv=pounds_lost)
+
+# Questions
+1. Aesthetically - is it weird to not have the same gradations of specificity for interaction even though empirically we've found that interactions are difficult to reason about without (hyper-)specificity?
