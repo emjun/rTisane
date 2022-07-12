@@ -9,7 +9,7 @@
 #' AbstractVariable(name="name", relationships=list())
 AbstractVariable <- setClass("AbstractVariable",
     slots = c(
-        name = "character", 
+        name = "character",
         relationships = "list"
     ),
     prototype = list(
@@ -131,30 +131,6 @@ Dataset <- setClass("Dataset",
     )
 )
 
-#' Associates class
-#'
-#' Class for Associates relationships.
-#' Not called directly.
-#' @slot lhs AbstractVariable. A variable that is associated with another.
-#' @slot rhs AbstractVariable. A variable that is associated with another.
-#' @keywords
-#' @examples
-#' Associates(measure_0, measure_1)
-Associates <- setClass("Associates",
-    slot = c(
-        lhs = "AbstractVariable",
-        rhs = "AbstractVariable"
-    )
-)
-# Helper to create instances of the Associates class
-Associates <- function(lhs,
-                   rhs) {
-  new("Associates",
-      lhs = lhs,
-      rhs = rhs
-  )
-}
-
 #' Causes class
 #'
 #' Class for Causes relationships.
@@ -173,9 +149,9 @@ Causes <- setClass("Causes",
 
 #' Moderates class
 #'
-#' Class for Associates relationships.
+#' Class for Moderates relationships.
 #' Not called directly.
-#' @slot moderators List of AbstractVariables. 
+#' @slot moderators List of AbstractVariables.
 #' @slot on AbstractVariable that the moderators moderate each other on
 #' @keywords
 #' @examples
@@ -221,9 +197,9 @@ Has <- setClass("Has",
         according_to = "AbstractVariableORNull"
     ),
     prototype = list(
-        variable = NULL, 
-        measure = NULL, 
-        repetitions = NULL, 
+        variable = NULL,
+        measure = NULL,
+        repetitions = NULL,
         according_to = NULL
     )
 )
@@ -263,6 +239,35 @@ Unit <- setClass("Unit",
 Unit <- function(name,
                    cardinality=as.integer(0)) {
   new("Unit",
+      name = name,
+      cardinality = as.integer(cardinality)
+  )
+}
+
+#' Participant class
+#'
+#' Class for Participant variables
+#' @slot name Name of Participant, corresponds to column name if assigning data
+#' @slot integer Integer for cardinality, optional. Only required if no data is assigned
+#' @keywords
+#' @export
+#' @examples
+#' Participant()
+Participant <- setClass("Participant",
+    slot = c(
+      name = "character",
+      cardinality = "integer"
+    ),
+    contains = "Unit",
+    prototype = list(
+      name = NULL,
+      cardinality = as.integer(0)
+    )
+)
+# Helper to create instances of the Participant class
+Participant <- function(name,
+                 cardinality=as.integer(0)) {
+  new("Participant",
       name = name,
       cardinality = as.integer(cardinality)
   )
@@ -386,7 +391,7 @@ SetUp <- setClass("SetUp",
     ),
     contains = "AbstractVariable",
     prototype = list(
-        name = NULL, 
+        name = NULL,
         order = list(),
         cardinality = as.integer(0)
     )
@@ -433,14 +438,14 @@ Nests <- setClass("Nests",
 setClassUnion("DF_OR_NULL", c("list", "NULL"))
 
 #' Design class
-#' 
+#'
 #' Class for Study designs.
-#' @slot relationships List of relationships between variables. 
-#' @slot ivs List of AbstractVariables. Varibale that are independent variables. 
-#' @slot dv AbstractVariable. Variable that is the dependent variable. 
-#' @slot source Data frame containing data for Design. 
+#' @slot relationships List of relationships between variables.
+#' @slot ivs List of AbstractVariables. Varibale that are independent variables.
+#' @slot dv AbstractVariable. Variable that is the dependent variable.
+#' @slot source Data frame containing data for Design.
 #' @keywords
-#' @examples 
+#' @examples
 #' Design()
 Design <- setClass("Design",
     slot = c(
@@ -450,13 +455,13 @@ Design <- setClass("Design",
         source = "DF_OR_NULL" # Should be a data.frame (with data) or NULL (no data)
     ),
     prototype = list(
-        relationships = NULL, 
-        ivs = NULL, 
-        dv = NULL, 
+        relationships = NULL,
+        ivs = NULL,
+        dv = NULL,
         source = NULL
     )
 )
-# Helper to create instances of Design 
+# Helper to create instances of Design
 Design <- function(relationships=list(),
                     ivs=NULL,
                     dv=NULL,
@@ -464,7 +469,7 @@ Design <- function(relationships=list(),
   # Check parameters
   if (length(relationships) == 0) {
       stop("There are no relationships. Provide @relationship in order to infer a statistical model.")
-  } 
+  }
   if (is.null(ivs) || length(ivs) == 0) {
       stop("@ivs is not specified. Please provide at least one variable to model.")
   }

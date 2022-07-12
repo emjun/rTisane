@@ -12,18 +12,18 @@
 #' @examples
 #' infer_interaction_effects_with_explanations()
 infer_random_effects_with_explanations <- function(measurement_gr, nests_gr, design, all_relationships, main_effects, interaction_effects) {
-    dv <- design@dv
+    # dv <- design@dv
 
-    unit <- parents(measurement_gr, dv@name)
-    stopifnot(length(unit) == 1)
+    # unit <- parents(measurement_gr, dv@name)
+    # stopifnot(length(unit) == 1)
 
-    for (r in all_relationships) {
-        if (is(r, "Has")) {
-            # Is this the has relationship we are looking for? 
-            if (is(r@variable, unit) && is(r@measure, dv)) {
+    # for (r in all_relationships) {
+    #     if (is(r, "Has")) {
+    #         # Is this the has relationship we are looking for?  
+    #         if (is(r@variable, unit) && is(r@measure, dv)) {
                 
-            }
-        }
-    }
+    #         }
+    #     }
+    # }
 }
 

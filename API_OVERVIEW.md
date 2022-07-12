@@ -1,8 +1,9 @@
 # API OVERVIEW
 
-# Variable declaration
+# EXTERNAL API 
+## Variable declaration
 
-## Participant
+### [x] Participant
 ```R
 member <- Participant("member", caridinality=386)
 
@@ -11,18 +12,18 @@ age <- numeric(unit=member, name="age", number_of_instances=1)
 pounds_lost <- numeric(unit=member, name="pounds_lost")
 ```
 
-## Condition
+### [x] Condition
 ```R
 condition <- condition(unit=group, "treatment", cardinality=2 number_of_instances=1)
 ```
 
-# Conceptual relationships
+## Conceptual relationships
 ```R
 cm <- ConceptualModel()
 ```
 
-## _Specificity_ of relationship direction 
-## UNCERTAIN: Ambiguous direction, general conceptual relationship
+### _Specificity_ of relationship direction 
+### UNCERTAIN: Ambiguous direction, general conceptual relationship
 The direction of relationship is unclear.
 ```R
 # Either -->, <-- could be true; system needs to ask user for input or explore multiple paths
@@ -30,13 +31,13 @@ r0 <- relates(motivation, pounds_lost)
 r1 <- relates(motivation, pounds_lost)
 ```
 
-## Specific relationships
+### Specific relationships
 ```R
 c0 <- causes(age, pounds_lost)
 c1 <- causes(condition, pounds_lost)
 ```
 
-## (Hyper-) specific relationships
+### (Hyper-) specific relationships
 The benefit of these functions is (i) closer mapping to the detail with which how analysts think about causal relationships and (ii) more thorough documentation to facilitate analysts' reflection.
 ```R
 # System: Have to infer/follow-up when not all categories in a categorical variable is stated?
@@ -50,8 +51,8 @@ sr2 <- when(condition, "==`treatment`").then(pounds_lost, "increases")
 sr3 <- when(condition, "!=`treatment`").then(pounds_lost, "decreases")
 ```
 
-## _Evidence_ for relationships
-## Known relationship (e.g., from prior work, would be problematic if this did not exist)
+### _Evidence_ for relationships
+### Known relationship (e.g., from prior work, would be problematic if this did not exist)
 ```R
 c <- causes(age, pounds_lost)
 assume(c, cm)
@@ -64,7 +65,7 @@ assume(r, cm)
 assume(relates(motivation, pounds_lost), cm)
 ```
 
-## Hypothesized relationship (e.g., the focus of the current ongoing research)
+### Hypothesized relationship (e.g., the focus of the current ongoing research)
 ```R
 c <- causes(condition, pounds_lost)
 hypothesize(c, cm)
@@ -117,3 +118,11 @@ query(conceptual_model=cm, iv=[list], dv=pounds_lost)
 
 # Questions
 1. Aesthetically - is it weird to not have the same gradations of specificity for interaction even though empirically we've found that interactions are difficult to reason about without (hyper-)specificity?
+
+
+## Possible inconveniences
+1. Casting all parmeters using integer().
+Because we override the ``numeric`` data type/function in R, end-users need to specify integer parameters by explicitly casting/specifying their parameters using ``integer``. For example: 
+```R
+condition <- condition(unit=participant, name="treatment", order=list("low","medium", "high"), number_of_instances=integer(1))
+```

@@ -33,11 +33,4 @@ setMethod("nominal", signature("Unit", "character", "numeric", "missing"), funct
   # has_relat
   # Return handle to measure
   measure
-
-  # # Add has relationship to @param unit
-  # unit@relationships <- append(unit@relationships, has_relat)
-  # # Add has relationship to @param measure
-  # measure@relationships <- append(measure@relationships, has_relat)
-  # # Return handle to measure
-  # # measure
 })

@@ -50,15 +50,7 @@ construct_graphs <- function(all_relationships, vars){
 
             edge <- paste(r@cause@name, "->", r@effect@name)
             causal_edges <- append(causal_edges, edge)
-        } else if (is(r, "Associates")) {
-            # conceptual_gr <- add_edges(conceptual_gr, c(r@lhs@name,r@rhs@name, r@rhs@name,r@lhs@name)) %>%
-            #     set_edge_attr("type", value = "black") %>%
-            #     set_edge_attr("color", value = "blue")
-            edge <- paste(r@lhs@name, "->", r@rhs@name)
-            associative_edges <- append(associative_edges, edge)
-            edge <- paste(r@lhs@name, "<-", r@rhs@name)
-            associative_edges <- append(associative_edges, edge)
-        } else if (is(r, "Moderates")) {
+        }else if (is(r, "Moderates")) {
             
             # Construct new interaction variable
             # Get Units

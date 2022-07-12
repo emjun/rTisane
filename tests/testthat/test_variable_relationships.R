@@ -12,18 +12,6 @@ test_that("Causes created properly", {
   expect_equal(cause_relat@effect, measure_1)
 })
 
-test_that("Associates created properly", {
-  unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-
-  associates_relat <- associates_with(measure_0, measure_1)
-  expect_s4_class(associates_relat, "Associates")
-  # Verify that Associates is created correctly
-  expect_equal(associates_relat@lhs, measure_0)
-  expect_equal(associates_relat@rhs, measure_1)
-})
-
 test_that("Moderates created properly", {
   unit <- Unit("person")
   measure_0 <- numeric(unit=unit, name="measure_0")
