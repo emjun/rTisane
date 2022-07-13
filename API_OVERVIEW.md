@@ -17,13 +17,14 @@ pounds_lost <- numeric(unit=member, name="pounds_lost")
 condition <- condition(unit=group, "treatment", cardinality=2 number_of_instances=1)
 ```
 
-## Conceptual relationships
+## [x] Conceptual relationships
 ```R
 cm <- ConceptualModel()
 ```
 
 ### _Specificity_ of relationship direction 
-### UNCERTAIN: Ambiguous direction, general conceptual relationship
+These constructs create relationship objects that must then get added to the conceptual model based on the evidence for each relationship.
+### [x] UNCERTAIN: Ambiguous direction, general conceptual relationship
 The direction of relationship is unclear.
 ```R
 # Either -->, <-- could be true; system needs to ask user for input or explore multiple paths
@@ -31,7 +32,7 @@ r0 <- relates(motivation, pounds_lost)
 r1 <- relates(motivation, pounds_lost)
 ```
 
-### Specific relationships
+### [x] Specific relationships
 ```R
 c0 <- causes(age, pounds_lost)
 c1 <- causes(condition, pounds_lost)
@@ -39,6 +40,9 @@ c1 <- causes(condition, pounds_lost)
 
 ### (Hyper-) specific relationships
 The benefit of these functions is (i) closer mapping to the detail with which how analysts think about causal relationships and (ii) more thorough documentation to facilitate analysts' reflection.
+
+Return a Cause relationship.
+**Idea could the specificity be used to facilitate statistical model/result interpretation?**
 ```R
 # System: Have to infer/follow-up when not all categories in a categorical variable is stated?
 # Return set of implied relationships?
@@ -49,9 +53,45 @@ sr1 <- when(motivation, "increases").then(pounds_lost, "decreases")
 # Provide own condition that must parse in R (==, !=)
 sr2 <- when(condition, "==`treatment`").then(pounds_lost, "increases")
 sr3 <- when(condition, "!=`treatment`").then(pounds_lost, "decreases")
+
+# New construct 
+# Concern: Too similar to ifelse? 
+whenThen(when=increases(motivation), then=increases(pounds_lost))
+whenThen(when=list((increases(motivation)), then=increases(pounds_lost))
+
+# Mix levels of ambiguity
+causes(when=list(), then=) # Defeats purpose of when/then? 
+relates(when=list(), then=) # Reuse Relates
+
+# Alternative although we would need to change the order of parameters so then came before when 
+whenThen(.result, ...)
+
+
+# Piping: https://adv-r.hadley.nz/functions.html#function-composition
+# Reads as "and then"
+# Focuses on verbs rather than nouns
+# Concern: Violates assumption/idioms using %>% to operate over the same piece of data. Could seem a bit unnatural since the variables of interest/parameters differ from each other?
+
+# Seems more readable
+increases(motivation) %>% increases(pounds_lost) # provided condition
+when(condition, "=='treatment'") %>% increases(pounds_lost) # custom condition 
+
+# Other syntax
+when() & when() =>
+
+# AWK: Why can't use when on the RHS?
+when(motivation, "increases") %>% increases(pounds_lost)
+when(motivation, "increases") %>% decreases(pounds_lost)
+
+# Compares instead of when
+increases(motivation) %>% increases(pounds_lost) # provided condition
+increases(motivation) %>% decreases(pounds_lost) # provided condition
+compares(condition, "==`treatment`") %>% increases(pounds_lost) # custom condition 
+compares(condition, "!=`treatment`") %>% decreases(pounds_lost) # custom condition 
 ```
 
 ### _Evidence_ for relationships
+Specifying the evidence for a relationship adds it to the conceptual model. 
 ### Known relationship (e.g., from prior work, would be problematic if this did not exist)
 ```R
 c <- causes(age, pounds_lost)
@@ -103,6 +143,20 @@ Why not just all conjunction?: There is an implied consequence/"directionality" 
 suspect(when((motivation, "==high"), (age, "increases")).then(pounds_lost, "increases"), cm)
 suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "baseline"), cm) # Do we want to allow for baseline?
 suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "decreases"), cm)
+
+# Unique/extensible function
+whenThen(increases(motivation), comapres(motivation, "=='high'"), increases(pounds_lost))
+
+# Piping
+# Gives a sense of passage of time, which seems closer to how people think about cause/effect
+when(motivation, "==high") & when(age, "increases") %>% increases(pounds_lost)
+ 
+# More like SQL, invoking mental model of SQL could be confusing especially for people who are unfamiliar with SQL
+where(motivation, "==high") %>% where(age, "increases") %>% increases(pounds_lost)
+where(motivation, "==high") & where(age, "increases") %>% increases(pounds_lost)
+
+# Combine nesting with piping 
+compares(list((motivation, "==high"), (age, "increases"))) %>% increases(pounds_lost)
 ```
 
 # Queries to issue
@@ -126,3 +180,9 @@ Because we override the ``numeric`` data type/function in R, end-users need to s
 ```R
 condition <- condition(unit=participant, name="treatment", order=list("low","medium", "high"), number_of_instances=integer(1))
 ```
+
+
+## TODOs
+- Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
+
+## Internal API 

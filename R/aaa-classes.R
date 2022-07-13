@@ -131,6 +131,22 @@ Dataset <- setClass("Dataset",
     )
 )
 
+#' Relates class
+#'
+#' Class for Relates relationships.
+#' Not called directly.
+#' @slot lhs AbstractVariable. A variable.
+#' @slot rhs AbstractVariable. A variable.
+#' @keywords
+#' @examples
+#' Relates()
+Relates <- setClass("Relates",
+                   slot = c(
+                     lhs = "AbstractVariable",
+                     rhs = "AbstractVariable"
+                   )
+)
+
 #' Causes class
 #'
 #' Class for Causes relationships.
@@ -435,7 +451,31 @@ Nests <- setClass("Nests",
 )
 
 
-setClassUnion("DF_OR_NULL", c("list", "NULL"))
+#' ConceptualModel class
+#'
+#' Class for Conceptual Models
+#' @keywords
+#' @export
+#' @examples
+#' ConceptualModel()
+ConceptualModel <- setClass("ConceptualModel",
+    slot = c(
+      variables = "list",
+      relationships = "list"
+    ),
+    prototype = list(
+      variables = NULL,
+      relationships = NULL
+    )
+)
+# Helper to create instances of the ConceptualModel class
+ConceptualModel <- function(variables=list(), relationships=list()) {
+  new("ConceptualModel",
+      variables=variables,
+      relationships=relationships)
+}
+
+setClassUnion("dfOrNull", c("list", "NULL"))
 
 #' Design class
 #'
@@ -452,7 +492,7 @@ Design <- setClass("Design",
         relationships = "list",
         ivs = "list", # list of AbstractVariables
         dv = "AbstractVariable",
-        source = "DF_OR_NULL" # Should be a data.frame (with data) or NULL (no data)
+        source = "dfOrNull" # Should be a data.frame (with data) or NULL (no data)
     ),
     prototype = list(
         relationships = NULL,
@@ -486,3 +526,23 @@ Design <- function(relationships=list(),
       dv=dv,
       source=source)
 }
+
+#' Compares class
+#'
+#' Class for comparison relationships.
+#' Not called directly.
+#' @slot variable AbstractVariable. Variable that is being compared.
+#' @slot condition character. Condition to filter values of @slot variable on.
+#' @keywords
+#' @examples
+#' Compares()
+Compares <- setClass("Compares",
+                  slot = c(
+                    variable = "AbstractVariable",
+                    condition = "character"
+                  )
+)
+
+setClassUnion("numericORordinal", c("Numeric", "Ordinal"))
+setClassUnion("nominalORordinal", c("Nominal", "Ordinal"))
+setClassUnion("integerORnumericORcharacter", c("integer", "numeric", "character"))

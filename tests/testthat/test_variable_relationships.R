@@ -1,5 +1,25 @@
 library(tisaner)
 
+test_that("Conceptual Model created properly", {
+  cm <- ConceptualModel()
+
+  expect_s4_class(cm, "ConceptualModel")
+  expect_type(cm@variables, "list")
+  expect_equal(length(cm@variables), 0)
+  expect_type(cm@relationships, "list")
+  expect_equal(length(cm@relationships), 0)
+})
+
+test_that("Ambiguous Relates created properly", {
+  participant <- Participant("pid")
+  measure_0 <- numeric(unit=participant, name="measure_0")
+  measure_1 <- numeric(unit=participant, name="measure_1")
+
+  ambig_relat <- relates(measure_0, measure_1)
+  expect_s4_class(ambig_relat, "Relates")
+
+})
+
 test_that("Causes created properly", {
   unit <- Unit("person")
   measure_0 <- numeric(unit=unit, name="measure_0")
@@ -54,4 +74,60 @@ test_that("Nests created properly", {
   expect_error(nests_within(measure_0, measure_1), "*")
 })
 
-# Need to make sure that measure, unit has relationship is inferred
+test_that("Compares created properly", {
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+
+  # increases
+  inc <- increases(measure_0)
+
+  expect_s4_class(inc, "Compares")
+  expect_equal(inc@variable, measure_0)
+  expect_equal(inc@condition, "increases")
+
+  # decreases
+  measure_1 <- ordinal(unit=unit, name="measure_1", order=list(1, 2, 3, 4, 5))
+  dec <- decreases(measure_1)
+
+  expect_s4_class(inc, "Compares")
+  expect_equal(dec@variable, measure_1)
+  expect_equal(dec@condition, "decreases")
+
+  # equals
+  eq <- equals(measure_1, 4)
+  expect_s4_class(eq, "Compares")
+  expect_equal(eq@variable, measure_1)
+  expect_equal(eq@condition, "==4")
+
+  # not equals
+  measure_2 <- nominal(unit=unit, name="measure_2", cardinality=5)
+  neq <- notEquals(measure_2, 4)
+  expect_s4_class(neq, "Compares")
+  expect_equal(neq@variable, measure_2)
+  expect_equal(neq@condition, "!=4")
+
+})
+
+# test_that("WhenThen created properly", {
+#   unit <- Unit("person")
+#
+#   # increases
+#   measure_0 <- numeric(unit=unit, name="measure_0")
+#   measure_1 <- numeric(unit=unit, name="measure_1")
+#   inc <- increases(measure_0)
+#
+#   wt <- whenThen(increases(measure_0), increases(measure_1))
+#
+#
+#   # decreases
+#
+#   # ==
+#   measure_2 <- numeric(unit=unit, name="measure_2")
+#   measure_3 <- numeric(unit=unit, name="measure_3")
+#
+#   # !=
+#
+#   # other
+# })
+#
+# # TODO: Need to make sure that measure, unit has relationship is inferred
