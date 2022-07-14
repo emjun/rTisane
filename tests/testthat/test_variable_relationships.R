@@ -108,26 +108,36 @@ test_that("Compares created properly", {
 
 })
 
-# test_that("WhenThen created properly", {
-#   unit <- Unit("person")
-#
-#   # increases
-#   measure_0 <- numeric(unit=unit, name="measure_0")
-#   measure_1 <- numeric(unit=unit, name="measure_1")
-#   inc <- increases(measure_0)
-#
-#   wt <- whenThen(increases(measure_0), increases(measure_1))
-#
-#
-#   # decreases
-#
-#   # ==
-#   measure_2 <- numeric(unit=unit, name="measure_2")
-#   measure_3 <- numeric(unit=unit, name="measure_3")
-#
-#   # !=
-#
-#   # other
-# })
-#
-# # TODO: Need to make sure that measure, unit has relationship is inferred
+test_that("WhenThen created properly", {
+  unit <- Unit("person")
+
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  # increases
+  wt <- whenThen(increases(measure_0), increases(measure_1))
+  expect_s4_class(wt, "Causes")
+  expect_equal(wt@cause, measure_0)
+  expect_equal(wt@effect, measure_1)
+
+
+  # decreases
+  wt <- whenThen(increases(measure_0), decreases(measure_1))
+  expect_s4_class(wt, "Causes")
+  expect_equal(wt@cause, measure_0)
+  expect_equal(wt@effect, measure_1)
+
+  measure_2 <- nominal(unit=unit, name="measure_2", cardinality=5)
+  # ==
+  wt <- whenThen(equals(measure_2, integer(3)), increases(measure_1))
+  expect_s4_class(wt, "Causes")
+  expect_equal(wt@cause, measure_2)
+  expect_equal(wt@effect, measure_1)
+
+  # !=
+  wt <- whenThen(notEquals(measure_2, integer(3)), increases(measure_1))
+  expect_s4_class(wt, "Causes")
+  expect_equal(wt@cause, measure_2)
+  expect_equal(wt@effect, measure_1)
+})
+
+# TODO: Need to make sure that measure, unit has relationship is inferred

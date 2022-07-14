@@ -38,7 +38,7 @@ c0 <- causes(age, pounds_lost)
 c1 <- causes(condition, pounds_lost)
 ```
 
-### (Hyper-) specific relationships
+### [x] (Hyper-) specific relationships
 The benefit of these functions is (i) closer mapping to the detail with which how analysts think about causal relationships and (ii) more thorough documentation to facilitate analysts' reflection.
 
 Return a Cause relationship.
@@ -47,6 +47,18 @@ Return a Cause relationship.
 # System: Have to infer/follow-up when not all categories in a categorical variable is stated?
 # Return set of implied relationships?
 
+# New construct 
+# Concern: Too similar to ifelse? 
+whenThen(when=increases(motivation), then=increases(pounds_lost))
+whenThen(decreases(motivation), increases(pounds_lost))
+whenThen(equals(condition, "control"), increases(pounds_lost))
+whenThen(notEquals(condition, "treatment"), decreases(pounds_lost))
+
+
+whenThen(when=list((increases(motivation)), then=increases(pounds_lost))
+
+####
+
 # Use keyword "increases" or "decreases"
 sr0 <- when(motivation, "increases").then(pounds_lost, "increases")
 sr1 <- when(motivation, "increases").then(pounds_lost, "decreases")
@@ -54,18 +66,12 @@ sr1 <- when(motivation, "increases").then(pounds_lost, "decreases")
 sr2 <- when(condition, "==`treatment`").then(pounds_lost, "increases")
 sr3 <- when(condition, "!=`treatment`").then(pounds_lost, "decreases")
 
-# New construct 
-# Concern: Too similar to ifelse? 
-whenThen(when=increases(motivation), then=increases(pounds_lost))
-whenThen(when=list((increases(motivation)), then=increases(pounds_lost))
-
 # Mix levels of ambiguity
 causes(when=list(), then=) # Defeats purpose of when/then? 
 relates(when=list(), then=) # Reuse Relates
 
 # Alternative although we would need to change the order of parameters so then came before when 
 whenThen(.result, ...)
-
 
 # Piping: https://adv-r.hadley.nz/functions.html#function-composition
 # Reads as "and then"
