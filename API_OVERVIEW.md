@@ -120,27 +120,18 @@ cm <- assume(causes(latent_var, motivation), cm)
 cm <- assume(causes(age, motivation), cm)
 ```
 
-## Potential interactions
+## [x] Potential interactions
+Reuses whenThen + hypothesize/assume -- Is this a concern? <-- Separating out Specificity and Evidence!
+
 Interactions are a conjunction of multiple "conditions" + a consequence
 Why not just all conjunction?: There is an implied consequence/"directionality" of effect in interactions
+
 ```R
-suspect(when((motivation, "==high"), (age, "increases")).then(pounds_lost, "increases"), cm)
-suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "baseline"), cm) # Do we want to allow for baseline?
-suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "decreases"), cm)
+wt <- whenThen(when=list(increases(motivation), increases(age)), then=increases(pounds_lost))
+cm <- hypothesize(wt, cm)
 
-# Unique/extensible function
-whenThen(increases(motivation), comapres(motivation, "=='high'"), increases(pounds_lost))
-
-# Piping
-# Gives a sense of passage of time, which seems closer to how people think about cause/effect
-when(motivation, "==high") & when(age, "increases") %>% increases(pounds_lost)
- 
-# More like SQL, invoking mental model of SQL could be confusing especially for people who are unfamiliar with SQL
-where(motivation, "==high") %>% where(age, "increases") %>% increases(pounds_lost)
-where(motivation, "==high") & where(age, "increases") %>% increases(pounds_lost)
-
-# Combine nesting with piping 
-compares(list((motivation, "==high"), (age, "increases"))) %>% increases(pounds_lost)
+wt <- whenThen(when=list(equals(motivation, 'high'), increases(age)), then=increases(pounds_lost))
+cm <- assume(wt, cm)
 ```
 
 # Queries to issue
@@ -164,9 +155,13 @@ Because we override the ``numeric`` data type/function in R, end-users need to s
 ```R
 condition <- condition(unit=participant, name="treatment", order=list("low","medium", "high"), number_of_instances=integer(1))
 ```
-
+2. Do we want to provide some kind of "baseline" declaration for interactions? 
+```R
+suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "baseline"), cm) # Do we want to allow for baseline?
+```
 
 ## TODOs
 - Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
+- Is there anything we can do with the hyper-specific information end-users provide? (maybe for interpretation?)
 
 ## Internal API 

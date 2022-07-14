@@ -565,7 +565,7 @@ Compares <- setClass("Compares",
                   )
 )
 
-setClassUnion("relatesORcauses", c("Relates", "Causes"))
+setClassUnion("relatesORcausesORmoderates", c("Relates", "Causes", "Moderates"))
 #' Assumption class
 #'
 #' Class for Assumptions.
@@ -577,7 +577,7 @@ setClassUnion("relatesORcauses", c("Relates", "Causes"))
 #' Assumption()
 Assumption <- setClass("Assumption",
                         slot = c(
-                          relationship = "relatesORcauses",
+                          relationship = "relatesORcausesORmoderates",
                           conceptualModel = "ConceptualModel"
                         )
 )
@@ -602,7 +602,7 @@ Assumption <- function(relationship,
 #' Hypothesis()
 Hypothesis <- setClass("Hypothesis",
                        slot = c(
-                         relationship = "relatesORcauses",
+                         relationship = "relatesORcausesORmoderates",
                          conceptualModel = "ConceptualModel"
                        )
 )
@@ -619,3 +619,4 @@ Hypothesis <- function(relationship,
 setClassUnion("numericORordinal", c("Numeric", "Ordinal"))
 setClassUnion("nominalORordinal", c("Nominal", "Ordinal"))
 setClassUnion("integerORnumericORcharacter", c("integer", "numeric", "character"))
+setClassUnion("ComparesORComparesList", c("Compares", "list"))

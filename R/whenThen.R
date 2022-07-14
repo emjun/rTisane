@@ -1,22 +1,38 @@
-#' Specify a (hyper-)specific relationship
+#' Specify a (hyper-)specific relationship about two or more relationships.
 #'
 #' Method for constructing a very specific relationship between two variables.
-#' Returns the Causes relationship constructed.
-#' @param when Compares.
+#' Returns the Causes relationship constructed if @param when is a single Compares/involves one variable.
+#' Returns the Moderates relationship constructed if @param when is a list of Compares/involves multiple variables.
+#' @param when Compares or a list of Compares.
 #' @param then Compares.
 #' @keywords
 #' @export
 #' @examples
 #' whenThen()
 setGeneric("whenThen", function(when, then) standardGeneric("whenThen"))
-setMethod("whenThen", signature("Compares", "Compares"), function(when, then)
+setMethod("whenThen", signature("ComparesORComparesList", "Compares"), function(when, then)
 {
-  # Get the variables from the when/then parameters
-  cause_obj = when@variable
-  effect_obj = then@variable
+  if (class(when) == "Compares") {
+    # Get the variables from the when/then parameters
+    cause_obj = when@variable
+    effect_obj = then@variable
 
-  # create a Causes relationship obj
-  relat = Causes(cause=cause_obj, effect=effect_obj)
+    # create a Causes relationship obj
+    relat = Causes(cause=cause_obj, effect=effect_obj)
+  } else {
+    # Assert that @param when is a List of Compares
+    stopifnot(class(when) == "list")
+    for (comp in when) {
+      stopifnot(class(comp) == "Compares")
+    }
+
+    # Create a Moderates relationship obj
+    moderators = list()
+    for (comp in when) {
+      moderators <- append(comp@variable, moderators)
+    }
+    relat = Moderates(moderators=moderators, on=then@variable)
+  }
 
   # Return relationship
   relat

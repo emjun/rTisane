@@ -9,7 +9,7 @@
 #' @examples
 #' assume()
 setGeneric("assume", function(relationship, conceptualModel) standardGeneric("assume"))
-setMethod("assume", signature("relatesORcauses", "ConceptualModel"), function(relationship, conceptualModel)
+setMethod("assume", signature("relatesORcausesORmoderates", "ConceptualModel"), function(relationship, conceptualModel)
 {
 
   if (class(relationship) == "Causes") {
@@ -18,7 +18,6 @@ setMethod("assume", signature("relatesORcauses", "ConceptualModel"), function(re
 
     # Add Assumption obj to ConceptualModel
     # Update variables
-
     if (!(c(relationship@cause) %in% conceptualModel@variables)) {
 
       conceptualModel@variables <- append(conceptualModel@variables, relationship@cause)
@@ -26,10 +25,27 @@ setMethod("assume", signature("relatesORcauses", "ConceptualModel"), function(re
     if (!(c(relationship@effect) %in% conceptualModel@variables)) {
       conceptualModel@variables <- append(conceptualModel@variables, relationship@effect)
     }
-
     # Update relationships
     conceptualModel@relationships <- append(conceptualModel@relationships, assump) # Add Assumption
+  } else if (class(relationship) == "Moderates") {
+    # create an Assumption obj
+    assump = Assumption(relationship=relationship, conceptualModel=conceptualModel)
+
+    # Add Hypothesis obj to ConceptualModel
+    # Update variables
+    for (var in relationship@moderators) {
+      if (!(c(var) %in% conceptualModel@variables)) {
+        conceptualModel@variables <- append(conceptualModel@variables, var)
+      }
+    }
+    if (!(c(relationship@on) %in% conceptualModel@variables)) {
+      conceptualModel@variables <- append(conceptualModel@variables, relationship@on)
+    }
+    # Update relationships
+    conceptualModel@relationships <- append(conceptualModel@relationships, assump) # Add Assumption
+
   } else {
+    stopifnot(class(relationship) == "Relates")
     # TODO: If relationship is Relates, ask for more specificity before adding to ConceptualModel?
     cat("Should specify how relationship Causes")
   }

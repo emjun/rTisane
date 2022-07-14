@@ -1,6 +1,6 @@
 library(tisaner)
 
-test_that("Assumes updates Conceptual Model properly", {
+test_that("Assume updates Conceptual Model properly", {
   cm <- ConceptualModel()
 
   unit <- Unit("person")
@@ -127,4 +127,93 @@ test_that("Unobserved variables treated properly in Conceptual Models", {
   relat = cm@relationships[[3]]
   expect_s4_class(relat, "Assumption")
   expect_equal(relat@relationship, cr3)
+})
+
+test_that("Hypothesize WhenThen updated Conceptual Model properly", {
+  cm <- ConceptualModel()
+
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+
+  wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
+  cm <- hypothesize(wt, cm)
+
+  expect_s4_class(cm, "ConceptualModel")
+  expect_type(cm@variables, "list")
+  expect_length(cm@variables, 3)
+  expect_true(c(measure_0) %in% cm@variables)
+  expect_true(c(measure_1) %in% cm@variables)
+  expect_true(c(measure_2) %in% cm@variables)
+
+  expect_type(cm@relationships, "list")
+  expect_length(cm@relationships, 1)
+  relat = cm@relationships[[1]]
+  expect_s4_class(relat, "Hypothesis")
+  expect_equal(relat@relationship, wt)
+
+  # Ordinal variable
+  measure_3 <- ordinal(unit=unit, name="measure_3", order=list(1, 2, 3, 4, 5))
+  wt <- whenThen(when=list(equals(measure_3, integer(3)), increases(measure_1)), then=increases(measure_2))
+  cm <- hypothesize(wt, cm)
+
+  expect_s4_class(cm, "ConceptualModel")
+  expect_type(cm@variables, "list")
+  expect_length(cm@variables, 4)
+  expect_true(c(measure_0) %in% cm@variables)
+  expect_true(c(measure_1) %in% cm@variables)
+  expect_true(c(measure_2) %in% cm@variables)
+  expect_true(c(measure_3) %in% cm@variables)
+
+  expect_type(cm@relationships, "list")
+  expect_length(cm@relationships, 2)
+  relat = cm@relationships[[2]]
+  expect_s4_class(relat, "Hypothesis")
+  expect_equal(relat@relationship, wt)
+
+})
+
+test_that("Assume WhenThen updated Conceptual Model properly", {
+  cm <- ConceptualModel()
+
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+
+  wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
+  cm <- assume(wt, cm)
+
+  expect_s4_class(cm, "ConceptualModel")
+  expect_type(cm@variables, "list")
+  expect_length(cm@variables, 3)
+  expect_true(c(measure_0) %in% cm@variables)
+  expect_true(c(measure_1) %in% cm@variables)
+  expect_true(c(measure_2) %in% cm@variables)
+
+  expect_type(cm@relationships, "list")
+  expect_length(cm@relationships, 1)
+  relat = cm@relationships[[1]]
+  expect_s4_class(relat, "Assumption")
+  expect_equal(relat@relationship, wt)
+
+  # Nominal variable
+  measure_3 <- nominal(unit=unit, name="measure_3", cardinality=5)
+  wt <- whenThen(when=list(equals(measure_3, integer(3)), increases(measure_1)), then=increases(measure_2))
+  cm <- assume(wt, cm)
+
+  expect_s4_class(cm, "ConceptualModel")
+  expect_type(cm@variables, "list")
+  expect_length(cm@variables, 4)
+  expect_true(c(measure_0) %in% cm@variables)
+  expect_true(c(measure_1) %in% cm@variables)
+  expect_true(c(measure_2) %in% cm@variables)
+  expect_true(c(measure_3) %in% cm@variables)
+
+  expect_type(cm@relationships, "list")
+  expect_length(cm@relationships, 2)
+  relat = cm@relationships[[2]]
+  expect_s4_class(relat, "Assumption")
+  expect_equal(relat@relationship, wt)
 })
