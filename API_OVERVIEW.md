@@ -135,14 +135,25 @@ cm <- assume(wt, cm)
 ```
 
 # Queries to issue
-## Expressed conceptual model vs. data
-```R
-assess(conceptual_model=cm, data=data)
-```
+With an explicit handle to the conceptual model, we don't need to construct an intermediate "Study Design." We can directly assess/query the conceptual model. 
 
 ## Expressed conceptual model --> statistical model 
+Which/how many IVs to specify in my query? Include variable/s whose impact on the DV you care about.  
+IDEA: Allow for only 1 IV at a time to avoid mutual adjustment fallacy (http://dagitty.net/learn/graphs/table2-fallacy.html)
+
+Fits and shows results of executing a statistical model + visualizing it from the conceptual model. 
+
+Returns script for running the statistical models + visualization 
 ```R
 query(conceptual_model=cm, iv=[list], dv=pounds_lost)
+```
+
+## Expressed conceptual model vs. data
+Fits and shows results of executing one or more statistical models for assessing the conceptual model. 
+
+Returns a script for running the statistical models
+```R
+assess(conceptual_model=cm, data=data)
 ```
 
 # Questions
@@ -159,6 +170,7 @@ condition <- condition(unit=participant, name="treatment", order=list("low","med
 ```R
 suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "baseline"), cm) # Do we want to allow for baseline?
 ```
+3. Especially if we go with one IV at a time, we start to see the need to facilitate/support improved interpretation of the results...
 
 ## TODOs
 - Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
