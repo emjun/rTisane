@@ -18,11 +18,19 @@ condition <- condition(unit=group, "treatment", cardinality=2 number_of_instance
 ```
 
 ## [x] Conceptual relationships
+Conceptual relationships are added to a conceptual model that provides an evaluation context for queries (further below). 
+Conceptual relationships are comprised of two parts: (i) a relational direction (i.e., What causes what?) and (ii) evidence for that direction (i.e., Is the end-user assuming or hypothesizing a specific relationship?). When declaring a relational direction, end-users can specify relationships in three degrees of specificity: (i) the general presence of a relationship (no specific direction, must be clarified before executing a query), a directional summary (i.e., A causes B), or a hyper-specific direction (i.e., when A is "treatment", B increases. 
+
+TODO?: In the presence of multiple expressed relationships between the same two variables, rTisane will check....
+
+To derive statistical models from conceptual models, rTisane reasons about relationships at the middle-level (directional summary). As a result, rTisane will ask users who provide relationships at a general level to specify further and infer direciotnal summaries from hyper-specific expressions. 
+
 ```R
 cm <- ConceptualModel()
 ```
 
-### _Specificity_ of relationship direction 
+
+### [x] _Specificity_ of relationship direction 
 These constructs create relationship objects that must then get added to the conceptual model based on the evidence for each relationship.
 ### [x] UNCERTAIN: Ambiguous direction, general conceptual relationship
 The direction of relationship is unclear.
@@ -54,46 +62,8 @@ whenThen(decreases(motivation), increases(pounds_lost))
 whenThen(equals(condition, "control"), increases(pounds_lost))
 whenThen(notEquals(condition, "treatment"), decreases(pounds_lost))
 
-
+# Idea, not implemented:
 whenThen(when=list((increases(motivation)), then=increases(pounds_lost))
-
-####
-
-# Use keyword "increases" or "decreases"
-sr0 <- when(motivation, "increases").then(pounds_lost, "increases")
-sr1 <- when(motivation, "increases").then(pounds_lost, "decreases")
-# Provide own condition that must parse in R (==, !=)
-sr2 <- when(condition, "==`treatment`").then(pounds_lost, "increases")
-sr3 <- when(condition, "!=`treatment`").then(pounds_lost, "decreases")
-
-# Mix levels of ambiguity
-causes(when=list(), then=) # Defeats purpose of when/then? 
-relates(when=list(), then=) # Reuse Relates
-
-# Alternative although we would need to change the order of parameters so then came before when 
-whenThen(.result, ...)
-
-# Piping: https://adv-r.hadley.nz/functions.html#function-composition
-# Reads as "and then"
-# Focuses on verbs rather than nouns
-# Concern: Violates assumption/idioms using %>% to operate over the same piece of data. Could seem a bit unnatural since the variables of interest/parameters differ from each other?
-
-# Seems more readable
-increases(motivation) %>% increases(pounds_lost) # provided condition
-when(condition, "=='treatment'") %>% increases(pounds_lost) # custom condition 
-
-# Other syntax
-when() & when() =>
-
-# AWK: Why can't use when on the RHS?
-when(motivation, "increases") %>% increases(pounds_lost)
-when(motivation, "increases") %>% decreases(pounds_lost)
-
-# Compares instead of when
-increases(motivation) %>% increases(pounds_lost) # provided condition
-increases(motivation) %>% decreases(pounds_lost) # provided condition
-compares(condition, "==`treatment`") %>% increases(pounds_lost) # custom condition 
-compares(condition, "!=`treatment`") %>% decreases(pounds_lost) # custom condition 
 ```
 
 ### _Evidence_ for relationships
