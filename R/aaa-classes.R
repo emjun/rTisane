@@ -569,6 +569,30 @@ Assumption <- function(relationship,
   )
 }
 
+#' Hypothesis class
+#'
+#' Class for Hypotheses.
+#' @slot relationship. Relationship to hypothesize.
+#' @slot conceptualModel ConceptualModel to which this Hypothesis belongs.
+#' @keywords
+#' @export
+#' @examples
+#' Hypothesis()
+Hypothesis <- setClass("Hypothesis",
+                       slot = c(
+                         relationship = "relatesORcauses",
+                         conceptualModel = "ConceptualModel"
+                       )
+)
+# Helper to create instances of the Hypothesis class
+# Used internally only
+Hypothesis <- function(relationship,
+                       conceptualModel) {
+  new("Hypothesis",
+      relationship = relationship,
+      conceptualModel = conceptualModel
+  )
+}
 
 setClassUnion("numericORordinal", c("Numeric", "Ordinal"))
 setClassUnion("nominalORordinal", c("Nominal", "Ordinal"))

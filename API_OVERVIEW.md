@@ -72,29 +72,30 @@ Specifying the evidence for a relationship adds it to the conceptual model.
 ### [x] Known relationship (e.g., from prior work, would be problematic if this did not exist)
 ```R
 c <- causes(age, pounds_lost)
-assume(c, cm)
+cm <- assume(c, cm)
 # OR
-assume(causes(age, pounds_lost), cm)
+cm <- assume(causes(age, pounds_lost), cm)
 
 r <- relates(motivation, pounds_lost)
-assume(r, cm)
+cm <- assume(r, cm)
 # OR
-assume(relates(motivation, pounds_lost), cm)
+cm <- assume(relates(motivation, pounds_lost), cm)
 ```
-
-### Hypothesized relationship (e.g., the focus of the current ongoing research)
+**TODO: Ask for user input if they assume an ambiguous Relates, not Causes**
+### [x] Hypothesized relationship (e.g., the focus of the current ongoing research)
 ```R
 c <- causes(condition, pounds_lost)
-hypothesize(c, cm)
+cm <- hypothesize(c, cm)
 # OR 
-hypothesize(causes(condition, pounds_lost), cm)
+cm <- hypothesize(causes(condition, pounds_lost), cm)
 
 r <- relates(motivation, pounds_lost)
-hypothesize(r, cm)
+cm <- hypothesize(r, cm)
 # OR
-hypothesize(relates(motivation, pounds_lost), cm)
+cm <- hypothesize(relates(motivation, pounds_lost), cm)
 ```
 
+### 3+ variables in a relationship
 ## Unobserved variables (for what previously was associates_with)
 ```R
 #  Mediation
