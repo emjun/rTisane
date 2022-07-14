@@ -68,7 +68,8 @@ whenThen(when=list((increases(motivation)), then=increases(pounds_lost))
 
 ### _Evidence_ for relationships
 Specifying the evidence for a relationship adds it to the conceptual model. 
-### Known relationship (e.g., from prior work, would be problematic if this did not exist)
+**TODO: Ask for user input if they assume an ambiguous Relates, not Causes**
+### [x] Known relationship (e.g., from prior work, would be problematic if this did not exist)
 ```R
 c <- causes(age, pounds_lost)
 assume(c, cm)

@@ -543,6 +543,33 @@ Compares <- setClass("Compares",
                   )
 )
 
+setClassUnion("relatesORcauses", c("Relates", "Causes"))
+#' Assumption class
+#'
+#' Class for Assumptions.
+#' @slot relationship. Relationship to assume.
+#' @slot conceptualModel ConceptualModel to which this Assumption belongs.
+#' @keywords
+#' @export
+#' @examples
+#' Assumption()
+Assumption <- setClass("Assumption",
+                        slot = c(
+                          relationship = "relatesORcauses",
+                          conceptualModel = "ConceptualModel"
+                        )
+)
+# Helper to create instances of the Assumptions class
+# Used internally only
+Assumption <- function(relationship,
+                        conceptualModel) {
+  new("Assumption",
+      relationship = relationship,
+      conceptualModel = conceptualModel
+  )
+}
+
+
 setClassUnion("numericORordinal", c("Numeric", "Ordinal"))
 setClassUnion("nominalORordinal", c("Nominal", "Ordinal"))
 setClassUnion("integerORnumericORcharacter", c("integer", "numeric", "character"))
