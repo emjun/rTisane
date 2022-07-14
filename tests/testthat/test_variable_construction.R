@@ -200,3 +200,10 @@ test_that("Condition constructed properly", {
   # Provide both cardinality and order
   expect_error(condition(unit=participant, name="treatment", cardinality=integer(3), order=list("low","medium", "high"), number_of_instances=integer(1)))
 })
+
+test_that("Unobserved variable properly", {
+  midlife_crisis <- Unobserved()
+
+  expect_s4_class(midlife_crisis, "UnobservedVariable")
+  expect_null(midlife_crisis@name)
+})

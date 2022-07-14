@@ -9,7 +9,7 @@
 #' @examples
 #' causes()
 setGeneric("causes", function(cause, effect) standardGeneric("causes"))
-setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(cause, effect)
+setMethod("causes", signature("AbstractVariableORUnobservedVariable", "AbstractVariableORUnobservedVariable"), function(cause, effect)
 {
   # create a Causes relationship obj
   relat = Causes(cause=cause, effect=effect)

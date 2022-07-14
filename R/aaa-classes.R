@@ -26,6 +26,27 @@ AbstractVariable <- function(name,
   )
 }
 
+#' UnobservedVariable class
+#'
+#' Class for Unobserved variables.
+#' @keywords
+#' @export
+#' @examples
+#' Unobserved()
+UnobservedVariable <- setClass("UnobservedVariable",
+                               slot = c(
+                                 name = "character"
+                               ),
+                               prototype = list(
+                                 name = NULL
+                               )
+)
+# Helper to create instances of the Unobserved class
+# Used internally only
+Unobserved <- function() {
+  new("UnobservedVariable")
+}
+
 #' Number Value class
 #'
 #' Abstract super class for number values, used for number_of_instances that a Unit has of a Measure
@@ -131,6 +152,7 @@ Dataset <- setClass("Dataset",
     )
 )
 
+setClassUnion("AbstractVariableORUnobservedVariable", c("AbstractVariable", "UnobservedVariable"))
 #' Relates class
 #'
 #' Class for Relates relationships.
@@ -142,8 +164,8 @@ Dataset <- setClass("Dataset",
 #' Relates()
 Relates <- setClass("Relates",
                    slot = c(
-                     lhs = "AbstractVariable",
-                     rhs = "AbstractVariable"
+                     lhs = "AbstractVariableORUnobservedVariable",
+                     rhs = "AbstractVariableORUnobservedVariable"
                    )
 )
 
@@ -158,8 +180,8 @@ Relates <- setClass("Relates",
 #' Causes()
 Causes <- setClass("Causes",
     slot = c(
-        cause = "AbstractVariable",
-        effect = "AbstractVariable"
+        cause = "AbstractVariableORUnobservedVariable",
+        effect = "AbstractVariableORUnobservedVariable"
     )
 )
 

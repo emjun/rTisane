@@ -13,6 +13,8 @@ setMethod("hypothesize", signature("relatesORcauses", "ConceptualModel"), functi
 {
 
   if (class(relationship) == "Causes") {
+    stopifnot(is(relationship@cause, "AbstractVariable")) # Check superclass
+    stopifnot(is(relationship@effect, "AbstractVariable")) # Check superclass
     # create a Hypothesis obj
     hypo = Hypothesis(relationship=relationship, conceptualModel=conceptualModel)
 

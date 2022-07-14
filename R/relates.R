@@ -9,7 +9,7 @@
 #' @examples
 #' relates()
 setGeneric("relates", function(lhs, rhs) standardGeneric("relates"))
-setMethod("relates", signature("AbstractVariable", "AbstractVariable"), function(lhs, rhs)
+setMethod("relates", signature("AbstractVariableORUnobservedVariable", "AbstractVariableORUnobservedVariable"), function(lhs, rhs)
 {
   # create a Relates relationship obj
   relat = Relates(lhs=lhs, rhs=rhs)

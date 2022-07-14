@@ -96,22 +96,28 @@ cm <- hypothesize(relates(motivation, pounds_lost), cm)
 ```
 
 ### 3+ variables in a relationship
-## Unobserved variables (for what previously was associates_with)
+## [x] Unobserved variables (for what previously was associates_with)
+Can only assume, not hypothesize, relationships with Unobserved variables (enforced by function type signature). 
+Must be Assume. Because (i) Unobserved variables are not measured and therefore (2) We cannot test/hypothesize unobserved relationships.
+
+Can only say a variable causes an Unobserved variable (middle level of specificity, directional summary), not a hyper-specific relationship because that would focus more on measurement even though an Unobserved variable is defined to be not measured. 
+
+Can also say a variable is related to an Unobserved variable (ambiguous level of specifity)
 ```R
 #  Mediation
 # age -> midlife_crisis -> pounds_lost
 # age -> midlife_crisis -> motivation
 midlife_crisis <- Unobserved()
-assume(causes(age, midlife_crisis), cm)
-assume(causes(midlife_crisis, pounds_lost), cm)
-assume(causes(midlife_crisis, motivation), cm) # Assume vs. hypothesize does not matter/change behavior later on. For latent variables, should use assume since we cannot test/hypothesize unobserved relationships.
+cm <- assume(causes(age, midlife_crisis), cm)
+cm <- assume(causes(midlife_crisis, pounds_lost), cm)
+cm <- assume(causes(midlife_crisis, motivation), cm) # Must be Assume. Because (i) Unobserved variables are not measured and therefore (2) We cannot test/hypothesize unobserved relationships.
 
 # Common ancestor
 # latent_var -> age, latent_var -> motivation
 latent_var <- Unobserved()
-assume(causes(latent_var, age), cm)
-assume(causes(latent_var, motivation), cm)
-assume(causes(age, motivation), cm)
+cm <- assume(causes(latent_var, age), cm)
+cm <- assume(causes(latent_var, motivation), cm)
+cm <- assume(causes(age, motivation), cm)
 ```
 
 ## Potential interactions
