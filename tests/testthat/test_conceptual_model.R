@@ -217,3 +217,101 @@ test_that("Assume WhenThen updated Conceptual Model properly", {
   expect_s4_class(relat, "Assumption")
   expect_equal(relat@relationship, wt)
 })
+
+test_that("Causal graph consstructed/updated properly", {
+  cm <- ConceptualModel()
+  # Test empty graph
+  gr <- updateGraph(cm)
+  expect_true(is.dagitty(gr))
+  expect_equal(nrow(edges(gr)), 0)
+
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+
+  # Assume 1 relationship
+  cm <- assume(causes(measure_0, measure_1), cm)
+  gr <- updateGraph(cm)
+  expect_true(is.dagitty(gr))
+  expect_equal(nrow(edges(gr)), 1)
+  expect_equal(edges(gr)[[1]][1], measure_0@name)
+  expect_equal(edges(gr)[[2]][1], measure_1@name)
+  expect_equal(edges(gr)[[3]][1], "->")
+
+  # Add an assume relationship
+  cm <- assume(causes(measure_1, measure_2), cm)
+  gr <- updateGraph(cm)
+  expect_true(is.dagitty(gr))
+  expect_equal(nrow(edges(gr)), 2)
+  expect_equal(edges(gr)[[1]][1], measure_0@name)
+  expect_equal(edges(gr)[[2]][1], measure_1@name)
+  expect_equal(edges(gr)[[3]][1], "->")
+  expect_equal(edges(gr)[[1]][2], measure_1@name)
+  expect_equal(edges(gr)[[2]][2], measure_2@name)
+  expect_equal(edges(gr)[[3]][2], "->")
+
+  # Add a hypothesized relationship
+  # Should not matter if relationship is assumed vs. hypothesized
+  cm <- hypothesize(causes(measure_0, measure_2), cm)
+  gr <- updateGraph(cm)
+  expect_true(is.dagitty(gr))
+  expect_equal(nrow(edges(gr)), 3)
+  expect_equal(edges(gr)[[1]][1], measure_0@name)
+  expect_equal(edges(gr)[[2]][1], measure_1@name)
+  expect_equal(edges(gr)[[3]][1], "->")
+  expect_equal(edges(gr)[[1]][2], measure_0@name) # alpha-numeric ordering
+  expect_equal(edges(gr)[[2]][2], measure_2@name)
+  expect_equal(edges(gr)[[3]][2], "->")
+  expect_equal(edges(gr)[[1]][3], measure_1@name)
+  expect_equal(edges(gr)[[2]][3], measure_2@name)
+  expect_equal(edges(gr)[[3]][3], "->")
+})
+
+test_that("Validate Conceptual Model's causal graph properly", {
+  cm <- ConceptualModel()
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_3 <- numeric(unit=unit, name="measure_3")
+  measure_4 <- numeric(unit=unit, name="measure_4")
+
+  cm <- assume(causes(measure_0, measure_1), cm)
+  cm <- assume(causes(measure_1, measure_2), cm)
+  cm <- hypothesize(causes(measure_0, measure_2), cm)
+
+  cm@graph <- updateGraph(cm)
+  isValid <- checkConceptualModel(cm, measure_0, measure_2)
+  expect_true(isValid)
+
+  # DV is not in the Conceptual Model/graph
+  cm <- ConceptualModel()
+  cm <- assume(causes(measure_0, measure_1), cm)
+  cm@graph <- updateGraph(cm)
+  expect_error(checkConceptualModel(cm, measure_0, measure_2))
+  # IV is not in the Conceptual Model/graph
+  expect_error(checkConceptualModel(cm, measure_2, measure_0))
+
+  # No path between IV and DV!
+  cm <- ConceptualModel()
+  cm <- assume(causes(measure_0, measure_2), cm)
+  cm <- assume(causes(measure_1, measure_2), cm)
+  cm <- assume(causes(measure_3, measure_4), cm)
+  cm@graph <- updateGraph(cm)
+  expect_error(checkConceptualModel(cm, measure_0, measure_4))
+
+  # DV causes IV!
+  cm <- ConceptualModel()
+  cm <- assume(causes(measure_0, measure_2), cm)
+  cm@graph <- updateGraph(cm)
+  expect_error(checkConceptualModel(cm, measure_2, measure_0))
+
+  # Cycles!
+  cm <- ConceptualModel()
+  cm <- assume(causes(measure_0, measure_2), cm)
+  cm <- assume(causes(measure_2, measure_0), cm)
+  cm@graph <- updateGraph(cm)
+  expect_error(checkConceptualModel(cm, measure_0, measure_2))
+  expect_error(checkConceptualModel(cm, measure_2, measure_0))
+})

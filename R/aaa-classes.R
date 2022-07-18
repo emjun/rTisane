@@ -472,29 +472,36 @@ Nests <- setClass("Nests",
     )
 )
 
+#' @import dagitty
+setOldClass("dagitty")
 
 #' ConceptualModel class
 #'
 #' Class for Conceptual Models
 #' @keywords
+#' @import dagitty
 #' @export
 #' @examples
 #' ConceptualModel()
 ConceptualModel <- setClass("ConceptualModel",
     slot = c(
       variables = "list",
-      relationships = "list"
+      relationships = "list",
+      graph = "dagitty"
     ),
     prototype = list(
       variables = NULL,
-      relationships = NULL
-    )
+      relationships = NULL,
+      graph = NULL
+    ),
+    contains = "dagitty"
 )
 # Helper to create instances of the ConceptualModel class
-ConceptualModel <- function(variables=list(), relationships=list()) {
+ConceptualModel <- function(variables=list(), relationships=list(), graph=dagitty({''})) {
   new("ConceptualModel",
       variables=variables,
-      relationships=relationships)
+      relationships=relationships,
+      graph=graph)
 }
 
 setClassUnion("dfOrNull", c("list", "NULL"))

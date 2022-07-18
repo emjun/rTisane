@@ -140,6 +140,11 @@ With an explicit handle to the conceptual model, we don't need to construct an i
 ## Expressed conceptual model --> statistical model 
 Which/how many IVs to specify in my query? Include variable/s whose impact on the DV you care about.  
 IDEA: Allow for only 1 IV at a time to avoid mutual adjustment fallacy (http://dagitty.net/learn/graphs/table2-fallacy.html)
+START HERE: 1 IV at a time. (could treat each IV sequentially)
+
+Idea: 
+- create ConceptualModel 
+- call updateGraph (idiom?)
 
 Fits and shows results of executing a statistical model + visualizing it from the conceptual model. 
 
@@ -172,8 +177,24 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 ```
 3. Especially if we go with one IV at a time, we start to see the need to facilitate/support improved interpretation of the results...
 
+4. Does ``Assumption`` have to have a ConceptualModel piv? 
+
 ## TODOs
 - Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
 - Is there anything we can do with the hyper-specific information end-users provide? (maybe for interpretation?)
 
 ## Internal API 
+
+## Data measurement relationships 
+### Has 
+
+### Nest (should be external)
+
+
+
+## Debugging tips 
+```R
+library(devtools)
+add browser() checkpoint
+rlang::with_interactive(test_active_file())
+```

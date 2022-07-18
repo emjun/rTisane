@@ -4,17 +4,20 @@
 #' Fits and shows results of executing a statistical model + visualizing it from the conceptual model.
 #' Returns an R script for running the statistical models + visualization
 #' @param conceptualModel ConceptualModel we are assuming in order to assess the effects of @param ivs on @param dv.
-#' @param ivs list of AbstractVariables. Which variables whose effects on @param dv we want to evaluate
+#' @param iv AbstractVariable. Which variable whose effect on @param dv we want to evaluate.
 #' @param dv AbstractVariable. Variable whose outcome we want to assess.
 #' @keywords
 #' @export
 #' @examples
 #' query()
-setGeneric("query", function(conceptualModel, ivs, dv) standardGeneric("query"))
-setMethod("query", signature("ConceptualModel", "list", "AbstractVariable"), function(conceptualModel, ivs, dv)
+setGeneric("query", function(conceptualModel, iv, dv) standardGeneric("query"))
+setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {
+  ### Step 0: Update graph
+  conceptualModel@graph <- updateGraph(conceptualModel)
+
   ### Step 1: Initial conceptual checks
-  check_conceptual_relationships(causal_gr, assocative_gr)
+  checkConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
 
   ### Step 2: Candidate statistical model inference/generation
   main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
