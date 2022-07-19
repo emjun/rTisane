@@ -205,5 +205,5 @@ test_that("Unobserved variable properly", {
   midlife_crisis <- Unobserved()
 
   expect_s4_class(midlife_crisis, "UnobservedVariable")
-  expect_null(midlife_crisis@name)
+  expect_equal(midlife_crisis@name, "Unobserved")
 })

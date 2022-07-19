@@ -266,6 +266,25 @@ test_that("Causal graph consstructed/updated properly", {
   expect_equal(edges(gr)[[1]][3], measure_1@name)
   expect_equal(edges(gr)[[2]][3], measure_2@name)
   expect_equal(edges(gr)[[3]][3], "->")
+
+  # Unobserved variable
+  cm <- ConceptualModel()
+  unit <- Unit("person")
+  x <- numeric(unit=unit, name="x")
+  y <- numeric(unit=unit, name="y")
+  z <- numeric(unit=unit, name="z")
+  m <- numeric(unit=unit, name="m")
+  w <- numeric(unit=unit, name="w")
+  u <- Unobserved()
+
+  cm <- assume(causes(x, y), cm)
+  cm <- assume(causes(u, y), cm)
+  cm <- assume(causes(u, z), cm)
+  cm <- assume(causes(z, x), cm)
+  gr <- updateGraph(cm)
+  expect_true(is.dagitty(gr))
+  expect_equal(nrow(edges(gr)), 4)
+  expect_length(names(gr), 4)
 })
 
 test_that("Validate Conceptual Model's causal graph properly", {
@@ -314,4 +333,179 @@ test_that("Validate Conceptual Model's causal graph properly", {
   cm@graph <- updateGraph(cm)
   expect_error(checkConceptualModel(cm, measure_0, measure_2))
   expect_error(checkConceptualModel(cm, measure_2, measure_0))
+})
+
+test_that("Mediators found correctly", {
+  unit <- Unit("person")
+  x <- numeric(unit=unit, name="x")
+  y <- numeric(unit=unit, name="y")
+  z <- numeric(unit=unit, name="z")
+  m <- numeric(unit=unit, name="m")
+  w <- numeric(unit=unit, name="w")
+  u <- Unobserved()
+
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, m), cm)
+  cm <- assume(causes(m, y), cm)
+  cm@graph <- updateGraph(cm)
+
+  mediators <- getMediators(cm@graph, x@name, y@name)
+  expect_length(mediators, 1)
+  expect_true(m@name %in% mediators)
+})
+
+test_that("Observed variables found correctly", {
+  unit <- Unit("person")
+  x <- numeric(unit=unit, name="x")
+  y <- numeric(unit=unit, name="y")
+  z <- numeric(unit=unit, name="z")
+  m <- numeric(unit=unit, name="m")
+  w <- numeric(unit=unit, name="w")
+  u <- Unobserved()
+
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, m), cm)
+  cm <- assume(causes(m, y), cm)
+  cm <- assume(causes(u, x), cm)
+  cm@graph <- updateGraph(cm)
+
+
+  expect_true(isObserved(cm, x))
+  expect_true(isObserved(cm, y))
+  expect_true(isObserved(cm, m))
+  expect_null(isObserved(cm, unit))
+  expect_false(isObserved(cm, u))
+})
+
+test_that("Infer confounders correctly", {
+  cm <- ConceptualModel()
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_3 <- numeric(unit=unit, name="measure_3")
+  measure_4 <- numeric(unit=unit, name="measure_4")
+
+  # Model 1: measure_1 is a common parent
+  cm <- assume(causes(measure_1, measure_0), cm)
+  cm <- assume(causes(measure_0, measure_2), cm)
+  cm <- assume(causes(measure_1, measure_2), cm)
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  expect_length(confounders, 1)
+  expect_true(measure_1@name %in% confounders)
+
+  # Model 2: Mediator, Unobserved common parent
+  cm <- ConceptualModel()
+  unit <- Unit("person")
+  x <- numeric(unit=unit, name="x")
+  y <- numeric(unit=unit, name="y")
+  z <- numeric(unit=unit, name="z")
+  m <- numeric(unit=unit, name="m")
+  w <- numeric(unit=unit, name="w")
+  u <- Unobserved()
+
+  cm <- assume(causes(x, y), cm)
+  cm <- assume(causes(u, y), cm)
+  cm <- assume(causes(u, z), cm)
+  cm <- assume(causes(z, x), cm)
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
+
+  # Model 3: Mediator, Unobserved common parent
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, y), cm)
+  cm <- assume(causes(u, x), cm)
+  cm <- assume(causes(u, z), cm)
+  cm <- assume(causes(z, y), cm)
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
+
+  # # Model 4: Common cause of X and any mediator between X and Y
+  # cm <- ConceptualModel()
+  # cm <- assume(causes(x, m), cm)
+  # cm <- assume(causes(m, y), cm)
+  # cm <- assume(causes(z, x), cm)
+  # cm <- assume(causes(z, m), cm)
+  #
+  # cm@graph <- updateGraph(cm)
+  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  # expect_length(confounders, 1)
+  # expect_true(z@name %in% confounders)
+  #
+  # # Model 5: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> M
+  # cm <- ConceptualModel()
+  # cm <- assume(causes(x, m), cm)
+  # cm <- assume(causes(m, y), cm)
+  # cm <- assume(causes(u, x), cm)
+  # cm <- assume(causes(u, z), cm)
+  # cm <- assume(causes(z, m), cm)
+  #
+  # cm@graph <- updateGraph(cm)
+  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  # expect_length(confounders, 1)
+  # expect_true(z@name %in% confounders)
+  #
+  # # Model 6: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> X (Unobserved --> M)
+  # cm <- ConceptualModel()
+  # cm <- assume(causes(x, m), cm)
+  # cm <- assume(causes(m, y), cm)
+  # cm <- assume(causes(z, x), cm)
+  # cm <- assume(causes(u, z), cm)
+  # cm <- assume(causes(u, m), cm)
+  #
+  # cm@graph <- updateGraph(cm)
+  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  # expect_length(confounders, 1)
+  # expect_true(z@name %in% confounders)
+  #
+  # # Model 8: Parent of Y that is unrelated to X (Maybe good for precision)
+  # cm <- ConceptualModel()
+  # cm <- assume(causes(x, y), cm)
+  # cm <- assume(causes(z, y), cm)
+  #
+  # cm@graph <- updateGraph(cm)
+  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  # expect_length(confounders, 1)
+  # expect_true(z@name %in% confounders)
+  #
+  # # Model 13: Parent of Mediator (Maybe good for precision)
+  # cm <- ConceptualModel()
+  # cm <- assume(causes(x, w), cm)
+  # cm <- assume(causes(m, y), cm)
+  # cm <- assume(causes(z, w), cm)
+  #
+  # cm@graph <- updateGraph(cm)
+  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  # expect_length(confounders, 1)
+  # expect_true(z@name %in% confounders)
+  #
+  # # Model 14: Child of X
+  # cm <- ConceptualModel()
+  # cm <- assume(causes(x, y), cm)
+  # cm <- assume(causes(x, z), cm)
+  #
+  # cm@graph <- updateGraph(cm)
+  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  # expect_length(confounders, 1)
+  # expect_true(z@name %in% confounders)
+  #
+  # # Model 15: Child of X that has child that is also child of Unobserved variable that causes Y
+  # cm <- ConceptualModel()
+  # cm <- assume(causes(x, y), cm)
+  # cm <- assume(causes(x, z), cm)
+  # cm <- assume(causes(z, w), cm)
+  # cm <- assume(causes(u, w), cm)
+  # cm <- assume(causes(u, y), cm)
+  #
+  # cm@graph <- updateGraph(cm)
+  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  # expect_length(confounders, 1)
+  # expect_true(z@name %in% confounders)
 })

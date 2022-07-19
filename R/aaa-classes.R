@@ -38,7 +38,7 @@ UnobservedVariable <- setClass("UnobservedVariable",
                                  name = "character"
                                ),
                                prototype = list(
-                                 name = NULL
+                                 name = "Unobserved"
                                )
 )
 # Helper to create instances of the Unobserved class

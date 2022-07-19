@@ -20,6 +20,9 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   checkConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
 
   ### Step 2: Candidate statistical model inference/generation
+  confounders <- inferConfounders(conceptualModel=conceptualModel, iv=iv, dv=dv) # Should only use Assumed relationships to get confounders?
+  # What happens if there are multiple Hypothesized relationships (not just the one with the IV)?
+
   main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
   interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design, main_effects)
   random_effects <- infer_random_effects_with_explanations(measurement_gr, nests_gr, design, all_relationships, main_effects, interaction_effects)

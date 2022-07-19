@@ -139,8 +139,25 @@ With an explicit handle to the conceptual model, we don't need to construct an i
 
 ## Expressed conceptual model --> statistical model 
 Which/how many IVs to specify in my query? Include variable/s whose impact on the DV you care about.  
-IDEA: Allow for only 1 IV at a time to avoid mutual adjustment fallacy (http://dagitty.net/learn/graphs/table2-fallacy.html)
-START HERE: 1 IV at a time. (could treat each IV sequentially)
+Currently: Allow for only 1 IV at a time to avoid mutual adjustment fallacy (http://dagitty.net/learn/graphs/table2-fallacy.html)
+1 IV at a time. (could treat each IV sequentially)
+
+A query for a statistical model from a conceptual model probes into the influence of one IV on a DV in the context of the assumed + hypothesized relationships in the conceptual model. 
+
+Confounders are selected on the basis that end-users are interested in the average causal effect ("ACE") of an independent variable on the dependent/outcome variable. Confounders are suggested based on recommendations by Cinelli, Forney, and Pearl (TR 2020) to prioritize precision of ACE estimates in regression. Causal interpretation of regression models. 
+
+TODO: Summary of confounder identification rules: 
+- How do these compare to what we had before in Tisane?
+
+Use cases: 
+- Only main effect
+[x] Tests
+[]Finish code for inferring confounders
+- Family + Link  --> more specific type system, disambiguation
+
+- Main effect + random effect
+- Main effect + interaction effect 
+- Main + interaction + random 
 
 Idea: 
 - create ConceptualModel 
@@ -155,14 +172,19 @@ query(conceptual_model=cm, iv=[list], dv=pounds_lost)
 
 ## Expressed conceptual model vs. data
 Fits and shows results of executing one or more statistical models for assessing the conceptual model. 
-
 Returns a script for running the statistical models
+
+Only assesses the presence of evidence for *assumed* relationships. Hypothesized relationships are discarded in the assessment.
 ```R
 assess(conceptual_model=cm, data=data)
 ```
 
 # Questions
 1. Aesthetically - is it weird to not have the same gradations of specificity for interaction even though empirically we've found that interactions are difficult to reason about without (hyper-)specificity?
+2. Should we add a check that the IV in a query has a hypothesized relationship (not an assumed one) to the DV? Right now, we don't check for Assumed/Hypothesized relationship between the IV and DV although the intended (?) use case is that the IV in a query is "hypothesized" implicitly. 
+- Idea: If end-users assess an Assumed relationship (IV in query), ask if they want to proceed/should the relationship be hypothesized?  (interaction) - START HERE
+- For end-users who want to assess an Assumed relationship, what should they do? 
+
 
 
 ## Possible inconveniences
@@ -178,6 +200,8 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 3. Especially if we go with one IV at a time, we start to see the need to facilitate/support improved interpretation of the results...
 
 4. Does ``Assumption`` have to have a ConceptualModel piv? 
+
+5. isObserved returns NULL if ask about Unit variable because Unit variable is not added to Conceptual Model -- This seems wrong? 
 
 ## TODOs
 - Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
