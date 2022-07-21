@@ -349,7 +349,18 @@ test_that("Mediators found correctly", {
   cm <- assume(causes(m, y), cm)
   cm@graph <- updateGraph(cm)
 
-  mediators <- getMediators(cm@graph, x@name, y@name)
+  mediators <- getMediators(cm, x@name, y@name)
+  expect_length(mediators, 1)
+  expect_true(m@name %in% mediators)
+
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, m), cm)
+  cm <- assume(causes(m, y), cm)
+  cm <- assume(causes(z, x), cm)
+  cm <- assume(causes(z, m), cm)
+  cm@graph <- updateGraph(cm)
+
+  mediators <- getMediators(cm, x@name, y@name)
   expect_length(mediators, 1)
   expect_true(m@name %in% mediators)
 })
@@ -427,18 +438,18 @@ test_that("Infer confounders correctly", {
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
-  # # Model 4: Common cause of X and any mediator between X and Y
-  # cm <- ConceptualModel()
-  # cm <- assume(causes(x, m), cm)
-  # cm <- assume(causes(m, y), cm)
-  # cm <- assume(causes(z, x), cm)
-  # cm <- assume(causes(z, m), cm)
-  #
-  # cm@graph <- updateGraph(cm)
-  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
-  # expect_length(confounders, 1)
-  # expect_true(z@name %in% confounders)
-  #
+  # Model 4: Common cause of X and any mediator between X and Y
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, m), cm)
+  cm <- assume(causes(m, y), cm)
+  cm <- assume(causes(z, x), cm)
+  cm <- assume(causes(z, m), cm)
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
+
   # # Model 5: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> M
   # cm <- ConceptualModel()
   # cm <- assume(causes(x, m), cm)

@@ -31,26 +31,28 @@ setMethod("isObserved", signature("ConceptualModel", "UnobservedVariable"), func
 
 #' Find mediators.
 #'
-#' This function findings mediators on paths between @param x and @param y
+#' This function finds Observed mediators on paths between @param x and @param y
 #' Helper function to follow recommendations from Cinelli, Forney, and Pearl 2020
-#' @param graph DAG (from dagitty) that is part of a ConceptualModel.
+#' @param ConceptualModel.
 #' @param x character. Name of AbstractVariable in @param graph.
 #' @param y character. Name of AbstractVariable in @param graph.
-#' @return list of mediators.
+#' @return list of Observed mediators.
 #' @import dagitty
 #' @keywords
 #' @examples
 #' getMediators()
-getMediators <- function(graph, x, y) {
+getMediators <- function(conceptualModel, x, y) {
+  graph = conceptualModel@graph
   mediators = list()
-  xyPaths <- paths(graph, from=x, to=y)
+  xyPaths <- paths(graph, from=x, to=y)$paths
 
   for (path in xyPaths) {
     # Do we have two -> ??
     tokenLength = 2
     expMatches <- gregexpr("->", path)
+    backwardMatches <- gregexpr("<-", path)
     # Found a mediator!
-    if (length(expMatches[[1]]) == 2) {
+    if (length(expMatches[[1]]) == 2 && backwardMatches[[1]][1] == -1) {
       firstIdx = expMatches[[1]][1]
       secondIdx = expMatches[[1]][2]
 
@@ -61,8 +63,11 @@ getMediators <- function(graph, x, y) {
       # Strip whitespace
       mediatorName = trimws(mediatorName)
 
-      # Add to list of mediators
-      mediators <- append(mediators, mediatorName)
+      # Mediators must be Observed
+      if (isObserved(conceptualModel, mediatorName)) {
+        # Add to list of mediators
+        mediators <- append(mediators, mediatorName)
+      }
     }
   }
   # Return mediators
@@ -147,21 +152,21 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
   }
 
   # Model 4: Common cause of X and any mediator between X and Y
-  # mediators <- getMediators(gr, iv, dv)
+  mediators <- getMediators(conceptualModel, iv@name, dv@name)
   # mParentsObserved = list()
   # mParentsUnobserved = list()
-  # for (m in mediators) {
-  #   mps <- parents(gr, m)
-  #   for (p in mps) {
-  #     if (isObserved(p)) {
-  #       mParentsObserved <- append(mParentsObserved, p)
-  #     } else {
-  #       mParentsUnobserved <- append(mParentsUnobserved, p)
-  #     }
-  #   }
-  # }
-  # commonMediatorParents <- intersect(ivParents, mParentsObserved)
-  #
+  for (m in mediators) {
+    mParents <- parents(gr, m)
+
+    sharedParents <- intersect(ivParents, mParents)
+
+    for (sp in sharedParents) {
+      if (isObserved(conceptualModel, sp)) {
+        confounders <- append(confounders, sp)
+      }
+    }
+  }
+
   # # Model 5: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> M
   # mediatorGrandparentsUnobserved = list()
   # for (mp in mParentsObserved) {
