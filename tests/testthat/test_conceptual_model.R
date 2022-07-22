@@ -450,32 +450,32 @@ test_that("Infer confounders correctly", {
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
-  # # Model 5: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> M
-  # cm <- ConceptualModel()
-  # cm <- assume(causes(x, m), cm)
-  # cm <- assume(causes(m, y), cm)
-  # cm <- assume(causes(u, x), cm)
-  # cm <- assume(causes(u, z), cm)
-  # cm <- assume(causes(z, m), cm)
-  #
-  # cm@graph <- updateGraph(cm)
-  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
-  # expect_length(confounders, 1)
-  # expect_true(z@name %in% confounders)
-  #
-  # # Model 6: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> X (Unobserved --> M)
-  # cm <- ConceptualModel()
-  # cm <- assume(causes(x, m), cm)
-  # cm <- assume(causes(m, y), cm)
-  # cm <- assume(causes(z, x), cm)
-  # cm <- assume(causes(u, z), cm)
-  # cm <- assume(causes(u, m), cm)
-  #
-  # cm@graph <- updateGraph(cm)
-  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
-  # expect_length(confounders, 1)
-  # expect_true(z@name %in% confounders)
-  #
+  # Model 5: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> M
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, m), cm)
+  cm <- assume(causes(m, y), cm)
+  cm <- assume(causes(u, x), cm)
+  cm <- assume(causes(u, z), cm)
+  cm <- assume(causes(z, m), cm)
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
+
+  # Model 6: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> X (Unobserved --> M)
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, m), cm)
+  cm <- assume(causes(m, y), cm)
+  cm <- assume(causes(z, x), cm)
+  cm <- assume(causes(u, z), cm)
+  cm <- assume(causes(u, m), cm)
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
+
   # # Model 8: Parent of Y that is unrelated to X (Maybe good for precision)
   # cm <- ConceptualModel()
   # cm <- assume(causes(x, y), cm)

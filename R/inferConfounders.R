@@ -153,8 +153,6 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
 
   # Model 4: Common cause of X and any mediator between X and Y
   mediators <- getMediators(conceptualModel, iv@name, dv@name)
-  # mParentsObserved = list()
-  # mParentsUnobserved = list()
   for (m in mediators) {
     mParents <- parents(gr, m)
 
@@ -168,24 +166,50 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
   }
 
   # # Model 5: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> M
-  # mediatorGrandparentsUnobserved = list()
-  # for (mp in mParentsObserved) {
-  #   grandparents <- parents(gr, mp)
-  #
-  #   for (gp in grandparents) {
-  #     # Check that the grandparent is UNOBSERVED
-  #     if (!isObserved(gp)) {
-  #       mediatorGrandparentsUnobserved <- append(mediatorGrandparentsUnobserved, gp)
-  #     }
-  #   }
-  #   commonAncestorsUnobserved <- intersect(ivParents, mediatorGrandparentsUnobserved)
-  #   if (length(commonAncestorsUnobserved) > 0) {
-  #    confounders <- append(confounders, mp)
-  #   }
-  #   mediatorGrandparentsUnobserved <- list()
-  # }
-  #
-  # # Model 6: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> X (Unobserved --> M)
+  ivParentsUnobserved = NULL
+  for (ip in ivParents) {
+    if (!isObserved(conceptualModel, ip)) {
+      ivParentsUnobserved <- append(ivParentsUnobserved, ip)
+    }
+  }
+  for (m in mediators) {
+    mParents <- parents(gr, m)
+
+    for (mp in mParents) {
+      # Only consider mediator parents that are not the IV
+      if (mp != iv@name) {
+        mGrandparents <- parents(gr, mp)
+
+        sharedAncestors <- intersect(ivParentsUnobserved, mGrandparents)
+        if (length(sharedAncestors) == 1) {
+          confounders <- append(confounders, mp)
+        }
+      }
+    }
+  }
+
+  # Model 6: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> X (Unobserved --> M)
+  mParentsUnobserved = NULL
+  for (m in mediators) {
+    mParents <- parents(gr, m)
+
+    for (mp in mParents) {
+      if (!isObserved(conceptualModel, mp)) {
+        mParentsUnobserved <- append(mParentsUnobserved, mp)
+      }
+    }
+    for (mpu in mParentsUnobserved) {
+      for (ip in ivParents) {
+        ivGrandparents <- parents(gr, ip)
+
+        sharedAncestors <- intersect(ivGrandparents, mParentsUnobserved)
+        browser()
+        if (length(sharedAncestors) == 1) {
+          confounders <- append(confounders, ip)
+        }
+      }
+    }
+  }
   # for (ip in ivParents) {
   #   ivGrandparents <- parents(gr, ip)
   #
@@ -199,7 +223,7 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
   #     }
   #   }
   # }
-  #
+
   # # Neutral Controls
   # # Model 8: Parent of Y that is unrelated to X (Maybe good for precision)
   # for (dp in dvParents) {
