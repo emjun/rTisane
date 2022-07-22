@@ -203,53 +203,73 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
         ivGrandparents <- parents(gr, ip)
 
         sharedAncestors <- intersect(ivGrandparents, mParentsUnobserved)
-        browser()
         if (length(sharedAncestors) == 1) {
           confounders <- append(confounders, ip)
         }
       }
     }
   }
-  # for (ip in ivParents) {
-  #   ivGrandparents <- parents(gr, ip)
-  #
-  #   for (gp in ivGrandparents) {
-  #     # Check that the grandparent is UNOBSERVED
-  #     if (!isObserved(gp)) {
-  #       # Is the Unobserved grandparent also the parent of the mediator?
-  #       if (gp %in% mParentsUnobserved) {
-  #         confounders <- append(confounders, ip)
-  #       }
-  #     }
-  #   }
-  # }
 
-  # # Neutral Controls
-  # # Model 8: Parent of Y that is unrelated to X (Maybe good for precision)
-  # for (dp in dvParents) {
-  #   # Not a shared a common parent of IV
-  #   if (!(dp %in% commonParents)) {
-  #     confounders <- append(confounders, dp)
-  #   }
-  # }
-  #
+  # Neutral Controls
+  # Model 8: Parent of Y that is unrelated to X (Maybe good for precision)
+  for (dp in dvParents) {
+    # Is dp observed?
+    if (isObserved(conceptualModel, dp)) {
+      dAncestors <- ancestors(gr, dp) # dAncestors has dp in the list
+      # Not a shared a common parent of IV
+      if ((length(dAncestors) == 1) && (dAncestors[[1]] == dp)) {
+        # Exclude IV as a parent of DV
+        if(dp != iv@name) {
+          # Is the ancestor's only child the DV?
+          aChildren <- children(gr, dp)
+          if ((length(aChildren) == 1) && (aChildren[[1]] == dv@name)) {
+            confounders <- append(confounders, dp)
+          }
+        }
+      }
+    }
+  }
+
   # # SKIP: Model 9: Parent of X that is unrelated to Y (Maybe bad for precision)
-  #
-  # # Model 13: Parent of Mediator (Maybe good for precision)
-  # mParentsObserved
-  #
-  # for (mp in mParentsObserved) {
-  #  ps = paths(gr, iv@name, mp)
-  #  closedPaths = list()
-  #  # TODO: Check and add closed paths?
-  # }
-  #
-  # # Model 14, 15: Post-treatment (Maybe good for selection bias)
-  # # Model 14: Child of X
-  # ivChildren <- children(gr, iv@name)
-  # # TODO: Check that children are not related to Y in any way except through X
-  #
-  # # Model 15: Child of X that has child that is also child of Unobserved variable that causes Y
+
+  # Model 13: Parent of Mediator (Maybe good for precision)
+  for (m in mediators) {
+    mParents <- parents(gr, m)
+
+    for (mp in mParents) {
+      # Exclude IV as a parent of DV
+      if (mp!= iv@name && isObserved(conceptualModel, mp)) {
+        mpAncestors <- ancestors(gr, mp)
+        # Mediator's parent has no other ancestors
+        if ((length(mpAncestors) == 1) && (mpAncestors[[1]] == mp)) {
+          # Mediator's parent has no other children
+          mpChildren <- children(gr, mp)
+          if ((length(mpChildren) == 1) && (mpChildren[[1]] == m)) {
+            confounders <- append(confounders, mp)
+          }
+        }
+      }
+    }
+  }
+  # Model 14, 15: Post-treatment (Maybe good for selection bias)
+  # Model 14: Child of X
+  ivChildren <- descendants(gr, iv@name)
+  for (ic in ivChildren) {
+    # Don't consider the IV and Is the child Observed?
+    if ((ic != iv@name) && (isObserved(conceptualModel, ic))) {
+      # The child has no other ancestors
+      icAncestors <- ancestors(gr, ic)
+      if ((length(icAncestors) == 1) && (icAncestors[[1]] == ic)) {
+        # The child has no other children
+        icChildren <- children(gr, ic)
+        if (length(icChildren) == 0) {
+          confounders <- append(confounders, ic)
+        }
+      }
+    }
+  }
+
+  # Model 15: Child of X that has child that is also child of Unobserved variable that causes Y
   # dvParentsUnobserved
   # for (dp in dvParentsUnobserved) {
   #   # Get children
@@ -259,8 +279,8 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
   #   # Is there an Observed mediator on this path?
   #   # If so, add to confounders
   # }
-  #
-  #
+
+
   # # Bad Controls (Pre-treatment, )
   # # Model 7: Unobserved variables of X and Y both cause Z
   #

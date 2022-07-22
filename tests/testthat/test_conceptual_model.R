@@ -476,28 +476,28 @@ test_that("Infer confounders correctly", {
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
-  # # Model 8: Parent of Y that is unrelated to X (Maybe good for precision)
-  # cm <- ConceptualModel()
-  # cm <- assume(causes(x, y), cm)
-  # cm <- assume(causes(z, y), cm)
-  #
-  # cm@graph <- updateGraph(cm)
-  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
-  # expect_length(confounders, 1)
-  # expect_true(z@name %in% confounders)
-  #
-  # # Model 13: Parent of Mediator (Maybe good for precision)
-  # cm <- ConceptualModel()
-  # cm <- assume(causes(x, w), cm)
-  # cm <- assume(causes(m, y), cm)
-  # cm <- assume(causes(z, w), cm)
-  #
-  # cm@graph <- updateGraph(cm)
-  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
-  # expect_length(confounders, 1)
-  # expect_true(z@name %in% confounders)
-  #
-  # # Model 14: Child of X
+  # Model 8: Parent of Y that is unrelated to X (Maybe good for precision)
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, y), cm)
+  cm <- assume(causes(z, y), cm)
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
+
+  # Model 13: Parent of Mediator (Maybe good for precision)
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, w), cm)
+  cm <- assume(causes(w, y), cm)
+  cm <- assume(causes(z, w), cm)
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
+
+  # Model 14: Child of X
   # cm <- ConceptualModel()
   # cm <- assume(causes(x, y), cm)
   # cm <- assume(causes(x, z), cm)
@@ -506,7 +506,7 @@ test_that("Infer confounders correctly", {
   # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
   # expect_length(confounders, 1)
   # expect_true(z@name %in% confounders)
-  #
+
   # # Model 15: Child of X that has child that is also child of Unobserved variable that causes Y
   # cm <- ConceptualModel()
   # cm <- assume(causes(x, y), cm)
