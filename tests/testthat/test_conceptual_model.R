@@ -498,25 +498,25 @@ test_that("Infer confounders correctly", {
   expect_true(z@name %in% confounders)
 
   # Model 14: Child of X
-  # cm <- ConceptualModel()
-  # cm <- assume(causes(x, y), cm)
-  # cm <- assume(causes(x, z), cm)
-  #
-  # cm@graph <- updateGraph(cm)
-  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
-  # expect_length(confounders, 1)
-  # expect_true(z@name %in% confounders)
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, y), cm)
+  cm <- assume(causes(x, z), cm)
 
-  # # Model 15: Child of X that has child that is also child of Unobserved variable that causes Y
-  # cm <- ConceptualModel()
-  # cm <- assume(causes(x, y), cm)
-  # cm <- assume(causes(x, z), cm)
-  # cm <- assume(causes(z, w), cm)
-  # cm <- assume(causes(u, w), cm)
-  # cm <- assume(causes(u, y), cm)
-  #
-  # cm@graph <- updateGraph(cm)
-  # confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
-  # expect_length(confounders, 1)
-  # expect_true(z@name %in% confounders)
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
+
+  # Model 15: Child of X that has child that is also child of Unobserved variable that causes Y
+  cm <- ConceptualModel()
+  cm <- assume(causes(x, y), cm)
+  cm <- assume(causes(x, z), cm)
+  cm <- assume(causes(z, w), cm)
+  cm <- assume(causes(u, w), cm)
+  cm <- assume(causes(u, y), cm)
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  expect_length(confounders, 1)
+  expect_true(z@name %in% confounders)
 })

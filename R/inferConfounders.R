@@ -253,13 +253,13 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
   }
   # Model 14, 15: Post-treatment (Maybe good for selection bias)
   # Model 14: Child of X
-  ivChildren <- descendants(gr, iv@name)
+  ivChildren <- children(gr, iv@name)
   for (ic in ivChildren) {
-    # Don't consider the IV and Is the child Observed?
-    if ((ic != iv@name) && (isObserved(conceptualModel, ic))) {
-      # The child has no other ancestors
+    # Don't consider the IV, Don't consider the DV, and Is the child Observed?
+    if ((ic != iv@name) && (ic != dv@name) && (isObserved(conceptualModel, ic))) {
+      # The child has no other ancestors except itself and the IV
       icAncestors <- ancestors(gr, ic)
-      if ((length(icAncestors) == 1) && (icAncestors[[1]] == ic)) {
+      if ((length(icAncestors) == 2) && (ic %in% icAncestors) && (iv@name %in% icAncestors)) {
         # The child has no other children
         icChildren <- children(gr, ic)
         if (length(icChildren) == 0) {
@@ -270,15 +270,36 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
   }
 
   # Model 15: Child of X that has child that is also child of Unobserved variable that causes Y
-  # dvParentsUnobserved
-  # for (dp in dvParentsUnobserved) {
-  #   # Get children
-  #   childrenUnobserved = children(gr, dp)
-  #
-  #   # Check if there is a path between IV and each childrenUnobserved
-  #   # Is there an Observed mediator on this path?
-  #   # If so, add to confounders
-  # }
+  ivChildrenObserved = NULL
+  for (ic in children(gr, iv@name)) {
+    # Don't consider the IV and Is the child Observed?
+    if ((ic != iv@name) && (isObserved(conceptualModel, ic))) {
+      ivChildrenObserved <- append(ivChildrenObserved, ic)
+    }
+  }
+
+
+  dvParentsUnobserved = NULL
+  for (dp in dvParents) {
+    if(!isObserved(conceptualModel, dp)) {
+      dvParentsUnobserved <- append(dvParentsUnobserved, dp)
+    }
+  }
+
+  for (ico in ivChildrenObserved) {
+    ivGrandchildren <- children(gr, ico)
+    for (ig in ivGrandchildren) {
+      if (isObserved(conceptualModel, ig)) {
+        for (dp in dvParentsUnobserved) {
+          dpChildren <- children(gr, dp)
+
+          if (c(ig) %in% dpChildren) {
+            confounders <- append(confounders, ico)
+          }
+        }
+      }
+    }
+  }
 
 
   # # Bad Controls (Pre-treatment, )
