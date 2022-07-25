@@ -411,6 +411,63 @@ Ordinal <- setClass("Ordinal",
     contains = "Measure"
 )
 
+#' Continuous class
+#'
+#' Wrapper class for Continuous measures.
+#' Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
+#' @slot measure Measure to wrap.
+#' @slot skew character. Description of skew, options are "positive" or NULL.
+#' @keywords
+#' @examples
+#' Continuous()
+Continuous <- setClass("Continuous",
+                    slot = c(
+                      measure = "Measure",
+                      skew = "character"
+                    ),
+                    prototype = list(
+                      measure = NULL,
+                      skew = "none"
+                    )
+)
+
+#' Counts class
+#'
+#' Wrapper class for Counts.
+#' Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
+#' @slot measure Measure to wrap.
+#' @keywords
+#' @examples
+#' Counts()
+Counts <- setClass("Counts",
+                   slot = c(
+                     measure = "Measure"
+                   ),
+                   prototype = list(
+                     measure = NULL
+                   )
+)
+
+#' Categories class
+#'
+#' Wrapper class for Categorical measures.
+#' Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
+#' @slot measure Measure to wrap.
+#' @slot numberOfCategories integer. Number of categories the measure contains.
+#' @keywords
+#' @examples
+#' Categories()
+Categories <- setClass("Categories",
+                   slot = c(
+                     measure = "Measure",
+                     numberOfCategories = "integer"
+                   ),
+                   prototype = list(
+                     measure = NULL,
+                     numberOfCategories = as.integer(0)
+                   )
+)
+
 #' SetUp class
 #'
 #' Class for SetUp variables

@@ -50,3 +50,7 @@ Collate:
     'relates.R'
     'updateGraph.R'
     'whenThen.R'
+    'asContinuous.R'
+    'asCounts.R'
+    'asCategories.R'
+    'inferFamilyLinkFunctions.R'

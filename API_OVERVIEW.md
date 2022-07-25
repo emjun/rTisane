@@ -146,18 +146,58 @@ A query for a statistical model from a conceptual model probes into the influenc
 
 Confounders are selected on the basis that end-users are interested in the average causal effect ("ACE") of an independent variable on the dependent/outcome variable. Confounders are suggested based on recommendations by Cinelli, Forney, and Pearl (TR 2020) to prioritize precision of ACE estimates in regression. Causal interpretation of regression models. 
 
-TODO: Summary of confounder identification rules: 
+TODO: Summary of confounder identification rules: [Monday Aug 1]
 - How do these compare to what we had before in Tisane?
 
-Use cases: 
-- Only main effect
-[x] Tests
-[]Finish code for inferring confounders
-- Family + Link  --> more specific type system, disambiguation
+TODO: Summary of which relationships (Assumed, Hypothesized) are used to infer confounders, etc, in order to answer query [Monday Aug 1]
 
-- Main effect + random effect
-- Main effect + interaction effect 
-- Main + interaction + random 
+Use cases: 
+- [x]Only main effect
+- [x] Family + Link  --> more specific type system, disambiguation
+  - Try with existing type system --> Disambiguation could replace/cast more generic type system into a more specific one?
+
+
+### Supported Family and Link functions
+GLM, GLMER in lme4 ([see lme4 reference](https://github.com/lme4/lme4/blob/master/src/glmFamily.h))
+Family: 
+- Binomial Distribution
+- Gamma
+- Gaussian
+- Inverse Gaussian
+- Negative Binomial
+- Poission
+
+Link: "logit", "probit", "cauchit", "cloglog", "identity", "log", "sqrt", "1/mu^2", "inverse".
+
+
+- cauchit
+- Cloglog
+- Identity
+- Inverse
+- Log
+- Logit
+- Probit
+- Sqrt
+- 1/mu^2
+
+
+
+- TODO: Map out places for disambiguation (e.g., express generic relationship/need to narrow before infer confounders; use broader type system/need to make more specific before infer statistical model; )
+
+Notes about code generation: 
+- Negative Binomial: glm.nb, glmer.nb
+
+- Write up some documentation [Tuesday Aug 2]
+
+- Main effect + interaction effect [Tuesday] 
+
+
+- Main effect + random effect [Friday]
+  - Rule: repeated measures 
+  - Rule: hierarchies
+  - Rule: Non-nested composition 
+
+- Main + interaction + random [Friday/Tuesday]
 
 Idea: 
 - create ConceptualModel 
@@ -182,10 +222,10 @@ assess(conceptual_model=cm, data=data)
 # Questions
 1. Aesthetically - is it weird to not have the same gradations of specificity for interaction even though empirically we've found that interactions are difficult to reason about without (hyper-)specificity?
 2. Should we add a check that the IV in a query has a hypothesized relationship (not an assumed one) to the DV? Right now, we don't check for Assumed/Hypothesized relationship between the IV and DV although the intended (?) use case is that the IV in a query is "hypothesized" implicitly. 
-- Idea: If end-users assess an Assumed relationship (IV in query), ask if they want to proceed/should the relationship be hypothesized?  (interaction) - START HERE
+- Idea: If end-users assess an Assumed relationship (IV in query), ask if they want to proceed/should the relationship be hypothesized?  (interaction)
 - For end-users who want to assess an Assumed relationship, what should they do? 
-
-
+- Variable data types (i.e., Numeric, Ordinal, Nominal) vs. treat-as types (i.e., Continuous, Counts, Categories) -- What do we want to call this type system? Just external vs. internal types? As wrapper (current implementation) Should inherit from Measure?
+  - Wrapper feels a bit "backwards" like should be removing layers of ambiguity rather than adding layers of specifity? 
 
 ## Possible inconveniences
 1. Casting all parmeters using integer().
@@ -202,6 +242,16 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 4. Does ``Assumption`` have to have a ConceptualModel piv? 
 
 5. isObserved returns NULL if ask about Unit variable because Unit variable is not added to Conceptual Model -- This seems wrong? 
+
+6. Might be able to get rid of disambiguation for Family/Link functions if we have a more expressive type system for data. 
+- Pro of keeping in disambiguation: Keep specification focused on conceptual modeling, less focus on specific data types. Disambiguation can be for specifying data types. <Phased concerns>
+- Con of keeping in disambiguation: Might be more efficient and not actually that confusing/distracting for end-user to use better type system. Could run into problem where end-user commits too prematurely? 
+
+7. Could be nice: For zero-inflated counts, use glmmTMB rather than lme4? zero-inflated negative binomial?
+
+8. Is it more in line with rTisane's design goals to just provide the default link functions rather than allow the end-user to select among options? Right now, we've opted for using the default + showing end-users alternatives that they can select among
+
+9. Lme4 doesn't support multinomial, so need to use another library (https://github.com/lme4/lme4/issues/594)
 
 ## TODOs
 - Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"

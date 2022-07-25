@@ -1,11 +1,3 @@
-# getVariableType <- function(conceptualModel, variable) {
-#   for (v in conceptualModel@variables) {
-#     if (variable@name == v@name) {
-#       return(class(v))
-#     }
-#   }
-# }
-
 setGeneric("isObserved", function(conceptualModel, variable) standardGeneric("isObserved"))
 setMethod("isObserved", signature("ConceptualModel", "AbstractVariable"), function(conceptualModel, variable)
 {
@@ -316,6 +308,6 @@ setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "
   # # Model 17: "Case-control bias"/"Selection bias" Child of Y
 
 
-  # Return confounders
+  # Return list of confounders
   confounders
 })
