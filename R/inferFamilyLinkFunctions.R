@@ -88,14 +88,23 @@ inferLinkFunctions <- function(family) {
 #'
 #' Infers possible family and link function pairs for dependent variable
 #' Returns a list of possible family and link function pairs.
-#' @param dv AbstractVariable. Variable whose outcome we want to assess.
+#' @param dv ContinuousORCountsORCategories. Wrapped Measure whose outcome we want to assess.
 #' @keywords
 #' @export
 #' @examples
 #' inferFamilyLinkFunctions()
 setGeneric("inferFamilyLinkFunctions", function(dv) standardGeneric("inferFamilyLinkFunctions"))
-setMethod("inferFamilyLinkFunctions", signature("AbstractVariable"), function(dv)
+setMethod("inferFamilyLinkFunctions", signature("ContinuousORCountsORCategories"), function(dv)
 {
   familyLinkPairs <- list()
 
+  familyCandidates <- inferFamilyFunctions(dv)
+  for (f in familyCandidates) {
+    linkCandidates <- inferLinkFunctions(f)
+    familyLinkPairs[[f]] <- linkCandidates
+  }
+
+  # Return family and link candidates
+  stopifnot(length(familyLinkPairs) == length(familyCandidates))
+  familyLinkPairs
 })

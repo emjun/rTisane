@@ -131,6 +131,25 @@ test_that("Infers candidate link functions properly", {
   expect_length(linkFunctions, 0)
 })
 
+test_that("Infer Family and Link functions properly", {
+  participant <- Participant("pid", cardinality=40)
+  age <- numeric(unit=participant, name="age")
+  cont <- asContinuous(age)
+
+  familyLinkPairs <- inferFamilyLinkFunctions(cont)
+  familyCandidates <- inferFamilyFunctions(cont)
+  expect_equal(length(familyLinkPairs), length(familyCandidates))
+  expect_length(familyLinkPairs, 1)
+  expect_equal(familyLinkPairs[["gaussian"]], inferLinkFunctions("gaussian"))
+
+  count <- asCounts(measure=age)
+  familyLinkPairs <- inferFamilyLinkFunctions(count)
+  familyCandidates <- inferFamilyFunctions(count)
+  expect_equal(length(familyLinkPairs), length(familyCandidates))
+  expect_length(familyLinkPairs, 2)
+  expect_equal(familyLinkPairs[["poisson"]], inferLinkFunctions("poisson"))
+  expect_equal(familyLinkPairs[["negativeBinomial"]], inferLinkFunctions("negativeBinomial"))
+})
 # test_that("Asks questions to disambiguate variables properly", {
 #
 # })
