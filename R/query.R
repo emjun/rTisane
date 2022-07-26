@@ -16,8 +16,25 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   ### Step 0: Update graph
   conceptualModel@graph <- updateGraph(conceptualModel)
 
-  ### Step 1: Initial conceptual checks
+  ### Step 1: Disambiguation round 1
+  # START HERE: Start app
+  runApp('../app/app.R')
+
+  #### Step 1A: Initial conceptual checks
+  # Check that have "causes"-level of info
+  processConceptualModel(conceptualModel=conceptualModel)
+
   checkConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
+
+
+  #### Step 1B: How to treat DV?
+  #### Specify DV from Numeric/Ordinal/Nominal to Continuous/Count/Categories
+  checkVariable(dv=dv)
+
+
+  ## WILL WE GET ANY RETURN VALUE FROM SHINY?? - https://stackoverflow.com/questions/48882427/how-to-store-the-returned-value-from-a-shiny-module-in-reactivevalues
+
+  #### ????Step 1C: Data collection checks
 
   ### Step 2: Candidate statistical model inference/generation
   # Use Assumed and Hypothesized relationships to infer confounders

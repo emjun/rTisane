@@ -146,16 +146,12 @@ A query for a statistical model from a conceptual model probes into the influenc
 
 Confounders are selected on the basis that end-users are interested in the average causal effect ("ACE") of an independent variable on the dependent/outcome variable. Confounders are suggested based on recommendations by Cinelli, Forney, and Pearl (TR 2020) to prioritize precision of ACE estimates in regression. Causal interpretation of regression models. 
 
-TODO: Summary of confounder identification rules: [Monday Aug 1]
-- How do these compare to what we had before in Tisane?
+Fits and shows results of executing a statistical model + visualizing it from the conceptual model. 
 
-TODO: Summary of which relationships (Assumed, Hypothesized) are used to infer confounders, etc, in order to answer query [Monday Aug 1]
-
-Use cases: 
-- [x]Only main effect
-- [x] Family + Link  --> more specific type system, disambiguation
-  - Try with existing type system --> Disambiguation could replace/cast more generic type system into a more specific one?
-
+Returns script for running the statistical models + visualization 
+```R
+query(conceptual_model=cm, iv=[list], dv=pounds_lost)
+```
 
 ### Supported Family and Link functions
 GLM, GLMER in lme4 ([see lme4 reference](https://github.com/lme4/lme4/blob/master/src/glmFamily.h))
@@ -180,35 +176,12 @@ Link: "logit", "probit", "cauchit", "cloglog", "identity", "log", "sqrt", "1/mu^
 - Sqrt
 - 1/mu^2
 
-
-
-- TODO: Map out places for disambiguation (e.g., express generic relationship/need to narrow before infer confounders; use broader type system/need to make more specific before infer statistical model; )
-
-Notes about code generation: 
+### Notes about code generation: 
 - Negative Binomial: glm.nb, glmer.nb
 
-- Write up some documentation [Tuesday Aug 2]
-
-- Main effect + interaction effect [Tuesday] 
-
-
-- Main effect + random effect [Friday]
-  - Rule: repeated measures 
-  - Rule: hierarchies
-  - Rule: Non-nested composition 
-
-- Main + interaction + random [Friday/Tuesday]
-
-Idea: 
-- create ConceptualModel 
-- call updateGraph (idiom?)
-
-Fits and shows results of executing a statistical model + visualizing it from the conceptual model. 
-
-Returns script for running the statistical models + visualization 
-```R
-query(conceptual_model=cm, iv=[list], dv=pounds_lost)
-```
+### Programming idiom 
+1. Create ConceptualModel 
+3. Call updateGraph
 
 ## Expressed conceptual model vs. data
 Fits and shows results of executing one or more statistical models for assessing the conceptual model. 
@@ -252,6 +225,8 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 8. Is it more in line with rTisane's design goals to just provide the default link functions rather than allow the end-user to select among options? Right now, we've opted for using the default + showing end-users alternatives that they can select among
 
 9. Lme4 doesn't support multinomial, so need to use another library (https://github.com/lme4/lme4/issues/594)
+
+10. Order in which we disambiguate the first round: Variables then Conceptual Relationships? Or Conceptual Relationships then Variables? How does the order influence the following step? 
 
 ## TODOs
 - Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
