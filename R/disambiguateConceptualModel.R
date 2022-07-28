@@ -128,10 +128,6 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
       stopApp(res) # returns whatever is passed as a parameter
     })
 
-    return(list(dat = reactive({x$data}),
-              groups = reactive({gps$x})
-  ))
-
     #### For DEBUGGING -----
     # output$activeTab <- renderText({
     #   paste("Current panel: ", input$tabset)
