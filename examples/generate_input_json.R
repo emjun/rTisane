@@ -13,4 +13,4 @@ cm <- assume(cause_relat, cm)
 cm@graph <- updateGraph(cm)
 
 # Output json
-outputJSON(cm, measure_1, "simpleInput.json")
+generateJSON(cm, measure_1, "simpleInput.json")

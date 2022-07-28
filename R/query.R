@@ -17,39 +17,36 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   ### Step 0: Update graph
   conceptualModel@graph <- updateGraph(conceptualModel)
 
+
   ### Step 1: Disambiguation round 1
-  #### Step 1A: Initial conceptual checks
-  # Check that have "causes"-level of info
-  processConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
+  #### A: How to treat DV? (as Continuous, Count, Categories), B: Check + Ask for "causes"-level of info
+  updates <- processQuery(conceptualModel=conceptualModel, iv=iv, dv=dv)
+  dvUpdated <- updates$updatedDV
+  cmUpdated <- updates$updatedConceptualModel
 
+  ## LOOK UP: Validation in Shiny?
+  ## TODO: Should check ConceptualModel during disambiguation
   checkConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
-
-  #### Step 1B: How to treat DV?
-  #### Specify DV from Numeric/Ordinal/Nominal to Continuous/Count/Categories
-  checkVariable(dv=dv)
-
-
-  ## WILL WE GET ANY RETURN VALUE FROM SHINY?? - https://stackoverflow.com/questions/48882427/how-to-store-the-returned-value-from-a-shiny-module-in-reactivevalues
 
   #### ????Step 1C: Data collection checks
 
   ### Step 2: Candidate statistical model inference/generation
   # Use Assumed and Hypothesized relationships to infer confounders
   # What happens if there are multiple Hypothesized relationships (not just the one with the IV)?
-  confounders <- inferConfounders(conceptualModel=conceptualModel, iv=iv, dv=dv)
+  confounders <- inferConfounders(conceptualModel=cmUpdated, iv=iv, dv=dv)
   # main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
 
   # interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design, main_effects)
   # random_effects <- infer_random_effects_with_explanations(measurement_gr, nests_gr, design, all_relationships, main_effects, interaction_effects)
 
-  family_functions <- inferFamilyLinkFunctions()
-  # link_functions <- infer_link_functions()
+  familyLinkFunctions <- inferFamilyLinkFunctions(dvUpdated)
 
   # Output JSON file
   json_file <- NULL
 
   ### Step 3: Disambiguation loop (GUI)
   # TODO: Call bash script to run GUI
+  # Also, look into: Multipage app in Shiny https://mastering-shiny.org/scaling-modules.html#scaling-modules
 
   ### Step 4: Code generation
   # TODO: Generate code

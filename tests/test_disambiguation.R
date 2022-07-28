@@ -13,7 +13,7 @@ test_that("DV disambiguation options created properly", {
   # cause_relat <- causes(measure_0, measure_1)
   # cm <- assume(cause_relat, cm)
 
-  path <- outputJSON(dv=measure_1, "test_input.json")
+  path <- generateJSON(dv=measure_1, "test_input.json")
 
   options <- read_json(path)
 

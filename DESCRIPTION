@@ -46,7 +46,7 @@ Collate:
     'hypothesize.R'
     'increases.R'
     'notEquals.R'
-    'processConceptualModel.R'
+    'processQuery.R'
     'query.R'
     'relates.R'
     'updateGraph.R'

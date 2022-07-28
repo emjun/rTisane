@@ -1,60 +1,59 @@
 disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, dataPath) {
   require(shiny)
+  require(purrr)
 
-  # Process input JSON file
-  jsonData <- read_json(inputFilePath) # Relative path to input.json file that processConceptualModel outputs
-  dvName <- jsonData$dvName
-  dvType <- jsonData$dvType
-  dvOptions <- jsonData$dvOptions
-
-  # Read data file, if available
+  #### Read data file, if available ----
   df <- NULL
   if (!is.null(dataPath)) {
     df <- read.csv(dataPath)
   }
 
+  #### Process input JSON file -----
+  # Get DV options
+  jsonData <- read_json(inputFilePath) # Relative path to input.json file that processQuery outputs
+  dvName <- jsonData$dvName
+  dvType <- jsonData$dvType
+  dvOptions <- jsonData$dvOptions
+
+
+  # Get Conceptual model info
+  graph <- dagitty( "dag { X <- U1 -- M <- U2 -> Y } " ) 
+
+  # START HERE! GET THE JSON TO GIVE YOU THIS
+  uncertainRelationships <- list("When A increases, B increases", "B is related to C")
+  optionsAB <- c("A causes B", "B causes A")
+  optionsBC <- c("B causes C", "C causes B")
+  uncertainOptions <- list("When A increases, B increases"=optionsAB, "B is related to C"=optionsBC)
+
   # Specify App UI
   ui = fluidPage(
     tags$script(src = "conceptualModelDisambiguation.js"),
 
-    titlePanel("rTisane: Conceptual Modeling"),
+    titlePanel("rTisane"),
+    textOutput("activeTab"),
 
-    sidebarLayout(
+    tabsetPanel(
+      id = "tabset",
+      tabPanel("Dependent variable",
+               # fileInput("file", "Data", buttonLabel = "Upload..."),
+               # Info about dependent variable ---
+               p(paste("Dependent variable:", dvName)),
+               p(paste(dvName, " looks like this:")),
+               plotOutput('dvHist'),
+               selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
 
-      # Sidebar panel for inputs ----
-      sidebarPanel(),
-      # sidebarPanel(
-      #
-      #   # Input: Slider for DV  ----
-      #   # sliderInput(inputId = "dvType",
-      #   #             label = "Number of bins:",
-      #   #             min = 1,
-      #   #             max = 50,
-      #   #             value = 30)
-      #
-      #   p(paste("Dependent variable:", dvName)),
-      #   selectInput("dvType", "", choices = unique(dvOptions)),
-      #   # selectInput("customername", "Customer", choices = NULL),
-      #   # selectInput("ordernumber", "Order number", choices = NULL),
-      #   tableOutput("data")
-      # ),
-
-      # Main panel for displaying outputs ----
-      mainPanel(
-        # Info about dependent variable ---
-        p(paste("Dependent variable:", dvName)),
-        p(paste(dvName, " looks like this:")),
-        plotOutput('dvHist'),
-        selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
-
-        # selectInput("customername", "Customer", choices = NULL),
-        # selectInput("ordernumber", "Order number", choices = NULL),
-        tableOutput("data")
-        # Output: Histogram ----
-
+               # textInput("delim", "Delimiter (leave blank to guess)", ""),
+               # numericInput("skip", "Rows to skip", 0, min = 0),
+               # numericInput("rows", "Rows to preview", 10, min = 1)
+      ),
+      tabPanel("Conceptual model",
+               p("This is what your conceptual model looks like:"),
+               p("WBN: Visualization of conceptual model, look into dynamic vis"),
+               plotOutput('cmGraph'),
+               uiOutput("cmQuestions"),
+               textOutput("palette")
       )
     ),
-
     actionButton("stop", "Done!")
   )
 
@@ -65,12 +64,8 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
       dvName = NULL,
       dvType = NULL
     )
-    # React to updated dvType
-    # re <- reactive({
-    #   output$dvType
-    # })
 
-
+    #### DV -----
     # Visualize DV if there is data
     if (!is.null(df)) {
       output$dvHist <- renderPlot({
@@ -83,6 +78,39 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
     observeEvent(input$dvType, {
       userInput$dvName <- dvName
       userInput$dvType <- input$dvType
+    })
+
+    #### Conceptual Model -----
+    # Dynamically generate/ask questions about under-specified relationships
+    output$cmQuestions <- renderUI({
+      map(uncertainRelationships, ~ div(
+        paste("You wrote that:", .x),
+        strong("More specifically, what did you mean?"),
+        selectInput(.x, NULL, choices = uncertainOptions[[.x]])
+      ))
+      # map(col_names(), ~ selectInput(.x, NULL, choices = c("A --> B", "A <-- B")))
+    })
+
+    output$palette <- renderText({
+      map_chr(uncertainRelationships, ~ input[[.x]] %||% "")
+    })
+
+    # Update graph vis 
+    output$cmGraph <- renderPlot({
+      plot(graphLayout(graph))
+    })
+
+    # IDEA: wrap inputs in Div, check if Div updates (attach event to that DIV), then regenerate the graph
+    # observeEvent(input$option, {
+    #   graph <- getExample('mediator')
+    # }, ignoreInit = TRUE) # try removing ignoreInit? What does the parameter do anyway? 
+    # output$cmGraph <- renderPlot({plot(graphLayout(graph))})
+
+
+
+    #### For DEBUGGING -----
+    output$activeTab <- renderText({
+      paste("Current panel: ", input$tabset)
     })
 
     # Store saved values and close app
@@ -103,8 +131,3 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
   # shinyApp(ui = ui, server = server)
   runApp(shinyApp(ui = ui, server = server))
 }
-
-# disambiguateConceptualModel <- function(conceptualModel, inputFilePath, dataPath) {
-#   userInput <- NULL
-#   getUserInput(conceptualModel, inputFilePath, dataPath, userInput)
-# }

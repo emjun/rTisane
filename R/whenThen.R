@@ -14,11 +14,17 @@ setMethod("whenThen", signature("ComparesORComparesList", "Compares"), function(
 {
   if (class(when) == "Compares") {
     # Get the variables from the when/then parameters
-    cause_obj = when@variable
-    effect_obj = then@variable
+    # cause_obj = when@variable
+    # effect_obj = then@variable
+    lhs = when@variable
+    rhs = then@variable
 
     # create a Causes relationship obj
-    relat = Causes(cause=cause_obj, effect=effect_obj)
+    # relat = Causes(cause=cause_obj, effect=effect_obj)
+
+    # create a Relates relationship obj 
+    relat = Relates(lhs=lhs, rhs=rhs)
+    
   } else {
     # Assert that @param when is a List of Compares
     stopifnot(class(when) == "list")

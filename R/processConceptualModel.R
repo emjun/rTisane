@@ -5,8 +5,9 @@
 #' @import jsonlite
 #' @keywords
 #' @examples
-#' outputJSON()
-outputJSON <- function(dv, path) {
+#' generateJSON()
+generateJSON <- function(conceptualModel, dv, path) {
+  #### Generate options for DV
   dvClass = class(dv)
   # Create options
   dvOptions <- list()
@@ -24,7 +25,38 @@ outputJSON <- function(dv, path) {
     # dvOptions <- append(dvOptions, "Categories")
     dvOptions <- c("Categories")
   }
-  # Create list about DV
+  
+  #### Generate options for Conceptual Model 
+  ambigRelationships <- c()
+  ambigOptions <- list()
+  relatationships <- conceptualModel@relationships
+  for (relat in relatationships) {
+    r <- relat@relationship # Could be Assumption or Hypothesis
+    rClass <- class(r)
+
+    if (rClass == "Relates") {
+        # Create and track relationship
+        relatString <- paste(r@lhs, "is related to", r@rhs, sep=" ")
+        ambigRelationships <- append(ambigRelationships, relatString)
+
+        # Create options to resolve/make more specific relationship
+        options <- c(paste(r@lhs, "causes", r@rhs, sep=" "), paste(r@rhs, "causes", r@lhs, sep=" ")) 
+        ambigOptions <- append(ambigOptions, list(relatString=options))
+    } else if (rClass == "WhenThen") {
+        # Create and track relationship 
+        relatString <- paste(r@lhs, "is related to", r@rhs, sep=" ")
+        ambigRelationships <- append(ambigRelationships, relatString)
+
+    } else {
+      stopifnot(rClass == "Causes") 
+      # Do nothing for causes relationships
+    }
+    
+    
+  }
+
+  
+  # Create list to output
   dvInfo <- list(dvName = dv@name, dvClass = dvClass, dvOptions = dvOptions)
 
   # Output JSON with DV info to file
@@ -94,12 +126,12 @@ updateConceptualModel <- function(conceptualModel, values) {
 #' @return
 #' @keywords
 #' @examples
-#' processConceptualModel()
-setGeneric("processConceptualModel", function(conceptualModel, iv, dv) standardGeneric("processConceptualModel"))
-setMethod("processConceptualModel", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
+#' processQuery()
+setGeneric("processQuery", function(conceptualModel, iv, dv) standardGeneric("processQuery"))
+setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {
   # Write DV to JSON, which is read to create disambiguation GUI
-  path <- outputJSON(dv, "input.json")
+  path <- generateJSON(conceptualModel, dv, "input.json")
 
   # Start up disambiguation process
   inputFilePath <- path
