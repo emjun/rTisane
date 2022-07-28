@@ -12,6 +12,7 @@
 setGeneric("checkConceptualModel", function(conceptualModel, iv, dv) standardGeneric("checkConceptualModel"))
 setMethod("checkConceptualModel", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {
+
   gr <- conceptualModel@graph
   nodes <- names(gr) # Get the names of nodes in gr
 

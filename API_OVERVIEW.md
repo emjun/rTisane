@@ -228,6 +228,8 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 
 10. Order in which we disambiguate the first round: Variables then Conceptual Relationships? Or Conceptual Relationships then Variables? How does the order influence the following step? 
 
+11. Do we want to pre-check DV before allowing for casting to Continuous/Counts/Categories? For example, if there are any floats, can't be counts. 
+
 ## TODOs
 - Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
 - Is there anything we can do with the hyper-specific information end-users provide? (maybe for interpretation?)
@@ -246,4 +248,11 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 library(devtools)
 add browser() checkpoint
 rlang::with_interactive(test_active_file())
+```
+
+
+For testing shiny Apps
+```R
+# Add to ~/.Rprofile to prevent Shiny from opening new RStudio internal browser each time
+options(shiny.launch.browser = .rs.invokeShinyWindowExternal)
 ```

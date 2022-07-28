@@ -13,19 +13,16 @@
 setGeneric("query", function(conceptualModel, iv, dv) standardGeneric("query"))
 setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {
+
   ### Step 0: Update graph
   conceptualModel@graph <- updateGraph(conceptualModel)
 
   ### Step 1: Disambiguation round 1
-  # START HERE: Start app
-  runApp('../app/app.R')
-
   #### Step 1A: Initial conceptual checks
   # Check that have "causes"-level of info
-  processConceptualModel(conceptualModel=conceptualModel)
+  processConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
 
   checkConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
-
 
   #### Step 1B: How to treat DV?
   #### Specify DV from Numeric/Ordinal/Nominal to Continuous/Count/Categories
