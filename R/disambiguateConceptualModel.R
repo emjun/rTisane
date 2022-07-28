@@ -17,13 +17,14 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
 
 
   # Get Conceptual model info
-  graph <- dagitty( "dag { X <- U1 -- M <- U2 -> Y } " ) 
+  graph <- dagitty( "dag { X <- U1 -- M <- U2 -> Y } " )
 
   # START HERE! GET THE JSON TO GIVE YOU THIS
-  uncertainRelationships <- list("When A increases, B increases", "B is related to C")
-  optionsAB <- c("A causes B", "B causes A")
-  optionsBC <- c("B causes C", "C causes B")
-  uncertainOptions <- list("When A increases, B increases"=optionsAB, "B is related to C"=optionsBC)
+  uncertainRelationships <- jsonData$ambiguousRelationships
+  options1 <- jsonData$ambiguousOptions1
+  options2 <- jsonData$ambiguousOptions2
+  stopifnot(length(uncertainRelationships) == length(options1))
+  stopifnot(length(options1) == length(options2))
 
   # Specify App UI
   ui = fluidPage(
@@ -83,10 +84,12 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
     #### Conceptual Model -----
     # Dynamically generate/ask questions about under-specified relationships
     output$cmQuestions <- renderUI({
-      map(uncertainRelationships, ~ div(
-        paste("You wrote that:", .x),
+      l <- list(uncertainRelationships, options1, options2)
+      browser()
+      pmap(l, ~ div(
+        paste("You wrote that:", ..1),
         strong("More specifically, what did you mean?"),
-        selectInput(.x, NULL, choices = uncertainOptions[[.x]])
+        selectInput(..1, NULL, choices=c(..2, ..3))
       ))
       # map(col_names(), ~ selectInput(.x, NULL, choices = c("A --> B", "A <-- B")))
     })
@@ -95,7 +98,7 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
       map_chr(uncertainRelationships, ~ input[[.x]] %||% "")
     })
 
-    # Update graph vis 
+    # Update graph vis
     output$cmGraph <- renderPlot({
       plot(graphLayout(graph))
     })
@@ -103,7 +106,7 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
     # IDEA: wrap inputs in Div, check if Div updates (attach event to that DIV), then regenerate the graph
     # observeEvent(input$option, {
     #   graph <- getExample('mediator')
-    # }, ignoreInit = TRUE) # try removing ignoreInit? What does the parameter do anyway? 
+    # }, ignoreInit = TRUE) # try removing ignoreInit? What does the parameter do anyway?
     # output$cmGraph <- renderPlot({plot(graphLayout(graph))})
 
 

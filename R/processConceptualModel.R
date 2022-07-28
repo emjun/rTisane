@@ -25,43 +25,46 @@ generateJSON <- function(conceptualModel, dv, path) {
     # dvOptions <- append(dvOptions, "Categories")
     dvOptions <- c("Categories")
   }
-  
+
+  # Populate list to output 
+  output <- list(dvName = dv@name, dvClass = dvClass, dvOptions = dvOptions)
+
   #### Generate options for Conceptual Model 
   ambigRelationships <- c()
-  ambigOptions <- list()
+  ambigOptions1 <- c()
+  ambigOptions2 <- c()
+
   relatationships <- conceptualModel@relationships
   for (relat in relatationships) {
-    r <- relat@relationship # Could be Assumption or Hypothesis
-    rClass <- class(r)
+    relatClass <- class(relat)
+    # Could be Assumption or Hypothesis
+    stopifnot(relatClass == "Assumption" || relatClass=="Hypothesis")
 
+    r <- relat@relationship 
+    rClass <- class(r)
     if (rClass == "Relates") {
         # Create and track relationship
-        relatString <- paste(r@lhs, "is related to", r@rhs, sep=" ")
+        relatString <- paste(r@lhs@name, "is related to", r@rhs@name, sep=" ")
         ambigRelationships <- append(ambigRelationships, relatString)
 
         # Create options to resolve/make more specific relationship
-        options <- c(paste(r@lhs, "causes", r@rhs, sep=" "), paste(r@rhs, "causes", r@lhs, sep=" ")) 
-        ambigOptions <- append(ambigOptions, list(relatString=options))
-    } else if (rClass == "WhenThen") {
-        # Create and track relationship 
-        relatString <- paste(r@lhs, "is related to", r@rhs, sep=" ")
-        ambigRelationships <- append(ambigRelationships, relatString)
-
+        ambigOptions1 <- append(ambigOptions1, paste(r@lhs@name, "causes", r@rhs@name, sep=" "))
+        ambigOptions2 <- append(ambigOptions2, paste(r@rhs@name, "causes", r@lhs@name, sep=" ")) 
+    } else if (rClass == "Moderates") {
+      cat("DO SOMETHING!")
     } else {
-      stopifnot(rClass == "Causes") 
+      stopifnot(rClass == "Causes")  # Could Moderates reach here?
       # Do nothing for causes relationships
     }
-    
-    
   }
 
-  
-  # Create list to output
-  dvInfo <- list(dvName = dv@name, dvClass = dvClass, dvOptions = dvOptions)
-
-  # Output JSON with DV info to file
-  # jsonData <- jsonlite::toJSON(dvInfo, pretty=TRUE)
-  write_json(dvInfo, path=path)
+  # Add to output list 
+  # stopifnot(length(ambigRelationships) == length(ambigOptions))
+  if (length(ambigRelationships) > 0) {
+    output <- append(output, list(ambiguousRelationships = ambigRelationships, ambiguousOptions1 = ambigOptions1, ambiguousOptions2 = ambigOptions2))
+  }
+  # Write output to JSON file
+  write_json(output, path=path)
 
   # Return path
   path

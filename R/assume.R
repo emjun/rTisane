@@ -13,7 +13,7 @@ setMethod("assume", signature("relatesORcausesORmoderates", "ConceptualModel"), 
 {
 
   if (class(relationship) == "Causes") {
-    # create an Assumption obj
+    # Create an Assumption obj
     assump = Assumption(relationship=relationship, conceptualModel=conceptualModel)
 
     # Add Assumption obj to ConceptualModel
@@ -28,10 +28,10 @@ setMethod("assume", signature("relatesORcausesORmoderates", "ConceptualModel"), 
     # Update relationships
     conceptualModel@relationships <- append(conceptualModel@relationships, assump) # Add Assumption
   } else if (class(relationship) == "Moderates") {
-    # create an Assumption obj
+    # Create an Assumption obj
     assump = Assumption(relationship=relationship, conceptualModel=conceptualModel)
 
-    # Add Hypothesis obj to ConceptualModel
+    # Add Assumption obj to ConceptualModel
     # Update variables
     for (var in relationship@moderators) {
       if (!(c(var) %in% conceptualModel@variables)) {
@@ -46,8 +46,21 @@ setMethod("assume", signature("relatesORcausesORmoderates", "ConceptualModel"), 
 
   } else {
     stopifnot(class(relationship) == "Relates")
-    # TODO: If relationship is Relates, ask for more specificity before adding to ConceptualModel?
-    cat("Should specify how relationship Causes")
+
+    # Create an Assumption obj
+    assump = Assumption(relationship=relationship, conceptualModel=conceptualModel)
+
+    # Add Assumption obj to ConceptualModel
+    # Update variables
+    if (!(c(relationship@lhs) %in% conceptualModel@variables)) {
+
+      conceptualModel@variables <- append(conceptualModel@variables, relationship@lhs)
+    }
+    if (!(c(relationship@rhs) %in% conceptualModel@variables)) {
+      conceptualModel@variables <- append(conceptualModel@variables, relationship@rhs)
+    }
+    # Update relationships
+    conceptualModel@relationships <- append(conceptualModel@relationships, assump) # Add Assumption
   }
 
   # Return updated ConceptualModel
