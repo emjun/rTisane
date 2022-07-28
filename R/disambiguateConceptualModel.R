@@ -19,7 +19,6 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
   # Get Conceptual model info
   graph <- dagitty( "dag { X <- U1 -- M <- U2 -> Y } " )
 
-  # START HERE! GET THE JSON TO GIVE YOU THIS
   uncertainRelationships <- jsonData$ambiguousRelationships
   options1 <- jsonData$ambiguousOptions1
   options2 <- jsonData$ambiguousOptions2
@@ -55,15 +54,15 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
                textOutput("palette")
       )
     ),
-    actionButton("stop", "Done!")
+    actionButton("submit", "Done!")
   )
 
   server = function(input, output) {
 
     # User input values to store and process at the end of disambiguation
     userInput <- reactiveValues(
-      dvName = NULL,
-      dvType = NULL
+      # dvName = NULL,
+      # dvType = NULL, 
     )
 
     #### DV -----
@@ -76,10 +75,10 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
     }
 
     # Capture the updated DV data type
-    observeEvent(input$dvType, {
-      userInput$dvName <- dvName
-      userInput$dvType <- input$dvType
-    })
+    # observeEvent(input$dvType, {
+    #   userInput$dvName <- dvName
+    #   userInput$dvType <- input$dvType
+    # })
 
     #### Conceptual Model -----
     # Dynamically generate/ask questions about under-specified relationships
@@ -88,7 +87,9 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
       pmap(l, ~ div(
         paste("You wrote that:", ..1),
         strong("More specifically, what did you mean?"),
-        selectInput(..1, NULL, choices=c(..2, ..3))
+        selectInput(paste0(..1), 
+                    NULL, 
+                    choices=c(..2, ..3))
       ))
       # map(col_names(), ~ selectInput(.x, NULL, choices = c("A --> B", "A <-- B")))
     })
@@ -107,27 +108,48 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
     #   graph <- getExample('mediator')
     # }, ignoreInit = TRUE) # try removing ignoreInit? What does the parameter do anyway?
     # output$cmGraph <- renderPlot({plot(graphLayout(graph))})
+    
+    #### Return values -----
+    # Collect input for conceptual model 
+    # Based off of: https://stackoverflow.com/questions/51531006/access-a-dynamically-generated-input-in-r-shiny
+    cmInputs <- reactiveValues(uncertainRelationships=NULL)
+    observeEvent(input$submit, {
+      lapply(1:length(uncertainRelationships), function(i) {
+        cmInputs$uncertainRelationships[[i]] <- input[[uncertainRelationships[[i]]]]
+      })
 
+      # Capture the updated DV data type
+      dvType=input$dvType
 
+      # Make named list of values to return
+      res <- list(uncertainRelationships = cmInputs$uncertainRelationships, dvName=dvName, dvType=input$dvType)
+      
+      # Return updated values
+      stopApp(res) # returns whatever is passed as a parameter
+    })
+
+    return(list(dat = reactive({x$data}),
+              groups = reactive({gps$x})
+  ))
 
     #### For DEBUGGING -----
-    output$activeTab <- renderText({
-      paste("Current panel: ", input$tabset)
-    })
+    # output$activeTab <- renderText({
+    #   paste("Current panel: ", input$tabset)
+    # })
 
     # Store saved values and close app
-    observe({
-      if (input$stop) {
-        # Update conceptual model
-        dvUpdated <- updateDV(dv, userInput)
-        cmUpdated <- updateConceptualModel(conceptualModel, userInput)
+    # observe({
+    #   if (input$submit) {
+    #     # Update DV, Update Conceptual Model
+    #     dvUpdated <- updateDV(dv, userInput)
+    #     cmUpdated <- updateConceptualModel(conceptualModel, userInput)
 
-        # Make named list of values to return
-        res <- list(updatedDV = dvUpdated, updatedConceptualModel = cmUpdated)
-        stopApp(res) # returns whatever is passed as a parameter
-      }
+    #     # Make named list of values to return
+    #     res <- list(updatedDV = dvUpdated, updatedConceptualModel = cmUpdated)
+    #     stopApp(res) # returns whatever is passed as a parameter
+    #   }
 
-    })
+    # })
   }
   # Run the application
   # shinyApp(ui = ui, server = server)

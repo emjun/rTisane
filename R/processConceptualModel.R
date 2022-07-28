@@ -111,11 +111,7 @@ updateDV <- function(dv, values) {
 #' updateConceptualModel()
 updateConceptualModel <- function(conceptualModel, values) {
 
-  # for (v in conceptualModel@variables) {
-  #   if (v@name == dvName) {
-  #     cat(v@name)
-  #   }
-  #
+  browser()
 
   # Return updated Conceptual Model
   stopifnot(!is.null(conceptualModel))
@@ -139,8 +135,11 @@ setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "Abst
   # Start up disambiguation process
   inputFilePath <- path
   dataPath = NULL
-  disambiguateConceptualModel(conceptualModel=conceptualModel, dv=dv, inputFilePath=path, dataPath=dataPath)
-  print(dv)
+  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, dv=dv, inputFilePath=path, dataPath=dataPath)
+  
+  # Update DV, Update Conceptual Model
+  dvUpdated <- updateDV(dv, updates)
+  cmUpdated <- updateConceptualModel(conceptualModel, updates)
 
 
   # Show variables

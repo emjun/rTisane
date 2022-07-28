@@ -16,5 +16,14 @@ path = "examples/json/simpleDisambiguation.json"
 # Data file
 dataPath = NULL
 updates <- disambiguateConceptualModel(conceptualModel=cm, dv=dv, inputFilePath=path, dataPath=dataPath)
-dvUpdated <- updates$updatedDV
-cmUpdated <- updates$updatedConceptualModel
+
+# Update DV, Update Conceptual Model
+# dvUpdated <- updateDV(dv, userInput)
+# cmUpdated <- updateConceptualModel(conceptualModel, cmInputs)
+#
+# # Make named list of values to return
+# res <- list(updatedDV = dvUpdated, updatedConceptualModel = cmUpdated)
+#
+# dvUpdated <- updates$updatedDV
+# cmUpdated <- updates$updatedConceptualModel
+browser()
