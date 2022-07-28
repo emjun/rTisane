@@ -15,7 +15,7 @@ setMethod("hypothesize", signature("relatesORcausesORmoderates", "ConceptualMode
   if (class(relationship) == "Causes") {
     stopifnot(is(relationship@cause, "AbstractVariable")) # Check superclass
     stopifnot(is(relationship@effect, "AbstractVariable")) # Check superclass
-    # create a Hypothesis obj
+    # Create a Hypothesis obj
     hypo = Hypothesis(relationship=relationship, conceptualModel=conceptualModel)
 
     # Add Hypothesis obj to ConceptualModel
@@ -49,8 +49,21 @@ setMethod("hypothesize", signature("relatesORcausesORmoderates", "ConceptualMode
 
   } else {
     stopifnot(class(relationship) == "Relates")
-    # TODO: If relationship is Relates, ask for more specificity before adding to ConceptualModel?
-    cat("Should specify how relationship Causes")
+    # Create a Hypothesis obj
+    hypo = Hypothesis(relationship=relationship, conceptualModel=conceptualModel)
+
+    # Add Hypothesis obj to ConceptualModel
+    # Update variables
+    if (!(c(relationship@lhs) %in% conceptualModel@variables)) {
+
+      conceptualModel@variables <- append(conceptualModel@variables, relationship@lhs)
+    }
+    if (!(c(relationship@rhs) %in% conceptualModel@variables)) {
+      conceptualModel@variables <- append(conceptualModel@variables, relationship@rhs)
+    }
+    # Update relationships
+    conceptualModel@relationships <- append(conceptualModel@relationships, hypo) # Add Hypothesis
+
   }
 
   # Return updated ConceptualModel

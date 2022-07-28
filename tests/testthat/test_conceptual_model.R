@@ -69,7 +69,6 @@ test_that("Hypothesize updates Conceptual Model properly", {
 
   # Assume ambiguous relationship
   ambig_relat <- relates(measure_0, measure_1)
-  expect_output(hypothesize(ambig_relat, cm))
   cm <- hypothesize(ambig_relat, cm)
 
   expect_s4_class(cm, "ConceptualModel")
@@ -79,13 +78,13 @@ test_that("Hypothesize updates Conceptual Model properly", {
   expect_true(c(measure_1) %in% cm@variables)
 
   expect_type(cm@relationships, "list")
-  expect_length(cm@relationships, 1)
+  expect_length(cm@relationships, 2)
   relat = cm@relationships[[1]]
   expect_s4_class(relat, "Hypothesis")
   expect_equal(relat@relationship, cause_relat)
-  # relat = cm@relationships[[2]]
-  # expect_s4_class(relat, "Hypothesis")
-  # expect_equal(relat@relationship, ambig_relat)
+  relat = cm@relationships[[2]]
+  expect_s4_class(relat, "Hypothesis")
+  expect_equal(relat@relationship, ambig_relat)
 
 })
 
