@@ -85,7 +85,6 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
     # Dynamically generate/ask questions about under-specified relationships
     output$cmQuestions <- renderUI({
       l <- list(uncertainRelationships, options1, options2)
-      browser()
       pmap(l, ~ div(
         paste("You wrote that:", ..1),
         strong("More specifically, what did you mean?"),
