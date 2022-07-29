@@ -105,6 +105,7 @@ test_that("Conceptual model updated after disambiguation properly", {
   measure_0 <- numeric(unit=unit, name="measure_0")
   measure_1 <- numeric(unit=unit, name="measure_1")
 
+  ## Assume
   relat <- relates(measure_0, measure_1)
   cm <- assume(relat, cm)
   # Update graph
@@ -125,6 +126,34 @@ test_that("Conceptual model updated after disambiguation properly", {
   expect_length(relationships, 1)
   assump <- relationships[[1]]
   expect_s4_class(assump, "Assumption")
+  r <- assump@relationship
+  expect_s4_class(r, "Causes")
+  expect_equal(r@cause, relat@lhs)
+  expect_equal(r@effect, relat@rhs)
+
+
+  ## Hypothesize
+  cm <- ConceptualModel()
+  relat <- relates(measure_0, measure_1)
+  cm <- hypothesize(relat, cm)
+  # Update graph
+  cm@graph <- updateGraph(cm)
+
+  # Values to update to
+  uRelat <- paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
+  dvName = measure_1@name
+  dvType = "Continuous"
+
+  # Create updates list to pass to updateDV function
+  updates <- list(dvName=dvName, dvType=dvType)
+  updates$uncertainRelationships[[1]] = uRelat
+  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+
+  expect_s4_class(cmUpdated, "ConceptualModel")
+  relationships <- cmUpdated@relationships
+  expect_length(relationships, 1)
+  assump <- relationships[[1]]
+  expect_s4_class(assump, "Hypothesis")
   r <- assump@relationship
   expect_s4_class(r, "Causes")
   expect_equal(r@cause, relat@lhs)

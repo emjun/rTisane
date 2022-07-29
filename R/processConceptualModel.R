@@ -184,11 +184,9 @@ updateConceptualModel <- function(conceptualModel, values) {
               relat <- r@relationship
               if (identical(relat@lhs, cause) && identical(relat@rhs, effect)) {
                 index = i
-                # startId = i-1
                 break
               } else if (identical(relat@rhs, cause) && identical(relat@lhs, effect)) {
                 index = i
-                # startId = i-1
                 break
               }
             }
@@ -227,10 +225,10 @@ updateConceptualModel <- function(conceptualModel, values) {
         if (class(r) == "Hypothesis") {
           if (class(r@relationship) == "Relates") {
             relat <- r@relationship
-            if ((relat@lhs == cause) && (relat@rhs == effect)) {
+            if (identical(relat@lhs, cause) && identical(relat@rhs, effect)) {
               index = i
               break
-            } else if ((relat@rhs == cause) && (relat@lhs == effect)) {
+            } else if (identical(relat@rhs, cause) && identical(relat@lhs, effect)) {
               index = i
               break
             }
