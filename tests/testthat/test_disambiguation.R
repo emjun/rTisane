@@ -45,13 +45,13 @@ test_that("Conceptual model disambiguation options created properly", {
   expect_true("Continuous" %in% options$dvOptions)
   expect_true("Counts" %in% options$dvOptions)
   expect_length(options$ambiguousRelationships, 1)
-  expectedKey = paste(measure_0@name, "is related to", measure_1@name, sep=" ")
+  expectedKey = paste("Assume", measure_0@name, "is related to", measure_1@name, sep=" ")
   expect_true(expectedKey %in% options$ambiguousRelationships)
   expect_length(options$ambiguousOptions1, 1)
-  expectedValue = paste(measure_0@name, "causes", measure_1@name, sep=" ")
+  expectedValue = paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
   expect_true(expectedValue %in% options$ambiguousOptions1)
   expect_length(options$ambiguousOptions2, 1)
-  expectedValue = paste(measure_1@name, "causes", measure_0@name, sep=" ")
+  expectedValue = paste("Assume", measure_1@name, "causes", measure_0@name, sep=" ")
   expect_true(expectedValue %in% options$ambiguousOptions2)
 
   cm <- ConceptualModel()
@@ -68,13 +68,65 @@ test_that("Conceptual model disambiguation options created properly", {
   expect_true("Continuous" %in% options$dvOptions)
   expect_true("Counts" %in% options$dvOptions)
   expect_length(options$ambiguousRelationships, 1)
-  expectedKey = paste(measure_0@name, "is related to", measure_1@name, sep=" ")
+  expectedKey = paste("Hypothesize", measure_0@name, "is related to", measure_1@name, sep=" ")
   expect_true(expectedKey %in% options$ambiguousRelationships)
   expect_length(options$ambiguousOptions1, 1)
-  expectedValue = paste(measure_0@name, "causes", measure_1@name, sep=" ")
+  expectedValue = paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
   expect_true(expectedValue %in% options$ambiguousOptions1)
   expect_length(options$ambiguousOptions2, 1)
-  expectedValue = paste(measure_1@name, "causes", measure_0@name, sep=" ")
+  expectedValue = paste("Hypothesize", measure_1@name, "causes", measure_0@name, sep=" ")
   expect_true(expectedValue %in% options$ambiguousOptions2)
 
+})
+
+test_that("DV updates properly", {
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+
+  # Values to update to
+  uRelat <- paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
+  dvName = measure_1@name
+  dvType = "Continuous"
+
+  # Create updates list to pass to updateDV function
+  updates <- list(dvName=dvName, dvType=dvType)
+  updates$uncertainRelationships[[1]] = uRelat
+  dvUpdated <- updateDV(dv=measure_1, values=updates)
+
+  expect_s4_class(dvUpdated, "Continuous")
+  expect_equal(dvUpdated@measure, measure_1)
+  expect_equal(dvUpdated@skew, "none")
+})
+
+test_that("Conceptual model updated after disambiguation properly", {
+  cm <- ConceptualModel()
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+
+  relat <- relates(measure_0, measure_1)
+  cm <- assume(relat, cm)
+  # Update graph
+  cm@graph <- updateGraph(cm)
+
+  # Values to update to
+  uRelat <- paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
+  dvName = measure_1@name
+  dvType = "Continuous"
+
+  # Create updates list to pass to updateDV function
+  updates <- list(dvName=dvName, dvType=dvType)
+  updates$uncertainRelationships[[1]] = uRelat
+  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+
+  expect_s4_class(cmUpdated, "ConceptualModel")
+  relationships <- cmUpdated@relationships
+  expect_length(relationships, 1)
+  assump <- relationships[[1]]
+  expect_s4_class(assump, "Assumption")
+  r <- assump@relationship
+  expect_s4_class(r, "Causes")
+  expect_equal(r@cause, relat@lhs)
+  expect_equal(r@effect, relat@rhs)
 })
