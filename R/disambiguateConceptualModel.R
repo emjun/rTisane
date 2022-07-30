@@ -59,11 +59,29 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
 
   server = function(input, output) {
 
-    # User input values to store and process at the end of disambiguation
-    userInput <- reactiveValues(
-      # dvName = NULL,
-      # dvType = NULL, 
-    )
+    data  <- reactive({
+      # Get some user input
+      lapply(1:length(uncertainRelationships), function(i) {
+        cmInputs$uncertainRelationships[[i]] <- input[[uncertainRelationships[[i]]]]
+      })
+      relationships <- list(uncertainRelationships = cmInputs$uncertainRelationships)
+
+      # Use it to update the conceptual model + graph
+      cm <- updateConceptualModel(conceptualModel, relationships)
+
+      return (cm)
+    })
+
+    # Update graph vis based on selection
+    observe({
+      cmUpdated = data() # get data
+      gr = updateGraph(cmUpdated)
+
+      # Update graph vis
+      output$cmGraph <- renderPlot({
+        plot(graphLayout(gr))
+      })
+    })
 
     #### DV -----
     # Visualize DV if there is data
@@ -87,8 +105,8 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
       pmap(l, ~ div(
         paste("You wrote that:", ..1),
         strong("More specifically, what did you mean?"),
-        selectInput(paste0(..1), 
-                    NULL, 
+        selectInput(paste0(..1),
+                    NULL,
                     choices=c(..2, ..3))
       ))
       # map(col_names(), ~ selectInput(.x, NULL, choices = c("A --> B", "A <-- B")))
@@ -98,19 +116,19 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
       map_chr(uncertainRelationships, ~ input[[.x]] %||% "")
     })
 
-    # Update graph vis
-    output$cmGraph <- renderPlot({
-      plot(graphLayout(graph))
-    })
+    # # Update graph vis
+    # output$cmGraph <- renderPlot({
+    #   plot(graphLayout(graph))
+    # })
 
     # IDEA: wrap inputs in Div, check if Div updates (attach event to that DIV), then regenerate the graph
     # observeEvent(input$option, {
     #   graph <- getExample('mediator')
     # }, ignoreInit = TRUE) # try removing ignoreInit? What does the parameter do anyway?
     # output$cmGraph <- renderPlot({plot(graphLayout(graph))})
-    
+
     #### Return values -----
-    # Collect input for conceptual model 
+    # Collect input for conceptual model
     # Based off of: https://stackoverflow.com/questions/51531006/access-a-dynamically-generated-input-in-r-shiny
     cmInputs <- reactiveValues(uncertainRelationships=NULL)
     observeEvent(input$submit, {
@@ -123,7 +141,7 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
 
       # Make named list of values to return
       res <- list(uncertainRelationships = cmInputs$uncertainRelationships, dvName=dvName, dvType=input$dvType)
-      
+
       # Return updated values
       stopApp(res) # returns whatever is passed as a parameter
     })

@@ -174,7 +174,6 @@ test_that("Conceptual model updated after disambiguation properly", {
   # Create updates list to pass to updateDV function
   updates <- list(dvName=dvName, dvType=dvType)
   updates$uncertainRelationships[[1]] = uRelat
-  browser()
   cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
 
   expect_s4_class(cmUpdated, "ConceptualModel")
@@ -184,7 +183,6 @@ test_that("Conceptual model updated after disambiguation properly", {
   expect_s4_class(hypo, "Hypothesis")
   r <- hypo@relationship
   expect_s4_class(r, "Causes")
-  browser()
   expect_equal(r@cause, relat@rhs)
   expect_equal(r@effect, relat@lhs)
 })
