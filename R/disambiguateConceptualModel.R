@@ -78,9 +78,17 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
       gr = updateGraph(cmUpdated)
 
       # Update graph vis
-      output$cmGraph <- renderPlot({
-        plot(graphLayout(gr))
-      })
+      e <- edges(gr)
+      # Is the graph empty (has no edges)?
+      if (length(e) > 0) {
+        output$cmGraph <- renderPlot({
+          plot(graphLayout(gr))
+        })
+      } else {
+        # gr is NULL 
+        output$cmGraph <- renderPlot({})
+      }
+      
     })
 
     #### DV -----

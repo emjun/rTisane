@@ -10,12 +10,12 @@ measure_1 <- numeric(unit=unit, name="measure_1")
 dv = measure_1
 
 # Specify conceptual relationships
-cause_relat <- causes(measure_0, measure_1)
-cm <- assume(cause_relat, cm)
+relat <- relates(measure_0, measure_1)
+cm <- assume(relat, cm)
 
 # Update graph
 cm@graph <- updateGraph(cm)
-plot(graphLayout(cm@graph))
+# plot(graphLayout(cm@graph))
 
 # JSON input file
 path = "examples/json/simpleDisambiguation.json"
