@@ -6,11 +6,12 @@ unit <- Unit("person")
 measure_0 <- numeric(unit=unit, name="measure_0")
 measure_1 <- numeric(unit=unit, name="measure_1")
 
-cause_relat <- causes(measure_0, measure_1)
-cm <- assume(cause_relat, cm)
+relat <- relates(measure_0, measure_1)
+cm <- assume(relat, cm)
 
 # Update graph
 cm@graph <- updateGraph(cm)
 
 # Output json
-generateJSON(cm, measure_1, "simpleInput.json")
+path = file.path(getwd(), "examples/json/simpleDisambiguation.json")
+generateJSON(cm, measure_1, path)

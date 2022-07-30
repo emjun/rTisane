@@ -152,10 +152,39 @@ test_that("Conceptual model updated after disambiguation properly", {
   expect_s4_class(cmUpdated, "ConceptualModel")
   relationships <- cmUpdated@relationships
   expect_length(relationships, 1)
-  assump <- relationships[[1]]
-  expect_s4_class(assump, "Hypothesis")
-  r <- assump@relationship
+  hypo <- relationships[[1]]
+  expect_s4_class(hypo, "Hypothesis")
+  r <- hypo@relationship
   expect_s4_class(r, "Causes")
   expect_equal(r@cause, relat@lhs)
   expect_equal(r@effect, relat@rhs)
+
+  ## Hypothesize, reverse direction of causes
+  cm <- ConceptualModel()
+  relat <- relates(measure_0, measure_1)
+  cm <- hypothesize(relat, cm)
+  # Update graph
+  cm@graph <- updateGraph(cm)
+
+  # Values to update to
+  uRelat <- paste("Hypothesize", measure_1@name, "causes", measure_0@name, sep=" ")
+  dvName = measure_1@name
+  dvType = "Continuous"
+
+  # Create updates list to pass to updateDV function
+  updates <- list(dvName=dvName, dvType=dvType)
+  updates$uncertainRelationships[[1]] = uRelat
+  browser()
+  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+
+  expect_s4_class(cmUpdated, "ConceptualModel")
+  relationships <- cmUpdated@relationships
+  expect_length(relationships, 1)
+  hypo <- relationships[[1]]
+  expect_s4_class(hypo, "Hypothesis")
+  r <- hypo@relationship
+  expect_s4_class(r, "Causes")
+  browser()
+  expect_equal(r@cause, relat@rhs)
+  expect_equal(r@effect, relat@lhs)
 })

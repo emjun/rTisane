@@ -174,10 +174,9 @@ updateConceptualModel <- function(conceptualModel, values) {
       stopifnot(c(effect) %in% variables)
 
       # Remove the older relationship
-      relationships <- conceptualModel@relationships
-      index = 0
-      for (i in 1:length(relationships)) {
-        r <- relationships[[i]]
+      index = 1
+      for (i in 1:length(conceptualModel@relationships)) {
+        r <- conceptualModel@relationships[[i]]
         # Does this relationship match the one we are trying to replace?
         if (class(r) == "Assumption") {
             if (class(r@relationship) == "Relates") {
@@ -185,19 +184,19 @@ updateConceptualModel <- function(conceptualModel, values) {
               if (identical(relat@lhs, cause) && identical(relat@rhs, effect)) {
                 index = i
                 break
-              } else if (identical(relat@rhs, cause) && identical(relat@lhs, effect)) {
+              } else if (identical(relat@lhs, effect) && identical(relat@rhs, cause)) {
                 index = i
                 break
               }
             }
         }
       }
-      relationships[[index]] = NULL
-      conceptualModel@relationships <- relationships
-
+      conceptualModel@relationships[[index]] = NULL
+      # if (is.null(relatToAdd)) {
+      #   browser()
+      # }
       # Add the relationship to the Conceptual Model
       conceptualModel <- assume(causes(cause, effect), conceptualModel)
-
     } else {
       stringr::str_detect(nr, "Hypothesize ")
 
@@ -217,10 +216,9 @@ updateConceptualModel <- function(conceptualModel, values) {
       stopifnot(c(effect) %in% variables)
 
       # Remove the older relationship
-      relationships <- conceptualModel@relationships
-      index = 0
-      for (i in 1:length(relationships)) {
-        r <- relationships[[i]]
+      index = 1
+      for (i in 1:length(conceptualModel@relationships)) {
+        r <- conceptualModel@relationships[[i]]
         # Does this relationship match the one we are trying to replace?
         if (class(r) == "Hypothesis") {
           if (class(r@relationship) == "Relates") {
@@ -228,16 +226,14 @@ updateConceptualModel <- function(conceptualModel, values) {
             if (identical(relat@lhs, cause) && identical(relat@rhs, effect)) {
               index = i
               break
-            } else if (identical(relat@rhs, cause) && identical(relat@lhs, effect)) {
+            } else if (identical(relat@lhs, effect) && identical(relat@rhs, cause)) {
               index = i
               break
             }
           }
         }
       }
-      relationships[[index]] = NULL
-      conceptualModel@relationships <- relationships
-
+      conceptualModel@relationships[[index]] = NULL
       # Add the relationship to the Conceptual Model
       conceptualModel <- hypothesize(causes(cause, effect), conceptualModel)
     }

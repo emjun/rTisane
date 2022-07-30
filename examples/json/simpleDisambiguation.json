@@ -1,1 +1,1 @@
-{"dvName":["measure_1"],"dvClass":["Numeric"],"dvOptions":["Continuous","Counts"],"ambiguousRelationships":["measure_0 is related to measure_1"],"ambiguousOptions1":["measure_0 causes measure_1"],"ambiguousOptions2":["measure_1 causes measure_0"]}
+{"dvName":["measure_1"],"dvClass":["Numeric"],"dvOptions":["Continuous","Counts"],"ambiguousRelationships":["Assume measure_0 is related to measure_1"],"ambiguousOptions1":["Assume measure_0 causes measure_1"],"ambiguousOptions2":["Assume measure_1 causes measure_0"]}
