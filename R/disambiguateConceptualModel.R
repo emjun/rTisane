@@ -17,7 +17,7 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
 
 
   # Get Conceptual model info
-  graph <- dagitty( "dag { X <- U1 -- M <- U2 -> Y } " )
+  graph <- conceptualModel@graph
 
   uncertainRelationships <- jsonData$ambiguousRelationships
   options1 <- jsonData$ambiguousOptions1
