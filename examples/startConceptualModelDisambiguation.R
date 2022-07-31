@@ -16,6 +16,6 @@ path = file.path(getwd(), fileName)
 
 # Data file
 dataPath = NULL
-updates <- disambiguateConceptualModel(conceptualModel=cm, dv=dv, inputFilePath=path, dataPath=dataPath)
+updates <- disambiguateConceptualModel(conceptualModel=cm, iv=iv, dv=dv, inputFilePath=path, dataPath=dataPath)
 dvUpdated <- updates$updatedDV
 cmUpdated <- updates$updatedConceptualModel

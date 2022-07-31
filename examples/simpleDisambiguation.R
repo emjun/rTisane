@@ -6,6 +6,8 @@ cm <- ConceptualModel()
 unit <- Unit("person")
 measure_0 <- numeric(unit=unit, name="measure_0")
 measure_1 <- numeric(unit=unit, name="measure_1")
+# Measure 0 is IV 
+iv = measure_0
 # Measure 1 is DV
 dv = measure_1
 
@@ -22,7 +24,7 @@ path = "examples/json/simpleDisambiguation.json"
 
 # Data file
 dataPath = NULL
-updates <- disambiguateConceptualModel(conceptualModel=cm, dv=dv, inputFilePath=path, dataPath=dataPath)
+updates <- disambiguateConceptualModel(conceptualModel=cm, iv=iv, dv=dv, inputFilePath=path, dataPath=dataPath)
 
 # Update DV, Update Conceptual Model
 dvUpdated <- updateDV(dv, updates)

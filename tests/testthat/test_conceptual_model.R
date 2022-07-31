@@ -300,7 +300,10 @@ test_that("Validate Conceptual Model's causal graph properly", {
 
   cm@graph <- updateGraph(cm)
   isValid <- checkConceptualModel(cm, measure_0, measure_2)
-  expect_true(isValid)
+  expect_type(isValid, "list")
+  expect_named(isValid, c("isValid"))
+  expect_true(isValid$isValid)
+  expect_null(isValid$reason)
 
   # DV is not in the Conceptual Model/graph
   cm <- ConceptualModel()
@@ -316,21 +319,28 @@ test_that("Validate Conceptual Model's causal graph properly", {
   cm <- assume(causes(measure_1, measure_2), cm)
   cm <- assume(causes(measure_3, measure_4), cm)
   cm@graph <- updateGraph(cm)
-  expect_error(checkConceptualModel(cm, measure_0, measure_4))
+  res <- checkConceptualModel(cm, measure_0, measure_4)
+  expect_named(res, c("isValid", "reason"))
 
   # DV causes IV!
   cm <- ConceptualModel()
   cm <- assume(causes(measure_0, measure_2), cm)
   cm@graph <- updateGraph(cm)
-  expect_error(checkConceptualModel(cm, measure_2, measure_0))
+  res <- checkConceptualModel(cm, measure_2, measure_0)
+  expect_named(res, c("isValid", "reason"))
+  expect_false(res$isValid)
 
   # Cycles!
   cm <- ConceptualModel()
   cm <- assume(causes(measure_0, measure_2), cm)
   cm <- assume(causes(measure_2, measure_0), cm)
   cm@graph <- updateGraph(cm)
-  expect_error(checkConceptualModel(cm, measure_0, measure_2))
-  expect_error(checkConceptualModel(cm, measure_2, measure_0))
+  res <- checkConceptualModel(cm, measure_0, measure_2)
+  expect_named(res, c("isValid", "reason"))
+  expect_false(res$isValid)
+  res <- checkConceptualModel(cm, measure_2, measure_0)
+  expect_named(res, c("isValid", "reason"))
+  expect_false(res$isValid)
 })
 
 test_that("Mediators found correctly", {

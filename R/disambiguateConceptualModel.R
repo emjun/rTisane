@@ -1,6 +1,7 @@
-disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, dataPath) {
+disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, dataPath) {
   require(shiny)
   require(purrr)
+  require(shinyjs)
 
   #### Read data file, if available ----
   df <- NULL
@@ -18,6 +19,7 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
 
   # Get Conceptual model info
   graph <- conceptualModel@graph
+  cmValidationRes <- list(isValid=TRUE)
 
   uncertainRelationships <- jsonData$ambiguousRelationships
   options1 <- jsonData$ambiguousOptions1
@@ -27,7 +29,8 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
 
   # Specify App UI
   ui = fluidPage(
-    tags$script(src = "conceptualModelDisambiguation.js"),
+    # tags$script(src = "conceptualModelDisambiguation.js"),
+    useShinyjs(),
 
     titlePanel("rTisane"),
     textOutput("activeTab"),
@@ -51,10 +54,14 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
                p("WBN: Visualization of conceptual model, look into dynamic vis"),
                plotOutput('cmGraph'),
                uiOutput("cmQuestions"),
-               textOutput("palette")
+               div(
+                style="color:red",
+                textOutput("cmValidation"),
+               ),
+               textOutput("palette"),
+               actionButton("submit", "Done!")
       )
-    ),
-    actionButton("submit", "Done!")
+    )
   )
 
   server = function(input, output) {
@@ -85,11 +92,41 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
           plot(graphLayout(gr))
         })
       } else {
-        # gr is NULL 
+        # gr is NULL
         output$cmGraph <- renderPlot({})
       }
-      
+
     })
+
+    # Validate conceptual model, inform user
+    observe({
+      cmUpdated = data() # get data
+      # cmUpdated <- updateGraph(cmUpdated) # update graph
+
+      e <- edges(cmUpdated@graph)
+      # Is the graph empty (has no edges)?
+      if (length(e) > 0) {
+        # Check conceptual model
+        cmValidationRes <- checkConceptualModel(conceptualModel=cmUpdated, iv=iv, dv=dv)
+      }
+      if (isFALSE(cmValidationRes$isValid)) {
+        warning <- paste("Error!:", cmValidationRes$reason, sep=" ")
+
+        output$cmValidation <- renderText({
+          warning
+        })
+
+        # Hide submit button
+      shinyjs::hide("submit")
+      } else {
+          output$cmValidation <- renderText({
+        })
+        # Show submit button
+        shinyjs::show("submit")
+      }
+    })
+
+
 
     #### DV -----
     # Visualize DV if there is data
@@ -136,6 +173,13 @@ disambiguateConceptualModel <- function(conceptualModel, dv, inputFilePath, data
     # output$cmGraph <- renderPlot({plot(graphLayout(graph))})
 
     #### Return values -----
+    # Toggle Submit button based on validation of conceptual model
+    # observe({
+    #   shinyjs::hide("submit")
+
+    #   if(cmValidationRes)
+    #     shinyjs::show("submit")
+    # })
     # Collect input for conceptual model
     # Based off of: https://stackoverflow.com/questions/51531006/access-a-dynamically-generated-input-in-r-shiny
     cmInputs <- reactiveValues(uncertainRelationships=NULL)

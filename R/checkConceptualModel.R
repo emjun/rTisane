@@ -17,17 +17,26 @@ setMethod("checkConceptualModel", signature("ConceptualModel", "AbstractVariable
   nodes <- names(gr) # Get the names of nodes in gr
 
   # (Automatically/Implicitly) Check that IV and DV are in the Conceptual Model
-  # Check that there is a path between IV and DV
+  # Check that there is a path between IV and DV if there are any edges in the graph
   p <- paths(gr, iv@name, dv@name)
-  stopifnot(length(p[[1]]) > 0)
+  if(length(p[[1]]) <= 0) {
+    output <- list(isValid=FALSE, reason="Graph has no relationships.")
+    return(output)
+  }
 
   # Check that DV does not cause IV
   dvCausingIv = paste(iv@name, "<-", dv@name)
-  stopifnot(p[[1]] != dvCausingIv)
+  if (p[[1]] == dvCausingIv) {
+    output <- list(isValid=FALSE, reason="DV cannot cause IV.")
+    return(output)
+  }
 
   # Check that there are no cycles
-  stopifnot(isTRUE(isAcyclic(gr)))
+  if (isFALSE(isAcyclic(gr))) {
+    output <- list(isValid=FALSE, reason="Graph is cyclic.")
+    return(output)
+  }
 
   # Return TRUE if pass all the above checks
-  TRUE
+  list(isValid=TRUE)
 })

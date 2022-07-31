@@ -264,7 +264,7 @@ setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "Abst
   # Start up disambiguation process
   inputFilePath <- path
   dataPath = NULL
-  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, dv=dv, inputFilePath=path, dataPath=dataPath)
+  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path, dataPath=dataPath)
 
   # Update DV, Update Conceptual Model
   dvUpdated <- updateDV(dv, updates)
