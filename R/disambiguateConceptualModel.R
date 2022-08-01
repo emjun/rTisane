@@ -1,7 +1,8 @@
 disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, dataPath) {
-  require(shiny)
-  require(purrr)
-  require(shinyjs)
+  # require(shiny)
+  # require(purrr)
+  # require(shinyjs)
+  # require(jsonlite)
 
   #### Read data file, if available ----
   df <- NULL
@@ -11,11 +12,10 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
 
   #### Process input JSON file -----
   # Get DV options
-  jsonData <- read_json(inputFilePath) # Relative path to input.json file that processQuery outputs
+  jsonData <- jsonlite::read_json(inputFilePath) # Relative path to input.json file that processQuery outputs
   dvName <- jsonData$dvName
   dvType <- jsonData$dvType
   dvOptions <- jsonData$dvOptions
-
 
   # Get Conceptual model info
   graph <- conceptualModel@graph
@@ -27,10 +27,10 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
   stopifnot(length(uncertainRelationships) == length(options1))
   stopifnot(length(options1) == length(options2))
 
-  # Specify App UI
+  #### Specify App UI -----
   ui = fluidPage(
     # tags$script(src = "conceptualModelDisambiguation.js"),
-    useShinyjs(),
+    shinyjs::useShinyjs(),
 
     titlePanel("rTisane"),
     textOutput("activeTab"),
@@ -41,7 +41,7 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
                # fileInput("file", "Data", buttonLabel = "Upload..."),
                # Info about dependent variable ---
                p(paste("Dependent variable:", dvName)),
-               p(paste(dvName, " looks like this:")),
+               textOutput("dvSummary"),
                plotOutput('dvHist'),
                selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
 
@@ -64,10 +64,12 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
     )
   )
 
+  #### Specify server ------
   server = function(input, output) {
 
+    # Get data to update graph vis, validate conceptual model, etc.
     data  <- reactive({
-      # Get some user input
+      # Get user input
       lapply(1:length(uncertainRelationships), function(i) {
         cmInputs$uncertainRelationships[[i]] <- input[[uncertainRelationships[[i]]]]
       })
@@ -84,7 +86,19 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
       cmUpdated = data() # get data
       gr = updateGraph(cmUpdated)
 
-      # Update graph vis
+      ## Update data vis for DV
+      # Is there data?
+      if (!is.null(df)) {
+        output$dvSummary <- renderText({paste(dvName, " looks like this:")})
+
+        colnames = names(df)
+        stopifnot(c(dvName) %in% colnames)
+        output$dvHist <- renderPlot({
+          hist(df[dvName])
+        })
+      }
+
+      ## Update graph vis
       e <- edges(gr)
       # Is the graph empty (has no edges)?
       if (length(e) > 0) {
@@ -137,17 +151,11 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
       })
     }
 
-    # Capture the updated DV data type
-    # observeEvent(input$dvType, {
-    #   userInput$dvName <- dvName
-    #   userInput$dvType <- input$dvType
-    # })
-
     #### Conceptual Model -----
     # Dynamically generate/ask questions about under-specified relationships
     output$cmQuestions <- renderUI({
       l <- list(uncertainRelationships, options1, options2)
-      pmap(l, ~ div(
+      purrr::pmap(l, ~ div(
         paste("You wrote that:", ..1),
         strong("More specifically, what did you mean?"),
         selectInput(paste0(..1),
@@ -158,7 +166,7 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
     })
 
     output$palette <- renderText({
-      map_chr(uncertainRelationships, ~ input[[.x]] %||% "")
+      purrr::map_chr(uncertainRelationships, ~ input[[.x]] %||% "")
     })
 
     # # Update graph vis
