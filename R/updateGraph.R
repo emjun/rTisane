@@ -5,8 +5,7 @@
 #' @return Dagitty DAG representing causal graph.
 #' @import dagitty
 #' @keywords
-#' @examples
-#' updateGraph()
+# updateGraph()
 updateGraph <- function(conceptualModel){
   # Get variable names
   varNames = list()

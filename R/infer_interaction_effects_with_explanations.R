@@ -7,8 +7,7 @@
 #' @return List of interaction/moderation effects and their explanations
 #' @import dagitty
 #' @keywords
-#' @examples
-#' infer_interaction_effects_with_explanations()
+# infer_interaction_effects_with_explanations()
 infer_interaction_effects_with_explanations <- function(causal_gr, associative_gr, design, main_effects) {
     interaction_effects = list()
 

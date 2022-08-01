@@ -6,7 +6,6 @@
 #' @param cardinality Optional. Cardinality of SetUp variable if itrepresents a nominal or ordinal value (e.g., trial identifier)
 #' @keywords
 #' @export
-#' @examples
-#' SetUp()
+# SetUp()
 setClass("SetUp", representation(name = "character", order = "list", cardinality = "integer"), contains = "AbstractVariable")
 

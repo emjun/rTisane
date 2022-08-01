@@ -5,8 +5,7 @@
 #' @param value integerORnumericORcharacter. The value to look for/filter on in @param variable.
 #' @keywords
 #' @export
-#' @examples
-#' equals()
+# equals()
 setGeneric("equals", function(variable, value) standardGeneric("equals"))
 setMethod("equals", signature("nominalORordinal", "integerORnumericORcharacter"), function(variable, value)
 {

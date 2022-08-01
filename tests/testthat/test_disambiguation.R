@@ -15,7 +15,7 @@ test_that("DV disambiguation options created properly", {
 
   path <- generateJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
-  options <- read_json(path)
+  options <- jsonlite::read_json(path)
 
   expect_equal("Numeric", options$dvClass[[1]])
   expect_equal(measure_1@name, options$dvName[[1]])
@@ -38,7 +38,7 @@ test_that("Conceptual model disambiguation options created properly", {
 
   path <- generateJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
-  options <- read_json(path)
+  options <- jsonlite::read_json(path)
 
   expect_equal("Numeric", options$dvClass[[1]])
   expect_equal(measure_1@name, options$dvName[[1]])
@@ -61,7 +61,7 @@ test_that("Conceptual model disambiguation options created properly", {
 
   path <- generateJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
-  options <- read_json(path)
+  options <- jsonlite::read_json(path)
 
   expect_equal("Numeric", options$dvClass[[1]])
   expect_equal(measure_1@name, options$dvName[[1]])

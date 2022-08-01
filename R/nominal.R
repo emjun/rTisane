@@ -8,8 +8,7 @@
 #' @return Has Relationship representing Unit having the Nominal Measure.
 #' @keywords
 #' @export
-#' @examples
-#' nominal()
+# nominal()
 setGeneric("nominal", function(unit, name, cardinality, number_of_instances) standardGeneric("nominal"))
 setMethod("nominal", signature("Unit", "character", "numeric", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, number_of_instances) {
   # Create new measure

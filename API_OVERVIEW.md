@@ -231,7 +231,7 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 11. Do we want to pre-check DV before allowing for casting to Continuous/Counts/Categories? For example, if there are any floats, can't be counts. 
 
 ## TODOs
-- Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
+- [x] Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
 - Is there anything we can do with the hyper-specific information end-users provide? (maybe for interpretation?)
 
 ## Internal API 

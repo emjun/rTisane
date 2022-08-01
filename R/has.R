@@ -6,8 +6,6 @@
 #' @param measure Measure. The Measure that @param unit has.
 #' @param number_of_instances Integer or AbstractVariable or AtMost or Per. Number of instances of the @param measure the @param unit has. Default is 1.
 #' @keywords
-#' @examples
-#' has()
 setGeneric("has", function(unit, measure, number_of_instances=1) standardGeneric("has"))
 setMethod("has", signature("Unit", "Measure", "integerORAbstractVariableORAtMostORPer"), function(unit, measure, number_of_instances)
 {

@@ -5,8 +5,7 @@
 #' @keywords
 #' @export Dataset
 #' @exportClass Dataset
-#' @examples
-#' Dataset()
+# Dataset()
 Dataset <- setClass("Dataset",
     slots = c(
       df = "character"

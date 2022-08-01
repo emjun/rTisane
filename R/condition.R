@@ -8,8 +8,7 @@
 #' @return Has Relationship representing Unit having the Nominal Measure.
 #' @keywords
 #' @export
-#' @examples
-#' condition()
+# condition()
 setGeneric("condition", function(unit, name, cardinality, order, number_of_instances) standardGeneric("condition"))
 setMethod("condition", signature("Unit", "character", "integer", "missing", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, number_of_instances)
 {

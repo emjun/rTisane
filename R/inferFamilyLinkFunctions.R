@@ -5,8 +5,7 @@
 #' @param dv AbstractVariable. Variable whose outcome we want to assess.
 #' @return list of possible family functions
 #' @keywords
-#' @examples
-#' inferFamilyFunctions()
+# inferFamilyFunctions()
 inferFamilyFunctions <- function(dv) {
   familyCandidates = NULL
 
@@ -43,8 +42,7 @@ inferFamilyFunctions <- function(dv) {
 #' @param family character. Name of family function for which we want to infer possible link functions.
 #' @return list of possible link functions
 #' @keywords
-#' @examples
-#' inferLinkFunctions()
+# inferLinkFunctions()
 inferLinkFunctions <- function(family) {
   linkFunctions = list()
   if (family == "binomial") {
@@ -91,8 +89,7 @@ inferLinkFunctions <- function(family) {
 #' @param dv ContinuousORCountsORCategories. Wrapped Measure whose outcome we want to assess.
 #' @keywords
 #' @export
-#' @examples
-#' inferFamilyLinkFunctions()
+# inferFamilyLinkFunctions()
 setGeneric("inferFamilyLinkFunctions", function(dv) standardGeneric("inferFamilyLinkFunctions"))
 setMethod("inferFamilyLinkFunctions", signature("ContinuousORCountsORCategories"), function(dv)
 {

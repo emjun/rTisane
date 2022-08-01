@@ -6,8 +6,7 @@
 #' @param conceptualModel ConceptualModel to which we should add the Hypothesized relationship.
 #' @keywords
 #' @export
-#' @examples
-#' hypothesize()
+# hypothesize()
 setGeneric("hypothesize", function(relationship, conceptualModel) standardGeneric("hypothesize"))
 setMethod("hypothesize", signature("relatesORcausesORmoderates", "ConceptualModel"), function(relationship, conceptualModel)
 {

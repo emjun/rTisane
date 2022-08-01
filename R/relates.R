@@ -6,8 +6,7 @@
 #' @param rhs AbstractVariable. A variable.
 #' @keywords
 #' @export
-#' @examples
-#' relates()
+# relates()
 setGeneric("relates", function(lhs, rhs) standardGeneric("relates"))
 setMethod("relates", signature("AbstractVariableORUnobservedVariable", "AbstractVariableORUnobservedVariable"), function(lhs, rhs)
 {

@@ -8,6 +8,5 @@
 #' @param relationships List of relationships this variable has with other variables
 #' @keywords
 #' @export
-#' @examples
-#' AbstractVariable()
+# AbstractVariable()
 setClass("AbstractVariable", representation(name = "character", relationships = "list"))

@@ -5,7 +5,7 @@
 #' @return Continuous variable wrapped around @param measure.
 #' @keywords
 #' @export
-#' @examples
+#' s
 #' asCounts()
 setGeneric("asCounts", function(measure) standardGeneric("asCounts"))
 setMethod("asCounts", signature("Numeric"), function(measure)

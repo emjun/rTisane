@@ -5,6 +5,5 @@
 #' @param integer Integer for cardinality, optional. Only required if no data is assigned
 #' @keywords
 #' @export
-#' @examples
-#' Unit()
+# Unit()
 setClass("Unit", representation(name = "character", cardinality = "integer"), contains = "AbstractVariable")

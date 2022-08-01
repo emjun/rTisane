@@ -7,8 +7,7 @@
 #' @return Has Relationship representing Unit having the Nominal Measure.
 #' @keywords
 #' @export
-#' @examples
-#' numeric()
+# numeric()
 setGeneric("numeric", function(unit, name, number_of_instances=1) standardGeneric("numeric"))
 setMethod("numeric", signature("Unit", "character", "integerORAbstractVariableORAtMostORPer"), function(unit, name, number_of_instances)
 {

@@ -6,8 +6,7 @@
 #' @param group Unit. Variable that contains multiple instances of @param base.
 #' @keywords
 #' @export
-#' @examples
-#' nests_within()
+# nests_within()
 setGeneric("nests_within", function(base, group) standardGeneric("nests_within"))
 setMethod("nests_within", signature("Unit", "Unit"), function(base, group)
 {

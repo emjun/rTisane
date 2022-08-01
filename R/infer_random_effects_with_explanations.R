@@ -9,8 +9,7 @@
 #' @return List of random effects and their explanations
 #' @import dagitty
 #' @keywords
-#' @examples
-#' infer_interaction_effects_with_explanations()
+# infer_interaction_effects_with_explanations()
 infer_random_effects_with_explanations <- function(measurement_gr, nests_gr, design, all_relationships, main_effects, interaction_effects) {
     # dv <- design@dv
 

@@ -4,8 +4,7 @@
 #' @param variable numericORordinal. The variable increasing.
 #' @keywords
 #' @export
-#' @examples
-#' increases()
+# increases()
 setGeneric("increases", function(variable) standardGeneric("increases"))
 setMethod("increases", signature("numericORordinal"), function(variable)
 {

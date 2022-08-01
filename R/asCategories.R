@@ -5,8 +5,6 @@
 #' @return Continuous variable wrapped around @param measure.
 #' @keywords
 #' @export
-#' @examples
-#' asCategories()
 setGeneric("asCategories", function(measure) standardGeneric("asCategories"))
 setMethod("asCategories", signature("Ordinal"), function(measure)
 {

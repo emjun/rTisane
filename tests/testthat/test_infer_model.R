@@ -185,33 +185,33 @@ test_that("Main effects inferred correctly", {
   expect_true(measure_3@name %in% main_effects)
 
   ## ONE ASSOCIATIVE RELATIONSHIP
-  measure_4 <- numeric(unit=unit, name="measure_4")
-  assoc <- associates_with(measure_0, measure_4)
-  design3 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc), ivs=list(measure_0), dv=measure_1)
-
-  graphs <- get_graphs(design3)
-  causal_gr <- graphs[[1]]
-  associative_gr <- graphs[[2]]
-  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design3)
-  expect_equal(length(main_effects), 3)
-  expect_true(measure_0@name %in% main_effects)
-  expect_true(measure_2@name %in% main_effects)
-  expect_true(measure_3@name %in% main_effects)
-
-  ## ONE ASSOCIATIVE INTERMEDIARY
-  assoc_ <- associates_with(measure_0, measure_4) # IV
-  assoc_intermediary <- associates_with(measure_1, measure_4) # DV
-  design4 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc_, assoc_intermediary), ivs=list(measure_0), dv=measure_1)
-
-  graphs <- get_graphs(design4)
-  causal_gr <- graphs[[1]]
-  associative_gr <- graphs[[2]]
-  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design4)
-  expect_equal(length(main_effects), 4)
-  expect_true(measure_0@name %in% main_effects)
-  expect_true(measure_2@name %in% main_effects)
-  expect_true(measure_3@name %in% main_effects)
-  expect_true(measure_4@name %in% main_effects)
+  # measure_4 <- numeric(unit=unit, name="measure_4")
+  # assoc <- associates_with(measure_0, measure_4)
+  # design3 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc), ivs=list(measure_0), dv=measure_1)
+  #
+  # graphs <- get_graphs(design3)
+  # causal_gr <- graphs[[1]]
+  # associative_gr <- graphs[[2]]
+  # main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design3)
+  # expect_equal(length(main_effects), 3)
+  # expect_true(measure_0@name %in% main_effects)
+  # expect_true(measure_2@name %in% main_effects)
+  # expect_true(measure_3@name %in% main_effects)
+  #
+  # ## ONE ASSOCIATIVE INTERMEDIARY
+  # assoc_ <- associates_with(measure_0, measure_4) # IV
+  # assoc_intermediary <- associates_with(measure_1, measure_4) # DV
+  # design4 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc_, assoc_intermediary), ivs=list(measure_0), dv=measure_1)
+  #
+  # graphs <- get_graphs(design4)
+  # causal_gr <- graphs[[1]]
+  # associative_gr <- graphs[[2]]
+  # main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design4)
+  # expect_equal(length(main_effects), 4)
+  # expect_true(measure_0@name %in% main_effects)
+  # expect_true(measure_2@name %in% main_effects)
+  # expect_true(measure_3@name %in% main_effects)
+  # expect_true(measure_4@name %in% main_effects)
 
 })
 

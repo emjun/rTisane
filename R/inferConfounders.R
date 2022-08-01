@@ -31,8 +31,7 @@ setMethod("isObserved", signature("ConceptualModel", "UnobservedVariable"), func
 #' @return list of Observed mediators.
 #' @import dagitty
 #' @keywords
-#' @examples
-#' getMediators()
+# getMediators()
 getMediators <- function(conceptualModel, x, y) {
   graph = conceptualModel@graph
   mediators = list()
@@ -76,8 +75,7 @@ getMediators <- function(conceptualModel, x, y) {
 #' @return list of confounders to include.
 #' @import dagitty
 #' @keywords
-#' @examples
-#' inferConfounders()
+# inferConfounders()
 setGeneric("inferConfounders", function(conceptualModel, iv, dv) standardGeneric("inferConfounders"))
 setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {

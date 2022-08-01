@@ -7,7 +7,7 @@
 #' @param data Dataset. Data to assess.
 #' @keywords
 #' @export
-#' @examples
+#' s
 #' assess()
 setGeneric("assess", function(conceptualModel, data) standardGeneric("assess"))
 setMethod("assess", signature("ConceptualModel", "Dataset"), function(conceptualModel, data)

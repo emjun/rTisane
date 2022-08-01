@@ -7,8 +7,7 @@
 #' @return TRUE if the Conceptual Model is valid, FALSE otherwise
 #' @import dagitty
 #' @keywords
-#' @examples
-#' checkConceptualModel()
+# checkConceptualModel()
 setGeneric("checkConceptualModel", function(conceptualModel, iv, dv) standardGeneric("checkConceptualModel"))
 setMethod("checkConceptualModel", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {
@@ -26,7 +25,7 @@ setMethod("checkConceptualModel", signature("ConceptualModel", "AbstractVariable
 
   # Check that DV does not cause IV
   dvCausingIv = paste(iv@name, "<-", dv@name)
-  if (p[[1]] == dvCausingIv) {
+  if (p[[1]][1] == dvCausingIv) {
     output <- list(isValid=FALSE, reason="DV cannot cause IV.")
     return(output)
   }

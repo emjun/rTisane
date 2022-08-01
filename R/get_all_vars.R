@@ -4,8 +4,7 @@
 #' @param design Design. 
 #' @return List of all variables
 #' @keywords
-#' @examples
-#' infer_has_relationships()
+# infer_has_relationships()
 get_all_vars <- function(design){
     # Combine all variables in design
     vars <- append(design@ivs, design@dv)

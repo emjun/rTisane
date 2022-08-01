@@ -5,8 +5,7 @@
 #' @param value integerORnumericORcharacter. The value to look for/filter on in @param variable.
 #' @keywords
 #' @export
-#' @examples
-#' notEquals()
+# notEquals()
 setGeneric("notEquals", function(variable, value) standardGeneric("notEquals"))
 setMethod("notEquals", signature("nominalORordinal", "integerORnumericORcharacter"), function(variable, value)
 {

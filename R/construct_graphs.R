@@ -6,8 +6,7 @@
 #' @return Tuple of graphs: (conceptual graph, data measurement graph)
 #' @import dagitty
 #' @keywords
-#' @examples
-#' construct_graphs()
+# construct_graphs()
 construct_graphs <- function(all_relationships, vars){
     # Get variable names
     var_names = list()

@@ -9,8 +9,7 @@
 #' @return Has Relationship representing Unit having the Nominal Measure.
 #' @keywords
 #' @export
-#' @examples
-#' ordinal()
+# ordinal()
 setGeneric("ordinal", function(unit, name, order, number_of_instances) standardGeneric("ordinal"))
 setMethod("ordinal", signature("Unit", "character", "list", "integerORAbstractVariableORAtMostORPer"), function(unit, name, order, number_of_instances)
 {

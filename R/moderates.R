@@ -9,8 +9,6 @@
 #' @param on AbstractVariable.
 #' @keywords
 #' @export
-#' @examples
-#' moderates()
 setGeneric("moderates", function(var, moderator, on) standardGeneric("moderates"))
 setMethod("moderates", signature("AbstractVariable", "AbstractVariable", "AbstractVariable"), function(var, moderator, on)
 {
@@ -34,8 +32,6 @@ setMethod("moderates", signature("AbstractVariable", "AbstractVariable", "Abstra
 #' @param on AbstractVariable.
 #' @keywords
 #' @export
-#' @examples
-#' moderates()
 setMethod("moderates", signature("AbstractVariable", "list", "AbstractVariable"), function(var, moderator, on)
 {
   # TODO: Add validity that the list of moderators is all AbstractVariables

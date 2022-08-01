@@ -7,8 +7,7 @@
 #' @return List of main effects and their explanations
 #' @import dagitty
 #' @keywords
-#' @examples
-#' infer_main_effects_with_explanations()
+# infer_main_effects_with_explanations()
 infer_main_effects_with_explanations <- function(causal_gr, associative_gr, design) {
     main_effects <- list()
 

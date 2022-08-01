@@ -6,8 +6,7 @@
 #' @param effect AbstractVariable. The effect.
 #' @keywords
 #' @export
-#' @examples
-#' causes()
+# causes()
 setGeneric("causes", function(cause, effect) standardGeneric("causes"))
 setMethod("causes", signature("AbstractVariableORUnobservedVariable", "AbstractVariableORUnobservedVariable"), function(cause, effect)
 {

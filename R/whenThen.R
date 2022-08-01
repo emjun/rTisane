@@ -7,8 +7,7 @@
 #' @param then Compares.
 #' @keywords
 #' @export
-#' @examples
-#' whenThen()
+# whenThen()
 setGeneric("whenThen", function(when, then) standardGeneric("whenThen"))
 setMethod("whenThen", signature("ComparesORComparesList", "Compares"), function(when, then)
 {

@@ -4,8 +4,7 @@
 #' @param dv AbstractVariable to write to JSON.
 #' @import jsonlite
 #' @keywords
-#' @examples
-#' generateJSON()
+# generateJSON()
 generateJSON <- function(conceptualModel, dv, path) {
   #### Generate options for DV
   dvClass = class(dv)
@@ -95,8 +94,7 @@ generateJSON <- function(conceptualModel, dv, path) {
 #' @param dv AbstractVariable to cast.
 #' @param values ReactiveValues from disambiguating DV type.
 #' @keywords
-#' @examples
-#' updateDV()
+# updateDV()
 updateDV <- function(dv, values) {
   # Extract values from disambiguation process
   dvName <- values$dvName
@@ -126,8 +124,7 @@ updateDV <- function(dv, values) {
 #' @param conceptualModel ConceptualModel with a variable of interest.
 #' @param name character. Name of variable we would like a handle to.
 #' @keywords
-#' @examples
-#' getVariable()
+# getVariable()
 getVariable <- function(conceptualModel, name) {
   for (v in conceptualModel@variables) {
     if (v@name == name) {
@@ -146,10 +143,9 @@ getVariable <- function(conceptualModel, name) {
 #' Updates Conceptual model based on analyst input during disambiguation
 #' @param conceptualModel ConceptualModel to update.
 #' @param values ReactiveValues from disambiguating DV type.
-#' @import stringr # For processing strings
+#' @import stringr 
 #' @keywords
-#' @examples
-#' updateConceptualModel()
+# updateConceptualModel()
 updateConceptualModel <- function(conceptualModel, values) {
   newRelat <- values$uncertainRelationships
 
@@ -253,8 +249,7 @@ updateConceptualModel <- function(conceptualModel, values) {
 #' @param conceptualModel ConceptualModel. Contains causal graph to process.
 #' @return
 #' @keywords
-#' @examples
-#' processQuery()
+# processQuery()
 setGeneric("processQuery", function(conceptualModel, iv, dv) standardGeneric("processQuery"))
 setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {
