@@ -15,11 +15,16 @@ reticulate::install_miniconda()
 py_install("dash", pip=TRUE)
 py_install("dash_daq", pip=TRUE)
 py_install("dash_bootstrap_components", pip=TRUE)
+py_install("flask", pip=TRUE)
+py_install("plotly", pip=TRUE)
 
 import("dash")
 import("dash_daq")
 import("dash_bootstrap_components")
+import("flask")
+import("plotly")
 
+# TODO: Get rid of this dependency
 py_install("pandas", pip=TRUE)
 import("pandas")
 ```

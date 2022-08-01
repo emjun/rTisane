@@ -14,4 +14,4 @@ cm@graph <- updateGraph(cm)
 
 # Output json
 path = file.path(getwd(), "examples/json/simpleDisambiguation.json")
-generateJSON(cm, measure_1, path)
+generateDVConceptualModelJSON(cm, measure_1, path)

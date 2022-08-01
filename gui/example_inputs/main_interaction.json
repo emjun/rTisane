@@ -8,16 +8,16 @@
                 "Measure_2"
             ]
         },
-        "generated main effects": [
+        "generatedMainEffects": [
             "Measure_2",
             "Measure_1",
             "Measure_0"
         ],
-        "generated interaction effects": [
+        "generatedInteractionEffects": [
             "Measure 2*Measure_1"
         ],
-        "generated random effects": {},
-        "generated family, link functions": {
+        "generatedRandomEffects": {},
+        "generatedFamilyLinkFunctions": {
             "GaussianFamily": [
                 "LogLogLink",
                 "IdentityLink",

@@ -13,7 +13,7 @@ test_that("DV disambiguation options created properly", {
   cause_relat <- causes(measure_0, measure_1)
   cm <- assume(cause_relat, cm)
 
-  path <- generateJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
+  path <- generateDVConceptualModelJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -36,7 +36,7 @@ test_that("Conceptual model disambiguation options created properly", {
   cause_relat <- relates(measure_0, measure_1)
   cm <- assume(cause_relat, cm)
 
-  path <- generateJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
+  path <- generateDVConceptualModelJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -59,7 +59,7 @@ test_that("Conceptual model disambiguation options created properly", {
   cause_relat <- relates(measure_0, measure_1)
   cm <- hypothesize(cause_relat, cm)
 
-  path <- generateJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
+  path <- generateDVConceptualModelJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -79,7 +79,7 @@ test_that("Conceptual model disambiguation options created properly", {
 
 })
 
-test_that("DV updates properly", {
+test_that("DV updates after disambiguation properly", {
   unit <- Unit("person")
   measure_0 <- numeric(unit=unit, name="measure_0")
   measure_1 <- numeric(unit=unit, name="measure_1")
@@ -99,7 +99,7 @@ test_that("DV updates properly", {
   expect_equal(dvUpdated@skew, "none")
 })
 
-test_that("Conceptual model updated after disambiguation properly", {
+test_that("Conceptual model updates after disambiguation properly", {
   cm <- ConceptualModel()
   unit <- Unit("person")
   measure_0 <- numeric(unit=unit, name="measure_0")
@@ -186,3 +186,41 @@ test_that("Conceptual model updated after disambiguation properly", {
   expect_equal(r@cause, relat@rhs)
   expect_equal(r@effect, relat@lhs)
 })
+
+test_that("Statistical modeling options created properly", {
+  cm <- ConceptualModel()
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+
+  # Model 1: measure_1 is a common parent
+  cm <- assume(causes(measure_1, measure_0), cm)
+  cm <- assume(causes(measure_0, measure_2), cm)
+  cm <- assume(causes(measure_1, measure_2), cm)
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  cont <- asContinuous(measure_2)
+  familyLinkPairs <- inferFamilyLinkFunctions(cont)
+
+  path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
+
+  options <- jsonlite::read_json(path)
+  expect_false(is.null(options$input))
+  input <- options$input
+  expect_type(input$generatedMainEffects, "list")
+  expect_length(input$generatedMainEffects, 1)
+  expect_type(input$generatedInteractionEffects, "list")
+  expect_length(input$generatedInteractionEffects, 0)
+  expect_type(input$generatedRandomEffects, "list")
+  expect_length(input$generatedRandomEffects, 0)
+  expect_false(is.null(input$generatedFamilyLinkFunctions)) # Key exists!
+  expect_false(is.null(input$query)) # Key exists!
+  query <- input$query
+  expect_equal(query$DV, measure_2@name)
+  expect_length(query$IVs, 1)
+  expect_equal(query$IVs[[1]], measure_0@name)
+})
+
+# TODO: Add tests for shiny app testing
+# https://shiny.rstudio.com/articles/testing-overview.html

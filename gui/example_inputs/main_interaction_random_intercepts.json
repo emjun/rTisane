@@ -9,16 +9,16 @@
                 "Time"
             ]
         },
-        "generated main effects": [
+        "generatedMainEffects": [
             "Measure_2",
             "Measure_0",
             "Measure_1",
             "Time"
         ],
-        "generated interaction effects": [
+        "generatedInteractionEffects": [
             "Measure 2*Measure_1"
         ],
-        "generated random effects": {
+        "generatedRandomEffects": {
             "Unit": {
                 "random intercept": {
                     "groups": "Unit"
@@ -30,7 +30,7 @@
                 }
             }
         },
-        "generated family, link functions": {
+        "generatedFamilyLinkFunctions": {
             "GammaFamily": [
                 "PowerLink",
                 "IdentityLink",

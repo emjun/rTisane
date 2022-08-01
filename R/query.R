@@ -6,6 +6,7 @@
 #' @param conceptualModel ConceptualModel we are assuming in order to assess the effects of @param ivs on @param dv.
 #' @param iv AbstractVariable. Which variable whose effect on @param dv we want to evaluate.
 #' @param dv AbstractVariable. Variable whose outcome we want to assess.
+#' @import reticulate
 #' @keywords
 #' @export
 # query()
@@ -17,7 +18,7 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   conceptualModel@graph <- updateGraph(conceptualModel)
 
 
-  ### Step 1: Disambiguation round 1
+  ### Step 1: Conceptual Model Disambiguation
   #### A: How to treat DV? (as Continuous, Count, Categories), B: Check + Ask for "causes"-level of info
   #### Check ConceptualModel during disambiguation
   updates <- processQuery(conceptualModel=conceptualModel, iv=iv, dv=dv)
@@ -37,18 +38,10 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
 
   familyLinkFunctions <- inferFamilyLinkFunctions(dvUpdated)
 
-  # Output JSON file
-  json_file <- NULL
+  ### Step 3: Statistical Model Disambiguation (GUI)
+  ## Call Python script to create and run disambiguation process 
+  code <- processStatisticalModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
 
-  # START HERE: How to run existing Tisane GUI from here? Bash  script?
-  # START with examples from Tisane (with existing JSON) and seeee
-  # Then: Generate JSON, update disambiguation (e.g., no main effects selection)
-  # Last: Generate code
-  # Once all the individual pieces working, try end-to-end with IHME dataset
-
-  ### Step 3: Disambiguation loop (GUI)
-  # TODO: Call bash script to run GUI
-  # Also, look into: Multipage app in Shiny https://mastering-shiny.org/scaling-modules.html#scaling-modules
 
   ### Step 4: Code generation
   # TODO: Generate code

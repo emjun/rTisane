@@ -7,14 +7,14 @@
                 "Measure B"
             ]
         },
-        "generated main effects": [
+        "generatedMainEffects": [
             "Measure B",
             "Measure A"
         ],
-        "generated interaction effects": [
+        "generatedInteractionEffects": [
             "Measure A*Measure B"
         ],
-        "generated random effects": {
+        "generatedRandomEffects": {
             "Unit": {
                 "random slope": [
                     {
@@ -24,7 +24,7 @@
                 ]
             }
         },
-        "generated family, link functions": {
+        "generatedFamilyLinkFunctions": {
             "TweedieFamily": [
                 "LogLink",
                 "PowerLink",

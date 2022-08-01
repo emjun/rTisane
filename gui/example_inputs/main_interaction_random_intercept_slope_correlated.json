@@ -6,11 +6,11 @@
                 "Word_type"
             ]
         },
-        "generated main effects": [
+        "generatedMainEffects": [
             "Word_type"
         ],
-        "generated interaction effects": [],
-        "generated random effects": {
+        "generatedInteractionEffects": [],
+        "generatedRandomEffects": {
             "Subject": {
                 "random intercept": {
                     "groups": "Subject"
@@ -29,7 +29,7 @@
                 }
             }
         },
-        "generated family, link functions": {
+        "generatedFamilyLinkFunctions": {
             "GaussianFamily": [
                 "IdentityLink",
                 "LogLink",

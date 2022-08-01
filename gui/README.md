@@ -43,11 +43,11 @@ From UIST 2021 submission: https://github.com/emjun/tisane/blob/main/tisane/smt/
 - `example_inputs/`: Example JSON files for candidate statistical models
 - `example.py`: Script to run GUI with data, edit to change the JSON file from `example_inputs` used to populate the GUI
 - `generate_examples.py`: Script for creating the JSON files in example_inputs, calls functions in `tisane/main.py` to generate Python dictionary that is cast and output as JSON.
-- `gui_components.py`: Stores code for layout of several components and provides an interface to the JSON input file
+- `gui.gui_components.py`: Stores code for layout of several components and provides an interface to the JSON input file
 - `callbacks.py`: Main file for callbacks
 - `family_link_function_callbacks.py`: Contains callbacks for the family and link functions tab
 - `random_effects_callbacks.py`: Contains callbacks for the random effects tab
-- `gui_helpers.py`: Functions that are generally helpful for multiple parts of the GUI
+- `gui.gui_helpers.py`: Functions that are generally helpful for multiple parts of the GUI
 - `default_explanations.json`: Static text to be used. In certain situations, some of this text may only be displayed if, for example, no interaction effects were generated. For others, such as "link-functions", this text is always displayed as a popover. To include it as a popover, use the keys `"header"` and `"body"` to specify the popover.
 
 ### Functions
@@ -62,11 +62,11 @@ The main function for generating JSON from Tisane programs is `collect_model_can
                 "Word_type"
             ]
         },
-        "generated main effects": [
+        "generatedMainEffects": [
             "Word_type"
         ],
-        "generated interaction effects": [],
-        "generated random effects": {
+        "generatedInteractionEffects": [],
+        "generatedRandomEffects": {
             "Subject": [
                 {
                     "random intercept": {
@@ -91,7 +91,7 @@ The main function for generating JSON from Tisane programs is `collect_model_can
                 }
             ]
         },
-        "generated family, link functions": {
+        "generatedFamilyLinkFunctions": {
             "GaussianFamily": [
                 "LogitLink",
                 "LogLogLink",

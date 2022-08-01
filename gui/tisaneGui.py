@@ -115,16 +115,16 @@ class TisaneGUI:
                             id="random-effects-progress",
                             color="secondary",
                         ),
-                        # dbc.Progress(
-                        #     self.components.strings(
-                        #         "progress", "family-link-functions"
-                        #     ),
-                        #     value=25,
-                        #     animated=False,
-                        #     bar=True,
-                        #     id="family-link-functions-progress",
-                        #     color="secondary",
-                        # ),
+                        dbc.Progress(
+                            self.components.strings(
+                                "progress", "family-link-functions"
+                            ),
+                            value=25,
+                            animated=False,
+                            bar=True,
+                            id="family-link-functions-progress",
+                            color="secondary",
+                        ),
                     ],
                     # multi=True,
                     style={"height": "2rem"},
@@ -152,13 +152,12 @@ class TisaneGUI:
             ]
             + self.components.createEffectPopovers()
             + self.components.createCodeGenerationModal(),
-            fluid=jupyter,
         )
 
         ### Start and run app on local server
         self.app = app
         createCallbacks(app, self.components)
-        # open_browser()
+        open_browser()
         # if jupyter:
         #     app.run_server(mode="inline", port=port)
         #     pass

@@ -97,13 +97,13 @@ class GUIComponents:
                 pass
             pass
         self.defaultLinkForFamily = {
-            "GaussianFamily": "IdentityLink",
-            "BinomialFamily": "LogitLink",
-            "PoissonFamily": "LogLink",
-            "TweedieFamily": "LogLink",
-            "GammaFamily": "InverseLink",
-            "NegativeBinomialFamily": "LogLink",
-            "InverseGaussianFamily": "InverseSquaredLink",
+            "Binomial": "logit",
+            "Gamma": "inverse",
+            "Gaussian": "identity",
+            "Inverse Gaussian": "1/mu^2",
+            "Negative Binomial": "log",
+            "Poisson": "log"
+            # "multinomial": ""
         }
         self.output = {
             "main effects": [],
@@ -217,7 +217,9 @@ class GUIComponents:
                     self.randomSlopeIdToGroupIv[cellId] = (unit, rs["iv"])
             pass
         # log(self.randomSlopes)
-        self._init_helper()
+        
+        ## For random effects
+        # self._init_helper()
         pass
 
     def getTypesOfData(self):
@@ -371,9 +373,10 @@ class GUIComponents:
         return self.data["input"][key]
 
     def getFamilyLinkFunctions(self):
-        if self.hasRandomEffects():
-            return self.familyLinkFunctions["with-mixed-effects"]
-        return self.familyLinkFunctions["without-mixed-effects"]
+        # if self.hasRandomEffects():
+        #     return self.familyLinkFunctions["with-mixed-effects"]
+        # return self.familyLinkFunctions["without-mixed-effects"]
+        return self.familyLinkFunctions
 
     def generateCode(self):
         if self.codeGenerator:
@@ -537,10 +540,10 @@ class GUIComponents:
     def getMainEffectCheckboxIds(self):
         return list(self.generatedComponentIdToMainEffect.keys())
 
-    def getGroupFromMeasure(self, measure):
-        if measure in self.data["input"]["measures to units"]:
-            return self.data["input"]["measures to units"][measure]
-        return ""
+    # def getGroupFromMeasure(self, measure):
+    #     if measure in self.data["input"]["measures to units"]:
+    #         return self.data["input"]["measures to units"][measure]
+    #     return ""
 
     def getInteractionEffectCheckboxIds(self):
         return list(self.generatedComponentIdToInteractionEffect.keys())
@@ -704,7 +707,7 @@ class GUIComponents:
         randomEffects = self.getGeneratedRandomEffects()
         assert (
             randomEffectGroup in self.getGeneratedRandomEffects()
-        ), "Group {} not found in generated random effects: {}".format(
+        ), "Group {} not found in generatedRandomEffects: {}".format(
             randomEffectGroup, randomEffects
         )
         return "component-id" in randomEffects[randomEffectGroup]
@@ -713,7 +716,7 @@ class GUIComponents:
         randomEffects = self.getGeneratedRandomEffects()
         assert (
             randomEffectGroup in randomEffects
-        ), "Group {} not found in generated random effects: {}".format(
+        ), "Group {} not found in generatedRandomEffects: {}".format(
             randomEffectGroup, randomEffects
         )
         if not self.hasComponentIdForRandomEffect(randomEffectGroup):
@@ -733,16 +736,16 @@ class GUIComponents:
         return self.getQuery()["IVs"]
 
     def getGeneratedMainEffects(self):
-        return self.data["input"]["generated main effects"]
+        return self.data["input"]["generatedMainEffects"]
 
     def getGeneratedInteractionEffects(self):
-        return self.data["input"]["generated interaction effects"]
+        return self.data["input"]["generatedInteractionEffects"]
 
     def getGeneratedRandomEffects(self):
-        return self.data["input"]["generated random effects"]
+        return self.data["input"]["generatedRandomEffects"]
 
     def getGeneratedFamilyLinkFunctions(self):
-        return self.data["input"]["generated family, link functions"]
+        return self.data["input"]["generatedFamilyLinkFunctions"]
 
     def getInteractionEffectsAddedSection(self):
         if self.hasInteractionEffects():
@@ -859,7 +862,8 @@ class GUIComponents:
 
     def getMainEffectsCard(self):
         ivs = self.getIndependentVariables()
-        intermediaries = self.getAssociativeIntermediaries()
+        # intermediaries = self.getAssociativeIntermediaries()
+        intermediaries = list()
         continueButtonPortion = [
             html.P(""),
             dbc.Button(
@@ -1362,65 +1366,67 @@ class GUIComponents:
             pass
         pass
 
-    def createFamilyOptionsFromValues(self, vals):
-        family_options = []
-        fls = self.getFamilyLinkFunctions().copy()
-        isAllIntegers = self.isDVDataAllNonNegativeIntegers()
-        removePoisson = (
-            "PoissonFamily" in self.getGeneratedFamilyLinkFunctions()
-            and "PoissonFamily" in fls
-            and isAllIntegers
-        )
-        # link_options =
-        if removePoisson:
-            fls.pop("PoissonFamily")
-            # dvData = self.dataDf[self.dv]
-            # allIntegers = dvData.dtype.kind == "i" or dvData.dtype.kind == "u"
-            # if not allIntegers:
-            #     dvData = dvData.astype(float)
-            #     allIntegers = dvData.apply(float.is_integer).all()
-            #     if not allIntegers:
-            #         fls.pop("PoissonFamily")
-            pass
-        for f in vals:
-            label = " ".join(separateByUpperCamelCase(f)[:-1])
+    # def createFamilyOptionsFromValues(self, vals):
+    #     family_options = []
+    #     fls = self.getFamilyLinkFunctions().copy()
+    #     isAllIntegers = self.isDVDataAllNonNegativeIntegers()
+    #     removePoisson = (
+    #         "PoissonFamily" in self.getGeneratedFamilyLinkFunctions()
+    #         and "PoissonFamily" in fls
+    #         and isAllIntegers
+    #     )
+    #     # link_options =
+    #     if removePoisson:
+    #         fls.pop("PoissonFamily")
+    #         # dvData = self.dataDf[self.dv]
+    #         # allIntegers = dvData.dtype.kind == "i" or dvData.dtype.kind == "u"
+    #         # if not allIntegers:
+    #         #     dvData = dvData.astype(float)
+    #         #     allIntegers = dvData.apply(float.is_integer).all()
+    #         #     if not allIntegers:
+    #         #         fls.pop("PoissonFamily")
+    #         pass
+    #     for f in vals:
+    #         label = " ".join(separateByUpperCamelCase(f)[:-1])
 
-            family_options.append(
-                {"label": label, "value": f, "disabled": f not in fls}
-            )
-            pass
-        return family_options
+    #         family_options.append(
+    #             {"label": label, "value": f, "disabled": f not in fls}
+    #         )
+    #         pass
+    #     return family_options
 
     def filterFamilyLinkOptions(self):
-        family_options = []
-        fls = self.getFamilyLinkFunctions().copy()
-        isAllIntegers = self.isDVDataAllNonNegativeIntegers()
-        removePoisson = (
-            "PoissonFamily" in self.getGeneratedFamilyLinkFunctions()
-            and "PoissonFamily" in fls
-            and isAllIntegers
-        )
+        family_link_options = self.getGeneratedFamilyLinkFunctions() # Returns a dict 
+        family_options = list(family_link_options.keys())
+        
+        # fls = self.getFamilyLinkFunctions().copy()
+        # isAllIntegers = self.isDVDataAllNonNegativeIntegers()
+        # removePoisson = (
+        #     "PoissonFamily" in self.getGeneratedFamilyLinkFunctions()
+        #     and "PoissonFamily" in fls
+        #     and isAllIntegers
+        # )
         # link_options =
-        if removePoisson:
-            fls.pop("PoissonFamily")
-            # dvData = self.dataDf[self.dv]
-            # allIntegers = dvData.dtype.kind == "i" or dvData.dtype.kind == "u"
-            # if not allIntegers:
-            #     dvData = dvData.astype(float)
-            #     allIntegers = dvData.apply(float.is_integer).all()
-            #     if not allIntegers:
-            #         fls.pop("PoissonFamily")
-            pass
+        # if removePoisson:
+        #     fls.pop("PoissonFamily")
+        #     # dvData = self.dataDf[self.dv]
+        #     # allIntegers = dvData.dtype.kind == "i" or dvData.dtype.kind == "u"
+        #     # if not allIntegers:
+        #     #     dvData = dvData.astype(float)
+        #     #     allIntegers = dvData.apply(float.is_integer).all()
+        #     #     if not allIntegers:
+        #     #         fls.pop("PoissonFamily")
+        #     pass
 
-        if not self.shouldEnableTypesOfDataControls():
-            for f in self.getGeneratedFamilyLinkFunctions():
-                label = " ".join(separateByUpperCamelCase(f)[:-1])
+        # if not self.shouldEnableTypesOfDataControls():
+        #     for f in self.getGeneratedFamilyLinkFunctions():
+        #         label = " ".join(separateByUpperCamelCase(f)[:-1])
 
-                family_options.append(
-                    {"label": label, "value": f, "disabled": f not in fls}
-                )
-                pass
-            pass
+        #         family_options.append(
+        #             {"label": label, "value": f, "disabled": f not in fls}
+        #         )
+        #         pass
+        #     pass
 
         return dbc.Row(
             [
@@ -1431,37 +1437,14 @@ class GUIComponents:
                     options=family_options,
                     value="",
                     optionHeight=45,
-                    disabled=self.shouldEnableTypesOfDataControls(),
+                    # disabled=self.shouldEnableTypesOfDataControls(),
                 ),
                 ])
             ]
         )
 
     def make_family_link_options(self):
-        family_options = list()
         forms = []
-
-        self.addTypesOfDataControls(forms)
-
-        fls = self.getFamilyLinkFunctions().copy()
-        isAllIntegers = self.isDVDataAllNonNegativeIntegers()
-        removePoisson = (
-            "PoissonFamily" in self.getGeneratedFamilyLinkFunctions()
-            and "PoissonFamily" in fls
-            and isAllIntegers
-        )
-        # link_options =
-        if removePoisson:
-            fls.pop("PoissonFamily")
-            pass
-
-        for f in self.getGeneratedFamilyLinkFunctions():
-            label = " ".join(separateByUpperCamelCase(f)[:-1])
-
-            family_options.append(
-                {"label": label, "value": f, "disabled": f not in fls}
-            )
-            pass
 
         linkExplanation = self.getDefaultExplanation("link-functions")
         familyExplanation = self.getDefaultExplanation("distribution-families")
@@ -1505,11 +1488,11 @@ class GUIComponents:
                             dcc.Markdown(
                                 familyExplanation["body"]
                                 + familyExplanation["note-begin"]
-                                + (
-                                    (familyExplanation["no-poisson"] + "\n")
-                                    if removePoisson
-                                    else ""
-                                )
+                                # + (
+                                #     (familyExplanation["no-poisson"] + "\n")
+                                #     if removePoisson
+                                #     else ""
+                                # )
                                 + familyExplanation["missing-families-note"]
                             )
                         ),
@@ -1686,26 +1669,29 @@ class GUIComponents:
         # Create family and link title
         # familyExplanation = self.getDefaultExplanation("distribution-families")
         # dvType = self.getDependentVariableType()
-        # indef_article = "n" if re.match(r"^[aeiouAEIOU]", dvType) else ""
-        # family_link_title = html.Div(
-        #     [
-        #         html.H5(self.strings.getFamilyLinksPageTitle()),
-        #         dcc.Markdown(
-        #             self.strings(
-        #                 "family-link-functions", "titles", "page-sub-title"
-        #             ).format(
-        #                 dv=self.getDependentVariable(),
-        #                 indef_article=indef_article,
-        #                 dv_type=self.getDependentVariableType()
-        #             )
-        #         ),
-        #         # dcc.Markdown(familyExplanation["caution"]),
-        #     ]
-        # )
+        dvType = "numeric"
+        indef_article = "n" if re.match(r"^[aeiouAEIOU]", dvType) else ""
+        dv_treat_as = "continuous"
+        family_link_title = html.Div(
+            [
+                html.H5(self.strings.getFamilyLinksPageTitle()),
+                dcc.Markdown(
+                    self.strings(
+                        "family-link-functions", "titles", "page-sub-title"
+                    ).format(
+                        dv=self.getDependentVariable(),
+                        indef_article=indef_article,
+                        dv_type=dvType,
+                        dv_treat_as=dv_treat_as
+                    )
+                ),
+                # dcc.Markdown(familyExplanation["caution"]),
+            ]
+        )
 
         # fig = self.createFigure("GaussianFamily")
 
-        # # Get form groups for family link div
+        # Get form groups for family link div
         # family_link_chart = html.Div(
         #     dcc.Graph(
         #         id="family-link-chart",
@@ -1715,23 +1701,21 @@ class GUIComponents:
         #     ),
         #     id="family-link-chart-div",
         # )
-        # family_link_controls = self.make_family_link_options()
+        family_link_controls = self.make_family_link_options()
 
-        # normalityTestPortion = self.createNormalityTestSection()
         ##### Combine all elements
         # Create div
         family_and_link_div = dbc.Card(
             dbc.CardBody(
                 [
-                    # family_link_title,
-                    # dbc.Row(
-                    #     [
-                    #         dbc.Col(family_link_chart, sm=6, md=7, lg=8),
-                    #         dbc.Col(family_link_controls, sm=6, md=5, lg=4),
-                    #     ],
-                    #     align="center",
-                    #     no_gutters=True,
-                    # ),
+                    family_link_title,
+                    dbc.Row(
+                        [
+                            dbc.Col(family_link_controls, sm=12, md=12, lg=12),
+                        ],
+                        align="center",
+                        # no_gutters=True,
+                    ),
                 ]
                 # + normalityTestPortion
                 + [
@@ -1759,13 +1743,15 @@ class GUIComponents:
         )
 
         ##### Return div
+        print("created div")
         return family_and_link_div
 
     def createEffectPopovers(self):
         mainEffects = self.getGeneratedMainEffects()
         interactionEffects = self.getGeneratedInteractionEffects()
         # randomEffects = self.getGeneratedRandomEffects()
-        explanations = self.getExplanations()
+        # explanations = self.getExplanations()
+        explanations = list()
         popovers = []
         for me in mainEffects:
             if (

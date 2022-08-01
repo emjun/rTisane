@@ -230,8 +230,12 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 
 11. Do we want to pre-check DV before allowing for casting to Continuous/Counts/Categories? For example, if there are any floats, can't be counts. 
 
+12. Why install and use Python in R analysis session? For the Statistical Model Disambiguation process, we can rewrite in R so that end-user doesn'thave to install Python. This may be more important for adoption. For the sake of this study, it might not matter as long as we give installation scripts/instructions since our focus is on assessing the impact of conceptual modeling (technique) on the analysis process + models authored.
+
+13. WBN: Suppress Dash/Flask output when starting Dash app 
+
 ## TODOs
-- [x] Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
+- [x]Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
 - Is there anything we can do with the hyper-specific information end-users provide? (maybe for interpretation?)
 
 ## Internal API 

@@ -1,96 +1,53 @@
 {
-  "with-mixed-effects": {
-    "GaussianFamily": {
-      "default": "IdentityLink",
-      "links": [
-        "IdentityLink"
-      ]
-    },
-    "InverseGaussianFamily": {
-      "default": "InverseSquaredLink",
-      "links": [
-        "InverseSquaredLink"
-      ]
-    },
-    "GammaFamily": {
-      "default": "InverseLink",
-      "links": [
-        "InverseLink"
-      ]
-    },
-    "PoissonFamily": {
-      "default": "LogLink",
-      "links": [
-        "LogLink"
-      ]
-    },
-    "BinomialFamily": {
-      "default": "LogitLink",
-      "links": [
-        "LogitLink"
-      ]
-    }
+  "Binomial" : {
+    "default" : "logit",
+    "links" : [
+      "logit",
+      "probit",
+      "cauchit",
+      "log",
+      "cloglog"
+    ]
   },
-  "without-mixed-effects": {
-    "GaussianFamily": {
-      "default": "IdentityLink",
-      "links": [
-        "IdentityLink",
-        "InverseLink",
-        "LogLink"
-      ]
-    },
-    "InverseGaussianFamily": {
-      "default": "InverseSquaredLink",
-      "links": [
-        "IdentityLink",
-        "InverseLink",
-        "InverseSquaredLink",
-        "LogLink"
-      ]
-    },
-    "GammaFamily": {
-      "default": "InverseLink",
-      "links": [
-        "IdentityLink",
-        "InverseLink",
-        "LogLink"
-      ]
-    },
-    "PoissonFamily": {
-      "default": "LogLink",
-      "links": [
-        "IdentityLink",
-        "LogLink",
-        "SquarerootLink"
-      ]
-    },
-    "BinomialFamily": {
-      "default": "LogitLink",
-      "links": [
-        "CauchyLink",
-        "CLogLogLink",
-        "LogLink",
-        "LogitLink",
-        "ProbitLink"
-      ]
-    },
-    "NegativeBinomialFamily": {
-      "default": "LogLink",
-      "links": [
-        "CLogLogLink",
-        "IdentityLink",
-        "LogLink",
-        "NegativeBinomialLink",
-        "PowerLink"
-      ]
-    },
-    "TweedieFamily": {
-      "default": "LogLink",
-      "links": [
-        "LogLink",
-        "PowerLink"
-      ]
-    }
+  "Gamma" : {
+    "default" : "inverse",
+    "links" : [
+      "inverse",
+      "identity",
+      "log"
+    ]
+  },
+  "Gaussian" : {
+    "default" : "identity",
+    "links" : [
+      "identity",
+      "log",
+      "inverse"
+    ]
+  },
+  "Inverse Gaussian" : {
+    "default" : "1/mu^2",
+    "links" : [
+      "1/mu^2",
+      "inverse",
+      "identity",
+      "log"
+    ]
+  },
+  "Negative Binomial" : {
+    "default" : "log",
+    "links" : [
+      "log",
+      "sqrt",
+      "identity"
+    ]
+  }, 
+  "Poisson" : {
+    "default" : "log",
+    "links" : [
+      "log",
+      "identity",
+      "sqrt"
+    ]
   }
 }

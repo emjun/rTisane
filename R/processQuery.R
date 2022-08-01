@@ -4,8 +4,8 @@
 #' @param dv AbstractVariable to write to JSON.
 #' @import jsonlite
 #' @keywords
-# generateJSON()
-generateJSON <- function(conceptualModel, dv, path) {
+# generateDVConceptualModelJSON()
+generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
   #### Generate options for DV
   dvClass = class(dv)
   # Create options
@@ -82,7 +82,7 @@ generateJSON <- function(conceptualModel, dv, path) {
     output <- append(output, list(ambiguousRelationships = ambigRelationships, ambiguousOptions1 = ambigOptions1, ambiguousOptions2 = ambigOptions2))
   }
   # Write output to JSON file
-  write_json(output, path=path)
+  jsonlite::write_json(output, path=path)
 
   # Return path
   path
@@ -247,6 +247,8 @@ updateConceptualModel <- function(conceptualModel, values) {
 #'
 #' This function disambiguates the Conceptual Model before using it in future query steps.
 #' @param conceptualModel ConceptualModel. Contains causal graph to process.
+#' @param iv AbstractVariable. Independent variable whose influence on @param dv we want to assess. 
+#' @param dv AbstractVariable. Dependent variable. 
 #' @return
 #' @keywords
 # processQuery()
@@ -254,7 +256,7 @@ setGeneric("processQuery", function(conceptualModel, iv, dv) standardGeneric("pr
 setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {
   # Write DV to JSON, which is read to create disambiguation GUI
-  path <- generateJSON(conceptualModel, dv, "input.json")
+  path <- generateDVConceptualModelJSON(conceptualModel, dv, "input.json")
 
   # Start up disambiguation process
   inputFilePath <- path
@@ -265,14 +267,8 @@ setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "Abst
   dvUpdated <- updateDV(dv, updates)
   cmUpdated <- updateConceptualModel(conceptualModel, updates)
 
+  results <- list(updatedDV=dvUpdated, updatedConceptualModel=cmUpdated)
 
-  # Show variables
-
-  # DV as Continuous/Counts/Categories?
-
-  # Do we have any ambiguous relationships?
-  # Which direction are "relates"?
-  # For WhenThen, does that mean A --> B or B --> A or ....?
-
-
+  # Return updated values
+  results
 })

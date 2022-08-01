@@ -1,4 +1,4 @@
-from gui.gui import TisaneGUI
+from gui.tisaneGui import TisaneGUI
 import os
 
 

@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from gui.gui import TisaneGUI
+from gui.tisaneGui import TisaneGUI
+# from tisaneGui import TisaneGUI
 import dash
 import dash_bootstrap_components as dbc
 from dash import html
@@ -10,10 +11,10 @@ import socket  # For finding next available socket
 
 tg = TisaneGUI()
 
-main_only_input = os.path.join(
-        # os.path.dirname(__file__), 
-        "gui/example_inputs/main_only.json"
-    )
+# main_only_input = os.path.join(
+#         # os.path.dirname(__file__), 
+#         "gui/example_inputs/main_only.json"
+#     )
 
 ### Step 4: GUI generates code
 def generateCode(
@@ -48,4 +49,6 @@ def generateCode(
         # path = write_to_script(code, destinationDir, "model.py")
         # return path
 
-tg.start_app(input=main_only_input, generateCode=generateCode)
+# inputFile = "gui/example_inputs/main_only.json"
+inputFile = "examples/json/mainEffectsOnly.json"
+tg.start_app(input=inputFile, generateCode=generateCode)

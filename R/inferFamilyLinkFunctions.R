@@ -11,22 +11,22 @@ inferFamilyFunctions <- function(dv) {
 
   if (class(dv) == "Continuous") {
     if (dv@skew == "positive") {
-      familyCandidates <- append(familyCandidates, "inverse.gaussian")
+      familyCandidates <- append(familyCandidates, "Inverse Gaussian")
       familyCandidates <- append(familyCandidates, "Gamma")
     } else {
       stopifnot(dv@skew == "none")
-        familyCandidates <- append(familyCandidates, "gaussian")
+        familyCandidates <- append(familyCandidates, "Gaussian")
       }
   } else if (class(dv) == "Counts") {
-    familyCandidates <- append(familyCandidates, "poisson")
-    familyCandidates <- append(familyCandidates, "negativeBinomial")
+    familyCandidates <- append(familyCandidates, "Poisson")
+    familyCandidates <- append(familyCandidates, "Negative Binomial")
   } else {
     stopifnot(class(dv) == "Categories")
     if (dv@numberOfCategories == 2) {
-      familyCandidates <- append(familyCandidates, "binomial")
+      familyCandidates <- append(familyCandidates, "Binomial")
     } else {
       stopifnot(dv@numberOfCategories > 2)
-      familyCandidates <- append(familyCandidates, "multinomial")
+      familyCandidates <- append(familyCandidates, "Multinomial")
     }
   }
 
