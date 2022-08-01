@@ -41,8 +41,6 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   ### Step 3: Statistical Model Disambiguation (GUI)
   ## Call Python script to create and run disambiguation process 
   code <- processStatisticalModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
-
-
   ### Step 4: Code generation
   # TODO: Generate code
 })

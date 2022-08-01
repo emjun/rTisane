@@ -86,14 +86,14 @@ setMethod("processStatisticalModels", signature("ConceptualModel", "AbstractVari
     # Start up disambiguation process
     inputFilePath <- path
     dataPath = NULL # TODO: update
-    values <- disambiguateStatisticallModel(inputFilePath=path) #, dataPath=dataPath)
+    disambiguateStatisticallModel(inputFilePath=path) #, dataPath=dataPath)
 
     # Necesssary? Create a Statistical Model object 
-    sm <- constructStatisticalModel(values)
+    # sm <- constructStatisticalModel(values)
 
     # Generate code
-    codePath <- generateCode(sm)
+    # codePath <- generateCode(sm)
 
     # Return path to generated code
-    codePath 
+    # codePath 
 })

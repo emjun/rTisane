@@ -234,6 +234,8 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 
 13. WBN: Suppress Dash/Flask output when starting Dash app 
 
+14. Keep disambiguation running in background?
+
 ## TODOs
 - [x]Before doing any inference, check that all of the variable relationships are "Causes" not "Relates"
 - Is there anything we can do with the hyper-specific information end-users provide? (maybe for interpretation?)

@@ -2,7 +2,7 @@
     "dependent variable": "measure_2",
     "family": "Gaussian",
     "interaction effects": [],
-    "link": "log",
+    "link": "identity",
     "main effects": [],
     "random effects": {}
 }
