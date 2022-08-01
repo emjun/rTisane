@@ -25,7 +25,6 @@ def generateCode(
             destinationDir, modelSpecJson
         )  # or whatever path/file that the GUI outputs
 
-        print(destinationDir)
 
         ### Step 4: Code generation
         # Construct StatisticalModel from JSON spec
@@ -47,8 +46,9 @@ def generateCode(
         # # Write generated code out
 
         # path = write_to_script(code, destinationDir, "model.py")
-        # return path
+        path = "model.R"
+        return path
 
-# inputFile = "gui/example_inputs/main_only.json"
+# inputFile = "input2.json" # Output after disambiguating conceptual model
 inputFile = "examples/json/mainEffectsOnly.json"
 tg.start_app(input=inputFile, generateCode=generateCode)

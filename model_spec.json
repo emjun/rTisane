@@ -1,0 +1,8 @@
+{
+    "dependent variable": "measure_2",
+    "family": "Gaussian",
+    "interaction effects": [],
+    "link": "log",
+    "main effects": [],
+    "random effects": {}
+}
