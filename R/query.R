@@ -8,8 +8,7 @@
 #' @param dv AbstractVariable. Variable whose outcome we want to assess.
 #' @keywords
 #' @export
-#' @examples
-#' query()
+# query()
 setGeneric("query", function(conceptualModel, iv, dv) standardGeneric("query"))
 setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
 {
@@ -20,13 +19,10 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
 
   ### Step 1: Disambiguation round 1
   #### A: How to treat DV? (as Continuous, Count, Categories), B: Check + Ask for "causes"-level of info
+  #### Check ConceptualModel during disambiguation
   updates <- processQuery(conceptualModel=conceptualModel, iv=iv, dv=dv)
   dvUpdated <- updates$updatedDV
   cmUpdated <- updates$updatedConceptualModel
-
-  ## LOOK UP: Validation in Shiny?
-  ## TODO: Should check ConceptualModel during disambiguation
-  checkConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
 
   #### ????Step 1C: Data collection checks
 
@@ -43,6 +39,12 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
 
   # Output JSON file
   json_file <- NULL
+
+  # START HERE: How to run existing Tisane GUI from here? Bash  script?
+  # START with examples from Tisane (with existing JSON) and seeee
+  # Then: Generate JSON, update disambiguation (e.g., no main effects selection)
+  # Last: Generate code
+  # Once all the individual pieces working, try end-to-end with IHME dataset
 
   ### Step 3: Disambiguation loop (GUI)
   # TODO: Call bash script to run GUI
