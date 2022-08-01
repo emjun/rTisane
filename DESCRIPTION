@@ -25,7 +25,8 @@ Imports:
     dagitty,
     stringr,
     shiny,
-    reticulate
+    reticulate,
+    shinyjs
 Collate: 
     'aaa-classes.R'
     'condition.R'

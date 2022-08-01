@@ -165,9 +165,9 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
       # map(col_names(), ~ selectInput(.x, NULL, choices = c("A --> B", "A <-- B")))
     })
 
-    output$palette <- renderText({
-      purrr::map_chr(uncertainRelationships, ~ input[[.x]] %||% "")
-    })
+    # output$palette <- renderText({
+    #   purrr::map_chr(uncertainRelationships, ~ input[[.x]] %||% "")
+    # })
 
     # # Update graph vis
     # output$cmGraph <- renderPlot({

@@ -4,7 +4,7 @@
 #' @param unit Unit object. Unit that has/contributes the ordinal measure.
 #' @param name Character. Name of measure, corresponds to column name in data.
 #' @param order List. Ordered list of categories.
-#' @param cardinality. Integer. Optional. Only required if no data is assigned. If provided, checked to make sure @param cardinality == length(@param order)
+#' @param cardinality. Integer. Optional. Only required if no data is assigned. If provided, value to make sure @param cardinality == length(@param order)
 #' @param number_of_instances Integer or AbstractVariable or AtMost or Per. Number of instances of the measure the @param unit has. Default is 1.
 #' @return Has Relationship representing Unit having the Nominal Measure.
 #' @keywords
