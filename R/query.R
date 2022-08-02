@@ -33,14 +33,16 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   confounders <- inferConfounders(conceptualModel=cmUpdated, iv=iv, dv=dv)
   # main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
 
+  interactions <- inferInteractions(conceptualModel=cmUpdated, iv=iv, dv=dv)
   # interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design, main_effects)
+  randomEffects <- inferRandomEffects(conceptualModel=cmUpdated, iv=iv, dv=dv)
   # random_effects <- infer_random_effects_with_explanations(measurement_gr, nests_gr, design, all_relationships, main_effects, interaction_effects)
 
   familyLinkFunctions <- inferFamilyLinkFunctions(dvUpdated)
 
   ### Step 3: Statistical Model Disambiguation (GUI)
-  ## Call Python script to create and run disambiguation process 
-  code <- processStatisticalModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
+  ## Call Python script to create and run disambiguation process
+  code <- processStatisticalModels(confounders=confounders, interactions=interactions, randomEffects=randomEffects, familyLinkFunctions=familyLinkFunctions, iv=iv, dv=dv)
   ### Step 4: Code generation
   # TODO: Generate code
 })

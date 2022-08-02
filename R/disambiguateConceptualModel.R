@@ -51,7 +51,6 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
       ),
       tabPanel("Conceptual model",
                p("This is what your conceptual model looks like:"),
-               p("WBN: Visualization of conceptual model, look into dynamic vis"),
                plotOutput('cmGraph'),
                uiOutput("cmQuestions"),
                div(
@@ -67,38 +66,9 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
   #### Specify server ------
   server = function(input, output) {
 
-    # Get data to update graph vis, validate conceptual model, etc.
-    data  <- reactive({
-      # Get user input
-      lapply(1:length(uncertainRelationships), function(i) {
-        cmInputs$uncertainRelationships[[i]] <- input[[uncertainRelationships[[i]]]]
-      })
-      relationships <- list(uncertainRelationships = cmInputs$uncertainRelationships)
-
-      # Use it to update the conceptual model + graph
-      cm <- updateConceptualModel(conceptualModel, relationships)
-
-      return (cm)
-    })
-
-    # Update graph vis based on selection
-    observe({
-      cmUpdated = data() # get data
-      gr = updateGraph(cmUpdated)
-
-      ## Update data vis for DV
-      # Is there data?
-      if (!is.null(df)) {
-        output$dvSummary <- renderText({paste(dvName, " looks like this:")})
-
-        colnames = names(df)
-        stopifnot(c(dvName) %in% colnames)
-        output$dvHist <- renderPlot({
-          hist(df[dvName])
-        })
-      }
-
-      ## Update graph vis
+    ## We don't need to disambiguate the conceptual model
+    if (is.null(uncertainRelationships)) {
+      gr = conceptualModel@graph
       e <- edges(gr)
       # Is the graph empty (has no edges)?
       if (length(e) > 0) {
@@ -109,38 +79,84 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
         # gr is NULL
         output$cmGraph <- renderPlot({})
       }
+    }
 
-    })
-
-    # Validate conceptual model, inform user
-    observe({
-      cmUpdated = data() # get data
-      # cmUpdated <- updateGraph(cmUpdated) # update graph
-
-      e <- edges(cmUpdated@graph)
-      # Is the graph empty (has no edges)?
-      if (length(e) > 0) {
-        # Check conceptual model
-        cmValidationRes <- checkConceptualModel(conceptualModel=cmUpdated, iv=iv, dv=dv)
-      }
-      if (isFALSE(cmValidationRes$isValid)) {
-        warning <- paste("Error!:", cmValidationRes$reason, sep=" ")
-
-        output$cmValidation <- renderText({
-          warning
+    ## We need to disambiguate the update the conceptual model
+    # Get data to update graph vis, validate conceptual model, etc.
+    if (!is.null(uncertainRelationships)) {
+      data  <- reactive({
+        # Get user input
+        lapply(1:length(uncertainRelationships), function(i) {
+          cmInputs$uncertainRelationships[[i]] <- input[[uncertainRelationships[[i]]]]
         })
+        relationships <- list(uncertainRelationships = cmInputs$uncertainRelationships)
 
-        # Hide submit button
-      shinyjs::hide("submit")
-      } else {
+        # Use it to update the conceptual model + graph
+        cm <- updateConceptualModel(conceptualModel, relationships)
+
+        return (cm)
+      })
+
+      # Update graph vis based on selection
+      observe({
+        cmUpdated = data() # get data
+        browser()
+        gr = updateGraph(cmUpdated)
+
+        ## Update data vis for DV
+        # Is there data?
+        if (!is.null(df)) {
+          output$dvSummary <- renderText({paste(dvName, " looks like this:")})
+
+          colnames = names(df)
+          stopifnot(c(dvName) %in% colnames)
+          output$dvHist <- renderPlot({
+            hist(df[dvName])
+          })
+        }
+
+        ## Update graph vis
+        e <- edges(gr)
+        # Is the graph empty (has no edges)?
+        if (length(e) > 0) {
+          output$cmGraph <- renderPlot({
+            plot(graphLayout(gr))
+          })
+        } else {
+          # gr is NULL
+          output$cmGraph <- renderPlot({})
+        }
+
+      })
+
+      # Validate conceptual model, inform user
+      observe({
+        cmUpdated = data() # get data
+        # cmUpdated <- updateGraph(cmUpdated) # update graph
+
+        e <- edges(cmUpdated@graph)
+        # Is the graph empty (has no edges)?
+        if (length(e) > 0) {
+          # Check conceptual model
+          cmValidationRes <- checkConceptualModel(conceptualModel=cmUpdated, iv=iv, dv=dv)
+        }
+        if (isFALSE(cmValidationRes$isValid)) {
+          warning <- paste("Error!:", cmValidationRes$reason, sep=" ")
+
           output$cmValidation <- renderText({
-        })
-        # Show submit button
-        shinyjs::show("submit")
-      }
-    })
+            warning
+          })
 
-
+          # Hide submit button
+          shinyjs::hide("submit")
+        } else {
+          output$cmValidation <- renderText({
+          })
+          # Show submit button
+          shinyjs::show("submit")
+        }
+      })
+    }
 
     #### DV -----
     # Visualize DV if there is data
@@ -182,29 +198,39 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
 
     #### Return values -----
     # Toggle Submit button based on validation of conceptual model
-    # observe({
-    #   shinyjs::hide("submit")
 
-    #   if(cmValidationRes)
-    #     shinyjs::show("submit")
-    # })
-    # Collect input for conceptual model
-    # Based off of: https://stackoverflow.com/questions/51531006/access-a-dynamically-generated-input-in-r-shiny
-    cmInputs <- reactiveValues(uncertainRelationships=NULL)
-    observeEvent(input$submit, {
-      lapply(1:length(uncertainRelationships), function(i) {
-        cmInputs$uncertainRelationships[[i]] <- input[[uncertainRelationships[[i]]]]
+    ## There are no uncertain relationships to capture
+    if (is.null(uncertainRelationships)) {
+      observeEvent(input$submit, {
+        # Capture the updated DV data type
+        dvType <- observe(paste(input$dvType))
+
+        # Make named list of values to return
+        res <- list(uncertainRelationships = NULL, dvName=dvName, dvType=input$dvType)
+
+        # Return updated values
+        stopApp(res) # returns whatever is passed as a parameter
       })
+    } else {
+      stopifnot(!is.null(uncertainRelationships))
+      # Collect input for conceptual model
+      # Based off of: https://stackoverflow.com/questions/51531006/access-a-dynamically-generated-input-in-r-shiny
+      cmInputs <- reactiveValues(uncertainRelationships=NULL)
+      observeEvent(input$submit, {
+        lapply(1:length(uncertainRelationships), function(i) {
+          cmInputs$uncertainRelationships[[i]] <- input[[uncertainRelationships[[i]]]]
+        })
 
-      # Capture the updated DV data type
-      dvType=input$dvType
+        # Capture the updated DV data type
+        dvType=input$dvType
 
-      # Make named list of values to return
-      res <- list(uncertainRelationships = cmInputs$uncertainRelationships, dvName=dvName, dvType=input$dvType)
+        # Make named list of values to return
+        res <- list(uncertainRelationships = cmInputs$uncertainRelationships, dvName=dvName, dvType=input$dvType)
 
-      # Return updated values
-      stopApp(res) # returns whatever is passed as a parameter
-    })
+        # Return updated values
+        stopApp(res) # returns whatever is passed as a parameter
+      })
+    }
 
     #### For DEBUGGING -----
     # output$activeTab <- renderText({

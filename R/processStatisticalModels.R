@@ -5,11 +5,13 @@
 #' @param interactions list of interaction effects to consider including in the statistical model. Optional.
 #' @param randomEffects list of random effects to include in the statistical model to maximize generalizability. Optional.
 #' @param familyLinkFunctions list of family and link functions to consider.
-#' @param path Path or character. Where to write the JSON to.
+#' @param iv AbstractVariable whose influence on @param dv we are interested in.
+#' @param dv AbstractVariable whose outcome we are interested in.
+#' @param path Path-like or character. Path to write out the JSON.
 #' @import jsonlite
 #' @keywords
 # generateStatisticalModelJSON()
-generateStatisticalModelJSON <- function(confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions, path, iv, dv) {
+generateStatisticalModelJSON <- function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, path) {
     #### Generate main effects list from confounders
     stopifnot(!is.null(confounders))
     generatedMainEffects=confounders
@@ -21,16 +23,18 @@ generateStatisticalModelJSON <- function(confounders, interactions=NULL, randomE
     generatedInteractionEffects = list()
 
     # Are there interaction effects to consider?
-    if (!is.null(interactions)) {
+    if (length(interactions) > 0) {
         cat('IMPLEMENT interactions')
         browser()
     }
 
     #### Generate options for random effects
-    generatedRandomEffects = data.frame(randomEffects=character())
+    # generatedRandomEffects = data.frame(randomSlopes=c("", ""), randomIntercepts=c("", ""))
+    # generatedRandomEffects = data.frame(character()) # Empty dataframe
+    generatedRandomEffects = list(list())
 
     # Are there any random effects to consider?
-    if (!is.null(randomEffects)) {
+    if (length(randomEffects) > 0) {
         cat('IMPLEMENT random effects')
         browser()
     }
@@ -38,9 +42,6 @@ generateStatisticalModelJSON <- function(confounders, interactions=NULL, randomE
     #### Generate options for family and link functions
     stopifnot(!is.null(familyLinkFunctions))
     generatedFamilyLinkFunctions = familyLinkFunctions
-
-
-
 
 
     #### Create query
@@ -71,17 +72,20 @@ generateStatisticalModelJSON <- function(confounders, interactions=NULL, randomE
 #' Elicit additional information about to narrow the space of candidate statistical models to a final output one.
 #'
 #' This function disambiguates the Statistical Model.
-#' @param conceptualModel ConceptualModel. Contains causal graph to process.
-#' @param iv AbstractVariable. Independent variable whose influence on @param dv we want to assess.
-#' @param dv AbstractVariable. Dependent variable.
+#' @param confounders list of confounders to include in the statistical model.
+#' @param interactions list of interaction effects to consider including in the statistical model. Optional.
+#' @param randomEffects list of random effects to include in the statistical model to maximize generalizability. Optional.
+#' @param familyLinkFunctions list of family and link functions to consider.
+#' @param iv AbstractVariable whose influence on @param dv we are interested in.
+#' @param dv AbstractVariable whose outcome we are interested in.
 #' @return
 #' @keywords
 # processStatisticalModels()
-setGeneric("processStatisticalModels", function(conceptualModel, iv, dv) standardGeneric("processStatisticalModels"))
-setMethod("processStatisticalModels", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
+setGeneric("processStatisticalModels", function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv) standardGeneric("processStatisticalModels"))
+setMethod("processStatisticalModels", signature("list", "list", "list", "list", "AbstractVariable", "AbstractVariable"), function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv)
 {
     # Write candidate statistical models to JSON, which is read to create disambiguation GUI
-    path <- generateStatisticalModelJSON(conceptualModel, dv, "input2.json")
+    path <- generateStatisticalModelJSON(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, "input2.json")
 
     # Start up disambiguation process
     inputFilePath <- path

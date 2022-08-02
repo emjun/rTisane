@@ -143,12 +143,19 @@ getVariable <- function(conceptualModel, name) {
 #' Updates Conceptual model based on analyst input during disambiguation
 #' @param conceptualModel ConceptualModel to update.
 #' @param values ReactiveValues from disambiguating DV type.
-#' @import stringr 
+#' @import stringr
 #' @keywords
 # updateConceptualModel()
 updateConceptualModel <- function(conceptualModel, values) {
   newRelat <- values$uncertainRelationships
 
+  # Are there any new relationships to process?
+  # There are no relationships to process. Return the original conceptual model
+  if (is.null(newRelat)) {
+    return(conceptualModel)
+  }
+  # else
+  # There are relationships to process.
   for (nr in newRelat) {
     assump <- FALSE
     # Is this an Assumption or Hypothesis?
@@ -247,8 +254,8 @@ updateConceptualModel <- function(conceptualModel, values) {
 #'
 #' This function disambiguates the Conceptual Model before using it in future query steps.
 #' @param conceptualModel ConceptualModel. Contains causal graph to process.
-#' @param iv AbstractVariable. Independent variable whose influence on @param dv we want to assess. 
-#' @param dv AbstractVariable. Dependent variable. 
+#' @param iv AbstractVariable. Independent variable whose influence on @param dv we want to assess.
+#' @param dv AbstractVariable. Dependent variable.
 #' @return
 #' @keywords
 # processQuery()

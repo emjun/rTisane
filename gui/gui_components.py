@@ -148,7 +148,9 @@ class GUIComponents:
             }
             pass
         randomEffects = self.getGeneratedRandomEffects()
-        for unit, re in randomEffects.items():
+        # for unit, re in randomEffects.items():
+        for randomEff in randomEffects: 
+            unit, re = randomEff
             self.output["random effects"][unit] = {}
             if "random intercept" in re:
                 self.output["random effects"][unit]["random intercept"] = re[
@@ -165,7 +167,9 @@ class GUIComponents:
         self.randomInterceptIdToGroup = {}
         self.randomSlopeAddedIdToGroupIv = {}
         self.randomSlopeIdToGroupIv = {}
-        for unit, re in randomEffects.items():
+        # for unit, re in randomEffects.items():
+        for randomEff in randomEffects: 
+            unit, re = randomEff
             if "random intercept" in re:
                 infoId = self.getNewComponentId()
                 cellId = self.getNewComponentId()
@@ -315,6 +319,9 @@ class GUIComponents:
             "random effects": {},
         }
         if "random effects" in self.output:
+            pass
+            # for randomEff in randomEffects: 
+            #     group, randomEffect = randomEff
             for group, randomEffects in self.output["random effects"].items():
                 groupDict = {}
                 if "random intercept" in randomEffects:
@@ -393,6 +400,7 @@ class GUIComponents:
         return False
 
     def getRandomInterceptCellIds(self):
+        print(self.randomIntercepts)
         return [ri["cell-id"] for group, ri in self.randomIntercepts.items()]
 
     def getRandomEffectAddedGroupingIds(self):
@@ -765,7 +773,9 @@ class GUIComponents:
         if self.hasRandomEffects():
             randomEffects = self.getGeneratedRandomEffects()
             info = []
-            for group, randomEffect in randomEffects.items():
+            # for group, randomEffect in randomEffects.items():
+            for randomEff in randomEffects: 
+                group, randomEffect = randomEff
                 titleId = self.getNewComponentId()
                 self.unitsByAddedRandomVariableId[titleId] = group
                 titleElement = html.H6(
@@ -851,9 +861,8 @@ class GUIComponents:
         ]
 
     def hasRandomEffects(self):
-        if self.getGeneratedRandomEffects():
-            return True
-        return False
+        randomEffects = self.getGeneratedRandomEffects()
+        return len(randomEffects) > 0
 
     def hasInteractionEffects(self):
         if self.getGeneratedInteractionEffects():
@@ -1789,41 +1798,42 @@ class GUIComponents:
                 )
                 pass
             pass
-        for group, data in self.randomIntercepts.items():
-            key = "{},RandomIntercept".format(group)
-            if key in explanations and "info-id" in data:
-                popovers.append(
-                    dbc.Popover(
-                        [
-                            dbc.PopoverHeader("Random Intercept: {}".format(group)),
-                            dbc.PopoverBody(
-                                html.Ul([html.Li(expl) for expl in explanations[key]])
-                            ),
-                        ],
-                        target=data["info-id"],
-                        trigger="hover",
-                    )
-                )
-                pass
-            pass
-        for group, rsData in self.randomSlopes.items():
-            for iv, ivData in rsData.items():
-                key = "{}, {}, RandomSlope".format(group, iv)
-                if key in explanations and "info-id" in ivData:
-                    popovers.append(
-                        dbc.Popover(
-                            [
-                                dbc.PopoverHeader("Random Slope: {}".format(iv)),
-                                dbc.PopoverBody(
-                                    html.Ul(
-                                        [html.Li(expl) for expl in explanations[key]]
-                                    )
-                                ),
-                            ],
-                            target=ivData["info-id"],
-                            trigger="hover",
-                        )
-                    )
+        # TODO: Add back in for RANDOM EFFECTS
+        # for group, data in self.randomIntercepts.items():
+        #     key = "{},RandomIntercept".format(group)
+        #     if key in explanations and "info-id" in data:
+        #         popovers.append(
+        #             dbc.Popover(
+        #                 [
+        #                     dbc.PopoverHeader("Random Intercept: {}".format(group)),
+        #                     dbc.PopoverBody(
+        #                         html.Ul([html.Li(expl) for expl in explanations[key]])
+        #                     ),
+        #                 ],
+        #                 target=data["info-id"],
+        #                 trigger="hover",
+        #             )
+        #         )
+        #         pass
+        #     pass
+        # for group, rsData in self.randomSlopes.items():
+        #     for iv, ivData in rsData.items():
+        #         key = "{}, {}, RandomSlope".format(group, iv)
+        #         if key in explanations and "info-id" in ivData:
+        #             popovers.append(
+        #                 dbc.Popover(
+        #                     [
+        #                         dbc.PopoverHeader("Random Slope: {}".format(iv)),
+        #                         dbc.PopoverBody(
+        #                             html.Ul(
+        #                                 [html.Li(expl) for expl in explanations[key]]
+        #                             )
+        #                         ),
+        #                     ],
+        #                     target=ivData["info-id"],
+        #                     trigger="hover",
+        #                 )
+        #             )
         return popovers
 
     def createCodeGenerationModal(self):

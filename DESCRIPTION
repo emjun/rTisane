@@ -53,7 +53,6 @@ Collate:
     'increases.R'
     'notEquals.R'
     'processQuery.R'
-    'query.R'
     'relates.R'
     'updateGraph.R'
     'whenThen.R'
@@ -65,3 +64,4 @@ Collate:
     'disambiguateConceptualModel.R'
     'disambiguateStatisticalModel.R'
     'processStatisticalModels.R'
+    'query.R'
