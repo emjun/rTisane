@@ -38,12 +38,10 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
     tabsetPanel(
       id = "tabset",
       tabPanel("Dependent variable",
-               # fileInput("file", "Data", buttonLabel = "Upload..."),
+               selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
                # Info about dependent variable ---
-               p(paste("Dependent variable:", dvName)),
                textOutput("dvSummary"),
                plotOutput('dvHist'),
-               selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
 
                # textInput("delim", "Delimiter (leave blank to guess)", ""),
                # numericInput("skip", "Rows to skip", 0, min = 0),

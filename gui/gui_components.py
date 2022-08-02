@@ -998,7 +998,8 @@ class GUIComponents:
                             dbc.Checkbox(
                             id=componentIdSetter(name),
                             className="form-check-input",
-                            value=valueDict[name],
+                            # value=valueDict[name],
+                            value=True
                         ),
                         dbc.Label(
                             label,

@@ -60,6 +60,8 @@ Collate:
     'asCounts.R'
     'asCategories.R'
     'inferConfounders.R'
+    'inferInteractions.R'
+    'inferRandomEffects.R'
     'inferFamilyLinkFunctions.R'
     'disambiguateConceptualModel.R'
     'disambiguateStatisticalModel.R'
