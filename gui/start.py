@@ -49,6 +49,6 @@ def generateCode(
         path = "model.R"
         return path
 
-# inputFile = "input2.json" # Output after disambiguating conceptual model
-inputFile = "examples/json/mainEffectsOnly.json"
+inputFile = "input2.json" # Output after disambiguating conceptual model
+# inputFile = "examples/json/mainEffectsOnly.json"
 tg.start_app(input=inputFile, generateCode=generateCode)

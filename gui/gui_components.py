@@ -750,7 +750,11 @@ class GUIComponents:
         return self.data["input"]["generatedInteractionEffects"]
 
     def getGeneratedRandomEffects(self):
-        return self.data["input"]["generatedRandomEffects"]
+        gre = self.data["input"]["generatedRandomEffects"]
+        if " " in gre.keys():
+            return dict()
+        else: 
+            return self.data["input"]["generatedRandomEffects"]
 
     def getGeneratedFamilyLinkFunctions(self):
         return self.data["input"]["generatedFamilyLinkFunctions"]

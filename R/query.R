@@ -10,8 +10,8 @@
 #' @keywords
 #' @export
 # query()
-setGeneric("query", function(conceptualModel, iv, dv) standardGeneric("query"))
-setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
+setGeneric("query", function(conceptualModel, iv, dv, data) standardGeneric("query"))
+setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "missing"), function(conceptualModel, iv, dv, data)
 {
 
   ### Step 0: Update graph

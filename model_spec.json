@@ -1,8 +1,10 @@
 {
-    "dependent variable": "measure_2",
+    "dependent variable": "measure_1",
     "family": "Gaussian",
     "interaction effects": [],
     "link": "identity",
-    "main effects": [],
+    "main effects": [
+        "measure_0"
+    ],
     "random effects": {}
 }

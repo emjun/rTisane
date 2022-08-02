@@ -55,3 +55,5 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 15. - Is there anything we can do with the hyper-specific information end-users provide? (maybe for interpretation?)
 
 16. How much control to give the end-user in terms of main effects to include? Should we make main effect selection in the Tisane GUI optional checkboxes? Maybe have them all selected first and then allow the end-user to de-select? 
+
+17. Check/Validate choice of Continuous/Categories/Counts

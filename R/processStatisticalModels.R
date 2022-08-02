@@ -15,6 +15,8 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
     #### Generate main effects list from confounders
     stopifnot(!is.null(confounders))
     generatedMainEffects=confounders
+    # Add IV 
+    generatedMainEffects <- append(generatedMainEffects, iv@name)
 
     # Populate list to output
     # output <- list(generatedMainEffects=generatedMainEffects)
@@ -31,7 +33,7 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
     #### Generate options for random effects
     # generatedRandomEffects = data.frame(randomSlopes=c("", ""), randomIntercepts=c("", ""))
     # generatedRandomEffects = data.frame(character()) # Empty dataframe
-    generatedRandomEffects = list(list())
+    generatedRandomEffects = list(" "=list())
 
     # Are there any random effects to consider?
     if (length(randomEffects) > 0) {

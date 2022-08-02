@@ -16,4 +16,4 @@ path = file.path(getwd(), "examples", "json", fileName)
 
 # Data file
 dataPath = NULL
-updates <- disambiguateStatisticalModel(inputFilePath=path)
+updates <- disambiguateStatisticallModel(inputFilePath="input2.json")
