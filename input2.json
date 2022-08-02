@@ -1,0 +1,1 @@
+{"input":{"generatedMainEffects":[],"generatedInteractionEffects":[],"generatedRandomEffects":[[]],"generatedFamilyLinkFunctions":{"Gaussian":["identity","log","inverse"]},"query":{"DV":"measure_1","IVs":["measure_0"]}}}
