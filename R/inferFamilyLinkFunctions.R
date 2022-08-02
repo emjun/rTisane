@@ -45,7 +45,7 @@ inferFamilyFunctions <- function(dv) {
 # inferLinkFunctions()
 inferLinkFunctions <- function(family) {
   linkFunctions = list()
-  if (family == "binomial") {
+  if (family == "Binomial") {
     linkFunctions <- append(linkFunctions, "logit") # default (logistic CDF)
     linkFunctions <- append(linkFunctions, "probit") # normal CDF
     linkFunctions <- append(linkFunctions, "cauchit") # Cauchy CDF
@@ -55,25 +55,25 @@ inferLinkFunctions <- function(family) {
     linkFunctions <- append(linkFunctions, "inverse") # default
     linkFunctions <- append(linkFunctions, "identity")
     linkFunctions <- append(linkFunctions, "log")
-  } else if (family == "gaussian") {
+  } else if (family == "Gaussian") {
     linkFunctions <- append(linkFunctions, "identity") # default
     linkFunctions <- append(linkFunctions, "log")
     linkFunctions <- append(linkFunctions, "inverse")
-  } else if (family == "inverse.gaussian") {
+  } else if (family == "Inverse Gaussian") {
     linkFunctions <- append(linkFunctions, "1/mu^2") # default
     linkFunctions <- append(linkFunctions, "inverse")
     linkFunctions <- append(linkFunctions, "identity")
     linkFunctions <- append(linkFunctions, "log")
-  } else if (family == "negativeBinomial") { # uses glm.nb
+  } else if (family == "Negative Binomial") { # uses glm.nb
     linkFunctions <- append(linkFunctions, "log") # default
     linkFunctions <- append(linkFunctions, "sqrt")
     linkFunctions <- append(linkFunctions, "identity")
-  } else if (family == "poisson") {
+  } else if (family == "Poisson") {
     linkFunctions <- append(linkFunctions, "log") # default
     linkFunctions <- append(linkFunctions, "identity")
     linkFunctions <- append(linkFunctions, "sqrt")
   } else {
-    stopifnot(family == "multinomial")
+    stopifnot(family == "Multinomial")
     # TODO: Fill in with link options
   }
 

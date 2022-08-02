@@ -1,5 +1,5 @@
 #context("Variable declaration and construction")
-library(tisaner)
+library(rTisane)
 
 test_that("AbstractVariable created properly", {
   #var <- new("AbstractVariable", name="name")

@@ -1,4 +1,4 @@
-library(tisaner)
+library(rTisane)
 
 # Construct Conceptual Model
 cm <- ConceptualModel()

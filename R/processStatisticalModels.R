@@ -5,7 +5,7 @@
 #' @param interactions list of interaction effects to consider including in the statistical model. Optional.
 #' @param randomEffects list of random effects to include in the statistical model to maximize generalizability. Optional.
 #' @param familyLinkFunctions list of family and link functions to consider.
-#' @param path Path or character. Where to write the JSON to. 
+#' @param path Path or character. Where to write the JSON to.
 #' @import jsonlite
 #' @keywords
 # generateStatisticalModelJSON()
@@ -18,18 +18,18 @@ generateStatisticalModelJSON <- function(confounders, interactions=NULL, randomE
     # output <- list(generatedMainEffects=generatedMainEffects)
 
     #### Generate options for interaction effects
-    generatedInteractionEffects = list() 
+    generatedInteractionEffects = list()
 
-    # Are there interaction effects to consider? 
+    # Are there interaction effects to consider?
     if (!is.null(interactions)) {
         cat('IMPLEMENT interactions')
         browser()
     }
 
     #### Generate options for random effects
-    generatedRandomEffects = as.data.frame() 
+    generatedRandomEffects = data.frame(randomEffects=character())
 
-    # Are there any random effects to consider? 
+    # Are there any random effects to consider?
     if (!is.null(randomEffects)) {
         cat('IMPLEMENT random effects')
         browser()
@@ -43,7 +43,7 @@ generateStatisticalModelJSON <- function(confounders, interactions=NULL, randomE
 
 
 
-    #### Create query 
+    #### Create query
     query = list(DV=dv@name, IVs=list(iv@name))
 
     ##### Create measures-to-units mapping
@@ -68,12 +68,12 @@ generateStatisticalModelJSON <- function(confounders, interactions=NULL, randomE
 
 
 
-#' Elicit additional information about to narrow the space of candidate statistical models to a final output one. 
+#' Elicit additional information about to narrow the space of candidate statistical models to a final output one.
 #'
 #' This function disambiguates the Statistical Model.
 #' @param conceptualModel ConceptualModel. Contains causal graph to process.
-#' @param iv AbstractVariable. Independent variable whose influence on @param dv we want to assess. 
-#' @param dv AbstractVariable. Dependent variable. 
+#' @param iv AbstractVariable. Independent variable whose influence on @param dv we want to assess.
+#' @param dv AbstractVariable. Dependent variable.
 #' @return
 #' @keywords
 # processStatisticalModels()
@@ -88,12 +88,12 @@ setMethod("processStatisticalModels", signature("ConceptualModel", "AbstractVari
     dataPath = NULL # TODO: update
     disambiguateStatisticallModel(inputFilePath=path) #, dataPath=dataPath)
 
-    # Necesssary? Create a Statistical Model object 
+    # Necesssary? Create a Statistical Model object
     # sm <- constructStatisticalModel(values)
 
     # Generate code
     # codePath <- generateCode(sm)
 
     # Return path to generated code
-    # codePath 
+    # codePath
 })

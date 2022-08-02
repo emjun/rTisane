@@ -1,4 +1,4 @@
-library(tisaner)
+library(rTisane)
 
 test_that("Creates Continuous measure wrapper properly", {
   participant <- Participant("pid", cardinality=40)
@@ -60,35 +60,35 @@ test_that("Infers candidate family functions properly", {
   cont <- asContinuous(measure=age)
   familyFunctions <- inferFamilyFunctions(cont)
   expect_length(familyFunctions, 1)
-  expect_equal(familyFunctions[[1]], "gaussian")
+  expect_equal(familyFunctions[[1]], "Gaussian")
 
   cont <- asContinuous(measure=age)
   cont@skew = "positive"
   familyFunctions <- inferFamilyFunctions(cont)
   expect_length(familyFunctions, 2)
-  expect_true(c("inverse.gaussian") %in% familyFunctions)
+  expect_true(c("Inverse Gaussian") %in% familyFunctions)
   expect_true(c("Gamma") %in% familyFunctions)
 
   # Infer family functions for Counts measures
   count <- asCounts(measure=age)
   familyFunctions <- inferFamilyFunctions(count)
   expect_length(familyFunctions, 2)
-  expect_true(c("poisson") %in% familyFunctions)
-  expect_true(c("negativeBinomial") %in% familyFunctions)
+  expect_true(c("Poisson") %in% familyFunctions)
+  expect_true(c("Negative Binomial") %in% familyFunctions)
 
   # Infer family functions for Categories measures
   cat <- asCategories(measure=grade_binary)
   familyFunctions <- inferFamilyFunctions(cat)
   expect_length(familyFunctions, 1)
-  expect_equal(familyFunctions[[1]], "binomial")
+  expect_equal(familyFunctions[[1]], "Binomial")
   cat <- asCategories(measure=grade)
   familyFunctions <- inferFamilyFunctions(cat)
   expect_length(familyFunctions, 1)
-  expect_equal(familyFunctions[[1]], "multinomial")
+  expect_equal(familyFunctions[[1]], "Multinomial")
 })
 
 test_that("Infers candidate link functions properly", {
-  linkFunctions <- inferLinkFunctions("binomial")
+  linkFunctions <- inferLinkFunctions("Binomial")
   expect_length(linkFunctions, 5)
   expect_true(c("logit") %in% linkFunctions)
   expect_true(c("probit") %in% linkFunctions)
@@ -102,32 +102,32 @@ test_that("Infers candidate link functions properly", {
   expect_true(c("identity") %in% linkFunctions)
   expect_true(c("log") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("gaussian")
+  linkFunctions <- inferLinkFunctions("Gaussian")
   expect_length(linkFunctions, 3)
   expect_true(c("identity") %in% linkFunctions)
   expect_true(c("log") %in% linkFunctions)
   expect_true(c("inverse") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("inverse.gaussian")
+  linkFunctions <- inferLinkFunctions("Inverse Gaussian")
   expect_length(linkFunctions, 4)
   expect_true(c("1/mu^2") %in% linkFunctions)
   expect_true(c("inverse") %in% linkFunctions)
   expect_true(c("identity") %in% linkFunctions)
   expect_true(c("log") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("negativeBinomial")
+  linkFunctions <- inferLinkFunctions("Negative Binomial")
   expect_length(linkFunctions, 3)
   expect_true(c("log") %in% linkFunctions)
   expect_true(c("sqrt") %in% linkFunctions)
   expect_true(c("identity") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("poisson")
+  linkFunctions <- inferLinkFunctions("Poisson")
   expect_length(linkFunctions, 3)
   expect_true(c("log") %in% linkFunctions)
   expect_true(c("identity") %in% linkFunctions)
   expect_true(c("sqrt") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("multinomial")
+  linkFunctions <- inferLinkFunctions("Multinomial")
   expect_length(linkFunctions, 0)
 })
 
@@ -140,15 +140,15 @@ test_that("Infer Family and Link functions properly", {
   familyCandidates <- inferFamilyFunctions(cont)
   expect_equal(length(familyLinkPairs), length(familyCandidates))
   expect_length(familyLinkPairs, 1)
-  expect_equal(familyLinkPairs[["gaussian"]], inferLinkFunctions("gaussian"))
+  expect_equal(familyLinkPairs[["Gaussian"]], inferLinkFunctions("Gaussian"))
 
   count <- asCounts(measure=age)
   familyLinkPairs <- inferFamilyLinkFunctions(count)
   familyCandidates <- inferFamilyFunctions(count)
   expect_equal(length(familyLinkPairs), length(familyCandidates))
   expect_length(familyLinkPairs, 2)
-  expect_equal(familyLinkPairs[["poisson"]], inferLinkFunctions("poisson"))
-  expect_equal(familyLinkPairs[["negativeBinomial"]], inferLinkFunctions("negativeBinomial"))
+  expect_equal(familyLinkPairs[["Poisson"]], inferLinkFunctions("Poisson"))
+  expect_equal(familyLinkPairs[["Negative Binomial"]], inferLinkFunctions("Negative Binomial"))
 })
 # test_that("Asks questions to disambiguate variables properly", {
 #

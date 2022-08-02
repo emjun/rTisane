@@ -1,4 +1,4 @@
-Package: tisaner
+Package: rTisane
 Title: Tisane for R: Authoring Statistical Models via Formal Reasoning from Conceptual and Data Relationships 
 Version: 0.0.1
 Authors@R: 
@@ -63,3 +63,5 @@ Collate:
     'inferConfounders.R'
     'inferFamilyLinkFunctions.R'
     'disambiguateConceptualModel.R'
+    'disambiguateStatisticalModel.R'
+    'processStatisticalModels.R'

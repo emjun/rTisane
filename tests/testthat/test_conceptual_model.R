@@ -1,4 +1,4 @@
-library(tisaner)
+library(rTisane)
 
 test_that("Assume updates Conceptual Model properly", {
   cm <- ConceptualModel()

@@ -1,4 +1,4 @@
-library("tisaner")
+library("rTisane")
 
 # Helper function
 get_graphs <- function(design) {

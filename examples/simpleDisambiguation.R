@@ -1,4 +1,4 @@
-library(tisaner)
+library(rTisane)
 library(dagitty)
 
 # Construct Conceptual Model

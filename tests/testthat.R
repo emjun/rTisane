@@ -1,4 +1,4 @@
 library(testthat)
-library(tisaner)
+library(rTisane)
 
-test_check("tisaner")
+test_check("rTisane")

@@ -1,2 +1,2 @@
-# tisaner
+# rTisane
 Tisane in R
