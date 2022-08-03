@@ -22,7 +22,9 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
   dvName <- jsonData$dvName
   dvType <- jsonData$dvType
   dvOptions <- jsonData$dvOptions
-
+  
+  dvOptionsLabel <- list() 
+  
   # Get Conceptual model info
   graph <- conceptualModel@graph
   cmValidationRes <- list(isValid=TRUE)
@@ -40,7 +42,7 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
 
     fluidRow(
       column(8, offset=2, 
-        titlePanel("🌼 rTisane")
+        titlePanel("rTisane 🥖")
       )
     ),
 

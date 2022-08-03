@@ -2,6 +2,10 @@ library(rTisane)
 
 library(jsonlite)
 
+continuousType <- "Treat as a continuous measure"
+countType <- "Treat as counts"
+categoriesType <- "Treat as categories"
+
 test_that("DV disambiguation options created properly", {
   cm <- ConceptualModel()
 
@@ -19,8 +23,8 @@ test_that("DV disambiguation options created properly", {
 
   expect_equal("Numeric", options$dvClass[[1]])
   expect_equal(measure_1@name, options$dvName[[1]])
-  expect_true("Continuous" %in% options$dvOptions)
-  expect_true("Counts" %in% options$dvOptions)
+  expect_true(continuousType %in% options$dvOptions)
+  expect_true(countType %in% options$dvOptions)
   expect_null(options$ambiguousRelationships) # Does not exist!
   expect_null(options$ambiguousOptions) # Does not exist!
 })
@@ -42,8 +46,8 @@ test_that("Conceptual model disambiguation options created properly", {
 
   expect_equal("Numeric", options$dvClass[[1]])
   expect_equal(measure_1@name, options$dvName[[1]])
-  expect_true("Continuous" %in% options$dvOptions)
-  expect_true("Counts" %in% options$dvOptions)
+  expect_true(continuousType %in% options$dvOptions)
+  expect_true(countType %in% options$dvOptions)
   expect_length(options$ambiguousRelationships, 1)
   expectedKey = paste("Assume", measure_0@name, "is related to", measure_1@name, sep=" ")
   expect_true(expectedKey %in% options$ambiguousRelationships)
@@ -65,8 +69,8 @@ test_that("Conceptual model disambiguation options created properly", {
 
   expect_equal("Numeric", options$dvClass[[1]])
   expect_equal(measure_1@name, options$dvName[[1]])
-  expect_true("Continuous" %in% options$dvOptions)
-  expect_true("Counts" %in% options$dvOptions)
+  expect_true(continuousType %in% options$dvOptions)
+  expect_true(countType %in% options$dvOptions)
   expect_length(options$ambiguousRelationships, 1)
   expectedKey = paste("Hypothesize", measure_0@name, "is related to", measure_1@name, sep=" ")
   expect_true(expectedKey %in% options$ambiguousRelationships)
@@ -87,7 +91,7 @@ test_that("DV updates after disambiguation properly", {
   # Values to update to
   uRelat <- paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
   dvName = measure_1@name
-  dvType = "Continuous"
+  dvType = continuousType
 
   # Create updates list to pass to updateDV function
   updates <- list(dvName=dvName, dvType=dvType)

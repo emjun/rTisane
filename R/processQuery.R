@@ -13,16 +13,16 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
   if (dvClass == "Numeric") {
     # dvOptions <- append(dvOptions, "Continuous")
     # dvOptions <- append(dvOptions, "Counts")
-    dvOptions <- c("Continuous", "Counts")
+    dvOptions <- c("Treat as a continuous measure", "Treat as counts")
   } else if (dvClass == "Ordinal") {
     # dvOptions <- append(dvOptions, "Continuous")
     # dvOptions <- append(dvOptions, "Counts")
     # dvOptions <- append(dvOptions, "Categories")
-    dvOptions <- c("Continuous", "Counts", "Categories")
+    dvOptions <- c("Treat as a continuous measure", "Treat as counts", "Treat as categories")
   } else {
     stopifnot(dvClass == "Nominal")
     # dvOptions <- append(dvOptions, "Categories")
-    dvOptions <- c("Categories")
+    dvOptions <- c("Treat as categories")
   }
 
   # Populate list to output
@@ -93,6 +93,7 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
 #' Casts DV to be Continuous, Counts, or Categories, which is necessary to infer family and link functions
 #' @param dv AbstractVariable to cast.
 #' @param values ReactiveValues from disambiguating DV type.
+#' @import stringr
 #' @keywords
 # updateDV()
 updateDV <- function(dv, values) {
@@ -103,12 +104,13 @@ updateDV <- function(dv, values) {
 
   # Update DV
   updatedDv <- NULL
-  if (dvType == "Continuous") {
+  if (stringr::str_detect(dvType, "continuous")) {
     updatedDv <- asContinuous(dv)
-  } else if (dvType == "Counts") {
+  } else if (stringr::str_detect(dvType, "counts")) {
     updatedDv <- asCounts(dv)
   } else {
-    stopifnot(dvType == "Categories")
+    browser()
+    stopifnot(stringr::str_detect(dvType, "categories"))
     updatedDv <- asCategories(dv)
   }
 
