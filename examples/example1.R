@@ -16,6 +16,6 @@ income <- numeric(unit=pid, name="PINCP")
 cm <- assume(causes(age, income), cm)
 cm <- hypothesize(relates(edu, income), cm)
 
-# Measure 0 is IV, Measure 1 is DV
-# Don't need to disambiguate conceptual model
+# Education is IV, Income is DV
+# Need to disambiguate relationship between Education and Income in conceptual model
 query(conceptualModel=cm, iv=edu, dv=income, data="examples/data/2019_WA_income.csv")
