@@ -4,14 +4,14 @@ Data: No data
 Script: [example0.R](examples/example0.R)
 Status: Working!
 
-# Example 1 (from summative eval dataset)
+# Example 1 (from summative eval Income dataset)
 Relationships: Hypothesize Relates, Assume Causes
 Data: [WA income data](examples/data/2019_WA_income.csv)
 Script: [example1.R](examples/example1.R)
 Notes: 
-- Must disambiguate a direction even for a hypothesized relationship
+- Must disambiguate a direction even for a hypothesized relationship. The directionality helps us to (i) validate the conceptual model and (ii) derive confounders. 
 
-# Example 2 (from summative eval dataset)
+# Example 2 (from summative eval Income dataset)
 Relationships: Relates, Causes, whenThen 
 Data: data
 
