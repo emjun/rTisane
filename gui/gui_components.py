@@ -1671,21 +1671,30 @@ class GUIComponents:
         return family_link_chart
 
     def getDependentVariableType(self):
-        dataInput = self.data["input"]
-        typeKey = "dv type"
+        dataInput = self.data["input"]["dvInfo"]
+        typeKey = "dvType"
         assert (
             typeKey in dataInput
         ), f"Could not find type key {typeKey} in data input {dataInput}"
         return dataInput[typeKey]
 
+    def getDependentVariableTreatAsType(self): 
+        dataInput = self.data["input"]["dvInfo"]
+        treatAsKey = "dvTreatAs"
+        assert (
+            treatAsKey in dataInput
+        ), f"Could not find type key {treatAsKey} in data input {dataInput}"
+        return dataInput[treatAsKey]
+
     def getFamilyLinkFunctionsCard(self):
         ##### Collect all elements
         # Create family and link title
         # familyExplanation = self.getDefaultExplanation("distribution-families")
-        # dvType = self.getDependentVariableType()
-        dvType = "numeric"
+        dvType = self.getDependentVariableType()
+        # dvType = "numeric"
         indef_article = "n" if re.match(r"^[aeiouAEIOU]", dvType) else ""
-        dv_treat_as = "continuous"
+        dv_treat_as = self.getDependentVariableTreatAsType()
+        # dv_treat_as = "continuous"
         family_link_title = html.Div(
             [
                 html.H5(self.strings.getFamilyLinksPageTitle()),

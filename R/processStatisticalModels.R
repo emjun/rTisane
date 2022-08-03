@@ -6,7 +6,7 @@
 #' @param randomEffects list of random effects to include in the statistical model to maximize generalizability. Optional.
 #' @param familyLinkFunctions list of family and link functions to consider.
 #' @param iv AbstractVariable whose influence on @param dv we are interested in.
-#' @param dv AbstractVariable whose outcome we are interested in.
+#' @param dv Continuous, Counts, or Categories. 
 #' @param path Path-like or character. Path to write out the JSON.
 #' @import jsonlite
 #' @keywords
@@ -47,7 +47,11 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
 
 
     #### Create query
-    query = list(DV=dv@name, IVs=list(iv@name))
+    dvVar <- dv@measure
+    query = list(DV=dvVar@name, IVs=list(iv@name))
+
+    #### Gather info about DV 
+    dvInfo = list(dvType=class(dvVar), dvTreatAs=class(dv))
 
     ##### Create measures-to-units mapping
     # measureToUnits = data.frame()
@@ -59,7 +63,7 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
     #     },
 
     #### Add to output list
-    output <- list(generatedMainEffects=generatedMainEffects, generatedInteractionEffects=generatedInteractionEffects, generatedRandomEffects=generatedRandomEffects, generatedFamilyLinkFunctions=generatedFamilyLinkFunctions, query=query)
+    output <- list(generatedMainEffects=generatedMainEffects, generatedInteractionEffects=generatedInteractionEffects, generatedRandomEffects=generatedRandomEffects, generatedFamilyLinkFunctions=generatedFamilyLinkFunctions, query=query, dvInfo=dvInfo)
     output <- list(input=output) # to conform to format that statsitical model disambiguation GUI expects
 
     #### Write output to JSON file
@@ -84,7 +88,7 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
 #' @keywords
 # processStatisticalModels()
 setGeneric("processStatisticalModels", function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, data) standardGeneric("processStatisticalModels"))
-setMethod("processStatisticalModels", signature("list", "list", "list", "list", "AbstractVariable", "AbstractVariable", "characterORDataframeORnull"), function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, data)
+setMethod("processStatisticalModels", signature("list", "list", "list", "list", "AbstractVariable", "ContinuousORCountsORCategories", "characterORDataframeORnull"), function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, data)
 {
     # Write candidate statistical models to JSON, which is read to create disambiguation GUI
     path <- generateStatisticalModelJSON(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, "input2.json")

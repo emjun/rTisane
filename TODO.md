@@ -1,6 +1,6 @@
 Aug 3 AM TODOs
 [x] 0. Pass tests
-2. Update rTisane to "bread" emoji; update wording
+[x] 2. Update rTisane to "bread" emoji; update wording
 1. Run all examples
 3. Push/checkpoint
 4. Pull and run on laptop 

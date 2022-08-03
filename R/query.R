@@ -60,7 +60,7 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
 
   ### Step 3: Statistical Model Disambiguation (GUI)
   ## Call Python script to create and run disambiguation process
-  code <- processStatisticalModels(confounders=confounders, interactions=interactions, randomEffects=randomEffects, familyLinkFunctions=familyLinkFunctions, iv=iv, dv=dv, data=data)
+  code <- processStatisticalModels(confounders=confounders, interactions=interactions, randomEffects=randomEffects, familyLinkFunctions=familyLinkFunctions, iv=iv, dv=dvUpdated, data=data)
   ### Step 4: Code generation
   # TODO: Generate code
 })
