@@ -115,3 +115,7 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 - WBN: Suppress Dash/Flask output when starting Dash app 
 
 - Make rTisane statistical model GUI a separate repo/pypi package? Or just rewrite in R...?
+
+- Write blog comparing Dash and Shiny 
+
+- Write blog comparing statsmodels, lme4
