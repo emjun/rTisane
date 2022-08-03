@@ -1,6 +1,11 @@
 # Notes on the scope of statistical models inferred from a conceptual model 
-
 rTisane programs "compile" to scripts that use [lme4 (and related libraries)](https://github.com/lme4/lme4) to fit statistical models. 
+
+## How are confounders selected? 
+We follow the guidelines from [Cinelli, Forney, and Pearl, 2022](https://ftp.cs.ucla.edu/pub/stat_ser/r493.pdf). I chose this because (i) it was more comprehensive, covering the guidelines in the modified disjunctive criteria; (ii) more directly appliable to our setting/how I am thinking about querying a conceptual model; and (iii) more recent.
+
+This diverges from what Tisane implements, which is the [modified disjunctive criteria](https://link.springer.com/article/10.1007/s10654-019-00494-6). 
+
 ### Supported Family and Link functions
 GLM, GLMER in lme4 ([see lme4 reference](https://github.com/lme4/lme4/blob/master/src/glmFamily.h))
 Family: 

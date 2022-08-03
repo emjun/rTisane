@@ -4,8 +4,6 @@
 
 ## Variable declaration
 
-### TODO: Add Units + Measures info from Tisane
-
 ### Can explicitly state Participant (as a subclass of Unit)
 ```R
 member <- Participant("member", caridinality=386)
@@ -19,6 +17,7 @@ pounds_lost <- numeric(unit=member, name="pounds_lost")
 ```R
 condition <- condition(unit=group, "treatment", cardinality=2 number_of_instances=1)
 ```
+### TODO: Add Units + Measures info from Tisane
 
 ## Conceptual relationships between 2 variables
 Conceptual relationships are added to a conceptual model that provides an evaluation context for queries (further below). 
@@ -31,7 +30,6 @@ To derive statistical models from conceptual models (see "Query" section), rTisa
 ```R
 cm <- ConceptualModel()
 ```
-
 
 ### How to express _relational direction_
 These constructs create relationship objects that must then get added to the conceptual model based on the evidence for each relationship.
@@ -113,7 +111,7 @@ cm <- assume(causes(latent_var, motivation), cm)
 cm <- assume(causes(age, motivation), cm)
 ```
 
-### Potential interactions
+### Interactions
 Interactions are a conjunction of multiple "conditions" + a consequence. (Why not just all conjunction?: There is an implied consequence/"directionality" of effect in interactions.)
 
 ```R
@@ -126,7 +124,10 @@ cm <- assume(wt, cm)
 
 ## TODO: Data measurement relationships 
 
-### Nest (should be external)
+### TODO: Nest
+```R
+nests(student, family)
+```
 
 ## Queries to issue
 With an explicit handle to the conceptual model, we don't need to construct an intermediate "Study Design." We can directly assess/query the conceptual model. 
@@ -136,7 +137,7 @@ A query for a statistical model from a conceptual model probes into the influenc
 
 The statistical models are designed to assess the causal influence/effect of an independent variable on a dependent variable. To avoid the mutual adjustment fallacy (http://dagitty.net/learn/graphs/table2-fallacy.html) and support precise estimation, end-users can only query about 1 IV at a time. If they are interested in multiple variables, they can treat each IV sequentially. (In some cases, statistical models to assess the influence of two different variables may be identical.)
 
-Confounders are selected on the assumption that end-users are interested in the average causal effect ("ACE") of an independent variable on the dependent/outcome variable. Confounders are suggested based on recommendations by Cinelli, Forney, and Pearl (TR 2020) to prioritize precision of ACE estimates in regression. 
+Confounders are selected on the assumption that end-users are interested in the average causal effect ("ACE") of an independent variable on the dependent/outcome variable. Confounders are suggested based on recommendations by Cinelli, Forney, and Pearl (TR 2022) to prioritize precision of ACE estimates in regression. 
 
 ```R
 query(conceptual_model=cm, iv=age, dv=pounds_lost)
@@ -165,7 +166,7 @@ Steps involved in answering query:
 2. `processQuery` to disambiguate how to treat the DV and resolve any ambiguity in the conceptual model before inferring a statistical model. Disambiguation is complete once all ambiguities are resolved and the conceptual model is validated (`checkConceptualModel`). Disambiguation occurs in a GUI.
 3. `updateDV` and `updateConceptualModel` based on inputs during disambiguation. 
 4. Use disambiguated DV and conceputal model to derive candidate statistical models: `inferConfounders`, `inferFamilyLinkFunctions`
-5. `processStatisticalModel` to disambiguate modeling choices. Disambiguation occurs in a GUI. 
+5. `processStatisticalModels` to disambiguate modeling choices. Disambiguation occurs in a GUI. 
 [See details about statistical model inference details and scope](STATISTICAL_MODEL_INFERENCE.md). 
 
 ### Ongoing development
