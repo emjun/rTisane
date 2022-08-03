@@ -38,31 +38,39 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
     # tags$script(src = "conceptualModelDisambiguation.js"),
     shinyjs::useShinyjs(),
 
-    titlePanel("rTisane"),
-    textOutput("activeTab"),
+    fluidRow(
+      column(8, offset=2, 
+        titlePanel("🌼 rTisane")
+      )
+    ),
 
-    tabsetPanel(
-      id = "tabset",
-      tabPanel("Dependent variable",
-               selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
-               # Info about dependent variable ---
-               textOutput("dvSummary"),
-               plotlyOutput('dvHist'),
+    fluidRow(
+      column(8, offset=2, 
+        tabsetPanel(
+          id = "tabset",
+          tabPanel("Dependent variable",
+                  br(),
+                  selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
+                  # Info about dependent variable ---
+                  textOutput("dvSummary"),
+                  plotlyOutput('dvHist'),
 
-               # textInput("delim", "Delimiter (leave blank to guess)", ""),
-               # numericInput("skip", "Rows to skip", 0, min = 0),
-               # numericInput("rows", "Rows to preview", 10, min = 1)
-      ),
-      tabPanel("Conceptual model",
-               p("This is what your conceptual model looks like:"),
-               plotOutput('cmGraph'),
-               uiOutput("cmQuestions"),
-               div(
-                style="color:red",
-                textOutput("cmValidation"),
-               ),
-               textOutput("palette"),
-               actionButton("submit", "Done!")
+                  # textInput("delim", "Delimiter (leave blank to guess)", ""),
+                  # numericInput("skip", "Rows to skip", 0, min = 0),
+                  # numericInput("rows", "Rows to preview", 10, min = 1)
+          ),
+          tabPanel("Conceptual model",
+                  br(),
+                  div(
+                    style="color:red",
+                    textOutput("cmValidation"),
+                  ),
+                  uiOutput("cmQuestions"),
+                  p("This is what your conceptual model looks like:"),
+                  plotOutput('cmGraph'),
+                  actionButton("submit", "Done!")
+          )
+        )
       )
     )
   )

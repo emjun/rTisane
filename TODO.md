@@ -59,3 +59,10 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 17. Check/Validate choice of Continuous/Categories/Counts
 
 18. Graph layout in Conceptual Model disambiguation is not stochastic, so it jumps around. That's annoying and distracting. 
+
+19. Code generation
+
+# Aesthetic changes
+Conceptual model disambiguation GUI
+1. Make Conceptual Model disambiguation GUI look like Statistical Modeling one? Add sidepanel.
+2. Little titles and breaks for questions/sections.
