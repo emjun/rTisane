@@ -80,8 +80,13 @@ New ideas:
     - Make Conceptual Model disambiguation GUI look like Statistical Modeling one? Add sidepanel.
     
 9. Language implementation details: 
-- Does ``Assumption`` have to have a ConceptualModel piv? 
-- `isObserved` returns NULL if ask about Unit variable because Unit variable is not added to Conceptual Model -- This seems wrong? 
+  - Does ``Assumption`` have to have a ConceptualModel piv? 
+  - `isObserved` returns NULL if ask about Unit variable because Unit variable is not added to Conceptual Model -- This seems wrong? 
+  - Update selectInput generation to take a dataframe from input.json NOT list of three lists
+
+10. Stress test with edge cases
+    - In the presence of ambiguous relationships, such as multiple expressed relationships between the same two variables, rTisane will check ask for what the analyst intends to communicate at the level of a directional summary.
+
 
 ## Language design questions 
 1. Aesthetically - is it weird to not have the same gradations of specificity for interaction even though empirically we've found that interactions are difficult to reason about without (hyper-)specificity?
@@ -108,3 +113,5 @@ suspect(when((motivation, "==low"), (age, "increases")).then(pounds_lost, "basel
 - Why install and use Python in R analysis session? For the Statistical Model Disambiguation process, we can rewrite in R so that end-user doesn'thave to install Python. This may be more important for adoption. For the sake of this study, it might not matter as long as we give installation scripts/instructions since our focus is on assessing the impact of conceptual modeling (technique) on the analysis process + models authored.
 
 - WBN: Suppress Dash/Flask output when starting Dash app 
+
+- Make rTisane statistical model GUI a separate repo/pypi package? Or just rewrite in R...?

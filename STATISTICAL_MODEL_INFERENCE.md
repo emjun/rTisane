@@ -6,6 +6,7 @@ We follow the guidelines from [Cinelli, Forney, and Pearl, 2022](https://ftp.cs.
 
 This diverges from what Tisane implements, which is the [modified disjunctive criteria](https://link.springer.com/article/10.1007/s10654-019-00494-6). 
 
+To infer statistical models, we must infer confounders. To do so, we use all assumed and hypothesized relationships. This means that the confounders and statistical model are for the context of the causal graph/conceptual model specified.  
 ### Supported Family and Link functions
 GLM, GLMER in lme4 ([see lme4 reference](https://github.com/lme4/lme4/blob/master/src/glmFamily.h))
 Family: 
