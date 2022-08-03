@@ -1,1 +1,1 @@
-{"input":{"generatedMainEffects":["AGEP","SCHL"],"generatedInteractionEffects":[],"generatedRandomEffects":{" ":[]},"generatedFamilyLinkFunctions":{"Gaussian":["identity","log","inverse"]},"query":{"DV":"PINCP","IVs":["SCHL"]}}}
+{"input":{"generatedMainEffects":["AGEP","SEX","SCHL"],"generatedInteractionEffects":[],"generatedRandomEffects":{" ":[]},"generatedFamilyLinkFunctions":{"Gaussian":["identity","log","inverse"]},"query":{"DV":"PINCP","IVs":["SCHL"]}}}
