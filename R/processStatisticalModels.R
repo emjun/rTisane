@@ -83,8 +83,8 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
 #' @return
 #' @keywords
 # processStatisticalModels()
-setGeneric("processStatisticalModels", function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv) standardGeneric("processStatisticalModels"))
-setMethod("processStatisticalModels", signature("list", "list", "list", "list", "AbstractVariable", "AbstractVariable"), function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv)
+setGeneric("processStatisticalModels", function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, data) standardGeneric("processStatisticalModels"))
+setMethod("processStatisticalModels", signature("list", "list", "list", "list", "AbstractVariable", "AbstractVariable", "characterORDataframeORnull"), function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, data)
 {
     # Write candidate statistical models to JSON, which is read to create disambiguation GUI
     path <- generateStatisticalModelJSON(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, "input2.json")

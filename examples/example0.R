@@ -12,7 +12,7 @@ measure_1 <- numeric(unit=unit, name="measure_1")
 
 # Specify conceptual relationships
 cr <- causes(measure_0, measure_1)
-cm <- assume(cr, cm)
+cm <- hypothesize(cr, cm)
 
 # Measure 0 is IV, Measure 1 is DV
 # Don't need to disambiguate conceptual model

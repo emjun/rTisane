@@ -11,7 +11,7 @@
 #' @export
 # query()
 setGeneric("query", function(conceptualModel, iv, dv, data) standardGeneric("query"))
-setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "missing"), function(conceptualModel, iv, dv, data)
+setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "missingORCharacterORDataframe"), function(conceptualModel, iv, dv, data)
 {
 
   ### Step 0: Update graph
@@ -21,7 +21,10 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   ### Step 1: Conceptual Model Disambiguation
   #### A: How to treat DV? (as Continuous, Count, Categories), B: Check + Ask for "causes"-level of info
   #### Check ConceptualModel during disambiguation
-  updates <- processQuery(conceptualModel=conceptualModel, iv=iv, dv=dv)
+  if (missing(data)) {
+    data = NULL
+  }
+  updates <- processQuery(conceptualModel=conceptualModel, iv=iv, dv=dv, data=data)
   dvUpdated <- updates$updatedDV
   cmUpdated <- updates$updatedConceptualModel
 
@@ -42,7 +45,7 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
 
   ### Step 3: Statistical Model Disambiguation (GUI)
   ## Call Python script to create and run disambiguation process
-  code <- processStatisticalModels(confounders=confounders, interactions=interactions, randomEffects=randomEffects, familyLinkFunctions=familyLinkFunctions, iv=iv, dv=dv)
+  code <- processStatisticalModels(confounders=confounders, interactions=interactions, randomEffects=randomEffects, familyLinkFunctions=familyLinkFunctions, iv=iv, dv=dv, data=data)
   ### Step 4: Code generation
   # TODO: Generate code
 })

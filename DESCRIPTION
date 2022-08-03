@@ -20,7 +20,8 @@ Imports:
     stringr,
     shiny,
     reticulate,
-    shinyjs
+    shinyjs,
+    plotly
 Collate: 
     'aaa-classes.R'
     'condition.R'

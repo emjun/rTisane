@@ -82,7 +82,7 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
     output <- append(output, list(ambiguousRelationships = ambigRelationships, ambiguousOptions1 = ambigOptions1, ambiguousOptions2 = ambigOptions2))
   }
   # Write output to JSON file
-  jsonlite::write_json(output, path=path)
+  jsonlite::write_json(output, path=path, auto_unbox = TRUE)
 
   # Return path
   path
@@ -259,16 +259,15 @@ updateConceptualModel <- function(conceptualModel, values) {
 #' @return
 #' @keywords
 # processQuery()
-setGeneric("processQuery", function(conceptualModel, iv, dv) standardGeneric("processQuery"))
-setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)
+setGeneric("processQuery", function(conceptualModel, iv, dv, data) standardGeneric("processQuery"))
+setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "characterORDataframeORnull"), function(conceptualModel, iv, dv, data)
 {
   # Write DV to JSON, which is read to create disambiguation GUI
   path <- generateDVConceptualModelJSON(conceptualModel, dv, "input.json")
 
   # Start up disambiguation process
   inputFilePath <- path
-  dataPath = NULL
-  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path, dataPath=dataPath)
+  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path, data=data)
 
   # Update DV, Update Conceptual Model
   dvUpdated <- updateDV(dv, updates)

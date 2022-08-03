@@ -25,15 +25,17 @@ updateGraph <- function(conceptualModel){
       if(is(r, "Causes")) {
         edge <- paste(r@cause@name, "->", r@effect@name)
         causalEdges <- append(causalEdges, edge)
-      } 
-      # else if (is(r, "Relates")) {
-      #   edge <- paste(r@cause@name, "--", r@effect@name)
-      #   causalEdges <- append(causalEdges, edge)
-      # }
+      } else if (is(r, "Relates")) {
+        edge <- paste(r@lhs@name, "--", r@rhs@name)
+        causalEdges <- append(causalEdges, edge)
+      }
     } else if (is(relat, "Hypothesis")) {
       r = relat@relationship
       if(is(r, "Causes")) {
         edge <- paste(r@cause@name, "->", r@effect@name)
+        causalEdges <- append(causalEdges, edge)
+      } else if (is(r, "Relates")) {
+        edge <- paste(r@lhs@name, "--", r@rhs@name)
         causalEdges <- append(causalEdges, edge)
       }
     }

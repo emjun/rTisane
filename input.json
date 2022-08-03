@@ -1,1 +1,1 @@
-{"dvName":["measure_1"],"dvClass":["Numeric"],"dvOptions":["Continuous","Counts"]}
+{"dvName":"PINCP","dvClass":"Numeric","dvOptions":["Continuous","Counts"],"ambiguousRelationships":"Hypothesize SCHL is related to PINCP","ambiguousOptions1":"Hypothesize SCHL causes PINCP","ambiguousOptions2":"Hypothesize PINCP causes SCHL"}

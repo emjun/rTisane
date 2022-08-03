@@ -18,6 +18,7 @@ setMethod("checkConceptualModel", signature("ConceptualModel", "AbstractVariable
   # (Automatically/Implicitly) Check that IV and DV are in the Conceptual Model
   # Check that there is a path between IV and DV if there are any edges in the graph
   p <- paths(gr, iv@name, dv@name)
+
   if(length(p[[1]]) <= 0) {
     output <- list(isValid=FALSE, reason="Graph has no relationships.")
     return(output)

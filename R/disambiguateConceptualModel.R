@@ -1,4 +1,4 @@
-disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, dataPath) {
+disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, data) {
   # require(shiny)
   # require(purrr)
   # require(shinyjs)
@@ -6,9 +6,15 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
 
   #### Read data file, if available ----
   df <- NULL
-  if (!is.null(dataPath)) {
-    df <- read.csv(dataPath)
+  if (is.null(data)) {
+    # df is already NULL
+  } else if (is.character(data)) {
+    df <- read.csv(data)
+  } else {
+    stopifnot(class(data) == "data.frame")
+    df <- data
   }
+
 
   #### Process input JSON file -----
   # Get DV options
@@ -41,7 +47,7 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
                selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
                # Info about dependent variable ---
                textOutput("dvSummary"),
-               plotOutput('dvHist'),
+               plotlyOutput('dvHist'),
 
                # textInput("delim", "Delimiter (leave blank to guess)", ""),
                # numericInput("skip", "Rows to skip", 0, min = 0),
@@ -98,7 +104,6 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
       # Update graph vis based on selection
       observe({
         cmUpdated = data() # get data
-        browser()
         gr = updateGraph(cmUpdated)
 
         ## Update data vis for DV
@@ -108,8 +113,11 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
 
           colnames = names(df)
           stopifnot(c(dvName) %in% colnames)
-          output$dvHist <- renderPlot({
-            hist(df[dvName])
+          output$dvHist <- renderPlotly({
+            # hist(df[dvName][[1]])
+            fig <- plotly::plot_ly(x=df[dvName][[1]], type = 'histogram')
+              # layout(title = paste("Histogram of", dvName, sep=" "))
+            fig
           })
         }
 
@@ -170,8 +178,9 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
     output$cmQuestions <- renderUI({
       l <- list(uncertainRelationships, options1, options2)
       purrr::pmap(l, ~ div(
-        paste("You wrote that:", ..1),
-        strong("More specifically, what did you mean?"),
+        paste("You wrote that you ", ..1),
+        br(),
+        strong("Do you mean..."),
         selectInput(paste0(..1),
                     NULL,
                     choices=c(..2, ..3))
