@@ -188,9 +188,9 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
     output$cmQuestions <- renderUI({
       l <- list(uncertainRelationships, options1, options2)
       purrr::pmap(l, ~ div(
-        paste("You wrote that you ", ..1),
+        paste("You specified that you ", ..1),
         br(),
-        strong("Do you mean..."),
+        strong("What do you mean?"),
         selectInput(paste0(..1),
                     NULL,
                     choices=c(..2, ..3))

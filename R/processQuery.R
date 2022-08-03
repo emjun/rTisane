@@ -43,7 +43,7 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
     if (relatClass == "Assumption") {
       if (rClass == "Relates") {
         # Create and track relationship
-        relatString <- paste("Assume", r@lhs@name, "is related to", r@rhs@name, sep=" ")
+        relatString <- paste("assume", r@lhs@name, "is related to", r@rhs@name, sep=" ")
         ambigRelationships <- append(ambigRelationships, relatString)
 
         # Create options to resolve/make more specific relationship
@@ -59,7 +59,7 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
       stopifnot(relatClass == "Hypothesis")
       if (rClass == "Relates") {
         # Create and track relationship
-        relatString <- paste("Hypothesize", r@lhs@name, "is related to", r@rhs@name, sep=" ")
+        relatString <- paste("hypothesize", r@lhs@name, "is related to", r@rhs@name, sep=" ")
         ambigRelationships <- append(ambigRelationships, relatString)
 
         # Create options to resolve/make more specific relationship
