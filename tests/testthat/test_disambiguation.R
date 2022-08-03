@@ -209,11 +209,14 @@ test_that("Statistical modeling options created properly", {
   expect_false(is.null(options$input))
   input <- options$input
   expect_type(input$generatedMainEffects, "list")
-  expect_length(input$generatedMainEffects, 1)
+  expect_length(input$generatedMainEffects, 2) # IV and confounders
+  expect_true(measure_0@name %in% input$generatedMainEffects) # IV
+  expect_true(measure_1@name %in% input$generatedMainEffects) # confounder
   expect_type(input$generatedInteractionEffects, "list")
   expect_length(input$generatedInteractionEffects, 0)
   expect_type(input$generatedRandomEffects, "list")
-  expect_length(input$generatedRandomEffects, 0)
+  re <- getElement(input$generatedRandomEffects, " ")
+  expect_length(re, 0)
   expect_false(is.null(input$generatedFamilyLinkFunctions)) # Key exists!
   expect_false(is.null(input$query)) # Key exists!
   query <- input$query

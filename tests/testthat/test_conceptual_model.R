@@ -309,9 +309,11 @@ test_that("Validate Conceptual Model's causal graph properly", {
   cm <- ConceptualModel()
   cm <- assume(causes(measure_0, measure_1), cm)
   cm@graph <- updateGraph(cm)
-  expect_error(checkConceptualModel(cm, measure_0, measure_2))
+  res <- checkConceptualModel(cm, measure_0, measure_2)
+  expect_false(res$isValid)
   # IV is not in the Conceptual Model/graph
-  expect_error(checkConceptualModel(cm, measure_2, measure_0))
+  res <- checkConceptualModel(cm, measure_2, measure_0)
+  expect_false(res$isValid)
 
   # No path between IV and DV!
   cm <- ConceptualModel()
@@ -527,4 +529,41 @@ test_that("Infer confounders correctly", {
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
+})
+
+test_that("Catches errors in conceptual model properly", {
+  unit <- Unit("unit")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+
+  # Construct Conceptual Model
+  cm <- ConceptualModel()
+
+  # Specify conceptual relationships
+  cr <- causes(measure_0, measure_1)
+  cm <- hypothesize(cr, cm)
+
+  # IV is not in conceptual model
+  expect_error(query(conceptualModel=cm, iv=measure_2, dv=measure_1))
+
+  # DV is not in conceptual model
+  expect_error(query(conceptualModel=cm, iv=measure_0, dv=measure_2))
+
+  # Empty conceptual model (therefore, IV and DV not in conceptual model)
+  cm <- ConceptualModel()
+  expect_error(query(conceptualModel=cm, iv=measure_0, dv=measure_1))
+
+  # DV causes IV
+  cr <- causes(measure_1, measure_0)
+  cm <- hypothesize(cr, cm)
+  expect_error(query(conceptualModel=cm, iv=measure_0, dv=measure_1))
+
+  # Graph is cyclic
+  cr <- causes(measure_0, measure_1)
+  cr <- causes(measure_1, measure_2)
+  cr <- causes(measure_2, measure_0)
+  cm <- hypothesize(cr, cm)
+  expect_error(query(conceptualModel=cm, iv=measure_0, dv=measure_1))
+
 })

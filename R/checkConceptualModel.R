@@ -15,10 +15,22 @@ setMethod("checkConceptualModel", signature("ConceptualModel", "AbstractVariable
   gr <- conceptualModel@graph
   nodes <- names(gr) # Get the names of nodes in gr
 
-  # (Automatically/Implicitly) Check that IV and DV are in the Conceptual Model
+  # Check that IV is in the Conceptual Model
+  if (!(iv@name %in% nodes)) {
+    msg <- paste("IV", iv@name, "is not in the conceptual model.", sep=" ")
+    output <- list(isValid=FALSE, reason=msg)
+    return(output)
+  }
+
+  # Check that DV is in the Conceptual Model
+  if (!(dv@name %in% nodes)) {
+    msg <- paste("DV", dv@name, "is not in the conceptual model.", sep=" ")
+    output <- list(isValid=FALSE, reason=msg)
+    return(output)
+  }
+
   # Check that there is a path between IV and DV if there are any edges in the graph
   p <- paths(gr, iv@name, dv@name)
-
   if(length(p[[1]]) <= 0) {
     output <- list(isValid=FALSE, reason="Graph has no relationships.")
     return(output)

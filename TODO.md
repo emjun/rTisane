@@ -1,3 +1,24 @@
+Aug 3 AM TODOs
+[x] 0. Pass tests
+2. Update rTisane to "bread" emoji; update wording
+1. Run all examples
+3. Push/checkpoint
+4. Pull and run on laptop 
+5. Docs! 
+6. 
+
+
+Summative Eval 
+- metrics --> precision (how confounders are selected)
+
+
+
+Timeline 
+- upload + test on CRAN 
+- recruit participants in parallel + line them up! (dates?)
+
+
+
 Explanations 
 - [ ] # explanations = self.getExplanations() in createEffectPopovers()
 

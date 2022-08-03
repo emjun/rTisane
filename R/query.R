@@ -1,3 +1,15 @@
+initialCheck <- function(conceptualModel, iv, dv) {
+  validationResults <- checkConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
+  isValid <- validationResults$isValid
+  reason <- validationResults$reason
+
+  # Layout validation results nicely
+  if (!isValid) {
+    stop(reason)
+  }
+
+}
+
 #' Query a conceptual model for a statistical model
 #'
 #' Method for querying a conceptual model for a statistical model
@@ -16,6 +28,9 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
 
   ### Step 0: Update graph
   conceptualModel@graph <- updateGraph(conceptualModel)
+
+  ### Step 0B: Check the conceptual model for any issues right away
+  initialCheck(conceptualModel=conceptualModel, iv=iv, dv=dv)
 
 
   ### Step 1: Conceptual Model Disambiguation
