@@ -61,7 +61,7 @@ test_that("Nests created properly", {
   unit_0 <- Unit("person")
   unit_1 <- Unit("group")
 
-  nests_relat <- nests_within(unit_0, unit_1) # add to docs that can read like: first param.nests_within(second param)?
+  nests_relat <- nests(unit_0, unit_1) # add to docs that can read like: first param.nests(second param)?
   expect_s4_class(nests_relat, "Nests")
   # Verify that Nests is created correctly
   expect_equal(nests_relat@base, unit_0)
@@ -71,7 +71,7 @@ test_that("Nests created properly", {
   measure_1 <- numeric(unit=unit_0, name="measure_1")
 
   # Nests within only makes sense between Units
-  expect_error(nests_within(measure_0, measure_1), "*")
+  expect_error(nests(measure_0, measure_1), "*")
 })
 
 test_that("Compares created properly", {
