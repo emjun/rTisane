@@ -22,6 +22,26 @@ test_that("Unit created properly", {
   expect_equal(unit@cardinality, as.integer(40))
 })
 
+test_that("Nested Unit created properly", {
+  class <- Unit("class")
+  student <- Unit("student", nests_within=class)
+
+  # One nest
+  expect_s4_class(student, "Unit")
+  expect_equal(student@nests_within, class)
+  expect_s4_class(class, "Unit")
+
+  # Two nests
+  student <- Unit("student", nests_within=list(class, family))
+  famiy <- Unit("family")
+  expect_s4_class(student, "Unit")
+  expect_type(student@nests_within, "list")
+  expect_true(c(class) %in% student@nests_within)
+  expect_true(c(family) %in% student@nests_within)
+  expect_s4_class(class, "Unit")
+  expect_s4_class(family, "Unit")
+})
+
 test_that("Participant created properly", {
   participant <- Participant("pid")
   expect_true(inherits(participant, "AbstractVariable")) # inherits from AbstractVariable (supersuperclass)

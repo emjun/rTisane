@@ -245,32 +245,37 @@ Has <- function(variable, measure, repetitions, according_to) {
   )
 }
 
-
+setClassUnion("AbstractVariableORListORNull", c("AbstractVariable", "list", "NULL"))
 #' Unit class
 #'
 #' Class for Unit variables
 #' @slot name Name of Unit, corresponds to column name if assigning data
 #' @slot integer Integer for cardinality, optional. Only required if no data is assigned
+#' @slot nests_within Unit if this unit is nested within another (e.g., hierarchical relationship). Optional. 
 #' @keywords
 #' @export
 Unit <- setClass("Unit",
     slot = c(
         name = "character",
-        cardinality = "integer"
+        cardinality = "integer",
+        nests_within = "AbstractVariableORListORNull"
     ),
     contains = "AbstractVariable",
     prototype = list(
         name = NULL,
-        cardinality = as.integer(0)
+        cardinality = as.integer(0),
+        nests_within = NULL
     )
 
 )
 # Helper to create instances of the Unit class
 Unit <- function(name,
-                   cardinality=as.integer(0)) {
+                   cardinality=as.integer(0), 
+                   nests_within=NULL) {
   new("Unit",
       name = name,
-      cardinality = as.integer(cardinality)
+      cardinality = as.integer(cardinality), 
+      nests_within=NULL
   )
 }
 

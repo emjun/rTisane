@@ -124,9 +124,10 @@ cm <- assume(wt, cm)
 
 ## TODO: Data measurement relationships 
 
-### TODO: Nest
+### UPDATED: Specify nesting relationship
 ```R
-nests(student, family)
+student <- Unit("student", nests_within=family) # Can only nest within 1 Unit (family)
+family <- Unit("family") # Don't need to specify all the observations that family nests, could nest multiple
 ```
 
 ## Queries to issue

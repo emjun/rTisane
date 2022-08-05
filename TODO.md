@@ -2,6 +2,11 @@
 # Discussion points 
 Focus is on technique of eliciting conceptual models to prompt reflection during authoring process. 
 
+
+## How the language structures thought 
+Nests_within as a parameter when constructing Units --> requires people to specify outer group first to be able to pass it as a `nests_within` parameter.
+- Design considerations: (i) a Unit usually nests within only 1 other Unit, (ii) a Unit can nest multiple Units though. 
+
 ## Disambiguation interaction design
 Conceptual model disambiguation 
 1. Remove the Dependent Variable tab and put it in statistical model disambiguation process? Separate step? 

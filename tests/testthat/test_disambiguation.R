@@ -49,7 +49,7 @@ test_that("Conceptual model disambiguation options created properly", {
   expect_true(continuousType %in% options$dvOptions)
   expect_true(countType %in% options$dvOptions)
   expect_length(options$ambiguousRelationships, 1)
-  expectedKey = paste("Assume", measure_0@name, "is related to", measure_1@name, sep=" ")
+  expectedKey = paste("assume", measure_0@name, "is related to", measure_1@name, sep=" ")
   expect_true(expectedKey %in% options$ambiguousRelationships)
   expect_length(options$ambiguousOptions1, 1)
   expectedValue = paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
@@ -72,7 +72,7 @@ test_that("Conceptual model disambiguation options created properly", {
   expect_true(continuousType %in% options$dvOptions)
   expect_true(countType %in% options$dvOptions)
   expect_length(options$ambiguousRelationships, 1)
-  expectedKey = paste("Hypothesize", measure_0@name, "is related to", measure_1@name, sep=" ")
+  expectedKey = paste("hypothesize", measure_0@name, "is related to", measure_1@name, sep=" ")
   expect_true(expectedKey %in% options$ambiguousRelationships)
   expect_length(options$ambiguousOptions1, 1)
   expectedValue = paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
@@ -207,7 +207,7 @@ test_that("Statistical modeling options created properly", {
   cont <- asContinuous(measure_2)
   familyLinkPairs <- inferFamilyLinkFunctions(cont)
 
-  path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
+  path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=cont)
 
   options <- jsonlite::read_json(path)
   expect_false(is.null(options$input))
