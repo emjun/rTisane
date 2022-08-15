@@ -14,7 +14,7 @@ infer_has_relationships <- function(design){
         # Assert that v is a Measure
         stopifnot(inherits(v, "Measure"))
         # Construct has relationship
-        has_relat = has(unit=v@unit, measure=v, number_of_instances=v@number_of_instances)
+        has_relat = has(unit=v@unit, measure=v, numberOfInstances=v@numberOfInstances)
 
         has_relationships <- append(has_relationships, has_relat)
     }
@@ -53,7 +53,7 @@ infer_has_relationships <- function(design){
             )  
             # Construct has relationships
             for (u in m_units) {
-                has_relat = has(unit=u, measure=var, number_of_instances=as.integer(1))
+                has_relat = has(unit=u, measure=var, numberOfInstances=as.integer(1))
                 has_relationships <- append(has_relationships, has_relat)
             }
         }

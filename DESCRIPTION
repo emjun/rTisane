@@ -68,3 +68,5 @@ Collate:
     'disambiguateStatisticalModel.R'
     'processStatisticalModels.R'
     'query.R'
+    'checkEquals.R'
+    'checkGreaterThan.R'

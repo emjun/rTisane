@@ -4,8 +4,13 @@ Focus is on technique of eliciting conceptual models to prompt reflection during
 
 
 ## How the language structures thought 
-Nests_within as a parameter when constructing Units --> requires people to specify outer group first to be able to pass it as a `nests_within` parameter.
+`nestsWithin` as a parameter when constructing Units --> requires people to specify outer group first to be able to pass it as a `nestsWithin` parameter.
 - Design considerations: (i) a Unit usually nests within only 1 other Unit, (ii) a Unit can nest multiple Units though. 
+
+How analysts express their variables indicates how they are thinking about the problem/implicit assumptions about independence. For example, do they list "State" as a Unit and "Participant" as a Unit nested within State? This would trigger rTisane to treat State as a grouping variable and include a random effect. However, maybe people want to assume independence between observations? Is this right? Should it be a bigger deal for them to move away from nesting/random effects towards independent observations? 
+
+- TODO: Should we have a notion of SetUp like "Time" and "Trial" or allow for declaration of variables that do not have a unit (e.g., ``numeric("week")`` and ``ordinal("trial")``) where the assumption is that these variables do not belong to a specific Unit but rather belong to all of them in a sense?  --> What would this allow in terms of non-nesting relationships?
+--> For now, implement Time 
 
 ## Disambiguation interaction design
 Conceptual model disambiguation 
@@ -77,7 +82,7 @@ New ideas:
 7. Consider renaming `numeric` since casting all parmeters using integer() can be tedious.
     - Because we override the ``numeric`` data type/function in R, end-users need to specify integer parameters by explicitly casting/specifying their parameters using ``integer``. For example: 
   ```R
-  condition <- condition(unit=participant, name="treatment", order=list("low","medium", "high"), number_of_instances=integer(1))
+  condition <- condition(unit=participant, name="treatment", order=list("low","medium", "high"), numberOfInstances=integer(1))
   ```
 
 8. Make GUIs look better. 

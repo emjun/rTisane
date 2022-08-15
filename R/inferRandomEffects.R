@@ -1,30 +1,42 @@
 #' Infers random effects.
 #'
-#' This function infers random effects from data measurement relationships.
-#' @param measurement_gr Graph representing data measurement relationships.
-#' @param nests_gr Graph representing nesting relationships between variables.
-#' @param design Design
-#' @param main_effects List of candidate main effects
-#' @param interaction_effects List of candidate interaction effects
-#' @return List of random effects and their explanations
+#' This function infers random effects from data measurement relationships. 
+#' @param confounders List of confounders to include in a statistical model. 
+#' @param interactions List of interaction terms to include in a statistical model. 
+#' @param conceptualModel ConceptualModel expressing conceptual relationships. 
+#' @param iv AbstractVariable whose influence on @param dv we are interested in estimating. 
+#' @param dv AbstractVariable whose outcome we are interested in estimating in a statsitical model. 
+#' @return List of random effects to include. 
 #' @import dagitty
 #' @keywords
 # inferRandomEffects
-inferRandomEffects <- function(conceptualModel, iv, dv) {
+inferRandomEffects <- function(confounders, interactions, conceptualModel, iv, dv) {
     randomEffects = list()
-    # dv <- design@dv
+    dvUnit = dv@unit # Get the DV's unit 
 
-    # unit <- parents(measurement_gr, dv@name)
-    # stopifnot(length(unit) == 1)
+    # Construct random effects for repeated measures 
+    mainEffects = append(confounders, iv)
+    for (var in confounders) {
+        # Is the variable a between-subjects variable? 
+        
+        if (var@numberOfInstances == 1) {
+            RandomIntercept(variable=var, group=var@unit)
+        }
+        else {
+            # The variable is a within-subjects variable. 
+            stopifnot(var@numberOfInstances > 1)
+            # Are there multiple observations of each instance of the unit? 
 
-    # for (r in all_relationships) {
-    #     if (is(r, "Has")) {
-    #         # Is this the has relationship we are looking for?  
-    #         if (is(r@variable, unit) && is(r@measure, dv)) {
-                
-    #         }
-    #     }
-    # }
+
+            # There is only one observation. 
+        }
+    }
+
+    # Construct random effects for nesting relationships
+
+    # Construct random effects for non-nesting composition
+
+    # TODO: Construct random effects for interaction effects 
 
     # Return random effects
     randomEffects

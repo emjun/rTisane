@@ -9,15 +9,21 @@
 member <- Participant("member", caridinality=386)
 
 motivation <- ordinal(unit=member, name="motivation", order=[1, 2, 3, 4, 5, 6])
-age <- numeric(unit=member, name="age", number_of_instances=1)
+age <- numeric(unit=member, name="age", numberOfInstances=1)
 pounds_lost <- numeric(unit=member, name="pounds_lost")
 ```
 
 ### Explicitly state Condition (instead of as a measure)
 ```R
-condition <- condition(unit=group, "treatment", cardinality=2 number_of_instances=1)
+condition <- condition(unit=group, "treatment", cardinality=2 numberOfInstances=1)
 ```
 ### TODO: Add Units + Measures info from Tisane
+
+How to specify repeated measures
+```R
+week <- Time("week") # 1 - 5
+condition <- condition(unit=member, "condition", cadinality=5, numberOfInstances=per(2, week))
+```
 
 ## Conceptual relationships between 2 variables
 Conceptual relationships are added to a conceptual model that provides an evaluation context for queries (further below). 
@@ -126,7 +132,7 @@ cm <- assume(wt, cm)
 
 ### UPDATED: Specify nesting relationship
 ```R
-student <- Unit("student", nests_within=family) # Can only nest within 1 Unit (family)
+student <- Unit("student", nestsWithin=family) # Can only nest within 1 Unit (family)
 family <- Unit("family") # Don't need to specify all the observations that family nests, could nest multiple
 ```
 

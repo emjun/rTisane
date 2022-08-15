@@ -53,7 +53,7 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
 
   interactions <- inferInteractions(conceptualModel=cmUpdated, iv=iv, dv=dv)
   # interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design, main_effects)
-  randomEffects <- inferRandomEffects(conceptualModel=cmUpdated, iv=iv, dv=dv)
+  randomEffects <- inferRandomEffects(confounders=confounders, interactions=interactions, conceptualModel=cmUpdated, iv=iv, dv=dv)
   # random_effects <- infer_random_effects_with_explanations(measurement_gr, nests_gr, design, all_relationships, main_effects, interaction_effects)
 
   familyLinkFunctions <- inferFamilyLinkFunctions(dvUpdated)

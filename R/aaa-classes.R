@@ -47,7 +47,7 @@ Unobserved <- function() {
 
 #' Number Value class
 #'
-#' Internal use only. Abstract super class for number values, used for number_of_instances that a Unit has of a Measure
+#' Internal use only. Abstract super class for number values, used for numberOfInstances that a Unit has of a Measure
 #' @slot value Number value
 #' @keywords
 #' @export NumberValue
@@ -102,7 +102,7 @@ AtMost <- setClass("AtMost",
 # Helper to create instances of the AtMost class
 AtMost <- function(value=as.integer(1)) {
   new("AtMost",
-      value = value
+      value = as.integer(value)
   )
 }
 
@@ -112,28 +112,28 @@ AtMost <- function(value=as.integer(1)) {
 #' @slot number NumberValue
 #' @slot variable AbstractVariable that contains
 #' @slot cardinality
-#' @slot number_of_instances
+# ' @slot numberOfInstances
 #' @slot value
 #' @keywords
 Per <- setClass("Per",
     slots = c(
         number = "NumberValue",
         variable = "AbstractVariable",
-        cardinality = "logical",
-        number_of_instances = "logical",
-        value = "integer"
+        cardinality = "logical"
+        # numberOfInstances = "logical",
+        # value = "integer"
     ),
     prototype = list(
         number = NULL,
         variable = NULL,
-        cardinality = TRUE,
-        number_of_instances = FALSE,
-        value = NULL
+        cardinality = TRUE
+        # numberOfInstances = FALSE,
+        # value = NULL
     ),
     contains = "NumberValue"
 )
 
-# Specify Union type for number_of_instances
+# Specify Union type for numberOfInstances
 # https://stackoverflow.com/questions/13002200/s4-classes-multiple-types-per-slot
 setClassUnion("integerORAbstractVariableORAtMostORPer", c("integer", "AbstractVariable", "AtMost", "Per"))
 setClassUnion("missingORintegerORAbstractVariableORAtMostORPer", c("missing", "integerORAbstractVariableORAtMostORPer"))
@@ -251,30 +251,30 @@ setClassUnion("AbstractVariableORListORNull", c("AbstractVariable", "list", "NUL
 #' Class for Unit variables
 #' @slot name Name of Unit, corresponds to column name if assigning data
 #' @slot integer Integer for cardinality, optional. Only required if no data is assigned
-#' @slot nests_within Unit if this unit is nested within another (e.g., hierarchical relationship). Optional.
+#' @slot nestsWithin Unit if this unit is nested within another (e.g., hierarchical relationship). Optional.
 #' @keywords
 #' @export
 Unit <- setClass("Unit",
     slot = c(
         name = "character",
         cardinality = "integer",
-        nests_within = "AbstractVariableORListORNull"
+        nestsWithin = "AbstractVariableORListORNull"
     ),
     contains = "AbstractVariable",
     prototype = list(
         name = NULL,
         cardinality = as.integer(0),
-        nests_within = NULL
+        nestsWithin = NULL
     )
 
 )
 # Helper to create instances of the Unit class
 Unit <- function(name,
                    cardinality=as.integer(0),
-                   nests_within=NULL) {
+                   nestsWithin=NULL) {
   # Check that the nesting variables are Units
-  if (is(nests_within, "list")) {
-    for (fam in nests_within) {
+  if (is(nestsWithin, "list")) {
+    for (fam in nestsWithin) {
       stopifnot(!is.null(fam))
       stopifnot(is(fam, "Unit"))
     }
@@ -282,7 +282,7 @@ Unit <- function(name,
   new("Unit",
       name = name,
       cardinality = as.integer(cardinality),
-      nests_within = nests_within
+      nestsWithin = nestsWithin
   )
 }
 
@@ -321,7 +321,7 @@ Participant <- function(name,
 Measure <- setClass("Measure",
     slot = c(
         unit = "Unit",
-        number_of_instances = "integerORAbstractVariableORAtMostORPer"
+        numberOfInstances = "integerORAbstractVariableORAtMostORPer"
     ),
     contains = "AbstractVariable"
 )
@@ -454,15 +454,15 @@ Categories <- setClass("Categories",
                    )
 )
 
-#' SetUp class
+#' Time class
 #'
-#' Class for SetUp variables
-#' @slot name Name of SetUp, corresponds to column name if assigning data
-#' @slot order Optional. Order of categories if the SetUp variable represents an ordinal value (e.g., week of the month)
-#' @slot cardinality Optional. Cardinality of SetUp variable if itrepresents a nominal or ordinal value (e.g., trial identifier)
+#' Class for Time variables
+#' @slot name Name of Time, corresponds to column name if assigning data
+#' @slot order Optional. Order of categories if the Time variable represents an ordinal value (e.g., week of the month)
+#' @slot cardinality Optional. Cardinality of Time variable if itrepresents a nominal or ordinal value (e.g., trial identifier)
 #' @keywords
 #' @export
-SetUp <- setClass("SetUp",
+Time <- setClass("Time",
     slot = c(
         name = "character",
         order = "list",
@@ -476,26 +476,55 @@ SetUp <- setClass("SetUp",
     )
 )
 # Helper to create instances of the Unit class
-SetUp <- function(name,
+Time <- function(name,
                     order= list(),
-                    cardinality=as.integer(-1)) {
-  if (cardinality != -1 && length(order) != cardinality) {
-      stop("If @cardinality and @order are both provided, they need to match")
-  }
-  new("SetUp",
+                    cardinality=as.integer(0)) {
+  if (cardinality == 0) {
+    if (length(order) == 0) {
+        stop("Please provide at least either @cardinality or @order.")
+    }
+    new("Time",
       name = name,
       order = order,
       cardinality = as.integer(length(order))
-  )
-}
-# Validator to ensure that the slots corroborate with each other
-setValidity("SetUp", function(object) {
-  if (length(object@order)   !=  object@cardinality) {
-          stop("If @cardinality and @order are both provided, they need to match")
-    } else {
-    TRUE
+    )
+  } else {
+    stopifnot(cardinality > 0)
+    if (length(order) > 0) {
+        if (length(order) != cardinality) {
+            stop("If @cardinality and @order are both provided, they need to match")
+        }
     }
-})
+    new("Time",
+            name = name,
+            order = order,
+            cardinality = as.integer(cardinality)
+    )
+    # if(length(order) == cardinality) {
+    #     new("Time",
+    #         name = name,
+    #         order = order,
+    #         cardinality = cardinality
+    #     )
+    # } else {
+    #     stopifnot(length(order) == 0)
+    #     new("Time",
+    #         name = name,
+    #         order = order,
+    #         cardinality = cardinality
+    #     )
+    # }
+  }
+
+}
+# # Validator to ensure that the slots corroborate with each other
+# setValidity("Time", function(object) {
+#   if (length(object@order)   !=  object@cardinality) {
+#           stop("If @cardinality and @order are both provided, they need to match")
+#     } else {
+#     TRUE
+#     }
+# })
 
 #' Nests class
 #'
@@ -654,6 +683,55 @@ Hypothesis <- function(relationship,
       relationship = relationship,
       conceptualModel = conceptualModel
   )
+}
+
+
+#' RandomEffect class.
+#'
+#' Abstract super class for declaring random effects.
+#' @keywords
+#' @export
+RandomEffect <- setClass("RandomEffect")
+
+#' RandomSlope class.
+#'
+#' Class for declaring random slopes
+#' @slot variable Measure whose observations we want to calculate a slope for.
+#' @slot group Unit whose observations we want to pool.
+#' @keywords
+#' @export
+RandomSlope <- setClass("RandomSlope",
+    slots = c(
+            variable = "Measure",
+            group = "Unit"
+        )
+)
+# Helper to create instances of the RandomSlope class
+# Used internally only
+RandomSlope <- function(variable, group) {
+    new("RandomSlope",
+        variable=variable,
+        group=group
+    )
+}
+
+#' RandomIntercept class.
+#'
+#' Class for declaring random intercepts
+#' @slot group Unit whose observations we want to pool.
+#' @keywords
+#' @export
+RandomIntercept <- setClass("RandomIntercept",
+    slots = c(
+            group = "Unit"
+        )
+)
+# Helper to create instances of the RandomIntercept class
+# Used internally only
+RandomIntercept <- function(group) {
+    new("RandomIntercept",
+        group=group
+    )
 }
 
 setClassUnion("numericORordinal", c("Numeric", "Ordinal"))
