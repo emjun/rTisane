@@ -251,7 +251,7 @@ setClassUnion("AbstractVariableORListORNull", c("AbstractVariable", "list", "NUL
 #' Class for Unit variables
 #' @slot name Name of Unit, corresponds to column name if assigning data
 #' @slot integer Integer for cardinality, optional. Only required if no data is assigned
-#' @slot nests_within Unit if this unit is nested within another (e.g., hierarchical relationship). Optional. 
+#' @slot nests_within Unit if this unit is nested within another (e.g., hierarchical relationship). Optional.
 #' @keywords
 #' @export
 Unit <- setClass("Unit",
@@ -270,12 +270,19 @@ Unit <- setClass("Unit",
 )
 # Helper to create instances of the Unit class
 Unit <- function(name,
-                   cardinality=as.integer(0), 
+                   cardinality=as.integer(0),
                    nests_within=NULL) {
+  # Check that the nesting variables are Units
+  if (is(nests_within, "list")) {
+    for (fam in nests_within) {
+      stopifnot(!is.null(fam))
+      stopifnot(is(fam, "Unit"))
+    }
+  }
   new("Unit",
       name = name,
-      cardinality = as.integer(cardinality), 
-      nests_within=NULL
+      cardinality = as.integer(cardinality),
+      nests_within = nests_within
   )
 }
 

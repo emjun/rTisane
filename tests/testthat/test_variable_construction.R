@@ -32,8 +32,9 @@ test_that("Nested Unit created properly", {
   expect_s4_class(class, "Unit")
 
   # Two nests
+  expect_error(Unit("student", nests_within=list(class, family))) # family is not defined, therefore is NULL
+  family <- Unit("family")
   student <- Unit("student", nests_within=list(class, family))
-  famiy <- Unit("family")
   expect_s4_class(student, "Unit")
   expect_type(student@nests_within, "list")
   expect_true(c(class) %in% student@nests_within)
