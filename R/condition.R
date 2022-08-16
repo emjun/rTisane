@@ -10,7 +10,15 @@
 #' @export
 # condition()
 setGeneric("condition", function(unit, name, cardinality, order, numberOfInstances) standardGeneric("condition"))
-setMethod("condition", signature("Unit", "character", "integer", "missing", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, numberOfInstances)
+setMethod("condition", signature("Unit", "character", "numeric", "missing", "numeric"), function(unit, name, cardinality, numberOfInstances)
+{
+  # Create new measure
+  measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=as.integer(numberOfInstances))
+
+  # Return handle to measure
+  measure
+})
+setMethod("condition", signature("Unit", "character", "numeric", "missing", "numericORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, numberOfInstances)
 {
   # Create new measure
   measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=numberOfInstances)
@@ -18,12 +26,40 @@ setMethod("condition", signature("Unit", "character", "integer", "missing", "int
   # Return handle to measure
   measure
 })
-setMethod("condition", signature("Unit", "character", "missing", "list", "integerORAbstractVariableORAtMostORPer"), function(unit, name, order, numberOfInstances)
+setMethod("condition", signature("Unit", "character", "numeric", "missing", "missing"), function(unit, name, cardinality, numberOfInstances)
+{
+  # Create new measure
+  measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=as.integer(1))
+
+  # Return handle to measure
+  measure
+})
+setMethod("condition", signature("Unit", "character", "missing", "list", "numeric"), function(unit, name, order, numberOfInstances)
+{
+  # Calculate cardinality from order
+  cardinality = length(order)
+  # Create new measure
+  measure = Ordinal(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=as.integer(numberOfInstances))
+
+  # Return handle to measure
+  measure
+})
+setMethod("condition", signature("Unit", "character", "missing", "list", "numericORAbstractVariableORAtMostORPer"), function(unit, name, order, numberOfInstances)
 {
   # Calculate cardinality from order
   cardinality = length(order)
   # Create new measure
   measure = Ordinal(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=numberOfInstances)
+
+  # Return handle to measure
+  measure
+})
+setMethod("condition", signature("Unit", "character", "missing", "list", "missing"), function(unit, name, order, numberOfInstances)
+{
+  # Calculate cardinality from order
+  cardinality = length(order)
+  # Create new measure
+  measure = Ordinal(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=as.integer(1))
 
   # Return handle to measure
   measure

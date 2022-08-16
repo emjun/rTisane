@@ -10,7 +10,7 @@
 #' @export
 # nominal()
 setGeneric("nominal", function(unit, name, cardinality, numberOfInstances) standardGeneric("nominal"))
-setMethod("nominal", signature("Unit", "character", "numeric", "integerORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, numberOfInstances) {
+setMethod("nominal", signature("Unit", "character", "numeric", "integerORPer"), function(unit, name, cardinality, numberOfInstances) {
   # Create new measure
   measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=numberOfInstances)
   # Create has relationship

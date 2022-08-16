@@ -135,8 +135,9 @@ Per <- setClass("Per",
 
 # Specify Union type for numberOfInstances
 # https://stackoverflow.com/questions/13002200/s4-classes-multiple-types-per-slot
-setClassUnion("integerORAbstractVariableORAtMostORPer", c("integer", "AbstractVariable", "AtMost", "Per"))
-setClassUnion("missingORintegerORAbstractVariableORAtMostORPer", c("missing", "integerORAbstractVariableORAtMostORPer"))
+setClassUnion("numericORAbstractVariableORAtMostORPer", c("numeric", "AbstractVariable", "AtMost", "Per"))
+setClassUnion("integerORPer", c("integer", "Per"))
+setClassUnion("missingORintegerORAbstractVariableORAtMostORPer", c("missing", "numericORAbstractVariableORAtMostORPer"))
 
 #' Dataset class
 #'
@@ -321,7 +322,7 @@ Participant <- function(name,
 Measure <- setClass("Measure",
     slot = c(
         unit = "Unit",
-        numberOfInstances = "integerORAbstractVariableORAtMostORPer"
+        numberOfInstances = "numericORAbstractVariableORAtMostORPer"
     ),
     contains = "AbstractVariable"
 )
@@ -715,6 +716,7 @@ RandomSlope <- function(variable, group) {
     )
 }
 
+setClassUnion("UnitORTime", c("Unit", "Time"))
 #' RandomIntercept class.
 #'
 #' Class for declaring random intercepts
@@ -723,7 +725,7 @@ RandomSlope <- function(variable, group) {
 #' @export
 RandomIntercept <- setClass("RandomIntercept",
     slots = c(
-            group = "Unit"
+            group = "UnitORTime"
         )
 )
 # Helper to create instances of the RandomIntercept class

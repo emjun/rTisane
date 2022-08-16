@@ -9,7 +9,7 @@
 #' @export
 # numeric()
 setGeneric("numeric", function(unit, name, numberOfInstances=1) standardGeneric("numeric"))
-setMethod("numeric", signature("Unit", "character", "integerORAbstractVariableORAtMostORPer"), function(unit, name, numberOfInstances)
+setMethod("numeric", signature("Unit", "character", "integerORPer"), function(unit, name, numberOfInstances)
 {
   # Create new measure
   measure = Numeric(unit=unit, name=name, numberOfInstances=numberOfInstances)

@@ -1,4 +1,4 @@
-#' Checks if two values are equal.
+#' Checks if two values, treated as integers, are equal. 
 #'
 #' Returns TRUE if the values are equal. FALSE otherwise.
 #' @param variable
@@ -8,16 +8,14 @@
 # checkEquals()
 
 setGeneric("checkEquals", function(variable, value) standardGeneric("checkEquals"))
-setMethod("checkEquals", signature(variable = "integer", value = "integer"), function(variable, value)
+setMethod("checkEquals", signature(variable = "numeric", value = "numeric"), function(variable, value)
 {
-    # stopifnot(is(variable, "integer"))
-    # stopifnot(is(value, "integer"))
-    return (variable == value)
+    return (as.integer(variable) == as.integer(value))
 })
 
-setMethod("checkEquals", signature(variable = "Per", value = "integer"), function(variable, value)
+setMethod("checkEquals", signature(variable = "Per", value = "numeric"), function(variable, value)
 {
-
+    value = as.integer(value)
     val = variable@number
     stopifnot(is(val, "NumberValue"))
     if (is(val, "Exactly")) {
@@ -33,4 +31,11 @@ setMethod("checkEquals", signature(variable = "Per", value = "integer"), functio
     }
 
     return (totalTimes == value)
+})
+setMethod("checkEquals", signature(variable = "Exactly", value = "numeric"), function(variable, value)
+{
+  totalTimes = variable@value
+  stopifnot(is(totalTimes, "integer"))
+
+      return (totalTimes == value)
 })

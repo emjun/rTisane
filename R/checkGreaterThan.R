@@ -7,13 +7,13 @@
 #' @export
 # checkGreaterThan()
 setGeneric("checkGreaterThan", function(lhs, rhs) standardGeneric("checkGreaterThan"))
-setMethod("checkGreaterThan", signature(lhs = "integer", rhs = "integer"), function(lhs, rhs) 
+setMethod("checkGreaterThan", signature(lhs = "numeric", rhs = "numeric"), function(lhs, rhs) 
 {
-    return (lhs > rhs)
+    return (as.integer(lhs) > as.integer(rhs))
 })
-
-setMethod("checkGreaterThan", signature(lhs = "Per", rhs = "integer"), function(lhs, rhs) 
+setMethod("checkGreaterThan", signature(lhs = "Per", rhs = "numeric"), function(lhs, rhs) 
 {
+    rhs = as.integer(rhs)
     val = lhs@number
     stopifnot(is(val, "NumberValue"))
 
@@ -30,4 +30,8 @@ setMethod("checkGreaterThan", signature(lhs = "Per", rhs = "integer"), function(
     }
 
     return (totalTimes > rhs)
+})
+setMethod("checkGreaterThan", signature(lhs="Exactly", rhs="numeric"), function(lhs, rhs)
+{
+  return (as.integer(lhs@value) > as.integer(rhs))
 })

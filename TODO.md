@@ -12,6 +12,10 @@ How analysts express their variables indicates how they are thinking about the p
 - TODO: Should we have a notion of SetUp like "Time" and "Trial" or allow for declaration of variables that do not have a unit (e.g., ``numeric("week")`` and ``ordinal("trial")``) where the assumption is that these variables do not belong to a specific Unit but rather belong to all of them in a sense?  --> What would this allow in terms of non-nesting relationships?
 --> For now, implement Time 
 
+## Statistical model inference 
+Random effects inference 
+- Repeated measures --> email Dale Barr? 
+
 ## Disambiguation interaction design
 Conceptual model disambiguation 
 1. Remove the Dependent Variable tab and put it in statistical model disambiguation process? Separate step? 

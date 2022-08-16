@@ -11,7 +11,7 @@
 #' @export
 # ordinal()
 setGeneric("ordinal", function(unit, name, order, numberOfInstances) standardGeneric("ordinal"))
-setMethod("ordinal", signature("Unit", "character", "list", "integerORAbstractVariableORAtMostORPer"), function(unit, name, order, numberOfInstances)
+setMethod("ordinal", signature("Unit", "character", "list", "integerORPer"), function(unit, name, order, numberOfInstances)
 {
   # Calculate cardinality from order
   cardinality = length(order)
