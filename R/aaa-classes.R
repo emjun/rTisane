@@ -297,20 +297,31 @@ Unit <- function(name,
 Participant <- setClass("Participant",
     slot = c(
       name = "character",
-      cardinality = "integer"
+      cardinality = "integer",
+      nestsWithin = "AbstractVariableORListORNull"
     ),
     contains = "Unit",
     prototype = list(
       name = NULL,
-      cardinality = as.integer(0)
+      cardinality = as.integer(0),
+      nestsWithin = NULL
     )
 )
 # Helper to create instances of the Participant class
 Participant <- function(name,
-                 cardinality=as.integer(0)) {
+                 cardinality=as.integer(0),
+                 nestsWithin=NULL) {
+  # Check that the nesting variables are Units
+  if (is(nestsWithin, "list")) {
+    for (fam in nestsWithin) {
+      stopifnot(!is.null(fam))
+      stopifnot(is(fam, "Unit"))
+    }
+  }
   new("Participant",
       name = name,
-      cardinality = as.integer(cardinality)
+      cardinality = as.integer(cardinality),
+      nestsWithin = nestsWithin
   )
 }
 

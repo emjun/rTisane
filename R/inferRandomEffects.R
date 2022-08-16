@@ -12,11 +12,9 @@
 # inferRandomEffects
 inferRandomEffects <- function(confounders, interactions, conceptualModel, iv, dv) {
     randomEffects = list()
-    dvUnit = dv@unit # Get the DV's unit
 
-    # Construct random effects for repeated measures
+    ## Construct random effects for repeated measures
     mainEffects = append(confounders, iv)
-
     # Is there more than one observation for every unit?
     if (checkGreaterThan(dv@numberOfInstances, 1)) {
         # browser()
@@ -71,14 +69,17 @@ inferRandomEffects <- function(confounders, interactions, conceptualModel, iv, d
                             #     randomEffects <- append(randomEffects, RandomIntercept(group=var@unit))
                             # }
                         } else {
-                            msg = paste("Not implemented!", "Variable: ", var@name, "Number of instances is of type:", typeof(var@numberOfInstances), sep=" ")
+                            msg = paste("Not implemented!", "Variable: ", var@name, sep=" ")
+                            # msg = paste("Not implemented!", "Variable: ", var@name, "Number of instances is of type:", typeof(var@numberOfInstances), sep=" ")
                             stop(msg)
                         }
                     }
                 }
             } else {
-                msg = paste("Not implemented!", "Variable: ", var@name, "Number of instances is of type:", typeof(var@numberOfInstances), sep=" ")
-                stop(msg)
+                stopifnot(is(var, "Time"))
+                # msg = paste("Not implemented!", "Variable: ", var@name, "Number of instances is of type:", typeof(var@numberOfInstances), sep=" ")
+                # msg = paste("Not implemented!", "Variable: ", var@name, sep=" ")
+                # stop(msg)
             }
         }
         # Are there multiple observations of each instance of the unit for the DV?
@@ -112,9 +113,24 @@ inferRandomEffects <- function(confounders, interactions, conceptualModel, iv, d
             # }
         }
 
-        }
+    }
+    
+    ## Construct random effects for nesting relationships
+    dvUnit = dv@unit # Get the DV's unit
 
-    # Construct random effects for nesting relationships
+    # Is the DV unit nested in another Unit? 
+    if (!is.null(dvUnit@nestsWithin)) {
+        unitParent = dvUnit@nestsWithin
+        if (is(unitParent, "Unit")) {
+            randomEffects <- append(randomEffects, RandomIntercept(group=unitParent)) # For the parent variable
+        } else {
+            stopifnot(is(unitParent, "list"))
+            # Add random intercepts for all the parent units
+            for (p in unitParent) {
+                randomEffects <- append(randomEffects, RandomIntercept(group=p))
+            }
+        }  
+    } 
 
     # Construct random effects for non-nesting composition
 

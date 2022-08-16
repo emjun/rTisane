@@ -16,6 +16,10 @@ How analysts express their variables indicates how they are thinking about the p
 Random effects inference 
 - Repeated measures --> email Dale Barr? 
 
+## Summative evaluation idea 
+- Focus on GLM (make eval shorter?)
+    - Motivation: Since focus is on conceptual modeling
+
 ## Disambiguation interaction design
 Conceptual model disambiguation 
 1. Remove the Dependent Variable tab and put it in statistical model disambiguation process? Separate step? 
