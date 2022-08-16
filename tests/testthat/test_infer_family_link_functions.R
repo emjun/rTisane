@@ -3,7 +3,7 @@ library(rTisane)
 test_that("Creates Continuous measure wrapper properly", {
   participant <- Participant("pid", cardinality=40)
   age <- numeric(unit=participant, name="age")
-  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), number_of_instances=integer(1))
+  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
   race <- nominal(unit=participant, name="race", cardinality=5)
 
   # Verify that Continuous wrapper created correctly
@@ -20,7 +20,7 @@ test_that("Creates Continuous measure wrapper properly", {
 test_that("Creates Counts measure wrapper properly", {
   participant <- Participant("pid", cardinality=40)
   age <- numeric(unit=participant, name="age")
-  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), number_of_instances=integer(1))
+  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
   race <- nominal(unit=participant, name="race", cardinality=5)
 
   # Verify that Counts wrapper created correctly
@@ -35,7 +35,7 @@ test_that("Creates Counts measure wrapper properly", {
 test_that("Creates Categories measure wrapper properly", {
   participant <- Participant("pid", cardinality=40)
   age <- numeric(unit=participant, name="age")
-  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), number_of_instances=integer(1))
+  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
   race <- nominal(unit=participant, name="race", cardinality=5)
 
   # Verify that Categories measure created correctly
@@ -52,8 +52,8 @@ test_that("Creates Categories measure wrapper properly", {
 test_that("Infers candidate family functions properly", {
   participant <- Participant("pid", cardinality=40)
   age <- numeric(unit=participant, name="age")
-  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), number_of_instances=integer(1))
-  grade_binary <- ordinal(unit=participant, name="grade", order=list("low", "high"), number_of_instances=integer(1))
+  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
+  grade_binary <- ordinal(unit=participant, name="grade", order=list("low", "high"), numberOfInstances=integer(1))
   race <- nominal(unit=participant, name="race", cardinality=5)
 
   # Infer family functions for Continuous wrappers

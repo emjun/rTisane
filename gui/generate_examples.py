@@ -133,11 +133,11 @@ def main_interaction_random_intercepts(
     path="./gui/example_inputs/", filename="main_interaction_random_intercepts.json"
 ):
     u0 = ts.Unit("Unit")
-    s0 = ts.SetUp("Time", order=[1, 2, 3, 4, 5])
+    s0 = ts.Time("Time", order=[1, 2, 3, 4, 5])
     m0 = u0.numeric("Measure_0")
     m1 = u0.numeric("Measure_1")
     m2 = u0.numeric("Measure_2")
-    dv = u0.numeric("Dependent_variable", number_of_instances=s0)
+    dv = u0.numeric("Dependent_variable", numberOfInstances=s0)
 
     m0.causes(dv)
     m1.causes(dv)
@@ -198,7 +198,7 @@ def main_interaction_random_slope_one_variable(
 ):
     u = ts.Unit("Unit")
     a = u.nominal(
-        "Measure A", cardinality=2, number_of_instances=2
+        "Measure A", cardinality=2, numberOfInstances=2
     )  # A is within-subjects
     b = u.nominal("Measure B", cardinality=2)  # B is between-subjects
     dv = u.numeric("Dependent_variable")
@@ -261,10 +261,10 @@ def main_interaction_random_slope_interaction(
 ):
     u = ts.Unit("Unit")
     a = u.nominal(
-        "Measure A", cardinality=2, number_of_instances=2
+        "Measure A", cardinality=2, numberOfInstances=2
     )  # A is within-subjects
     b = u.nominal(
-        "Measure B", cardinality=2, number_of_instances=2
+        "Measure B", cardinality=2, numberOfInstances=2
     )  # B is within-subjects
     dv = u.numeric("Dependent_variable")
 
@@ -326,9 +326,9 @@ def main_interaction_random_intercept_slope_correlated(
 ):
     subject = ts.Unit("Subject", cardinality=12)
     word = ts.Unit("Word", cardinality=4)
-    condition = subject.nominal("Word_type", cardinality=2, number_of_instances=2)
-    reaction_time = subject.numeric("Time", number_of_instances=word)  # repeats
-    condition.has(word, number_of_instances=2)
+    condition = subject.nominal("Word_type", cardinality=2, numberOfInstances=2)
+    reaction_time = subject.numeric("Time", numberOfInstances=word)  # repeats
+    condition.has(word, numberOfInstances=2)
 
     condition.causes(reaction_time)
 
@@ -387,10 +387,10 @@ def main_interaction_multiple_random_slopes(
     u = ts.Unit("Unit")
     a = u.nominal("Measure A", cardinality=2)  # A is between-subjects
     b = u.nominal(
-        "Measure B", cardinality=2, number_of_instances=2
+        "Measure B", cardinality=2, numberOfInstances=2
     )  # B is within-subjects
     c = u.nominal(
-        "Measure C", cardinality=2, number_of_instances=2
+        "Measure C", cardinality=2, numberOfInstances=2
     )  # B is within-subjects
     dv = u.numeric("Dependent_variable")
 
