@@ -16,10 +16,6 @@ How analysts express their variables indicates how they are thinking about the p
 Random effects inference 
 - Repeated measures --> email Dale Barr? 
 
-## Summative evaluation idea 
-- Focus on GLM (make eval shorter?)
-    - Motivation: Since focus is on conceptual modeling
-
 ## Disambiguation interaction design
 Conceptual model disambiguation 
 1. Remove the Dependent Variable tab and put it in statistical model disambiguation process? Separate step? 
@@ -44,6 +40,12 @@ Family/link functions:
     - **Is it more in line with rTisane's design goals to just provide the default link functions rather than allow the end-user to select among options? Right now, we've opted for using the default + showing end-users alternatives that they can select among**
     - lme4 doesn't support multinomial linear models, so we need to use another library if we want to support multinomial family. (https://github.com/lme4/lme4/issues/594) -- **Is this necessary for the eval? (seems like not depending on our datasets)**
     - For zero-inflated counts, use glmmTMB rather than lme4? zero-inflated negative binomial?
+
+## TODO: Summative evaluation idea 
+- Focus on GLM (make eval shorter?)
+    - Motivation: Since focus is on conceptual modeling
+    - Concern: This is too narrow/focused?
+    - Think of GLM as conceptual core and then GLMM as study design/data collection details as a variable to add in 
 
 ## Summative Evaluation 
 Treatment: rTisane
