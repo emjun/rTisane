@@ -201,7 +201,7 @@ updateConceptualModel <- function(conceptualModel, values) {
       #   browser()
       # }
       # Add the relationship to the Conceptual Model
-      conceptualModel <- assume(causes(cause, effect), conceptualModel)
+      conceptualModel <- assume(conceptualModel, causes(cause, effect))
     } else {
       stringr::str_detect(nr, "Hypothesize ")
 
@@ -240,7 +240,7 @@ updateConceptualModel <- function(conceptualModel, values) {
       }
       conceptualModel@relationships[[index]] = NULL
       # Add the relationship to the Conceptual Model
-      conceptualModel <- hypothesize(causes(cause, effect), conceptualModel)
+      conceptualModel <- hypothesize(conceptualModel, causes(cause, effect))
     }
   }
 

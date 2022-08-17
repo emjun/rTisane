@@ -15,7 +15,7 @@ test_that("DV disambiguation options created properly", {
 
   # Assume causal relationship
   cause_relat <- causes(measure_0, measure_1)
-  cm <- assume(cause_relat, cm)
+  cm <- assume(cm, cause_relat)
 
   path <- generateDVConceptualModelJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
@@ -38,7 +38,7 @@ test_that("Conceptual model disambiguation options created properly", {
 
   # Assume causal relationship
   cause_relat <- relates(measure_0, measure_1)
-  cm <- assume(cause_relat, cm)
+  cm <- assume(cm, cause_relat)
 
   path <- generateDVConceptualModelJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
@@ -61,7 +61,7 @@ test_that("Conceptual model disambiguation options created properly", {
   cm <- ConceptualModel()
   # Hypothesize causal relationship
   cause_relat <- relates(measure_0, measure_1)
-  cm <- hypothesize(cause_relat, cm)
+  cm <- hypothesize(cm, cause_relat)
 
   path <- generateDVConceptualModelJSON(conceptualModel=cm, dv=measure_1, "test_input.json")
 
@@ -111,7 +111,7 @@ test_that("Conceptual model updates after disambiguation properly", {
 
   ## Assume
   relat <- relates(measure_0, measure_1)
-  cm <- assume(relat, cm)
+  cm <- assume(cm, relat)
   # Update graph
   cm@graph <- updateGraph(cm)
 
@@ -139,7 +139,7 @@ test_that("Conceptual model updates after disambiguation properly", {
   ## Hypothesize
   cm <- ConceptualModel()
   relat <- relates(measure_0, measure_1)
-  cm <- hypothesize(relat, cm)
+  cm <- hypothesize(cm, relat)
   # Update graph
   cm@graph <- updateGraph(cm)
 
@@ -166,7 +166,7 @@ test_that("Conceptual model updates after disambiguation properly", {
   ## Hypothesize, reverse direction of causes
   cm <- ConceptualModel()
   relat <- relates(measure_0, measure_1)
-  cm <- hypothesize(relat, cm)
+  cm <- hypothesize(cm, relat)
   # Update graph
   cm@graph <- updateGraph(cm)
 
@@ -199,9 +199,9 @@ test_that("Statistical modeling options created properly", {
   measure_2 <- numeric(unit=unit, name="measure_2")
 
   # Model 1: measure_1 is a common parent
-  cm <- assume(causes(measure_1, measure_0), cm)
-  cm <- assume(causes(measure_0, measure_2), cm)
-  cm <- assume(causes(measure_1, measure_2), cm)
+  cm <- assume(cm, causes(measure_1, measure_0))
+  cm <- assume(cm, causes(measure_0, measure_2))
+  cm <- assume(cm, causes(measure_1, measure_2))
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   cont <- asContinuous(measure_2)

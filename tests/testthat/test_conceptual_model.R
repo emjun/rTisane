@@ -9,7 +9,7 @@ test_that("Assume updates Conceptual Model properly", {
 
   # Assume causal relationship
   cause_relat <- causes(measure_0, measure_1)
-  cm <- assume(cause_relat, cm)
+  cm <- assume(cm, cause_relat)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -25,7 +25,7 @@ test_that("Assume updates Conceptual Model properly", {
 
   # Assume ambiguous relationship
   ambig_relat <- relates(measure_0, measure_1)
-  cm <- assume(ambig_relat, cm)
+  cm <- assume(cm, ambig_relat)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -53,7 +53,7 @@ test_that("Hypothesize updates Conceptual Model properly", {
 
   # Hypothesize causal relationship
   cause_relat <- causes(measure_0, measure_1)
-  cm <- hypothesize(cause_relat, cm)
+  cm <- hypothesize(cm, cause_relat)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -69,7 +69,7 @@ test_that("Hypothesize updates Conceptual Model properly", {
 
   # Assume ambiguous relationship
   ambig_relat <- relates(measure_0, measure_1)
-  cm <- hypothesize(ambig_relat, cm)
+  cm <- hypothesize(cm, ambig_relat)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -97,14 +97,14 @@ test_that("Unobserved variables treated properly in Conceptual Models", {
   pounds_lost <- numeric(unit=unit, name="pounds_lost")
   midlife_crisis <- Unobserved()
 
-  expect_error(hypothesize(causes(age, midlife_crisis), cm))
+  expect_error(hypothesize(cm, causes(age, midlife_crisis)))
 
   cr1 <- causes(age, midlife_crisis)
-  cm <- assume(cr1, cm)
+  cm <- assume(cm, cr1)
   cr2 <- causes(midlife_crisis, pounds_lost)
-  cm <- assume(cr2, cm)
+  cm <- assume(cm, cr2)
   cr3 <- causes(midlife_crisis, motivation)
-  cm <- assume(cr3, cm)
+  cm <- assume(cm, cr3)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -136,7 +136,7 @@ test_that("Hypothesize WhenThen updated Conceptual Model properly", {
   measure_2 <- numeric(unit=unit, name="measure_2")
 
   wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
-  cm <- hypothesize(wt, cm)
+  cm <- hypothesize(cm, wt)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -154,7 +154,7 @@ test_that("Hypothesize WhenThen updated Conceptual Model properly", {
   # Ordinal variable
   measure_3 <- ordinal(unit=unit, name="measure_3", order=list(1, 2, 3, 4, 5))
   wt <- whenThen(when=list(equals(measure_3, integer(3)), increases(measure_1)), then=increases(measure_2))
-  cm <- hypothesize(wt, cm)
+  cm <- hypothesize(cm, wt)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -181,7 +181,7 @@ test_that("Assume WhenThen updated Conceptual Model properly", {
   measure_2 <- numeric(unit=unit, name="measure_2")
 
   wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
-  cm <- assume(wt, cm)
+  cm <- assume(cm, wt)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -199,7 +199,7 @@ test_that("Assume WhenThen updated Conceptual Model properly", {
   # Nominal variable
   measure_3 <- nominal(unit=unit, name="measure_3", cardinality=5)
   wt <- whenThen(when=list(equals(measure_3, integer(3)), increases(measure_1)), then=increases(measure_2))
-  cm <- assume(wt, cm)
+  cm <- assume(cm, wt)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
@@ -229,7 +229,7 @@ test_that("Causal graph consstructed/updated properly", {
   measure_2 <- numeric(unit=unit, name="measure_2")
 
   # Assume 1 relationship
-  cm <- assume(causes(measure_0, measure_1), cm)
+  cm <- assume(cm, causes(measure_0, measure_1))
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
   expect_equal(nrow(edges(gr)), 1)
@@ -238,7 +238,7 @@ test_that("Causal graph consstructed/updated properly", {
   expect_equal(edges(gr)[[3]][1], "->")
 
   # Add an assume relationship
-  cm <- assume(causes(measure_1, measure_2), cm)
+  cm <- assume(cm, causes(measure_1, measure_2))
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
   expect_equal(nrow(edges(gr)), 2)
@@ -251,7 +251,7 @@ test_that("Causal graph consstructed/updated properly", {
 
   # Add a hypothesized relationship
   # Should not matter if relationship is assumed vs. hypothesized
-  cm <- hypothesize(causes(measure_0, measure_2), cm)
+  cm <- hypothesize(cm, causes(measure_0, measure_2))
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
   expect_equal(nrow(edges(gr)), 3)
@@ -275,10 +275,10 @@ test_that("Causal graph consstructed/updated properly", {
   w <- numeric(unit=unit, name="w")
   u <- Unobserved()
 
-  cm <- assume(causes(x, y), cm)
-  cm <- assume(causes(u, y), cm)
-  cm <- assume(causes(u, z), cm)
-  cm <- assume(causes(z, x), cm)
+  cm <- assume(cm, causes(x, y))
+  cm <- assume(cm, causes(u, y))
+  cm <- assume(cm, causes(u, z))
+  cm <- assume(cm, causes(z, x))
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
   expect_equal(nrow(edges(gr)), 4)
@@ -294,9 +294,9 @@ test_that("Validate Conceptual Model's causal graph properly", {
   measure_3 <- numeric(unit=unit, name="measure_3")
   measure_4 <- numeric(unit=unit, name="measure_4")
 
-  cm <- assume(causes(measure_0, measure_1), cm)
-  cm <- assume(causes(measure_1, measure_2), cm)
-  cm <- hypothesize(causes(measure_0, measure_2), cm)
+  cm <- assume(cm, causes(measure_0, measure_1))
+  cm <- assume(cm, causes(measure_1, measure_2))
+  cm <- hypothesize(cm, causes(measure_0, measure_2))
 
   cm@graph <- updateGraph(cm)
   isValid <- checkConceptualModel(cm, measure_0, measure_2)
@@ -307,7 +307,7 @@ test_that("Validate Conceptual Model's causal graph properly", {
 
   # DV is not in the Conceptual Model/graph
   cm <- ConceptualModel()
-  cm <- assume(causes(measure_0, measure_1), cm)
+  cm <- assume(cm, causes(measure_0, measure_1))
   cm@graph <- updateGraph(cm)
   res <- checkConceptualModel(cm, measure_0, measure_2)
   expect_false(res$isValid)
@@ -317,16 +317,16 @@ test_that("Validate Conceptual Model's causal graph properly", {
 
   # No path between IV and DV!
   cm <- ConceptualModel()
-  cm <- assume(causes(measure_0, measure_2), cm)
-  cm <- assume(causes(measure_1, measure_2), cm)
-  cm <- assume(causes(measure_3, measure_4), cm)
+  cm <- assume(cm, causes(measure_0, measure_2))
+  cm <- assume(cm, causes(measure_1, measure_2))
+  cm <- assume(cm, causes(measure_3, measure_4))
   cm@graph <- updateGraph(cm)
   res <- checkConceptualModel(cm, measure_0, measure_4)
   expect_named(res, c("isValid", "reason"))
 
   # DV causes IV!
   cm <- ConceptualModel()
-  cm <- assume(causes(measure_0, measure_2), cm)
+  cm <- assume(cm, causes(measure_0, measure_2))
   cm@graph <- updateGraph(cm)
   res <- checkConceptualModel(cm, measure_2, measure_0)
   expect_named(res, c("isValid", "reason"))
@@ -334,8 +334,8 @@ test_that("Validate Conceptual Model's causal graph properly", {
 
   # Cycles!
   cm <- ConceptualModel()
-  cm <- assume(causes(measure_0, measure_2), cm)
-  cm <- assume(causes(measure_2, measure_0), cm)
+  cm <- assume(cm, causes(measure_0, measure_2))
+  cm <- assume(cm, causes(measure_2, measure_0))
   cm@graph <- updateGraph(cm)
   res <- checkConceptualModel(cm, measure_0, measure_2)
   expect_named(res, c("isValid", "reason"))
@@ -355,8 +355,8 @@ test_that("Mediators found correctly", {
   u <- Unobserved()
 
   cm <- ConceptualModel()
-  cm <- assume(causes(x, m), cm)
-  cm <- assume(causes(m, y), cm)
+  cm <- assume(cm, causes(x, m))
+  cm <- assume(cm, causes(m, y))
   cm@graph <- updateGraph(cm)
 
   mediators <- getMediators(cm, x@name, y@name)
@@ -364,10 +364,10 @@ test_that("Mediators found correctly", {
   expect_true(m@name %in% mediators)
 
   cm <- ConceptualModel()
-  cm <- assume(causes(x, m), cm)
-  cm <- assume(causes(m, y), cm)
-  cm <- assume(causes(z, x), cm)
-  cm <- assume(causes(z, m), cm)
+  cm <- assume(cm, causes(x, m))
+  cm <- assume(cm, causes(m, y))
+  cm <- assume(cm, causes(z, x))
+  cm <- assume(cm, causes(z, m))
   cm@graph <- updateGraph(cm)
 
   mediators <- getMediators(cm, x@name, y@name)
@@ -385,9 +385,9 @@ test_that("Observed variables found correctly", {
   u <- Unobserved()
 
   cm <- ConceptualModel()
-  cm <- assume(causes(x, m), cm)
-  cm <- assume(causes(m, y), cm)
-  cm <- assume(causes(u, x), cm)
+  cm <- assume(cm, causes(x, m))
+  cm <- assume(cm, causes(m, y))
+  cm <- assume(cm, causes(u, x))
   cm@graph <- updateGraph(cm)
 
 
@@ -408,9 +408,9 @@ test_that("Infer confounders correctly", {
   measure_4 <- numeric(unit=unit, name="measure_4")
 
   # Model 1: measure_1 is a common parent
-  cm <- assume(causes(measure_1, measure_0), cm)
-  cm <- assume(causes(measure_0, measure_2), cm)
-  cm <- assume(causes(measure_1, measure_2), cm)
+  cm <- assume(cm, causes(measure_1, measure_0))
+  cm <- assume(cm, causes(measure_0, measure_2))
+  cm <- assume(cm, causes(measure_1, measure_2))
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   expect_length(confounders, 1)
@@ -426,10 +426,10 @@ test_that("Infer confounders correctly", {
   w <- numeric(unit=unit, name="w")
   u <- Unobserved()
 
-  cm <- assume(causes(x, y), cm)
-  cm <- assume(causes(u, y), cm)
-  cm <- assume(causes(u, z), cm)
-  cm <- assume(causes(z, x), cm)
+  cm <- assume(cm, causes(x, y))
+  cm <- assume(cm, causes(u, y))
+  cm <- assume(cm, causes(u, z))
+  cm <- assume(cm, causes(z, x))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -438,10 +438,10 @@ test_that("Infer confounders correctly", {
 
   # Model 3: Mediator, Unobserved common parent
   cm <- ConceptualModel()
-  cm <- assume(causes(x, y), cm)
-  cm <- assume(causes(u, x), cm)
-  cm <- assume(causes(u, z), cm)
-  cm <- assume(causes(z, y), cm)
+  cm <- assume(cm, causes(x, y))
+  cm <- assume(cm, causes(u, x))
+  cm <- assume(cm, causes(u, z))
+  cm <- assume(cm, causes(z, y))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -450,10 +450,10 @@ test_that("Infer confounders correctly", {
 
   # Model 4: Common cause of X and any mediator between X and Y
   cm <- ConceptualModel()
-  cm <- assume(causes(x, m), cm)
-  cm <- assume(causes(m, y), cm)
-  cm <- assume(causes(z, x), cm)
-  cm <- assume(causes(z, m), cm)
+  cm <- assume(cm, causes(x, m))
+  cm <- assume(cm, causes(m, y))
+  cm <- assume(cm, causes(z, x))
+  cm <- assume(cm, causes(z, m))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -462,11 +462,11 @@ test_that("Infer confounders correctly", {
 
   # Model 5: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> M
   cm <- ConceptualModel()
-  cm <- assume(causes(x, m), cm)
-  cm <- assume(causes(m, y), cm)
-  cm <- assume(causes(u, x), cm)
-  cm <- assume(causes(u, z), cm)
-  cm <- assume(causes(z, m), cm)
+  cm <- assume(cm, causes(x, m))
+  cm <- assume(cm, causes(m, y))
+  cm <- assume(cm, causes(u, x))
+  cm <- assume(cm, causes(u, z))
+  cm <- assume(cm, causes(z, m))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -475,11 +475,11 @@ test_that("Infer confounders correctly", {
 
   # Model 6: Unobserved variable is common ancestor of IV and Mediator, but Z is mediating Unobserved --> Z --> X (Unobserved --> M)
   cm <- ConceptualModel()
-  cm <- assume(causes(x, m), cm)
-  cm <- assume(causes(m, y), cm)
-  cm <- assume(causes(z, x), cm)
-  cm <- assume(causes(u, z), cm)
-  cm <- assume(causes(u, m), cm)
+  cm <- assume(cm, causes(x, m))
+  cm <- assume(cm, causes(m, y))
+  cm <- assume(cm, causes(z, x))
+  cm <- assume(cm, causes(u, z))
+  cm <- assume(cm, causes(u, m))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -488,8 +488,8 @@ test_that("Infer confounders correctly", {
 
   # Model 8: Parent of Y that is unrelated to X (Maybe good for precision)
   cm <- ConceptualModel()
-  cm <- assume(causes(x, y), cm)
-  cm <- assume(causes(z, y), cm)
+  cm <- assume(cm, causes(x, y))
+  cm <- assume(cm, causes(z, y))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -498,9 +498,9 @@ test_that("Infer confounders correctly", {
 
   # Model 13: Parent of Mediator (Maybe good for precision)
   cm <- ConceptualModel()
-  cm <- assume(causes(x, w), cm)
-  cm <- assume(causes(w, y), cm)
-  cm <- assume(causes(z, w), cm)
+  cm <- assume(cm, causes(x, w))
+  cm <- assume(cm, causes(w, y))
+  cm <- assume(cm, causes(z, w))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -509,8 +509,8 @@ test_that("Infer confounders correctly", {
 
   # Model 14: Child of X
   cm <- ConceptualModel()
-  cm <- assume(causes(x, y), cm)
-  cm <- assume(causes(x, z), cm)
+  cm <- assume(cm, causes(x, y))
+  cm <- assume(cm, causes(x, z))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -519,11 +519,11 @@ test_that("Infer confounders correctly", {
 
   # Model 15: Child of X that has child that is also child of Unobserved variable that causes Y
   cm <- ConceptualModel()
-  cm <- assume(causes(x, y), cm)
-  cm <- assume(causes(x, z), cm)
-  cm <- assume(causes(z, w), cm)
-  cm <- assume(causes(u, w), cm)
-  cm <- assume(causes(u, y), cm)
+  cm <- assume(cm, causes(x, y))
+  cm <- assume(cm, causes(x, z))
+  cm <- assume(cm, causes(z, w))
+  cm <- assume(cm, causes(u, w))
+  cm <- assume(cm, causes(u, y))
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
@@ -542,7 +542,7 @@ test_that("Catches errors in conceptual model properly", {
 
   # Specify conceptual relationships
   cr <- causes(measure_0, measure_1)
-  cm <- hypothesize(cr, cm)
+  cm <- hypothesize(cm, cr)
 
   # IV is not in conceptual model
   expect_error(query(conceptualModel=cm, iv=measure_2, dv=measure_1))
@@ -556,14 +556,13 @@ test_that("Catches errors in conceptual model properly", {
 
   # DV causes IV
   cr <- causes(measure_1, measure_0)
-  cm <- hypothesize(cr, cm)
+  cm <- hypothesize(cm, cr)
   expect_error(query(conceptualModel=cm, iv=measure_0, dv=measure_1))
 
   # Graph is cyclic
   cr <- causes(measure_0, measure_1)
   cr <- causes(measure_1, measure_2)
   cr <- causes(measure_2, measure_0)
-  cm <- hypothesize(cr, cm)
+  cm <- hypothesize(cm, cr)
   expect_error(query(conceptualModel=cm, iv=measure_0, dv=measure_1))
-
 })

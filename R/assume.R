@@ -2,17 +2,17 @@
 #'
 #' Method for constructing an assumption about a relationship.
 #' Returns the Assumption created.
-#' @param relationship Relationship to assume.
 #' @param conceptualModel ConceptualModel to which we should add the Assumption.
+#' @param relationship Relationship to assume.
 #' @keywords
 #' @export
-setGeneric("assume", function(relationship, conceptualModel) standardGeneric("assume"))
-setMethod("assume", signature("relatesORcausesORmoderates", "ConceptualModel"), function(relationship, conceptualModel)
+setGeneric("assume", function(conceptualModel, relationship) standardGeneric("assume"))
+setMethod("assume", signature("ConceptualModel", "relatesORcausesORmoderates"), function(conceptualModel, relationship)
 {
 
   if (class(relationship) == "Causes") {
     # Create an Assumption obj
-    assump = Assumption(relationship=relationship, conceptualModel=conceptualModel)
+    assump = Assumption(conceptualModel=conceptualModel, relationship=relationship)
 
     # Add Assumption obj to ConceptualModel
     # Update variables
@@ -27,7 +27,7 @@ setMethod("assume", signature("relatesORcausesORmoderates", "ConceptualModel"), 
     conceptualModel@relationships <- append(conceptualModel@relationships, assump) # Add Assumption
   } else if (class(relationship) == "Moderates") {
     # Create an Assumption obj
-    assump = Assumption(relationship=relationship, conceptualModel=conceptualModel)
+    assump = Assumption(conceptualModel=conceptualModel, relationship=relationship)
 
     # Add Assumption obj to ConceptualModel
     # Update variables
@@ -46,7 +46,7 @@ setMethod("assume", signature("relatesORcausesORmoderates", "ConceptualModel"), 
     stopifnot(class(relationship) == "Relates")
 
     # Create an Assumption obj
-    assump = Assumption(relationship=relationship, conceptualModel=conceptualModel)
+    assump = Assumption(conceptualModel=conceptualModel, relationship=relationship)
 
     # Add Assumption obj to ConceptualModel
     # Update variables

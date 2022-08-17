@@ -5,7 +5,8 @@
     "link": "identity",
     "main effects": [
         "AGEP",
-        "SCHL"
+        "SCHL",
+        "SEX"
     ],
     "random effects": {}
 }

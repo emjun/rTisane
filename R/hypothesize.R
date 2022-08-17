@@ -2,20 +2,20 @@
 #'
 #' Method for constructing a hypothesis about a relationship.
 #' Returns the Hypothesis created.
-#' @param relationship Relationship to assume.
 #' @param conceptualModel ConceptualModel to which we should add the Hypothesized relationship.
+#' @param relationship Relationship to assume.
 #' @keywords
 #' @export
 # hypothesize()
-setGeneric("hypothesize", function(relationship, conceptualModel) standardGeneric("hypothesize"))
-setMethod("hypothesize", signature("relatesORcausesORmoderates", "ConceptualModel"), function(relationship, conceptualModel)
+setGeneric("hypothesize", function(conceptualModel, relationship) standardGeneric("hypothesize"))
+setMethod("hypothesize", signature("ConceptualModel", "relatesORcausesORmoderates"), function(conceptualModel, relationship)
 {
 
   if (class(relationship) == "Causes") {
     stopifnot(is(relationship@cause, "AbstractVariable")) # Check superclass
     stopifnot(is(relationship@effect, "AbstractVariable")) # Check superclass
     # Create a Hypothesis obj
-    hypo = Hypothesis(relationship=relationship, conceptualModel=conceptualModel)
+    hypo = Hypothesis(conceptualModel=conceptualModel, relationship=relationship)
 
     # Add Hypothesis obj to ConceptualModel
     # Update variables
@@ -31,7 +31,7 @@ setMethod("hypothesize", signature("relatesORcausesORmoderates", "ConceptualMode
 
   } else if (class(relationship) == "Moderates") {
     # create a Hypothesis obj
-    hypo = Hypothesis(relationship=relationship, conceptualModel=conceptualModel)
+    hypo = Hypothesis(conceptualModel=conceptualModel, relationship=relationship)
 
     # Add Hypothesis obj to ConceptualModel
     # Update variables
@@ -49,7 +49,7 @@ setMethod("hypothesize", signature("relatesORcausesORmoderates", "ConceptualMode
   } else {
     stopifnot(class(relationship) == "Relates")
     # Create a Hypothesis obj
-    hypo = Hypothesis(relationship=relationship, conceptualModel=conceptualModel)
+    hypo = Hypothesis(conceptualModel=conceptualModel, relationship=relationship)
 
     # Add Hypothesis obj to ConceptualModel
     # Update variables
