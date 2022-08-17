@@ -76,27 +76,27 @@ To derive statistical models from conceptual models (see "Query" section), rTisa
 **Option 1: Assume a known relationship (e.g., from prior work, would be problematic if this did not exist)**
 ```R
 c <- causes(age, poundsLost)
-cm <- assume(c, cm)
+cm <- assume(cm, c)
 # OR
-cm <- assume(causes(age, poundsLost), cm)
+cm <- assume(cm, causes(age, poundsLost))
 
 r <- relates(motivation, poundsLost)
-cm <- assume(r, cm)
+cm <- assume(cm, r)
 # OR
-cm <- assume(relates(motivation, poundsLost), cm)
+cm <- assume(cm, relates(motivation, poundsLost))
 ```
 
 **Option 2: Hypothesize a relationship (e.g., the focus of the current ongoing analysis)**
 ```R
 c <- causes(condition, poundsLost)
-cm <- hypothesize(c, cm)
+cm <- hypothesize(c)
 # OR 
-cm <- hypothesize(causes(condition, poundsLost), cm)
+cm <- hypothesize(causes(condition, poundsLost))
 
 r <- relates(motivation, poundsLost)
-cm <- hypothesize(r, cm)
+cm <- hypothesize(r)
 # OR
-cm <- hypothesize(relates(motivation, poundsLost), cm)
+cm <- hypothesize(relates(motivation, poundsLost))
 ```
 
 ## Conceptual relationships for 3+ variables in a relationship
@@ -111,16 +111,16 @@ Unobserved variables can be involved in conceptual relationships that are constr
 # age -> midlife_crisis -> poundsLost
 # age -> midlife_crisis -> motivation
 midlife_crisis <- Unobserved()
-cm <- assume(causes(age, midlife_crisis), cm)
-cm <- assume(causes(midlife_crisis, poundsLost), cm)
-cm <- assume(causes(midlife_crisis, motivation), cm) # Must be Assume. Because (i) Unobserved variables are not measured and therefore (2) We cannot test/hypothesize unobserved relationships.
+cm <- assume(cm, causes(age, midlife_crisis))
+cm <- assume(cm, causes(midlife_crisis, poundsLost))
+cm <- assume(cm, causes(midlife_crisis, motivation)) # Must be Assume. Because (i) Unobserved variables are not measured and therefore (2) We cannot test/hypothesize unobserved relationships.
 
 # Common ancestor
 # latent_var -> age, latent_var -> motivation
 latent_var <- Unobserved()
-cm <- assume(causes(latent_var, age), cm)
-cm <- assume(causes(latent_var, motivation), cm)
-cm <- assume(causes(age, motivation), cm)
+cm <- assume(cm, causes(latent_var, age))
+cm <- assume(cm, causes(latent_var, motivation))
+cm <- assume(cm, causes(age, motivation))
 ```
 
 ### TO DISCUSS: Interactions
@@ -154,7 +154,19 @@ rel <- lessNegative(iv=motivation, dv=poundsLost, increases=age)
 rel <- as(increases=age) %>% LessNegative(iv=motivation, dv=poundsLost)
 
 cm = Conceptual Model() # if not previously constructed
-cm <- assume(rel, cm)
+cm <- assume(cm, rel)
+
+# Using %>%
+cm <- ConceptualModel() %>%
+    assume(...)
+```
+
+For categorical "reference" variable: 
+```R
+# Imagine we have a condition variable 
+condition <- nominal(member, "condition", cardinality=3)
+rel <- becomesLessNegative(influence=(of=motivation, on=poundsLost), asChange=list(condition, c("control", "treatment a", "treatment b"))) # similar to how we would read causes(a, b)
+# asChange parameter: Order categories according to "least" to "most" negative; must include all categories in variable (above: condition)
 ```
 
 When do these interaction variables get added to the statistical model? 
@@ -192,10 +204,10 @@ Previous design:
 
     ```R
     wt <- whenThen(when=list(increases(motivation), increases(age)), then=increases(poundsLost))
-    cm <- hypothesize(wt, cm)
+    cm <- hypothesize(wt)
 
     wt <- whenThen(when=list(equals(motivation, 'high'), increases(age)), then=increases(poundsLost))
-    cm <- assume(wt, cm)
+    cm <- assume(cm, wt)
     ```
 
 ## Queries to issue
