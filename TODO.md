@@ -18,7 +18,7 @@ Idea: Focus on GLM
 - Treatment: rTisane
 - Control/baseline: scaffolded workflow 
 - Particiants: Upwork, mailing lists; incentivize helping with statistical analyses for CHI?
-- N: 20ish? -- What is humanly possible in the next 3 weeks (with/without help)
+- N: 30ish? -- What is humanly possible in the next 3 weeks (with/without help)
 
 ### Tasks -- Any way to reduce this?
 - State personal conceptual model
