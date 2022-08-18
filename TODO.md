@@ -127,45 +127,45 @@ Family/link functions:
 *Update API OVERVIEW along the way*
 1. Interactions 
     - [Example program](examples/example3.R) 
+    - [ ] External API + tests 
+    - [ ] Statistical model inference rules + tests
     - Design decisions:
         - Don't need to disambiguate interaction effects in the same way as binary relationships. Include as suggested interaction effect (during statistical model disambiguation) if one or more of the variables is included as the IV or confounders? 
             - Motivation: Tisane represents an interaction as a new variable in the graph. I'm thinking about taking a different approach in rTisane since interaction effects aren't reasoned about in quite the same way. 
 
-2. Random effects:
-    - [ ] _init_help 
-    - [ ] randomEffects = self.getGeneratedRandomEffects()
-    - [ ] 'measures to units'
+2. Code generation
 
-3. Code generation
+3. Conceptual model disambiguation: Questions for narrowing family/link based on data 
 
-4. Conceptual model disambiguation: Questions for narrowing family/link based on data 
-
-5. Explanations
+4. (may not need) Explanations
     - [ ] # explanations = self.getExplanations() in createEffectPopovers()
-
-6. More checks  
+5. More checks  
     - Add a check that the IV in a query has a hypothesized relationship (not an assumed one) to the DV. 
     - Idea: If end-users assess an Assumed relationship (IV in query), ask if they want to proceed/should the relationship be hypothesized?  (interaction)
     - Do we want to pre-check DV before allowing for casting to Continuous/Counts/Categories? For example, if there are any floats, can't be counts. 
 
-7. Consider renaming `numeric` since casting all parmeters using integer() can be tedious.
+6. Consider renaming `numeric` since casting all parmeters using integer() can be tedious.
     - Because we override the ``numeric`` data type/function in R, end-users need to specify integer parameters by explicitly casting/specifying their parameters using ``integer``. For example: 
   ```R
   condition <- condition(unit=participant, name="treatment", order=list("low","medium", "high"), numberOfInstances=integer(1))
   ```
 
-8. Make GUIs look better. 
+7. Make GUIs look better. 
     - Little titles and breaks for questions/sections.
     - Make Conceptual Model disambiguation GUI look like Statistical Modeling one? Add sidepanel.
     
-9. Language implementation details: 
+8. Language implementation details: 
   - Does ``Assumption`` have to have a ConceptualModel piv? 
   - `isObserved` returns NULL if ask about Unit variable because Unit variable is not added to Conceptual Model -- This seems wrong? 
   - Update selectInput generation to take a dataframe from input.json NOT list of three lists
 
-10. Stress test with edge cases
+9. Stress test with edge cases
     - In the presence of ambiguous relationships, such as multiple expressed relationships between the same two variables, rTisane will check ask for what the analyst intends to communicate at the level of a directional summary.
 
+10. [hold off] Random effects:
+    - [ ] _init_help 
+    - [ ] randomEffects = self.getGeneratedRandomEffects()
+    - [ ] 'measures to units'
 
 ## Language design observations 
 *Analysts' stated conceptual assumptions drive their statistical models.*
