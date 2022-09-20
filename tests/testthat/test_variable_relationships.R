@@ -145,3 +145,26 @@ test_that("WhenThen created properly", {
 })
 
 # TODO: Need to make sure that measure, unit has relationship is inferred
+test_that("Interacts created properly", {
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+
+  # 2-way interaction
+  ixn <- interacts(measure_0, measure_1)
+  expect_s4_class(ixn, "Interaction")
+  expect_equal(ixn@name, "measure_0*measure_1")
+  expect_length(ixn@variables, 2)
+  expect_true(c(measure_0) %in% ixn@variables)
+  expect_true(c(measure_1) %in% ixn@variables)
+
+  # 3-way interaction
+  ixn <- interacts(measure_0, measure_1, measure_2)
+  expect_s4_class(ixn, "Interaction")
+  expect_equal(ixn@name, "measure_0*measure_1*measure_2")
+  expect_length(ixn@variables, 3)
+  expect_true(c(measure_0) %in% ixn@variables)
+  expect_true(c(measure_1) %in% ixn@variables)
+  expect_true(c(measure_2) %in% ixn@variables)
+})

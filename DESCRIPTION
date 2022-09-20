@@ -29,6 +29,7 @@ Collate:
     'associates_with.R'
     'calculate_cardinality.R'
     'causes.R'
+    'interacts.R'
     'get_cardinality.R'
     'has.R'
     'get_all_vars.R'
@@ -70,3 +71,4 @@ Collate:
     'query.R'
     'checkEquals.R'
     'checkGreaterThan.R'
+    'per.R'

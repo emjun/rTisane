@@ -376,25 +376,23 @@ Nominal <- setClass("Nominal",
     contains = "Measure"
 )
 
-#' Moderation Nominal class
+#' Interaction class
 #'
-#' Class for representing Moderation (or Moderation) effects as nominal variables.
-#' Not called directly. All moderations are declared through moderates.
+#' Class for representing Interaction effects.
+#' Not called directly. All interactions are declared through interacts.
+#' @slot name Character name (shorthand) for the interaction effect
 #' @slot units List of Units, may only be one unit if the moderation is constructed from Measures from the same Unit
-#' @slot name Character name (shorthand) for the interaction/moderation effect
-#' @slot cardinality Integer for cardinality.
-#' @slot moderators List of AbstractVariables that moderate each other
-#' @slot categories List of categories that are the product of interacting the moderators.
+# #' @slot cardinality Integer for cardinality.
+#' @slot variables List of AbstractVariables or UnobservedVariables that interact with each other
 #' @keywords
-ModerationNominal <- setClass("ModerationNominal",
+Interaction <- setClass("Interaction",
     slot = c(
-        units = "list", # List of Units
         name = "character",
-        cardinality = "integer",
-        # categories = "list",
-        moderators = "list" # List of AbstractVariables
+        units = "list", # List of Units
+        # cardinality = "integer",
+        variables = "list" # List of AbstractVariables
     ),
-    contains = "Measure"
+    contains = "AbstractVariable"
 )
 
 

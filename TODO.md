@@ -133,6 +133,15 @@ Family/link functions:
         - Don't need to disambiguate interaction effects in the same way as binary relationships. Include as suggested interaction effect (during statistical model disambiguation) if one or more of the variables is included as the IV or confounders? 
             - Motivation: Tisane represents an interaction as a new variable in the graph. I'm thinking about taking a different approach in rTisane since interaction effects aren't reasoned about in quite the same way. 
 
+# Declaration
+ixn <- interacts(a, b) --> creates a new variable node <heterogeneity>; only for AbstractVariables, not UnobservedVariables
+causes(ixn, c); Does NOT assume that a --> c or b --> c or a --> b; if these things are intended, must be stated explicitly  <of causal effect/s, but must state the causal effect/s explicitly>
+
+# Statistical model inference 
+If both/all variables in an interaction are included as confounders/main effects, include interaction effect 
+
+Future work: More fine-grained disambiguation about interaction effects, which may involve figuring out the delicate balance between too much detail...
+
 2. Code generation
 
 3. Conceptual model disambiguation: Questions for narrowing family/link based on data 

@@ -4,21 +4,21 @@
 \alias{inferRandomEffects}
 \title{Infers random effects.}
 \usage{
-inferRandomEffects(conceptualModel, iv, dv)
+inferRandomEffects(confounders, interactions, conceptualModel, iv, dv)
 }
 \arguments{
-\item{measurement_gr}{Graph representing data measurement relationships.}
+\item{confounders}{List of confounders to include in a statistical model.}
 
-\item{nests_gr}{Graph representing nesting relationships between variables.}
+\item{interactions}{List of interaction terms to include in a statistical model.}
 
-\item{design}{Design}
+\item{conceptualModel}{ConceptualModel expressing conceptual relationships.}
 
-\item{main_effects}{List of candidate main effects}
+\item{iv}{AbstractVariable whose influence on @param dv we are interested in estimating.}
 
-\item{interaction_effects}{List of candidate interaction effects}
+\item{dv}{AbstractVariable whose outcome we are interested in estimating in a statsitical model.}
 }
 \value{
-List of random effects and their explanations
+List of random effects to include.
 }
 \description{
 This function infers random effects from data measurement relationships.

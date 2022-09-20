@@ -4,12 +4,12 @@
 \alias{hypothesize}
 \title{Specify a Hypothesize statement}
 \usage{
-hypothesize(relationship, conceptualModel)
+hypothesize(conceptualModel, relationship)
 }
 \arguments{
-\item{relationship}{Relationship to assume.}
-
 \item{conceptualModel}{ConceptualModel to which we should add the Hypothesized relationship.}
+
+\item{relationship}{Relationship to assume.}
 }
 \description{
 Method for constructing a hypothesis about a relationship.

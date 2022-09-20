@@ -4,7 +4,7 @@
 \alias{Participant}
 \title{Participant class}
 \usage{
-Participant(name, cardinality = as.integer(0))
+Participant(name, cardinality = as.integer(0), nestsWithin = NULL)
 }
 \description{
 Class for Participant variables

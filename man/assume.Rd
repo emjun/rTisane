@@ -4,12 +4,12 @@
 \alias{assume}
 \title{Specify an Assumes statement}
 \usage{
-assume(relationship, conceptualModel)
+assume(conceptualModel, relationship)
 }
 \arguments{
-\item{relationship}{Relationship to assume.}
-
 \item{conceptualModel}{ConceptualModel to which we should add the Assumption.}
+
+\item{relationship}{Relationship to assume.}
 }
 \description{
 Method for constructing an assumption about a relationship.
