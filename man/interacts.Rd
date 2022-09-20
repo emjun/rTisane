@@ -13,5 +13,5 @@ interacts(...)
 }
 \description{
 Method for constructing an interaction between two or more variables.
-Returns the Interaction constructed.
+Returns the Interacts"constructed.
 }

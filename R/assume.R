@@ -7,7 +7,7 @@
 #' @keywords
 #' @export
 setGeneric("assume", function(conceptualModel, relationship) standardGeneric("assume"))
-setMethod("assume", signature("ConceptualModel", "relatesORcausesORmoderates"), function(conceptualModel, relationship)
+setMethod("assume", signature("ConceptualModel", "relatesORcausesORInteracts"), function(conceptualModel, relationship)
 {
 
   if (class(relationship) == "Causes") {

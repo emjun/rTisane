@@ -7,12 +7,11 @@
 whenThen(when, then)
 }
 \arguments{
-\item{when}{Compares or a list of Compares.}
+\item{when}{Compares.}
 
 \item{then}{Compares.}
 }
 \description{
 Method for constructing a very specific relationship between two variables.
 Returns the Causes relationship constructed if @param when is a single Compares/involves one variable.
-Returns the Moderates relationship constructed if @param when is a list of Compares/involves multiple variables.
 }

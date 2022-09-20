@@ -134,11 +134,11 @@ Family/link functions:
             - Motivation: Tisane represents an interaction as a new variable in the graph. I'm thinking about taking a different approach in rTisane since interaction effects aren't reasoned about in quite the same way. 
 
 # Declaration
-ixn <- interacts(a, b) --> creates a new variable node <heterogeneity>; only for AbstractVariables, not UnobservedVariables
-causes(ixn, c); Does NOT assume that a --> c or b --> c or a --> b; if these things are intended, must be stated explicitly  <of causal effect/s, but must state the causal effect/s explicitly>
+[x] ixn <- interacts(a, b) --> creates a new variable node <heterogeneity>; only for AbstractVariables, not UnobservedVariables
+[x] causes(ixn, c); Does NOT assume that a --> c or b --> c or a --> b; if these things are intended, must be stated explicitly  <of causal effect/s, but must state the causal effect/s explicitly>
 
 # Statistical model inference 
-If both/all variables in an interaction are included as confounders/main effects, include interaction effect 
+[x] If both/all variables in an interaction are included as confounders/main effects, include interaction effect && the interaction effect is ON the dv
 
 Future work: More fine-grained disambiguation about interaction effects, which may involve figuring out the delicate balance between too much detail...
 

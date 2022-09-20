@@ -1,7 +1,7 @@
 #' Specify an interaction relationship
 #'
 #' Method for constructing an interaction between two or more variables.
-#' Returns the Interaction constructed.
+#' Returns the Interacts"constructed.
 #' @param lhs AbstractVariable.
 #' @param rhs AbstractVariable.
 #' @keywords
@@ -20,7 +20,7 @@ interacts <- function(...){
     if (name == "") {
         name = r@name
     } else {
-        name = paste(name, r@name, sep="*")
+        name = paste(name, r@name, sep="_X_")
     }
   }
   # create a list of units
@@ -35,8 +35,8 @@ interacts <- function(...){
   for (r in vars) {
     variables = append(variables, r)
   }
-  # create an Interaction relationship obj
-  relat = Interaction(name=name, units=units, variables=variables)
+  # create an Interacts"relationship obj
+  relat = Interacts(name=name, units=units, variables=variables)
 
   # Return cause relationship
   relat

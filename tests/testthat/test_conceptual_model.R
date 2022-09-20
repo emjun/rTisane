@@ -135,14 +135,12 @@ test_that("Hypothesize WhenThen updated Conceptual Model properly", {
   measure_1 <- numeric(unit=unit, name="measure_1")
   measure_2 <- numeric(unit=unit, name="measure_2")
 
-  wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
+  wt <- whenThen(when=increases(measure_0), then=increases(measure_2))
   cm <- hypothesize(cm, wt)
-
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
-  expect_length(cm@variables, 3)
+  expect_length(cm@variables, 2)
   expect_true(c(measure_0) %in% cm@variables)
-  expect_true(c(measure_1) %in% cm@variables)
   expect_true(c(measure_2) %in% cm@variables)
 
   expect_type(cm@relationships, "list")
@@ -153,14 +151,13 @@ test_that("Hypothesize WhenThen updated Conceptual Model properly", {
 
   # Ordinal variable
   measure_3 <- ordinal(unit=unit, name="measure_3", order=list(1, 2, 3, 4, 5))
-  wt <- whenThen(when=list(equals(measure_3, integer(3)), increases(measure_1)), then=increases(measure_2))
+  wt <- whenThen(when=equals(measure_3, integer(3)), then=increases(measure_2))
   cm <- hypothesize(cm, wt)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
-  expect_length(cm@variables, 4)
+  expect_length(cm@variables, 3)
   expect_true(c(measure_0) %in% cm@variables)
-  expect_true(c(measure_1) %in% cm@variables)
   expect_true(c(measure_2) %in% cm@variables)
   expect_true(c(measure_3) %in% cm@variables)
 
@@ -170,6 +167,7 @@ test_that("Hypothesize WhenThen updated Conceptual Model properly", {
   expect_s4_class(relat, "Hypothesis")
   expect_equal(relat@relationship, wt)
 
+  expect_error(whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2)))
 })
 
 test_that("Assume WhenThen updated Conceptual Model properly", {
@@ -180,14 +178,13 @@ test_that("Assume WhenThen updated Conceptual Model properly", {
   measure_1 <- numeric(unit=unit, name="measure_1")
   measure_2 <- numeric(unit=unit, name="measure_2")
 
-  wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
+  wt <- whenThen(when=increases(measure_0), then=increases(measure_2))
   cm <- assume(cm, wt)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
-  expect_length(cm@variables, 3)
+  expect_length(cm@variables, 2)
   expect_true(c(measure_0) %in% cm@variables)
-  expect_true(c(measure_1) %in% cm@variables)
   expect_true(c(measure_2) %in% cm@variables)
 
   expect_type(cm@relationships, "list")
@@ -198,14 +195,13 @@ test_that("Assume WhenThen updated Conceptual Model properly", {
 
   # Nominal variable
   measure_3 <- nominal(unit=unit, name="measure_3", cardinality=5)
-  wt <- whenThen(when=list(equals(measure_3, integer(3)), increases(measure_1)), then=increases(measure_2))
+  wt <- whenThen(when=equals(measure_3, integer(3)), then=increases(measure_2))
   cm <- assume(cm, wt)
 
   expect_s4_class(cm, "ConceptualModel")
   expect_type(cm@variables, "list")
-  expect_length(cm@variables, 4)
+  expect_length(cm@variables, 3)
   expect_true(c(measure_0) %in% cm@variables)
-  expect_true(c(measure_1) %in% cm@variables)
   expect_true(c(measure_2) %in% cm@variables)
   expect_true(c(measure_3) %in% cm@variables)
 
@@ -214,9 +210,12 @@ test_that("Assume WhenThen updated Conceptual Model properly", {
   relat = cm@relationships[[2]]
   expect_s4_class(relat, "Assumption")
   expect_equal(relat@relationship, wt)
+
+
+  expect_error(whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2)))
 })
 
-test_that("Causal graph consstructed/updated properly", {
+test_that("Causal graph constructed/updated properly", {
   cm <- ConceptualModel()
   # Test empty graph
   gr <- updateGraph(cm)
@@ -398,6 +397,41 @@ test_that("Observed variables found correctly", {
   expect_false(isObserved(cm, u))
 })
 
+test_that("Interactions found correctly", {
+  unit <- Unit("person")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_3 <- numeric(unit=unit, name="measure_3")
+
+  cm <- ConceptualModel() 
+  # No interactions 
+  cm <- assume(cm, causes(measure_0, measure_3))
+  cm <- assume(cm, causes(measure_1, measure_3))
+  cm@graph <- updateGraph(cm)
+
+  interactions <- getInteractions(cm, measure_3)
+  expect_length(interactions, 0)
+
+  # 1 interaction 
+  ixn <- interacts(measure_0, measure_1)
+  cm <- assume(cm, causes(ixn, measure_3))
+  cm@graph <- updateGraph(cm)
+  
+  interactions <- getInteractions(cm, measure_3)
+  expect_length(interactions, 1)
+  expect_true(list(ixn) %in% interactions)
+
+  # 2 interactions 
+  ixn <- interacts(measure_0, measure_1, measure_2)
+  cm <- assume(cm, causes(ixn, measure_3))
+  cm@graph <- updateGraph(cm)
+  
+  interactions <- getInteractions(cm, measure_3)
+  expect_length(interactions, 2)
+  expect_true(list(ixn) %in% interactions)
+})
+
 test_that("Infer confounders correctly", {
   cm <- ConceptualModel()
   unit <- Unit("person")
@@ -565,4 +599,52 @@ test_that("Catches errors in conceptual model properly", {
   cr <- causes(measure_2, measure_0)
   cm <- hypothesize(cm, cr)
   expect_error(query(conceptualModel=cm, iv=measure_0, dv=measure_1))
+})
+
+test_that("Infer interactions correctly", {
+  unit <- Unit("unit")
+  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_3 <- numeric(unit=unit, name="measure_3")
+
+  # Construct Conceptual Model
+  cm <- ConceptualModel()
+
+  # Specify conceptual relationships
+  cm <- assume(cm, causes(measure_1, measure_0))
+  cm <- assume(cm, causes(measure_0, measure_2))
+  cm <- assume(cm, causes(measure_1, measure_2))
+  cr <- causes(measure_0, measure_1)
+  cm <- hypothesize(cm, cr)
+
+  # There are no interactions
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  expect_length(interactions, 0)
+
+  # There is 1 interaction 
+  cm <- assume(cm, causes(interacts(measure_0, measure_1), measure_2))
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  expect_length(interactions, 1)
+
+  # There is only 1 interaction with the applicable DV
+  cm <- assume(cm, causes(interacts(measure_1, measure_2), measure_3))
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  expect_length(interactions, 1)
+  
+  # There are 2 interactions
+  cm <- assume(cm, causes(interacts(measure_1, measure_2), measure_2))
+
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  expect_length(interactions, 2)
 })

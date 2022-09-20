@@ -8,7 +8,7 @@
 #' @export
 # hypothesize()
 setGeneric("hypothesize", function(conceptualModel, relationship) standardGeneric("hypothesize"))
-setMethod("hypothesize", signature("ConceptualModel", "relatesORcausesORmoderates"), function(conceptualModel, relationship)
+setMethod("hypothesize", signature("ConceptualModel", "relatesORcausesORInteracts"), function(conceptualModel, relationship)
 {
 
   if (class(relationship) == "Causes") {

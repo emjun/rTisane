@@ -2,14 +2,14 @@
 #'
 #' Method for constructing a very specific relationship between two variables.
 #' Returns the Causes relationship constructed if @param when is a single Compares/involves one variable.
-#' Returns the Moderates relationship constructed if @param when is a list of Compares/involves multiple variables.
-#' @param when Compares or a list of Compares.
+# #' Returns the Moderates relationship constructed if @param when is a list of Compares/involves multiple variables.
+#' @param when Compares.
 #' @param then Compares.
 #' @keywords
 #' @export
 # whenThen()
 setGeneric("whenThen", function(when, then) standardGeneric("whenThen"))
-setMethod("whenThen", signature("ComparesORComparesList", "Compares"), function(when, then)
+setMethod("whenThen", signature("Compares", "Compares"), function(when, then)
 {
   if (class(when) == "Compares") {
     # Get the variables from the when/then parameters
@@ -24,20 +24,21 @@ setMethod("whenThen", signature("ComparesORComparesList", "Compares"), function(
     # create a Relates relationship obj 
     relat = Relates(lhs=lhs, rhs=rhs)
     
-  } else {
-    # Assert that @param when is a List of Compares
-    stopifnot(class(when) == "list")
-    for (comp in when) {
-      stopifnot(class(comp) == "Compares")
-    }
+  } 
+  # else {
+  #   # Assert that @param when is a List of Compares
+  #   stopifnot(class(when) == "list")
+  #   for (comp in when) {
+  #     stopifnot(class(comp) == "Compares")
+  #   }
 
-    # Create a Moderates relationship obj
-    moderators = list()
-    for (comp in when) {
-      moderators <- append(comp@variable, moderators)
-    }
-    relat = Moderates(moderators=moderators, on=then@variable)
-  }
+  #   # Create a Moderates relationship obj
+  #   moderators = list()
+  #   for (comp in when) {
+  #     moderators <- append(comp@variable, moderators)
+  #   }
+  #   relat = Moderates(moderators=moderators, on=then@variable)
+  # }
 
   # Return relationship
   relat

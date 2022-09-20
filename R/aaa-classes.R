@@ -184,31 +184,31 @@ Causes <- setClass("Causes",
     )
 )
 
-#' Moderates class
-#'
-#' Class for Moderates relationships.
-#' Not called directly.
-#' @slot moderators List of AbstractVariables.
-#' @slot on AbstractVariable that the moderators moderate each other on
-#' @keywords
-Moderates <- setClass("Moderates",
-    slot = c(
-        moderators = "list",
-        on = "AbstractVariable"
-    ),
-    prototype = list(
-        moderators = NULL,
-        on = NULL
-    )
-)
-# Helper to create instances of the Moderates class
-Moderates <- function(moderators,
-                   on) {
-  new("Moderates",
-      moderators=moderators,
-      on = on
-  )
-}
+# #' Moderates class
+# #'
+# #' Class for Moderates relationships.
+# #' Not called directly.
+# #' @slot moderators List of AbstractVariables.
+# #' @slot on AbstractVariable that the moderators moderate each other on
+# #' @keywords
+# Moderates <- setClass("Moderates",
+#     slot = c(
+#         moderators = "list",
+#         on = "AbstractVariable"
+#     ),
+#     prototype = list(
+#         moderators = NULL,
+#         on = NULL
+#     )
+# )
+# # Helper to create instances of the Moderates class
+# Moderates <- function(moderators,
+#                    on) {
+#   new("Moderates",
+#       moderators=moderators,
+#       on = on
+#   )
+# }
 
 
 setClassUnion("numberValueORExactlyORAtMostORPer", c("NumberValue", "Exactly", "AtMost", "Per"))
@@ -365,27 +365,27 @@ Nominal <- setClass("Nominal",
         name = "character",
         cardinality = "integer",
         categories = "list",
-        isInteraction = "logical"
+        isInteraction= "logical"
     ),
     prototype = list(
         name = "",
         cardinality = as.integer(0),
         categories = list(),
-        isInteraction = FALSE
+        isInteraction= FALSE
     ),
     contains = "Measure"
 )
 
-#' Interaction class
+#' Interacts"class
 #'
-#' Class for representing Interaction effects.
+#' Class for representing Interacts"effects.
 #' Not called directly. All interactions are declared through interacts.
 #' @slot name Character name (shorthand) for the interaction effect
 #' @slot units List of Units, may only be one unit if the moderation is constructed from Measures from the same Unit
 # #' @slot cardinality Integer for cardinality.
 #' @slot variables List of AbstractVariables or UnobservedVariables that interact with each other
 #' @keywords
-Interaction <- setClass("Interaction",
+Interacts <- setClass("Interacts",
     slot = c(
         name = "character",
         units = "list", # List of Units
@@ -644,7 +644,7 @@ Compares <- setClass("Compares",
                   )
 )
 
-setClassUnion("relatesORcausesORmoderates", c("Relates", "Causes", "Moderates"))
+setClassUnion("relatesORcausesORInteracts", c("Relates", "Causes", "Interacts"))
 #' Assumption class
 #'
 #' Class for Assumptions.
@@ -654,7 +654,7 @@ setClassUnion("relatesORcausesORmoderates", c("Relates", "Causes", "Moderates"))
 #' @export
 Assumption <- setClass("Assumption",
                         slot = c(
-                          relationship = "relatesORcausesORmoderates",
+                          relationship = "relatesORcausesORInteracts",
                           conceptualModel = "ConceptualModel"
                         ),
                         prototype = list(
@@ -681,7 +681,7 @@ Assumption <- function(relationship=new("Relates", lhs=Unobserved(), rhs=Unobser
 #' @export
 Hypothesis <- setClass("Hypothesis",
                        slot = c(
-                         relationship = "relatesORcausesORmoderates",
+                         relationship = "relatesORcausesORInteracts",
                          conceptualModel = "ConceptualModel"
                        )
 )

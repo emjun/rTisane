@@ -16,4 +16,12 @@ setMethod("causes", signature("AbstractVariableORUnobservedVariable", "AbstractV
   # Return cause relationship
   relat
 })
+setMethod("causes", signature("Interaction", "AbstractVariableORUnobservedVariable"), function(cause, effect)
+{
+  # create a Causes relationship obj
+  relat = Causes(cause=cause, effect=effect)
+
+  # Return cause relationship
+  relat
+})
 

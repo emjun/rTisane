@@ -51,7 +51,7 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   confounders <- inferConfounders(conceptualModel=cmUpdated, iv=iv, dv=dv)
   # main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
 
-  interactions <- inferInteractions(conceptualModel=cmUpdated, iv=iv, dv=dv)
+  interactions <- inferInteractions(conceptualModel=cmUpdated, iv=iv, dv=dv, confounders=confounders)
   # interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design, main_effects)
   randomEffects <- inferRandomEffects(confounders=confounders, interactions=interactions, conceptualModel=cmUpdated, iv=iv, dv=dv)
   # random_effects <- infer_random_effects_with_explanations(measurement_gr, nests_gr, design, all_relationships, main_effects, interaction_effects)

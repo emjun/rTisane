@@ -4,7 +4,7 @@
 \alias{inferInteractions}
 \title{Infers interaction/moderation effects.}
 \usage{
-inferInteractions(conceptualModel, iv, dv)
+inferInteractions(conceptualModel, iv, dv, confounders)
 }
 \arguments{
 \item{conceptualModel}{ConceptualModel. With causal graph to use in order to identify confounders.}
@@ -12,6 +12,8 @@ inferInteractions(conceptualModel, iv, dv)
 \item{iv}{AbstractVariable. Independent variable that should cause (directly or indirectly) the @param dv.}
 
 \item{dv}{AbstractVariable. Dependent variable that should not cause the @param iv.}
+
+\item{confounders}{List. List of confounders to account for in order to estimate the causal effect of @param iv accurately.}
 }
 \value{
 List of interaction/moderation effects and their explanations.
