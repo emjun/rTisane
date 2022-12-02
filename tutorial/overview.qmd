@@ -1,0 +1,105 @@
+---
+title: "Overview of rTisane"
+author: "Eunice Jun"
+date: "December 2, 2022"
+toc: true
+format:
+  html:
+    html-math-method: katex
+    code-tools: true
+    self-contained: true
+execute:
+  warning: false
+---
+
+## Introduction 
+Status check: At this point, you have successfully installed rTisane! If not, look at [the instructions for installing rTisane](tutorial/start.qmd) or [ask for help](https://github.com/emjun/rTisane/issues). 
+
+In this part of the tutorial, you will use rTisane to author a statistical model without a priori knowing how exactly to formulate it. 
+
+*How?* In five steps (!!!), rTisane will help you leverage what you know about how variables relate to one another conceptually in your domain and how you collected the data in order to figure out the mathematical formulation and output a script that implements the statistical model. 
+
+## Step 1: Declare variables 
+There are two kinds of variables in rTisane: (i) Units and (ii) Measures. 
+
+Example: Consider a study about student test performance. You collect data from 100 students. For each student, you know their socioeconomic background and test score. You also randomly assign them to one of two conditions: online tutoring, in-person tutoring. 
+
+### Units
+Units are entities you collect data from through observation or experimentation. 
+
+In the example, student is your unit. 
+
+Units have
+- `name`: the column name in the dataset
+- `cardinality`: how many unique students you have
+```{r}
+student <- Unit(name="student", cardinality=100)
+```
+
+You could also consider each student a participant in your study and specify
+```{r}
+student <- Participant(name="student", cardinality=100)
+```
+
+*The above two are equivalent.* You should use whatever makes more sense to you. 
+
+### Measures
+Measures are attributes of a Unit you have observed and/or assigned them. Each measure can represent `numeric`, `nominal`, or `ordinal` data. 
+
+Numeric data represent quantitative measures that are considered to be continuous (e.g., time, age).
+
+In the example, test score is numeric. 
+
+Numeric variables have 
+- `unit`: the unit this measure describes
+- `name`: the column name in the dataset
+```{r}
+testScore <- numeric(unit=student, name="testScore")
+```
+
+Nominal data have unordered categories (e.g., chocolate ice cream, vanilla ice cream, strawberry ice cream).
+
+In the example, condition is nominal. 
+
+Nominal variables have 
+- `unit`: the unit this measure describes 
+- `name`: the column name in the dataset
+# TODO: nothing else?? 
+```{r}
+tutoring <- nominal(unit=student, name="condition")
+```
+
+Ordinal data have ordered categories (e.g., first grade, second grade, third grade).
+In the example, socioeconomic background is ordinal. 
+
+Ordinal variables have
+- `unit`: the unit this measure describes 
+- `name`: the column name in the dataset
+- `order`: an ordering to the categorical values the variable could take on 
+```{r}
+ses <- ordinal(unit=student, name="SES", order=list("low", "middle", "high"))
+```
+
+Result: A set of variables you are thinking about and that you want to specify conceptual relationships for. Don't worry, you can always add more variables later!
+
+## Step 2: Specify conceptual relationships 
+In rTisane, we 
+
+Result: Set of variables + conceptual relationships that represent your background knowledge about the domain. 
+
+## Step 3: Ask rTisane for a statistical model based on your variable relationships
+current limitation/expectation: 
+
+### What about my data? 
+
+
+Result: :clap: A complete rTisane program with variables, conceptual relationships, and a query for a statistical model!
+
+## Step 4: Clarify any relationships + answer a few more targeted questions
+
+At this point, you should see a GUI. 
+
+Result: A generated script with code for the resulting statistical model you can run! 
+
+## Step 5: Run your statistical model!
+Result: Summary of your statistical model + a visualization for how well the data fit. 
