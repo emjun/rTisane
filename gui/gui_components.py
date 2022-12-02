@@ -1856,12 +1856,14 @@ class GUIComponents:
                 dbc.ModalHeader("Code Generated!", id="code-generated-modal-header"),
                 dbc.ModalBody("Placeholder", id="code-generated-modal-body"),
                 dbc.ModalFooter(
-                    dbc.Button(
-                        "dismiss",
-                        id="close-code-generated-modal",
-                        className="ml-auto",
-                        n_clicks=0,
-                    )
+                    [
+                        dbc.Button(
+                            "close",
+                            id="close-code-generated-modal",
+                            className="ml-auto",
+                            n_clicks=0,
+                        )
+                    ]
                 ),
             ],
             id="code-generated-modal",

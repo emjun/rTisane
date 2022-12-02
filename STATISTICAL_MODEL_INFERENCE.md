@@ -8,7 +8,32 @@ This diverges from what Tisane implements, which is the [modified disjunctive cr
 
 To infer statistical models, we must infer confounders. To do so, we use all assumed and hypothesized relationships. This means that the confounders and statistical model are for the context of the causal graph/conceptual model specified.  
 ### Supported Family and Link functions
-GLM, GLMER in lme4 ([see lme4 reference](https://github.com/lme4/lme4/blob/master/src/glmFamily.h))
+GLM in base R ([From reference](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/family))
+Family: 
+binomial
+gaussian
+Gamma
+inverse.gaussian
+poisson
+
+Not currently supported in rTisane: 
+quasi
+quasibinomial (for modeling over-dispersion)
+quasipoisson (for modeling over-dispersion)
+
+Link functions: 
+- binomial family: logit (logistic), probit (normal), cauchit (Cauchy), log and cloglog (complementary log-log)
+- gaussian: identity, log, inverse
+- Gamma:  inverse, identity, log
+- inverse.gaussian: 1/mu^2, inverse, identity, log
+- poisson: log, identity, sqrt
+
+Not currently supported in rTisane: 
+- quasi: logit, probit, cloglog, identity, inverse, log, 1/mu^2, sqrt (Can create power link function with `power` function)
+- quasibinomial family: logit (logistic), probit (normal), cauchit (Cauchy), log and cloglog (complementary log-log)
+- quasipoisson: log, identity, sqrt
+
+GLMER in lme4 ([see lme4 reference](https://github.com/lme4/lme4/blob/master/src/glmFamily.h))
 Family: 
 - Binomial Distribution
 - Gamma

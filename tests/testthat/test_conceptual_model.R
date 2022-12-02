@@ -404,8 +404,8 @@ test_that("Interactions found correctly", {
   measure_2 <- numeric(unit=unit, name="measure_2")
   measure_3 <- numeric(unit=unit, name="measure_3")
 
-  cm <- ConceptualModel() 
-  # No interactions 
+  cm <- ConceptualModel()
+  # No interactions
   cm <- assume(cm, causes(measure_0, measure_3))
   cm <- assume(cm, causes(measure_1, measure_3))
   cm@graph <- updateGraph(cm)
@@ -413,23 +413,24 @@ test_that("Interactions found correctly", {
   interactions <- getInteractions(cm, measure_3)
   expect_length(interactions, 0)
 
-  # 1 interaction 
+  # 1 interaction
   ixn <- interacts(measure_0, measure_1)
   cm <- assume(cm, causes(ixn, measure_3))
   cm@graph <- updateGraph(cm)
-  
+
   interactions <- getInteractions(cm, measure_3)
   expect_length(interactions, 1)
   expect_true(list(ixn) %in% interactions)
 
-  # 2 interactions 
+  # 2 interactions
   ixn <- interacts(measure_0, measure_1, measure_2)
   cm <- assume(cm, causes(ixn, measure_3))
   cm@graph <- updateGraph(cm)
-  
+
   interactions <- getInteractions(cm, measure_3)
   expect_length(interactions, 2)
   expect_true(list(ixn) %in% interactions)
+  # browser()
 })
 
 test_that("Infer confounders correctly", {
@@ -624,7 +625,7 @@ test_that("Infer interactions correctly", {
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 0)
 
-  # There is 1 interaction 
+  # There is 1 interaction
   cm <- assume(cm, causes(interacts(measure_0, measure_1), measure_2))
 
   cm@graph <- updateGraph(cm)
@@ -639,7 +640,7 @@ test_that("Infer interactions correctly", {
   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 1)
-  
+
   # There are 2 interactions
   cm <- assume(cm, causes(interacts(measure_1, measure_2), measure_2))
 

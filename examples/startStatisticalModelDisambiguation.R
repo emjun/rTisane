@@ -6,7 +6,7 @@ unit <- Unit("person")
 measure_0 <- numeric(unit=unit, name="measure_0")
 measure_1 <- numeric(unit=unit, name="measure_1")
 cause_relat <- causes(measure_0, measure_1)
-cm <- assume(cause_relat, cm)
+cm <- assume(cm, cause_relat)
 # Update graph
 cm@graph <- updateGraph(cm)
 

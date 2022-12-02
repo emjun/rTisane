@@ -15,6 +15,7 @@ import pandas as pd
 from gui.gui_helpers import getTriggeredFromContext
 import json
 import os
+import signal
 import logging
 
 
@@ -419,6 +420,7 @@ def createGenerateCodeCallback(app, comp: GUIComponents = None):
         codeGenerated = "Code Generated!"
         if triggered:
             if triggered == "close-code-generated-modal" and n_clicks > 0:
+                # os.kill(os.getpid(), signal.SIGTERM)
                 return (False, 0, "Code Generated!", "Placeholder")
             dataObject = json.loads(data) if data else {}
             if "path" in dataObject:
