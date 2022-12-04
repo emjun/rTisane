@@ -142,7 +142,7 @@ Family/link functions:
 
 Future work: More fine-grained disambiguation about interaction effects, which may involve figuring out the delicate balance between too much detail...
 
-2. Code generation
+[x] 2. Code generation
 
 3. Conceptual model disambiguation: Questions for narrowing family/link based on data 
 
@@ -200,3 +200,40 @@ Example: How analysts express their variables indicates how they are thinking ab
 - Write blog comparing Dash and Shiny 
 
 - Write blog comparing statsmodels, lme4
+
+
+
+
+Few different specification strategies 
+general --> specific 
+hyper-specific --> more general
+
+# Relates 
+** Why does it make sense to allow someone to express Relates and then ask them if it is Causes A->B or B->A?
+
+# Interacts 
+- Causes(interacts(a, b), c) --> creates a*b
+- when(equals(interacts(a, b),"A1", "B1"), increases(C)) --> creates a*b, introduces causes between AB and C
+- Does a + b + a * b or a * b get added to the model?  --> Statistical model inference is separate??
+
+
+IDEA: Update type system to avoid disambiguation about dependent variable? 
+- THINK THROUGH: new data type + available famil/link functions! 
+- Add checks with data
+- Try out with pilot participant
+
+# Edge cases 
+- Can have multiple hypothesize relationships, but this model is focused on one hypothesized relationship. Can have multiple statistical models for multiple relationships. 
+--> How to think about this problem for multiple comparisons (Tibshirani?)
+
+# Common failure cases
+
+R/J meeting: 
+- API overview, including updated data type system
+- Example statistical models for study
+- Reason for including Relates to try out with Jeff and Rene 
+- Updated timeline for data collection + analysis --> Goal: have slide on the results for CSSS talk
+- Chapters of dissertation
+
+In a causal DAG, interactions are implied. However, we aren't trying to do causal estimation, so it is ok to ask for and include interactions directly. We rely on recommendations from the causal modeling literature on which confounders to include/exclude in order to ensure that estimates of interest are what we expect them to represent, or in other words, avoid common estimation biases (e.g., omitted variable bias). 
+Our goal is that, ultimately we allow the analyst to make modifications/final calls, but by adhering to the default, which we anticipate most end-users will, they will have a pretty good statistical model that accurately estimates what they care about + represents their conceptual knowledge. 

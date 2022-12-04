@@ -16,7 +16,8 @@ cm <- ConceptualModel() %>%
     # Specify conceptual relationships
     assume(causes(age, income)) %>%
     hypothesize(relates(edu, income)) %>%
-    hypothesize(whenThen(when=equals(sex, 1.0), then=increases(income)))
+    hypothesize(whenThen(when=equals(sex, 1.0), then=increases(income))) %>%
+    query(iv=edu, dv=income, data="examples/data/2019_WA_income.csv")
 
 # Education is IV, Income is DV
 # Need to disambiguate relationship between Education and Income, between Sex and Income in conceptual model

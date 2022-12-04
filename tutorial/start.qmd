@@ -1,2 +1,51 @@
-# Do I need data? 
-- Assume data is in long format. 
+# What is rTisane? 
+*Do you struggle figuring out which variables to include in your linear models?*
+*Are you uncertain about if you need random effects in your statistical model? And how to specify them?*
+*Not sure which family or link functions to pick?*
+We designed rTisane for you! 
+
+**rTisane is designed for analysts who may not know how to formulate their statistical models.**
+
+rTisane is an R library for authoring generalized linear models with or without mixed effects (GLMs or GLMMs). However, rTisane does not require you to write down the mathematical formula for your linear model. Instead, rTisane derives a statistical model from knowledge you express about your variables, how you collected them, and how they related conceptually.
+
+In rTisane, you specify something like this: 
+```{r}
+student <- Unit(name="student", cardinality=100)
+ses <- ordinal(unit=student, name="SES", order=list("low", "middle", "high"))
+tutoring <- nominal(unit=student, name="condition")
+testScore <- numeric(unit=student, name="testScore")
+
+cm <- ConceptualModel() %>%
+    assume(causes(ses, testScore)) %>%
+    assume(whenThen(when=equals(tutoring, "in-person"), then=increases(testScore))) %>%
+    query(iv=tutoring, dv=testScore, "data.csv")
+```
+and get this as output: 
+```{r}
+install.packages('tidyverse')
+install.packages('lme4')
+
+library(tidyverse)
+library(lme4)
+
+data <- read.csv("data.csv")
+glm(formula=testScore ~ SES + condition, family=gaussian(link='identity'), data=data)
+```
+
+# When should I use rTisane? 
+*I think I just need a Student's t-test. Do I need rTisane?*
+All common statistical significance tests can be reformulated as linear models. In fact, an ANOVA is just a linear regression. So, even if you don't think you need a linear model, in the process of using rTisane you might realize you could benefit from one!
+
+*Do I need data?*
+Nope! 
+
+Use rTisane to 
+- author a generalized linear model
+- author a first linear model that you later refine
+- plan for data collection (you can use rTisane without data!)
+- reflect and think through your conceptual assumptions and their implications on data analysis
+
+# How do I install rTisane? 
+Install rTisane from [RForge]() or [CRAN](). # TODO: UPDATE!
+
+# How do I use rTisane? 
