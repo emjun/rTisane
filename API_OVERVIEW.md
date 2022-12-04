@@ -1,7 +1,115 @@
 # API OVERVIEW
 Below is an overview of the external API for the rTisane conceptual modeling language. [Refer here for more details about the internal API.](INTERNAL_API.md)
 
-## Variable declaration
+
+1. Capture conceptual models accurately. 
+2. Capture analysis goals accurately. 
+
+## Variables
+### Units 
+### Measures 
+### Categories
+- nominal: baseline 
+- ordinal: order
+Possible families: Binomial, Multinomial
+#### Counts
+Possible families: Poisson, Negative Binomial (counts) 
+#### Continuous (e.g., scores, temperature, time)
+*Follow-up q: Skew?*
+Possible families: Inverse Gaussian, Gamma, Gaussian
+#### TODO: Add checks with data
+
+### Interactions: Multiplicative Measures
+
+# Interacts 
+- Causes(interacts(a, b), c) --> creates a*b
+- when(equals(interacts(a, b),"A1", "B1"), increases(C)) --> creates a*b, introduces causes between AB and C
+- Does a + b + a * b or a * b get added to the model?  --> Statistical model inference is separate??
+
+Sometimes, analysts want to specify an interaction between variables. An
+interaction is a combination of variables that produces an outcome. In other
+words, interacting variables influence an outcome beyond their additive
+influence on the outcome. To express an interaction, analysts can use the `interacts` construct. 
+
+`interacts` takes two or more variables as parameters, and returns a new variable that is the multiplicative result of all the parameters. 
+
+This new variable can be used to specify `causes` relationships. To use an interaction inside a `whenThen` statement, analysts must specify values for the variables comprising the interaction. The baseline will be when the interaction variable takes on the baseline values for all the individual variables. 
+```R 
+ixn <- interacts(a, b)
+when(when=equals(interacts(ses,tutoring), "high", "in-person"), then=increases(testScore))
+when(when=equals(interacts(ses,tutoring), "low", "in-person"), then=increases(testScore))
+```
+
+
+## Conceptual model: Three types of relationships
+### WhenThen 
+What this means is that when a variable takes on a value, it changes the outcome variable's compared to a baseline. 
+
+The baseline for numeric: 0 
+The baseline for ordinal: first value 
+The baseline for nominal: first value 
+The baseline for interaction variable: combination of baselines (e.g., 0, first value, first value)
+
+Can have multiple whenThen statements for the same two variables. 
+A When Then will be causes(when, Then), so if the multiple whenThen statements introduce a cycle, rTisane will halt. 
+
+Infers causal relationship 
+
+### Causes 
+
+### Relates 
+Requires disambiguation
+
+<!-- **Why does it make sense to allow someone to express Relates and then ask them if it is Causes A->B or B->A? -->
+
+rTisane allows analysts to specify `relates` between variables because that may
+be more accurate to analysts' understanding of a domain (goal: capture analysts'
+conceptual models accurately). However, these `relates` relationships are ambiguous, and a direction of influence must be assumed in order to infer a statistical model from a conceptual model. Thus, rTisane engages analysts in an initial disambiguation step to assume directions. Under the hood, this means `relates` relationships get cast as more specific `causes` relationships prior to deriving statistical models. 
+
+## Conceptual model: Label variable relationships
+### Assume 
+### Hypothesize 
+
+## Query 
+
+
+# Programming style
+We designed rTisane to be compatible with common programming idioms in R, including the chaining of calls using the pipe character (`%>%`). Using pipes is completely optional, but may be easier for some analysts to read and write. 
+
+The following two programs are equivalent. The first uses pipes, and the second does not. 
+
+
+# FAQs
+## Why do we need all these different ways of specifying conceptual relationships? 
+Analysts think about how variables relate conceptually in idiosyncratic but comparable ways. 
+
+Two approaches: 
+1. Language-based specification 
+Analysts state directional relationships right away using the language constructs `causes` or `whenThen`. `whenThen` is more specific and implies a causal relationship.
+2. System-aided specification
+Analysts start by indicating that two variables `relate` without specifying a direction of influence. Then, they use rTisane to help them visualize their conceptual model and then make more specific assumptions about directions of influence. 
+
+## If I specify an interaction, what gets added to the derived statistical model?
+It depends on the query issued.
+
+- If the query's independent variable is a measure (not an interaction), then rTisane will identify a set of confounders recommended for most accurately estimating the independent variable's influence on the dependent variable in the query. By default, rTisane will include all the confounders. If there is an interaction involving the independent variable and/or confounders, rTisane will suggest the interactions but leave their inclusion up to the analyst. 
+
+- If the query's independent variable is an interaction, then, rTisane will, by default, include the interaction and all the variables comprising the interaction. During disambiguation, the end-user can remove variables. rTisane does not suggest other confounders based on causality because there are no causal DAG-based recommendations for accurately estimating interactions in the causal reasoning literature. If end-users are concerned about confounders for interactions, they should issue a query for accurately estimating each component variable accurately, include the interaction of interest, and then compare the multiple output statistical models (if they are different). 
+
+## Why do we need a separate `interacts` construct? Interactions are already captured in causal DAGs.
+In a causal DAG, interactions are implied. However, we aren't trying to do causal estimation, so it is ok to ask for and include interactions directly. We rely on recommendations from the causal modeling literature on which confounders to include/exclude in order to ensure that estimates of interest are what we expect them to represent, or in other words, avoid common estimation biases (e.g., omitted variable bias). 
+Our goal is that, ultimately we allow the analyst to make modifications/final calls, but by adhering to the default, which we anticipate most end-users will, they will have a pretty good statistical model that accurately estimates what they care about + represents their conceptual knowledge. 
+
+## I have multiple hypothesized relationships. I want to assess all of them.
+We recommend issuing multiple queries for a statistical model with different independent variables (and conceptual relationships) of interest. Depending on your conceptual model, the queries may result in the same statistical model or multiple that are each designed to optimally asses a specific hypothesized relationship.
+
+## Questions for Carlos 
+- Interactions 
+- Assessing multiple variables and their influence on the same outcome. Using the recommendations, should run multiple statistical models?
+    - --> How to think about this problem for multiple comparisons (Tibshirani?)
+
+# Common failure cases
+
 
 ### Specify observational/experimental units
 ```R
