@@ -197,7 +197,7 @@ Also possible but less common:
 whenThen(when=increases(extra), then=equals(testScore, 85)) # Could describe a piecewise function or a plateauing effect
 ```
 ### Impact on statistical modeling
-A program can have multiple `whenThen` statements involving the same two Measures. When inferring a statistical model, rTisane will infer a `relates(when, then)` for each `whenThen` statement. 
+A program can have multiple `whenThen` statements involving the same two Measures. (In the future, rTisane will check that these statements do not contradict one another.) When inferring a statistical model, rTisane will infer a `relates(when, then)` for each `whenThen` statement. 
 <!-- A When Then will be causes(when, Then), so if the multiple whenThen statements introduce a cycle, rTisane will halt.  -->
 In the scenario, if we write
 ```R 

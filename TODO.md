@@ -7,8 +7,8 @@
 [ ] Test interactions with study 
 
 
-Edge cases 
-[ ] contradictory when/Then statements
+Future: Edge cases 
+[ ] stop execution if there are contradictory whenThen statements
 
 # Cool future project ideas 
 - Each universe in a multiverse analysis can differ in (i) proxy choice and (ii) causal graphical structure
