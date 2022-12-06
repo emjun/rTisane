@@ -1,3 +1,10 @@
+## Questions for Carlos 
+- Interactions 
+- Assessing multiple variables and their influence on the same outcome. Using the recommendations, should run multiple statistical models?
+    - --> How to think about this problem for multiple comparisons (Tibshirani?)
+
+# Common failure cases
+
 ## API OVERVIEW
 How to specify repeated measures
 ```R

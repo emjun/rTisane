@@ -1,9 +1,23 @@
 # Dec 4 todos 
 [ ] Update variable data types (rationale: get rid of this step in disambiguation)
     - not explicit finding in the qual lab study, but I think it would prevent confusion + remove the need for a disambiguating step. 
+[ ] For new data types, update family/link functions 
 [ ] Add support for baselines 
 [ ] Support interactions in whenThen (interacts as creating a new variable, so should act as other variables)
 [ ] Test interactions with study 
+
+
+Edge cases 
+[ ] contradictory when/Then statements
+
+# Cool future project ideas 
+- Each universe in a multiverse analysis can differ in (i) proxy choice and (ii) causal graphical structure
+- To address/account for (i): Given that each universe in a multiverse analysis differs in proxies, could we specify a set of proxies for each variable in a conceptual model and then instantiate in parallel, all the possible conceptual models using different combinations of proxies? 
+- To address/account for (ii): Rather than require an analyst to pick/assume a direction for `relates` relationships, could the system enumerate all possible conceptual models (picking a direction for each ambiguous relationship) and then execute?
+- If we do both ideas: Do we have a complete multiverse where "reasonability" is defined by same CPDAG? Should we account for removing edges (not just direction), too? 
+    - Could we somehow explore a multiverse based on the CPDAG it represents/supports?
+- Define goodness of multiverse based on what is conceptually represented? 
+- Output -- leverage people's assumptions to highlight how to interpret results...
 
 # Discussion points 
 Two observations to discuss: 
