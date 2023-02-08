@@ -42,7 +42,7 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
 
     fluidRow(
       column(8, offset=2, 
-        titlePanel("rTisane 🥖")
+        titlePanel("🌺 Tisane")
       )
     ),
 
@@ -50,17 +50,17 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
       column(8, offset=2, 
         tabsetPanel(
           id = "tabset",
-          tabPanel("Dependent variable",
-                  br(),
-                  selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
-                  # Info about dependent variable ---
-                  textOutput("dvSummary"),
-                  plotlyOutput('dvHist'),
+          # tabPanel("Dependent variable",
+          #         br(),
+          #         selectInput("dvType", paste("How do you want to treat", dvName, "?"), choices = unique(dvOptions)),
+          #         # Info about dependent variable ---
+          #         textOutput("dvSummary"),
+          #         plotlyOutput('dvHist'),
 
-                  # textInput("delim", "Delimiter (leave blank to guess)", ""),
-                  # numericInput("skip", "Rows to skip", 0, min = 0),
-                  # numericInput("rows", "Rows to preview", 10, min = 1)
-          ),
+          #         # textInput("delim", "Delimiter (leave blank to guess)", ""),
+          #         # numericInput("skip", "Rows to skip", 0, min = 0),
+          #         # numericInput("rows", "Rows to preview", 10, min = 1)
+          # ),
           tabPanel("Conceptual model",
                   br(),
                   div(
@@ -70,7 +70,7 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
                   uiOutput("cmQuestions"),
                   p("This is what your conceptual model looks like:"),
                   plotOutput('cmGraph'),
-                  actionButton("submit", "Done!")
+                  actionButton("submit", "Update!")
           )
         )
       )
@@ -191,6 +191,7 @@ disambiguateConceptualModel <- function(conceptualModel, iv, dv, inputFilePath, 
         paste("You specified that you ", ..1),
         br(),
         strong("What do you mean?"),
+        paste("Did you mean..."),
         selectInput(paste0(..1),
                     NULL,
                     choices=c(..2, ..3))

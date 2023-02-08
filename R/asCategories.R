@@ -6,7 +6,7 @@
 #' @keywords
 #' @export
 setGeneric("asCategories", function(measure) standardGeneric("asCategories"))
-setMethod("asCategories", signature("Ordinal"), function(measure)
+setMethod("asCategories", signature("Measure"), function(measure)
 {
   # Create new Categories wrapper
   categories = Categories(measure=measure)
@@ -17,7 +17,7 @@ setMethod("asCategories", signature("Ordinal"), function(measure)
   # Return handle to Continuous wrapper
   categories
 })
-setMethod("asCategories", signature("Nominal"), function(measure)
+setMethod("asCategories", signature("Measure"), function(measure)
 {
   # Create new Categories wrapper
   categories = Categories(measure=measure)

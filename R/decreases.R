@@ -6,7 +6,23 @@
 #' @export
 # decreases()
 setGeneric("decreases", function(variable) standardGeneric("decreases"))
-setMethod("decreases", signature("numericORordinal"), function(variable)
+setMethod("decreases", signature("Continuous"), function(variable)
+{
+  # create a Compares obj
+  comp = Compares(variable=variable, condition="decreases")
+
+  # Return Compares obj
+  comp
+})
+setMethod("decreases", signature("Counts"), function(variable)
+{
+  # create a Compares obj
+  comp = Compares(variable=variable, condition="decreases")
+
+  # Return Compares obj
+  comp
+})
+setMethod("decreases", signature("OrderedCategories"), function(variable)
 {
   # create a Compares obj
   comp = Compares(variable=variable, condition="decreases")

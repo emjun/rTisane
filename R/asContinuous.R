@@ -8,7 +8,7 @@
 #' s
 #' asContinuous()
 setGeneric("asContinuous", function(measure) standardGeneric("asContinuous"))
-setMethod("asContinuous", signature("Numeric"), function(measure)
+setMethod("asContinuous", signature("Measure"), function(measure)
 {
   # Create new Continuous wrapper
   continuous = Continuous(measure=measure)
@@ -16,7 +16,7 @@ setMethod("asContinuous", signature("Numeric"), function(measure)
   # Return handle to Continuous wrapper
   continuous
 })
-setMethod("asContinuous", signature("Ordinal"), function(measure)
+setMethod("asContinuous", signature("Measure"), function(measure)
 {
   # Create new Continuous wrapper
   continuous = Continuous(measure=measure)

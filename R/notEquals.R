@@ -7,7 +7,23 @@
 #' @export
 # notEquals()
 setGeneric("notEquals", function(variable, value) standardGeneric("notEquals"))
-setMethod("notEquals", signature("nominalORordinal", "integerORnumericORcharacter"), function(variable, value)
+setMethod("notEquals", signature("Continuous", "integerORnumericORcharacter"), function(variable, value)
+{
+  # create condition
+  if (is.numeric(value) || is.integer(value)) {
+    condition = paste(c("!=", value), collapse = "")
+  } else {
+    rhs = paste(c("\'", value, "\'"), collapse = "")
+    condition = paste(c("!=", rhs), collapse = "")
+  }
+
+  # create a Compares obj
+  comp = Compares(variable=variable, condition=condition)
+
+  # Return Compares obj
+  comp
+})
+setMethod("notEquals", signature("OrderedCategories", "integerORnumericORcharacter"), function(variable, value)
 {
   # create condition
   if (is.numeric(value) || is.integer(value)) {

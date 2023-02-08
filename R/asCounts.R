@@ -8,7 +8,7 @@
 #' s
 #' asCounts()
 setGeneric("asCounts", function(measure) standardGeneric("asCounts"))
-setMethod("asCounts", signature("Numeric"), function(measure)
+setMethod("asCounts", signature("Measure"), function(measure)
 {
   # Create new Counts wrapper
   counts = Counts(measure=measure)
@@ -16,7 +16,7 @@ setMethod("asCounts", signature("Numeric"), function(measure)
   # Return handle to Continuous wrapper
   counts
 })
-setMethod("asCounts", signature("Ordinal"), function(measure)
+setMethod("asCounts", signature("Measure"), function(measure)
 {
   # Create new Counts wrapper
   counts = Counts(measure=measure)

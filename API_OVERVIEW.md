@@ -41,6 +41,7 @@ Categories can be unordered (e.g., race) or ordered (e.g., socioeconomic backgro
 - `cardinality`: int. Number of unique categories. If `order` is provided, `cardinality` is not needed and will be set to the length of `order`
 - `order`: list. List of categories in order from "lowest" to "highest"
 - `baseline`: character. Specific category that the other categories in this measure are compared against. If `order` is provided, `baseline` is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
+- `numberOfInstances`: TODO
 
 In the scenario, race and tutoring are *unordered* categories: 
 ```R
@@ -60,6 +61,7 @@ Counts measures are declared with the following:
 - `unit`: Unit. The Unit the measure describes
 - `name`: character. Column name
 - `baseline`: optional. By default, 0.
+- `numberOfInstances`: TODO
 
 In the scenario, number of extra-curriculars is a count: 
 ```R 
@@ -73,6 +75,7 @@ Continuous measures are declared with the following:
 - `unit`: Unit. The Unit the measure describes
 - `name`: character. Column name
 - `baseline`: optional. By default, 0.
+- `numberOfInstances`: TODO
 
 In the scenario, test score is a continuous measure: 
 ```R 

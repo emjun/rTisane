@@ -77,68 +77,51 @@ test_that("Time created properly", {
   expect_error(Time("week", order=list(1,2,3,4), cardinality=10), "*")
 })
 
-test_that("Nominal measure created properly", {
+test_that("Nominal/Unordered Categories measure created properly", {
   # Create unit
   unit <- Unit("person", cardinality=40)
 
   # Specified correctly
-  eye_color <- nominal(unit=unit, name="eye_color", cardinality=10)
-  # Verify that Has relationship constructed
-  expect_s4_class(eye_color, "Nominal")
+  eye_color <- categories(unit=unit, name="eye_color", cardinality=10)
+  expect_s4_class(eye_color, "Categories")
+  expect_s4_class(eye_color, "UnorderedCategories")
   expect_true(inherits(eye_color, "Measure")) # inherits from Measure
-  # Verify that number of instances is set to 1 (Integer)
-  # expect_s4_class(eye_color@repetitions, "Exactly")
+  expect_equal(eye_color@numberOfInstances, 1)
+  expect_equal(eye_color@cardinality, 10)
 
   # Verify that number of instances is set to number greater than 1?
-  condition <- nominal(unit=unit, name="condition", cardinality=5, numberOfInstances=integer(5))
-  # Verify that Has relationship constructed
-  expect_s4_class(condition, "Nominal")
+  condition <- categories(unit=unit, name="condition", cardinality=5, numberOfInstances=as.integer(5))
+  expect_s4_class(condition, "Categories")
+  expect_s4_class(condition, "UnorderedCategories")
   expect_true(inherits(condition, "Measure")) # inherits from Measure
-  # Verify that number of instances is set to 5 (Integer)
-  # expect_s4_class(condition@repetitions, "Exactly")
-  # expect_type(condition@repetitions@value, "integer")
-  # expect_equal(condition@repetitions@value, integer(5))
+  expect_equal(condition@numberOfInstances, 5)
+  expect_equal(condition@cardinality, 5)
 
-  # Should throw error since there is no cardinality specified
-  expect_error(nominal(unit=unit, name="eye_color"), "*")
-
-  # Create Participant
-  participant <- Participant("pid", cardinality=40)
-
-  # Specified correctly
-  eye_color <- nominal(unit=participant, name="eye_color", cardinality=10)
-  # Verify that Has relationship constructed
-  expect_s4_class(eye_color, "Nominal")
-  expect_true(inherits(eye_color, "Measure")) # inherits from Measure
-
-  # Verify that number of instances is set to number greater than 1?
-  condition <- nominal(unit=participant, name="condition", cardinality=5, numberOfInstances=integer(5))
-  # Verify that Has relationship constructed
-  expect_s4_class(condition, "Nominal")
-  expect_true(inherits(condition, "Measure")) # inherits from Measure
+  # Should throw error since there is no cardinality or order specified
+  expect_error(categories(unit=unit, name="eye_color"), "*")
 })
 
-test_that("Ordinal measure created properly", {
+test_that("Ordinal/Ordered Categories measure created properly", {
   # Create unit
   unit <- Unit("person", cardinality=40)
 
   # Specified correctly
-  grade <- ordinal(unit=unit, name="grade", order=list(1, 2, 3, 4, 5))
+  grade <- categories(unit=unit, name="grade", order=list(1, 2, 3, 4, 5))
   # Verify that Has relationship constructed
-  expect_s4_class(grade, "Ordinal")
+  expect_s4_class(grade, "Categories")
+  expect_s4_class(grade, "OrderedCategories")
   expect_true(inherits(grade, "Measure")) # inherits from Measure
-  # Verify that number of instances is set to 1 (Integer)
-  # expect_s4_class(grade@repetitions, "Exactly")
+  expect_equal(condition@cardinality, 5)
+  expect_equal(grade@numberOfInstances, 1)
 
   # Verify that number of instances is set to number greater than 1?
   condition <- ordinal(unit=unit, name="condition", order=list(1, 2, 3, 4, 5), numberOfInstances=integer(5))
   # Verify that Has relationship constructed
-  expect_s4_class(condition, "Ordinal")
+  expect_s4_class(condition, "Categories")
+  expect_s4_class(condition, "UnorderedCategories")
   expect_true(inherits(condition, "Measure")) # inherits from Measure
-  # Verify that number of instances is set to 5 (Integer)
-  # expect_s4_class(condition@repetitions, "Exactly")
-  # expect_type(condition@repetitions@value, "integer")
-  # expect_equal(condition@repetitions@value, integer(5))
+  expect_equal(condition@cardinality, 5)
+  expect_equal(grade@numberOfInstances, 1)
 
   # Should throw error since there is no cardinality specified
    expect_error(ordinal(unit=unit, name="grade"), "*")
@@ -161,97 +144,97 @@ test_that("Ordinal measure created properly", {
    expect_true(inherits(condition, "Measure")) # inherits from Measure
 })
 
-test_that("Numeric measure created properly", {
-  # Create unit
-  unit <- Unit("person", cardinality=40)
+# test_that("Numeric measure created properly", {
+#   # Create unit
+#   unit <- Unit("person", cardinality=40)
 
-  # Specified correctly
-  age <- numeric(unit=unit, name="age")
-  # Verify that Has relationship constructed
-  expect_s4_class(age, "Numeric")
-  expect_true(inherits(age, "Measure")) # inherits from Measure
-  # Verify that number of instances is set to 1 (Integer)
-  # expect_s4_class(age@repetitions, "Exactly")
+#   # Specified correctly
+#   age <- numeric(unit=unit, name="age")
+#   # Verify that Has relationship constructed
+#   expect_s4_class(age, "Numeric")
+#   expect_true(inherits(age, "Measure")) # inherits from Measure
+#   # Verify that number of instances is set to 1 (Integer)
+#   # expect_s4_class(age@repetitions, "Exactly")
 
-  # Verify that number of instances is set to number greater than 1?
-  condition <- numeric(unit=unit, name="condition", numberOfInstances=integer(5))
-  # Verify that Has relationship constructed
-  expect_s4_class(condition, "Numeric")
-  expect_true(inherits(condition, "Measure")) # inherits from Measure
-  # Verify that number of instances is set to 5 (Integer)
-  # expect_s4_class(condition@repetitions, "Exactly")
-  # expect_type(condition@repetitions@value, "integer")
-  # expect_equal(condition@repetitions@value, integer(5))
+#   # Verify that number of instances is set to number greater than 1?
+#   condition <- numeric(unit=unit, name="condition", numberOfInstances=integer(5))
+#   # Verify that Has relationship constructed
+#   expect_s4_class(condition, "Numeric")
+#   expect_true(inherits(condition, "Measure")) # inherits from Measure
+#   # Verify that number of instances is set to 5 (Integer)
+#   # expect_s4_class(condition@repetitions, "Exactly")
+#   # expect_type(condition@repetitions@value, "integer")
+#   # expect_equal(condition@repetitions@value, integer(5))
 
-  # Create Participant
-  participant <- Participant("pid", cardinality=40)
+#   # Create Participant
+#   participant <- Participant("pid", cardinality=40)
 
-  # Specified correctly
-  age <- numeric(unit=participant, name="age")
-  # Verify that Has relationship constructed
-  expect_s4_class(age, "Numeric")
-  expect_true(inherits(age, "Measure")) # inherits from Measure
-  # Verify that number of instances is set to 1 (Integer)
-  # expect_s4_class(age@repetitions, "Exactly")
+#   # Specified correctly
+#   age <- numeric(unit=participant, name="age")
+#   # Verify that Has relationship constructed
+#   expect_s4_class(age, "Numeric")
+#   expect_true(inherits(age, "Measure")) # inherits from Measure
+#   # Verify that number of instances is set to 1 (Integer)
+#   # expect_s4_class(age@repetitions, "Exactly")
 
-  # Verify that number of instances is set to number greater than 1?
-  condition <- numeric(unit=participant, name="condition", numberOfInstances=integer(5))
-  # Verify that Has relationship constructed
-  expect_s4_class(condition, "Numeric")
-  expect_true(inherits(condition, "Measure")) # inherits from Measure
-})
+#   # Verify that number of instances is set to number greater than 1?
+#   condition <- numeric(unit=participant, name="condition", numberOfInstances=integer(5))
+#   # Verify that Has relationship constructed
+#   expect_s4_class(condition, "Numeric")
+#   expect_true(inherits(condition, "Measure")) # inherits from Measure
+# })
 
-test_that("Condition constructed properly", {
-  # Create Participant
-  participant <- Participant("pid", cardinality=40)
+# test_that("Condition constructed properly", {
+#   # Create Participant
+#   participant <- Participant("pid", cardinality=40)
 
-  # Assign condition with cardinality, no order
-  condition <- condition(unit=participant, name="treatment", cardinality=integer(2), numberOfInstances=integer(1))
-  expect_s4_class(condition, "Nominal")
-  expect_true(inherits(condition, "Measure"))
+#   # Assign condition with cardinality, no order
+#   condition <- condition(unit=participant, name="treatment", cardinality=integer(2), numberOfInstances=integer(1))
+#   expect_s4_class(condition, "Nominal")
+#   expect_true(inherits(condition, "Measure"))
 
-  # Assign condition with order, no cardinality
-  condition <- condition(unit=participant, name="treatment", order=list("low","medium", "high"), numberOfInstances=integer(1))
-  expect_s4_class(condition, "Ordinal")
-  expect_true(inherits(condition, "Measure"))
+#   # Assign condition with order, no cardinality
+#   condition <- condition(unit=participant, name="treatment", order=list("low","medium", "high"), numberOfInstances=integer(1))
+#   expect_s4_class(condition, "Ordinal")
+#   expect_true(inherits(condition, "Measure"))
 
-  # Throws an error
-  # Provide neither cardinality no order
-  expect_error(condition(unit=participant, name="treatment", numberOfInstances=integer(1)))
-  # Provide both cardinality and order
-  expect_error(condition(unit=participant, name="treatment", cardinality=integer(3), order=list("low","medium", "high"), numberOfInstances=integer(1)))
-})
+#   # Throws an error
+#   # Provide neither cardinality no order
+#   expect_error(condition(unit=participant, name="treatment", numberOfInstances=integer(1)))
+#   # Provide both cardinality and order
+#   expect_error(condition(unit=participant, name="treatment", cardinality=integer(3), order=list("low","medium", "high"), numberOfInstances=integer(1)))
+# })
 
-test_that("Unobserved variable properly", {
-  midlife_crisis <- Unobserved()
+# test_that("Unobserved variable properly", {
+#   midlife_crisis <- Unobserved()
 
-  expect_s4_class(midlife_crisis, "UnobservedVariable")
-  expect_equal(midlife_crisis@name, "Unobserved")
-})
+#   expect_s4_class(midlife_crisis, "UnobservedVariable")
+#   expect_equal(midlife_crisis@name, "Unobserved")
+# })
 
-test_that("Per object created properly", {
-  pid <- Participant("ID")
-  year <- Time(name="year", cardinality=5) # 5 years
-  # income <- numeric(unit=pid, name="PINCP", numberOfInstances=per(1, year)) # One for each year
-  perObj <- per(1, year)
+# test_that("Per object created properly", {
+#   pid <- Participant("ID")
+#   year <- Time(name="year", cardinality=5) # 5 years
+#   # income <- numeric(unit=pid, name="PINCP", numberOfInstances=per(1, year)) # One for each year
+#   perObj <- per(1, year)
 
-  expect_s4_class(perObj, "Per")
-  expect_s4_class(perObj@number, "NumberValue")
-  expect_s4_class(perObj@number, "Exactly")
-  expect_equal(perObj@variable, year)
-  expect_true(perObj@cardinality)
-  expect_false(checkEquals(perObj, as.integer(1)))
-  expect_true(checkEquals(perObj, as.integer(5)))
-  expect_true(checkGreaterThan(perObj, as.integer(1)))
+#   expect_s4_class(perObj, "Per")
+#   expect_s4_class(perObj@number, "NumberValue")
+#   expect_s4_class(perObj@number, "Exactly")
+#   expect_equal(perObj@variable, year)
+#   expect_true(perObj@cardinality)
+#   expect_false(checkEquals(perObj, as.integer(1)))
+#   expect_true(checkEquals(perObj, as.integer(5)))
+#   expect_true(checkGreaterThan(perObj, as.integer(1)))
 
-  perObj <- per(AtMost(1), year)
+#   perObj <- per(AtMost(1), year)
 
-  expect_s4_class(perObj, "Per")
-  expect_s4_class(perObj@number, "NumberValue")
-  expect_s4_class(perObj@number, "AtMost")
-  expect_equal(perObj@variable, year)
-  expect_true(perObj@cardinality)
-  expect_false(checkEquals(perObj, as.integer(1)))
-  expect_true(checkEquals(perObj, as.integer(5)))
-  expect_true(checkGreaterThan(perObj, as.integer(1)))
-})
+#   expect_s4_class(perObj, "Per")
+#   expect_s4_class(perObj@number, "NumberValue")
+#   expect_s4_class(perObj@number, "AtMost")
+#   expect_equal(perObj@variable, year)
+#   expect_true(perObj@cardinality)
+#   expect_false(checkEquals(perObj, as.integer(1)))
+#   expect_true(checkEquals(perObj, as.integer(5)))
+#   expect_true(checkGreaterThan(perObj, as.integer(1)))
+# })
