@@ -7,7 +7,7 @@ Two goals guided rTisane's domain-specific language (DSL) re-design:
 
 Towards these goals, rTisane's DSL provides constructs to specify (i) variables, (ii) conceptual models, and (iii) a query for a statistical model. 
 
-Note: Although data is not required to use rTisane, if included, a dataset must be in long format. 
+Note: Although data is not required to use rTisane, if included, a dataset must be in long format. If a dataset, 
 
 This API overview uses the following scenario as an example: 
 > You want to know the influence of tutoring on student test performance. To this end, you conduct a study involving 100 students. For each student, you collect data about their race, socioeconomic background, number of extra-curriculars, and test score. Additionally, you randomly assign each student to one of two tutoring conditions: online tutoring vs. in-person tutoring. 
@@ -29,7 +29,7 @@ If you prefer to think about students as participants, not units, you can specif
 ```R
 student <- Participant(name="student", cardinality=100)
 ```
-Participant is a special type of Unit. The above two declarations of `student` are equivalent.
+Participant is an alias for Unit. The above two declarations of `student` are equivalent.
 
 ## Measures 
 Measures are attributes of a Unit you have directly observed and/or assigned them. There are three types of Measures. 
