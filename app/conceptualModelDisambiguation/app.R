@@ -46,7 +46,7 @@ ui <- fluidPage(
 
     # ")),
 
-    actionButton("stop", "Done!")
+    actionButton("stop", "Update!")
 )
 
 # Define server logic required to draw a histogram

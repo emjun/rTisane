@@ -7,7 +7,23 @@
 #' @export
 # equals()
 setGeneric("equals", function(variable, value) standardGeneric("equals"))
-setMethod("equals", signature("nominalORordinal", "integerORnumericORcharacter"), function(variable, value)
+setMethod("equals", signature("Continuous", "integerORnumericORcharacter"), function(variable, value)
+{
+  # create condition
+  if (is.numeric(value) || is.integer(value)) {
+    condition = paste(c("==", value), collapse = "")
+  } else {
+    rhs = paste(c("\'", value, "\'"), collapse = "")
+    condition = paste(c("==", rhs), collapse = "")
+  }
+
+  # create a Compares obj
+  comp = Compares(variable=variable, condition=condition)
+
+  # Return Compares obj
+  comp
+})
+setMethod("equals", signature("OrderedCategories", "integerORnumericORcharacter"), function(variable, value)
 {
   # create condition
   if (is.numeric(value) || is.integer(value)) {

@@ -7,7 +7,7 @@ Two goals guided rTisane's domain-specific language (DSL) re-design:
 
 Towards these goals, rTisane's DSL provides constructs to specify (i) variables, (ii) conceptual models, and (iii) a query for a statistical model. 
 
-Note: Although data is not required to use rTisane, if included, a dataset must be in long format. If a dataset, 
+Note: Although a dataset is not required to use rTisane, if included, a dataset must be in long format. Furthermore, if a dataset is used, some [parameters for declaring variables become optional](#measures). rTisane will infer them from the dataset. 
 
 This API overview uses the following scenario as an example: 
 > You want to know the influence of tutoring on student test performance. To this end, you conduct a study involving 100 students. For each student, you collect data about their race, socioeconomic background, number of extra-curriculars, and test score. Additionally, you randomly assign each student to one of two tutoring conditions: online tutoring vs. in-person tutoring. 
@@ -41,6 +41,7 @@ Categories can be unordered (e.g., race) or ordered (e.g., socioeconomic backgro
 - `cardinality`: int. Number of unique categories. If `order` is provided, `cardinality` is not needed and will be set to the length of `order`
 - `order`: list. List of categories in order from "lowest" to "highest"
 - `baseline`: character. Specific category that the other categories in this measure are compared against. If `order` is provided, `baseline` is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
+- `numberOfInstances`: TODO
 
 In the scenario, race and tutoring are *unordered* categories: 
 ```R
@@ -60,6 +61,7 @@ Counts measures are declared with the following:
 - `unit`: Unit. The Unit the measure describes
 - `name`: character. Column name
 - `baseline`: optional. By default, 0.
+- `numberOfInstances`: TODO
 
 In the scenario, number of extra-curriculars is a count: 
 ```R 
@@ -73,6 +75,7 @@ Continuous measures are declared with the following:
 - `unit`: Unit. The Unit the measure describes
 - `name`: character. Column name
 - `baseline`: optional. By default, 0.
+- `numberOfInstances`: TODO
 
 In the scenario, test score is a continuous measure: 
 ```R 
@@ -93,7 +96,7 @@ Interacting variables influence an outcome beyond their additive influence. To e
 
 Like any other Measure, an interaction can be `categories`, `counts`, or `continuous`. rTisane follows these rules: 
 - If one or more of the interacting Measures are Categories, the returned variable will also be of type Categories. By default, the returned variable will have no order.
-- If all interacting Measures are Counts, the returned Measure will also be Counts. 
+- If all interacting Measures are Counts, the returned Measure will be Categories. 
 - If all interacting Measures are Continuous, the returned Measure will be Continuous. 
 - If some interacting Measures are Counts and others are Continuous, the returned Measure will be Continuous. 
 
@@ -119,6 +122,7 @@ Use `causes` to specify that a variable causes another.
 Causes takes two parameters: 
 - `cause`: Measure
 - `effect`: Measure
+- TODO: Add optional when, then
 
 In the scenario, if you think that tutoring causes test scores, you could specify
 ```R
@@ -128,21 +132,29 @@ causes(tutoring, testScore)
 ### Impact on statistical modeling 
 rTisane uses causal relationships between variables to suggest potential confounders. 
 
+TODO: How are when / then parameters treated? 
+- Check that when is cause and then is effect; if not, halt execution with an error and suggestion to fix. 
+
 ## Relates 
-Use `relates` to specify that two variables influence each other without specifying a direction of influence. 
+Use `relates` to specify that two variables influence each other without specifying a direction of influence. TODO: When should use this rather than causes 
 
 ### How to use 
 Relates takes two parameters: 
 - `lhs`: Measure
 - `rhs`: Measure
+- TODO: Add when (optional)
+- TODO: Add then (optional)
 
 ### Impact on statistical modeling 
-rTisane allows analysts to specify `relates` between variables because that may be more accurate to analysts' understanding of a domain (Goal #1). However, these `relates` relationships are ambiguous, and a direction of influence must be assumed in order to infer a statistical model. Thus, rTisane engages analysts in a disambiguation step to assume directions.
+rTisane allows analysts to specify `relates` between variables because that may be more accurate to analysts' understanding of a domain. However, these `relates` relationships are ambiguous, and a direction of influence must be assumed in order to infer a statistical model. Thus, rTisane engages analysts in a disambiguation step to determine directions.
  <!-- Under the hood, this means `relates` relationships get cast as more specific `causes` relationships prior to deriving statistical models.  -->
 
 <!-- **Why does it make sense to allow someone to express Relates and then ask them if it is Causes A->B or B->A? -->
 
-## WhenThen 
+TODO: Add how when / then used to infer statistical model 
+- If when / then included, suggest during disambiguation that when causes then, but have an option for specifying otherwise 
+
+## WhenThen [GET RID OF] 
 `whenThen` describes how a change to one Measure results in a change to another Measure. 
 
 ### How to use
@@ -259,9 +271,12 @@ A `query` is comprised of three parts:
 
 In the scenario, we can specify 
 ```R
-query(conceptualModel=cm, iv=tutoring, dv=testScore)
+query(conceptualModel=cm, dv=testScore, iv=tutoring)
 ```
 *Important note:* In order to infer a statistical model, there must be a hypothesized relationship between the `iv` and `dv`. 
+
+# TODO: WHAT NEXT! What do I get from query – take me to my lmer model!
+
 
 # Tip: Programming style
 rTisane is compatible with common programming idioms in R, including chaining function calls using pipes (`%>%`). Using pipes is completely optional, but you might find it helpful. Pipes make the focus of rTisane programs, conceptual models, more obvious. 
@@ -279,8 +294,9 @@ testScore <- continuous(unit=student, name="Test score")
 
 cm <- ConceptualModel() %>%
     assume(causes(ses, testScore)) %>%
-    assume(whenThen(when=equals(tutoring, "in-person"), then=increases(testScore))) %>%
-    query(iv=tutoring, dv=testScore)
+    assume(whenThen(when=equals(tutoring, "in-person"), then=increases(testScore)))
+
+query(cm, iv=tutoring, dv=testScore)
 ```
 
 Without pipes: 

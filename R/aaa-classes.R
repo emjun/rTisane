@@ -339,44 +339,44 @@ Measure <- setClass("Measure",
 )
 
 
-#' Numeric class
-#'
-#' Class for Numeric measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units.
-#' @slot name Character. Name of measure, corresponds to column name in data.
-#' @keywords
-Numeric <- setClass("Numeric",
-    slot = c(
-        name = "character"
-    ),
-    contains = "Measure"
-)
+# #' Numeric class
+# #'
+# #' Class for Numeric measures, inherits from Measure.
+# #' Not called directly. All measures are declared through Units.
+# #' @slot name Character. Name of measure, corresponds to column name in data.
+# #' @keywords
+# Numeric <- setClass("Numeric",
+#     slot = c(
+#         name = "character"
+#     ),
+#     contains = "Measure"
+# )
 
-#' Nominal class
-#'
-#' Class for Nominal measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units.
-#' @slot name Name of measure, corresponds to column name if assigning data.
-#' @slot cardinality Integer for cardinality.
-#' @slot categories List of categories.
-#' @keywords
-Nominal <- setClass("Nominal",
-    slot = c(
-        name = "character",
-        cardinality = "integer",
-        categories = "list",
-        isInteraction= "logical"
-    ),
-    prototype = list(
-        name = "",
-        cardinality = as.integer(0),
-        categories = list(),
-        isInteraction= FALSE
-    ),
-    contains = "Measure"
-)
+# #' Nominal class
+# #'
+# #' Class for Nominal measures, inherits from Measure.
+# #' Not called directly. All measures are declared through Units.
+# #' @slot name Name of measure, corresponds to column name if assigning data.
+# #' @slot cardinality Integer for cardinality.
+# #' @slot categories List of categories.
+# #' @keywords
+# Nominal <- setClass("Nominal",
+#     slot = c(
+#         name = "character",
+#         cardinality = "integer",
+#         categories = "list",
+#         isInteraction= "logical"
+#     ),
+#     prototype = list(
+#         name = "",
+#         cardinality = as.integer(0),
+#         categories = list(),
+#         isInteraction= FALSE
+#     ),
+#     contains = "Measure"
+# )
 
-#' Interacts"class
+#' Interacts class
 #'
 #' Class for representing Interacts"effects.
 #' Not called directly. All interactions are declared through interacts.
@@ -396,72 +396,101 @@ Interacts <- setClass("Interacts",
 )
 
 
-#' Ordinal class
-#'
-#' Class for Ordinal measures, inherits from Measure.
-#' Not called directly. All measures are declared through Units.
-#' @slot name Name of measure, corresponds to column name in data.
-#' @slot cardinality Integer for cardinality.
-#' @slot order Ordered list of categories.
+# #' Ordinal class
+# #'
+# #' Class for Ordinal measures, inherits from Measure.
+# #' Not called directly. All measures are declared through Units.
+# #' @slot name Name of measure, corresponds to column name in data.
+# #' @slot cardinality Integer for cardinality.
+# #' @slot order Ordered list of categories.
+# #' @keywords
+# Ordinal <- setClass("Ordinal",
+#     slot = c(
+#         name = "character",
+#         order = "list",
+#         cardinality = "integer"
+#     ),
+#     contains = "Measure"
+# )
+
+#' Continuous class
+#' 
+#' Class for Continuous measures (e.g., scores, temperature, time)
+#' Inherits from Measure.
+#' @slot name character. Name of measure, corresponds to column name in data.
+# @slot baseline numeric. Optional. By default, 0.
 #' @keywords
-Ordinal <- setClass("Ordinal",
+Continuous <- setClass("Continuous",
     slot = c(
-        name = "character",
-        order = "list",
-        cardinality = "integer"
+        name = "character"
+        # baseline = "numeric",
+        # skew = "character"
     ),
     contains = "Measure"
 )
 
-#' Continuous class
-#'
-#' Wrapper class for Continuous measures.
-#' Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
-#' @slot measure Measure to wrap.
-#' @slot skew character. Description of skew, options are "positive" or NULL.
-#' @keywords
-Continuous <- setClass("Continuous",
-                    slot = c(
-                      measure = "Measure",
-                      skew = "character"
-                    ),
-                    prototype = list(
-                      measure = NULL,
-                      skew = "none"
-                    )
-)
-
 #' Counts class
 #'
-#' Wrapper class for Counts.
-#' Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
-#' @slot measure Measure to wrap.
+#' Class for Counts
+#' Inherits from Measure. 
+#' @slot name character. Name of measure, corresponds to column name in data.
+# @slot baseline numeric. Optional. By default, 0.
 #' @keywords
 Counts <- setClass("Counts",
-                   slot = c(
-                     measure = "Measure"
-                   ),
-                   prototype = list(
-                     measure = NULL
-                   )
+    slot = c(
+        name = "character" 
+        # baseline = "numeric",
+    ),
+    contains = "Measure"
 )
 
 #' Categories class
 #'
-#' Wrapper class for Categorical measures.
-#' Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
-#' @slot measure Measure to wrap.
-#' @slot numberOfCategories integer. Number of categories the measure contains.
+#' Class for (ordered, unordered) Categories
+#' Inherits from Measure. 
+#' @slot name character. Name of measure, corresponds to column name in data.
+# @slot baseline character. Specific category that the other categories in this measure are compared against. If @param order is provided, @param baseline is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
 #' @keywords
 Categories <- setClass("Categories",
-                   slot = c(
-                     measure = "Measure",
-                     numberOfCategories = "integer"
-                   ),
-                   prototype = list(
-                     measure = NULL,
-                     numberOfCategories = as.integer(0)
-                   )
+    slot = c(
+    name = "character"
+    ),
+    contains = "Measure"
+)
+
+#' Unordered Categories class
+#'
+#' Class for unordered Categories
+#' Inherits from Measure. 
+#' @slot name character. Name of measure, corresponds to column name in data.
+#' @slot cardinality integer. Number of unique categories. If @param order is provided, @param cardinality is not needed and will be set to the length of @param order
+# @slot baseline character. Specific category that the other categories in this measure are compared against. If @param order is provided, @param baseline is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
+#' @keywords
+UnorderedCategories <- setClass("UnorderedCategories",
+    slot = c(
+        name = "character",
+        cardinality = "integer"
+    ),
+    contains = "Categories"
+)
+
+setClassUnion("listORNULL", c("list", "NULL"))
+#' Ordered Categories class
+#'
+#' Class for ordered Categories
+#' Inherits from Measure. 
+#' @slot name character. Name of measure, corresponds to column name in data.
+#' @slot cardinality integer. Number of unique categories. If @param order is provided, @param cardinality is not needed and will be set to the length of @param order
+#' @slot order list. Optional. List of categories in order from "lowest" to "highest"
+# @slot baseline character. Specific category that the other categories in this measure are compared against. If @param order is provided, @param baseline is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
+#' @keywords
+OrderedCategories <- setClass("OrderedCategories",
+    slot = c(
+    name = "character",
+    cardinality = "integer",
+    order = "listORNULL"
+    ),
+    contains = "Categories"
 )
 
 #' Time class
@@ -527,6 +556,7 @@ Time <- function(name,
   }
 
 }
+
 # # Validator to ensure that the slots corroborate with each other
 # setValidity("Time", function(object) {
 #   if (length(object@order)   !=  object@cardinality) {
@@ -745,8 +775,8 @@ RandomIntercept <- function(group) {
     )
 }
 
-setClassUnion("numericORordinal", c("Numeric", "Ordinal"))
-setClassUnion("nominalORordinal", c("Nominal", "Ordinal"))
+# setClassUnion("numericORordinal", c("Numeric", "Ordinal"))
+# setClassUnion("nominalORordinal", c("Nominal", "Ordinal"))
 setClassUnion("integerORnumericORcharacter", c("integer", "numeric", "character"))
 setClassUnion("ComparesORComparesList", c("Compares", "list"))
 setClassUnion("ContinuousORCountsORCategories", c("Continuous", "Counts", "Categories"))

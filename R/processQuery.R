@@ -20,7 +20,7 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
     # dvOptions <- append(dvOptions, "Categories")
     dvOptions <- c("Treat as a continuous measure", "Treat as counts", "Treat as categories")
   } else {
-    stopifnot(dvClass == "Nominal")
+    # stopifnot(dvClass == "Categories")
     # dvOptions <- append(dvOptions, "Categories")
     dvOptions <- c("Treat as categories")
   }
@@ -272,10 +272,10 @@ setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "Abst
   updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path, data=data)
 
   # Update DV, Update Conceptual Model
-  dvUpdated <- updateDV(dv, updates)
+  # dvUpdated <- updateDV(dv, updates)
   cmUpdated <- updateConceptualModel(conceptualModel, updates)
 
-  results <- list(updatedDV=dvUpdated, updatedConceptualModel=cmUpdated)
+  results <- list(updatedDV=dv, updatedConceptualModel=cmUpdated)
 
   # Return updated values
   results

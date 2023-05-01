@@ -136,7 +136,7 @@ class TisaneGUI:
         # Add all components to main app's layout
         app.layout = dbc.Container(
             [
-                html.H1("rTisane 🥖"),
+                html.H1("🌺 Tisane"),
                 dbc.Row(progress_row),
                 html.Br(),
                 # Split screen between overview and model specification tabs

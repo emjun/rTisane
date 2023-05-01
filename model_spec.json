@@ -1,12 +1,12 @@
 {
-    "dependent variable": "PINCP",
-    "family": "Gaussian",
+    "dependent variable": "Spending",
+    "family": "Gamma",
     "interaction effects": [],
-    "link": "identity",
+    "link": "inverse",
     "main effects": [
-        "AGEP",
-        "SCHL",
-        "SEX"
+        "Educ",
+        "Income",
+        "Sex"
     ],
     "random effects": {}
 }

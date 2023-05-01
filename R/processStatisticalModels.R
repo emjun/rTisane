@@ -47,7 +47,7 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
 
 
     #### Create query
-    dvVar <- dv@measure
+    dvVar <- dv
     query = list(DV=dvVar@name, IVs=list(iv@name))
 
     #### Gather info about DV 

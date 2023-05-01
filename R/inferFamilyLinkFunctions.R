@@ -10,13 +10,18 @@ inferFamilyFunctions <- function(dv) {
   familyCandidates = NULL
 
   if (class(dv) == "Continuous") {
-    if (dv@skew == "positive") {
-      familyCandidates <- append(familyCandidates, "Inverse Gaussian")
-      familyCandidates <- append(familyCandidates, "Gamma")
-    } else {
-      stopifnot(dv@skew == "none")
-        familyCandidates <- append(familyCandidates, "Gaussian")
-      }
+    # Positive skew
+    familyCandidates <- append(familyCandidates, "Inverse Gaussian")
+    familyCandidates <- append(familyCandidates, "Gamma")
+    # None
+    familyCandidates <- append(familyCandidates, "Gaussian")
+    # if (dv@skew == "positive") {
+    #   familyCandidates <- append(familyCandidates, "Inverse Gaussian")
+    #   familyCandidates <- append(familyCandidates, "Gamma")
+    # } else {
+    #   stopifnot(dv@skew == "none")
+    #     familyCandidates <- append(familyCandidates, "Gaussian")
+    #   }
   } else if (class(dv) == "Counts") {
     familyCandidates <- append(familyCandidates, "Poisson")
     familyCandidates <- append(familyCandidates, "Negative Binomial")
