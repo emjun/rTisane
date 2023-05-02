@@ -23,7 +23,8 @@ categories - order, not ordered - SES; sex -->
 ```
 
 ## Step 2: Specify conceptual relationships 
-For the sake of this tutorial, let's make sure you are familiar with the API. Use each construct at least once: ``causes``, ``relates``, ``assume``, ``hypothesize``
+For the sake of this tutorial, let's make sure you are familiar with the API. Use each construct at least once: ``causes``, ``relates``, ``assume``, ``hypothesize``. 
+Use the optional ``when`` and ``then`` parameters when specifying at least one conceptual relationship.
 ```R
 # Type in here
 ```
