@@ -218,10 +218,15 @@ The `query` captures the relationship you are interested in assessing.
 - `conceptualModel`: ConceptualModel
 - `iv`: Measure. The independent variable whose effect on the dependent variable you are interested in estimating
 - `dv`: Measure. The dependent variable, or outcome, you are interested in
+- `data`: Pathlike or Dataframe. (optional) Either the path to a dataset (a CSV in long format) or a Dataframe. 
 
 For example, you can specify
 ```R
 query(conceptualModel=cm, dv=testScore, iv=tutoring)
+# with a path to data 
+query(conceptualModel=cm, dv=testScore, iv=tutoring, data="data.csv")
+# with a dataframe (df) that you have already imported
+query(conceptualModel=cm, dv=testScore, iv=tutoring, data=df) 
 ```
 
 *Important note:* In order to infer a statistical model, there must be a hypothesized relationship between the `iv` and `dv`.
@@ -229,19 +234,13 @@ query(conceptualModel=cm, dv=testScore, iv=tutoring)
 Executing the `query` will initiate an interactive process to clarify the input conceptual model and present you with a few follow-up questions necessary to infer a statistical model. 
 
 See a video here: 
-# TODO: image of first disambiguation phase!
+# TODO: Video of running program + disambiguation loops
 
-## START HERE: Output
-Result: A generated script with code for the resulting statistical model you can run! 
-Run the output script with data! 
+## Output
+The result of executing an rTisane program (and engaging in the interactive process) is a script with code for fitting a statistical model to assess the average treatment effect of the IV on the DV in your query. 
 
-If you did not specify data in your query, you will need to specify a data path in the script. So, open the script up in a code editor. Type in the path, as the comments instruct you, and then run it! 
-# TODO: Record video showing me update the path!
-
-If you specified data in your query, run the script! 
-```{r}
-source("model.R") # The output script will be called model.R, but you might have to find it's path/location on your computer. 
+The last thing to do is to specify data in your script (when you have it) and run your script!
+```R
+source("model.R")
 ```
-Result: Summary of your statistical model + a visualization for how well the data fit. 
-
-Run your statistical model!
+<!-- Result: Summary of your statistical model + a visualization for how well the data fit.  -->

@@ -1,6 +1,34 @@
-# Consider the following scenario from the Overview: 
-> You want to know the influence of tutoring on student test performance. To this end, you conduct a study involving 100 students. For each student, you collect data about their race, socioeconomic background, number of extra-curriculars, and test score. Additionally, you randomly assign each student to one of two tutoring conditions: online tutoring vs. in-person tutoring. 
+# Tutorial 
+Answer the questions below. Feel free to refer back to the Overview. 
+
+Consider the following scenario from the Overview: 
+<!-- > You want to know the influence of tutoring on student test performance. To this end, you conduct a study involving 100 students. For each student, you collect data about their race, socioeconomic background, number of extra-curriculars, and test score. Additionally, you randomly assign each student to one of two tutoring conditions: online tutoring vs. in-person tutoring.   -->
+
+You are interested in understanding the influence of age on physical endurance, as measured by the number of minutes adults can run before hitting too high a heart rate. To this end, you collect data from 245 adults about their age, sex, SES (as "low", "medium", or "high") and the nubmer of years they self-report having done vigorous exercise regularly.
+Note: This example is adapted from Cohen, Cohen, West, Aiken 2003. <!-- Chapter 7  -->
 
 
-> Try it out! In a separate `tutorial.R` script, write the other two relationships that would result in the conceptual model below. 
-# TODO: Add picture + key below!
+assume / hypothesize
+causes / relates
+- / whenThen
+
+
+
+## Step 1: Declare variables
+<!-- count - years
+continuous - sex, minutes, 
+categories - order, not ordered - SES; sex -->
+```R
+# Type in here
+```
+
+## Step 2: Specify conceptual relationships 
+For the sake of this tutorial, let's make sure you are familiar with the API. Use each construct at least once: ``causes``, ``relates``, ``assume``, ``hypothesize``
+```R
+# Type in here
+```
+
+## Step 3: Query for a statistical model
+```R
+# Type in here
+```
