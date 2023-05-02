@@ -8,7 +8,6 @@ In five steps (!!!), rTisane will help you leverage what you know about your dom
 Note: Although a dataset is not required to use rTisane, if included, a dataset must be in long format. Furthermore, if a dataset is used, some [parameters for declaring variables become optional](#measures). rTisane will infer them from the dataset. 
 
 
-
 # Consider the following scenario: 
 > You want to know the influence of tutoring on student test performance. To this end, you conduct a study involving 100 students. For each student, you collect data about their race, socioeconomic background, number of extra-curriculars, and test score. Additionally, you randomly assign each student to one of two tutoring conditions: online tutoring vs. in-person tutoring. 
 
@@ -42,7 +41,7 @@ Categories can be unordered (e.g., race) or ordered (e.g., socioeconomic backgro
 - `name`: character. Column name
 - `cardinality`: int. Number of unique categories. If `order` is provided, `cardinality` is not needed and will be set to the length of `order`
 - `order`: list. List of categories in order from "lowest" to "highest"
-- `baseline`: character. Specific category that the other categories in this measure are compared against. If `order` is provided, `baseline` is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
+- `baseline`: character. Specific category that the other categories in this measure are compared against. If `order` is provided, `baseline` is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for adding detail to conceptual relationships, through `when` and `then` parameters ([see below](#optional-when-and-then)).
 
 In the scenario, race and tutoring are *unordered* categories: 
 ```R
@@ -96,106 +95,144 @@ In the scenario, if we think that the effect of tutoring (on test score) will de
 ixn <- interacts(ses, tutoring)
 ```
 
-## Step 2: Specify conceptual relationships START HERE
-To start, specify a conceptual model to add conceptual relationships to. The conceptual model is used to produce a statistical model. 
-```{r}
+## Step 2: Specify conceptual model
+A conceptual model is a graph with variables (nodes) and conceptual relationships between variables (edges). The conceptual model should accurately represent your background knowledge about the domain. The conceptual model is used to produce a statistical model.
+
+First, construct a conceptual model and then add conceptual relationships to it.
+```R
 cm <- ConceptualModel()
 ```
 
-rTisane represents the conceptual model as a directed acyclic graph. The nodes are variables, and the edges describe how the variables relate to one another. For example, here is the conceptual node you will be asked to specify at the end of this section. 
-# TODO: ADD PICTURE (Same one as later!)
+Specify conceptual relationships to add to the conceptual model. Each relationship has a *type* and a *label* about how to treat it. 
 
-There are **three different types of relationships (and edges)**. You should specify how variables relate according to what most closely represents your understanding. In the case of ambiguity when inferring a statistical model, rTisane will ask you follow-up questions. 
+### Two types of conceptual relationships
 
-<!-- What happens if you specify a relationship?  -->
+#### Causes 
+Use `causes` to specify that a variable causes another.  
 
-### WhenThen 
-Use `whenThen` to specify how exactly a variable causes another. 
+`causes` takes the following parameters: 
+- `cause`: Measure
+- `effect`: Measure
+- `when`: Compares relationship (optional, see below)
+- `then`: Compares relationship (optional, see below)
 
-For example, you might want to say that when students receive in-person tutoring, their test scores increase. 
-```{r}
-whenThen(when=equals(tutoring, "in-person"), then=increases(testScore))
+In the graph, `causes` introduces a directed edge from `cause` to `effect`.
+
+For example, you can specify that tutoring causes test scores. 
+```R
+causes(causes=tutoring, effect=testScore)
 ```
 
-### Relates
-Use `relates` when you want to note that two variables are related, but the direction of influence is unclear. 
+#### Relates
+Use `relates` th specify that two variables are related but you are uncertain about the direction of influence. 
 
-For example, you could also say that tutoring is related to test scores. 
-```{r}
-relates(tutoring, testScore)
+`relates` takes the following parameters: 
+- `lhs`: Measure
+- `rhs`: Measure
+- `when`: Compares relationship (optional, see below)
+- `then`: Compares relationship (optional, see below)
+
+In the graph, `relates` introduces a bi-directional edge  between `lhs` and `rhs`.
+
+For example, you can specify that tutoring is related to test scores. 
+```R
+relates(lhs=tutoring, rhs=testScore)
 ```
 
-To infer a statistical model, rTisane will ask you to assume a direction. 
+rTisane will guide you through possible graphical structures that a bi-directional edge could represent. To infer a statistical model, rTisane will ask you to assume a direction of influence.
 
-### Causes 
-Use `causes` to specify that a variable causes another, but you do not know or want to specify how specific values of a variable influence another variable. 
-
-For example, you might want to say that tutoring causes test scores. 
-```{r}
-causes(tutoring, testScore)
+#### Optional: `when` and `then` 
+For both `causes` and `relates`, you may want to describe in greater detail how the relationship "behaves" by including `when` and `then` parameters. For instance, if you mean that when tutoring is in-person, then test scores increase, you may specify
+```R
+causes(causes=tutoring, effect=testScore, when=equals(tutoring, 'in-person'), then=increases(testScore))
+# or
+relates(lhs=tutoring, rhs=testScore, when=equals(tutoring, 'in-person'), then=increases(testScore))
 ```
-*When inferring statistical models, the above two statements are equivalent.*
 
-Each edge also has one of two labels: assume or hypothesize. 
+To add detail to conceptual relationships involving interactions, specify values corresponding to each of the interacting Measures. For example, 
+```R 
+ixn <- interacts(ses,tutoring)
+# ses == "high", tutoring == "in-person"
+causes(when=equals(ixn, list("high", "in-person")), then=increases(testScore))
+```
 
-### Assume 
-Assume a conceptual relationship if it is established in prior work and would be problematic if it did not exist in the current dataset. 
+There are four types of comparisons you can include in `when` and `then`, depending on the kind of Measure you have:
+- `increases(measure)`
+    - measure: Categories with an order, Counts, or Continuous
+- `decreases(measure)`:
+    - measure: Categories with an order, Counts, or Continuous
+- `equals(measure, value)`
+    - measure: Categories, Counts, or Continuous
+    - value: character, int, float, or list
+- `notEquals(measure, value)`
+    - measure: Categories, Counts, or Continuous
+    - value: character, int, float, or list
+
+*Important note:* The change described in the `then` parameter is in comparison to a baseline. More precisely, the example `whenThen` statement above states that the average of `testScores` for `"Black"` students is higher than the average of `testScores` for `"White"` students (the baseline specified when `race` was declared.) The baseline for Counts and Continuous variables is 0 unless otherwise specified. The baseline for Categorical interactions is the product of baseline values from the interacting Measures. 
+
+You may want to include `when` and `then` parameters if they help you keep track of or think through your conceptual model. In `relates` statements, the parameters are used to more highly suggest graphical structures that you might mean. 
+
+### Label conceptual relationships
+When adding a relationship to a conceptual model, you must label each relationship (i.e., edge) with either `assume` or `hypothesize`. 
+
+#### Assume 
+Assume a conceptual relationship if it is established in prior work or you have a strong belief about it. 
+<!-- would be problematic if it did not exist in the current dataset.  -->
 
 For example, you can say that based on prior work, you assume socioeconomic background will cause test scores. 
-```{r}
+```R
+# Previously, we constructed a Conceptual Model: 
+cm <- ConceptualModel()
+...
 cr <- causes(ses, testScore)
 assume(cm, cr) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
+
+# Alternative syntax: nested function calls
+cm <- ConceptualModel()
+...
+cr <- assume(cm, causes(ses, testScore))
+
+# Alternative syntax: Pipe
+cm <- ConceptualModel() %>%
+...
+assume(causes(ses, testScore))
 ```
 
-### Hypothesize 
-Hypothesize a conceptual relationship if it is the focus of the ongoing analysis. **In order to infer a statistical model, there must be at least one hypothesized relationship.**
+#### Hypothesize 
+Hypothesize a conceptual relationship if it is unknown and/or the focus of the ongoing analysis. **In order to infer a statistical model, there must be at least one hypothesized relationship.**
 
-For example, you desigend the study so that each student was randomly assigned a tutoring condition. You hypothesize tutoring influences test scores. 
-```{r}
+In the scenario, you `hypothesize` that tutoring causes test scores.
+```R
+cm <- ConceptualModel()
+...
 cr <- causes(tutoring, testScore)
 hypothesize(cm, cr) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
 ```
 
-> Try it out! In a separate `tutorial.R` script, write the other two relationships that would result in the conceptual model below. 
-# TODO: Add picture + key below!
+## Step 3: Query rTisane for a statistical model
+Finally, once you have declared variables and specified a conceptual model, you can query the conceptual model for a statistical model!
 
-Result: Set of variables + conceptual relationships that represent your background knowledge about the domain. 
+The `query` captures the relationship you are interested in assessing.
 
-# FAQs
-1. How do I know which conceptual relationships I specify? 
-Reflect on what understanding of the domain you are bringing to data analysis. Express the type of relationships as what feels most accurate to your understanding. Label each relationship according to what you want to assume or hypothesize. 
+`query` has the following parameters: 
+- `conceptualModel`: ConceptualModel
+- `iv`: Measure. The independent variable whose effect on the dependent variable you are interested in estimating
+- `dv`: Measure. The dependent variable, or outcome, you are interested in
 
-2. What is the impact of specifying conceptual relationships? What happens if I omit a variable relationship? 
-The conceptual relationships help rTisane infer a statistical model that most accurately represents your conceptual knowledge and understanding of the domain. If you omit a variable relationship, the statistical model may not be applicable because it does not capture your complete conceptual understanding. 
-
-3. Can I go back and change my relationships? 
-Yes! If you become aware of conceptual relationships as you use rTisane, you should go back and add new conceptual relationships and/or update ones you already specified. Query rTisane again with this updated conceptual model. 
-
-## Step 3: Query rTisane for a statistical model based on your variable relationships
-Query rTisane for a statistical model estimating the infuence of a variable on a dependent variable based on the conceptual relationships specified in a conceptual model. 
-```{r}
-query(conceptualModel=cm, iv=tutoring, dv=testScore) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
-```
-Note: **Data is not required in order to generate a statistical model.**
-If you have data, pass its path to the query: 
-```{r}
-query(conceptualModel=cm, iv=tutoring, dv=testScore, data="data.csv")
+For example, you can specify
+```R
+query(conceptualModel=cm, dv=testScore, iv=tutoring)
 ```
 
-At this point, :clap:! You have a complete rTisane program with variables, conceptual relationships, and a query for a statistical model!
+*Important note:* In order to infer a statistical model, there must be a hypothesized relationship between the `iv` and `dv`.
 
-## Step 4: Clarify any relationships + answer a few more targeted questions
-rTisane will show you an overview of your conceptual model's graph. If you specified that a variable `relates` to another conceptually, rTisane will ask you to assume a specific direction of influence in order to infer a statistical model. For example: 
+Executing the `query` will initiate an interactive process to clarify the input conceptual model and present you with a few follow-up questions necessary to infer a statistical model. 
+
+See a video here: 
 # TODO: image of first disambiguation phase!
 
-Once you have finalized your conceptual model, rTisane will generate a space of valid statistical models and ask a few follow-up questions via a graphical user interface (GUI). The GUI will explain how rTisane determined which variables should be included in a linear model and what family and link options to pick among based on your variable data types. After answering all the questions, generate code to fit and summarize a statistical model!
-
-For example: 
-# TODO: Add gif of GUI for school tutoring! 
-
+## START HERE: Output
 Result: A generated script with code for the resulting statistical model you can run! 
-
-## Step 5: Run your statistical model!
 Run the output script with data! 
 
 If you did not specify data in your query, you will need to specify a data path in the script. So, open the script up in a code editor. Type in the path, as the comments instruct you, and then run it! 
@@ -207,35 +244,4 @@ source("model.R") # The output script will be called model.R, but you might have
 ```
 Result: Summary of your statistical model + a visualization for how well the data fit. 
 
-
-# Tip: Use the pipe character for specifying your conceptual model! 
-Consider the below rTisane program.
-```{r}
-student <- Unit(name="student", cardinality=100)
-ses <- ordinal(unit=student, name="SES", order=list("low", "middle", "high"))
-tutoring <- nominal(unit=student, name="condition")
-testScore <- numeric(unit=student, name="testScore")
-
-cm <- ConceptualModel() 
-
-cr <- causes(ses, testScore)
-cm <- assume(cm, cr)
-
-cr <- whenThen(when=equals(tutoring, "in-person"), then=increases(testScore))
-cm <- assume(cm, cr)
-
-query(conceptualModel=cm, iv=tutoring, dv=testScore)
-```
-The above program is equivalent to this program: 
-```{r}
-student <- Unit(name="student", cardinality=100)
-ses <- ordinal(unit=student, name="SES", order=list("low", "middle", "high"))
-tutoring <- nominal(unit=student, name="condition")
-testScore <- numeric(unit=student, name="testScore")
-
-cm <- ConceptualModel() %>%
-    assume(causes(ses, testScore)) %>%
-    assume(whenThen(when=equals(tutoring, "in-person"), then=increases(testScore))) %>%
-    query(iv=tutoring, dv=testScore)
-```
-By using the "piping" idiom common in R, the second program emphasizes that the conceptual model is driving the statistical modeling process. You may also find the second program easier to read and write.
+Run your statistical model!
