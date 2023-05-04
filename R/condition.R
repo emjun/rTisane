@@ -13,7 +13,7 @@ setGeneric("condition", function(unit, name, cardinality, order, numberOfInstanc
 setMethod("condition", signature("Unit", "character", "numeric", "missing", "numeric"), function(unit, name, cardinality, numberOfInstances)
 {
   # Create new measure
-  measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=as.integer(numberOfInstances))
+  measure = UnorderedCategories(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=as.integer(numberOfInstances))
 
   # Return handle to measure
   measure
@@ -21,7 +21,7 @@ setMethod("condition", signature("Unit", "character", "numeric", "missing", "num
 setMethod("condition", signature("Unit", "character", "numeric", "missing", "numericORAbstractVariableORAtMostORPer"), function(unit, name, cardinality, numberOfInstances)
 {
   # Create new measure
-  measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=numberOfInstances)
+  measure = UnorderedCategories(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=numberOfInstances)
 
   # Return handle to measure
   measure
@@ -29,7 +29,7 @@ setMethod("condition", signature("Unit", "character", "numeric", "missing", "num
 setMethod("condition", signature("Unit", "character", "numeric", "missing", "missing"), function(unit, name, cardinality, numberOfInstances)
 {
   # Create new measure
-  measure = Nominal(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=as.integer(1))
+  measure = UnorderedCategories(unit=unit, name=name, cardinality=as.integer(cardinality), numberOfInstances=as.integer(1))
 
   # Return handle to measure
   measure
@@ -39,7 +39,7 @@ setMethod("condition", signature("Unit", "character", "missing", "list", "numeri
   # Calculate cardinality from order
   cardinality = length(order)
   # Create new measure
-  measure = Ordinal(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=as.integer(numberOfInstances))
+  measure = OrderedCategories(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=as.integer(numberOfInstances))
 
   # Return handle to measure
   measure
@@ -49,7 +49,7 @@ setMethod("condition", signature("Unit", "character", "missing", "list", "numeri
   # Calculate cardinality from order
   cardinality = length(order)
   # Create new measure
-  measure = Ordinal(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=numberOfInstances)
+  measure = OrderedCategories(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=numberOfInstances)
 
   # Return handle to measure
   measure
@@ -59,7 +59,7 @@ setMethod("condition", signature("Unit", "character", "missing", "list", "missin
   # Calculate cardinality from order
   cardinality = length(order)
   # Create new measure
-  measure = Ordinal(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=as.integer(1))
+  measure = OrderedCategories(unit=unit, name=name, order=order, cardinality=cardinality, numberOfInstances=as.integer(1))
 
   # Return handle to measure
   measure
