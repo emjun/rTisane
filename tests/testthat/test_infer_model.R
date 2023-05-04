@@ -14,8 +14,8 @@ get_graphs <- function(design) {
 
 test_that("Design created properly", {
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
 
   cause_relat = causes(measure_0, measure_1)
 
@@ -27,7 +27,7 @@ test_that("Design created properly", {
   expect_type(design@ivs, "list")
   expect_equal(length(design@ivs), 1)
   expect_equal(design@ivs[[1]], measure_0)
-  expect_s4_class(design@dv, "Numeric")
+  expect_s4_class(design@dv, "Continuous")
   expect_true(inherits(design@dv, "AbstractVariable"))
   expect_null(design@source)
 
@@ -43,8 +43,8 @@ test_that("Design created properly", {
 
 test_that("Infer has relationships", {
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
 
   cause_relat = causes(measure_0, measure_1)
   design <- Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
@@ -61,8 +61,8 @@ test_that("Infer has relationships", {
 
 test_that("Causal graphs constructed correctly", {
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
 
   cause_relat = causes(measure_0, measure_1)
   design <- Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
@@ -85,9 +85,9 @@ test_that("Causal graphs constructed correctly", {
 # test_that("Measurement graphs constructed correctly", {
 #   # Add moderates relationship
 #   unit <- Unit("person")
-#   measure_0 <- numeric(unit=unit, name="measure_0")
-#   measure_1 <- numeric(unit=unit, name="measure_1")
-#   measure_2 <- numeric(unit=unit, name="measure_2")
+#   measure_0 <- continuous(unit=unit, name="measure_0")
+#   measure_1 <- continuous(unit=unit, name="measure_1")
+#   measure_2 <- continuous(unit=unit, name="measure_2")
 #
 #   ## Two variables moderate
 #   moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
@@ -114,7 +114,7 @@ test_that("Causal graphs constructed correctly", {
 #   }
 #
 #   ## Three variables moderate
-#   measure_3 <- numeric(unit=unit, name="measure_3")
+#   measure_3 <- continuous(unit=unit, name="measure_3")
 #   moderate_relat_1 <- moderates(var=measure_0, moderator=list(measure_2, measure_3), on=measure_1)
 #   design1 <- Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
 #   # Infer has relationships
@@ -142,8 +142,8 @@ test_that("Causal graphs constructed correctly", {
 
 test_that("Main effects inferred correctly", {
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
 
   ## ONLY ONE CAUSAL RELATIONSHIP
   cause_relat <- causes(measure_0, measure_1)
@@ -158,7 +158,7 @@ test_that("Main effects inferred correctly", {
   expect_true(measure_0@name %in% main_effects)
 
   ## ONE CAUSAL ANCESTOR
-  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_2 <- continuous(unit=unit, name="measure_2")
   cause_ancestor <- causes(measure_2, measure_0)
   design1 <- Design(relationships=list(cause_relat, cause_ancestor), ivs=list(measure_0), dv=measure_1)
 
@@ -171,7 +171,7 @@ test_that("Main effects inferred correctly", {
   expect_true(measure_2@name %in% main_effects)
 
   ## ONE CAUSAL OMISSION
-  measure_3 <- numeric(unit=unit, name="measure_3")
+  measure_3 <- continuous(unit=unit, name="measure_3")
   cause_omission <- causes(measure_3, measure_1)
   design2 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission), ivs=list(measure_0), dv=measure_1)
 
@@ -185,7 +185,7 @@ test_that("Main effects inferred correctly", {
   expect_true(measure_3@name %in% main_effects)
 
   ## ONE ASSOCIATIVE RELATIONSHIP
-  # measure_4 <- numeric(unit=unit, name="measure_4")
+  # measure_4 <- continuous(unit=unit, name="measure_4")
   # assoc <- associates_with(measure_0, measure_4)
   # design3 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc), ivs=list(measure_0), dv=measure_1)
   #
@@ -217,10 +217,10 @@ test_that("Main effects inferred correctly", {
 
 # test_that("Interaction effects inferred correctly", {
 #   unit <- Unit("person")
-#   measure_0 <- numeric(unit=unit, name="measure_0")
-#   measure_1 <- numeric(unit=unit, name="measure_1")
-#   measure_2 <- numeric(unit=unit, name="measure_2")
-#   measure_3 <- numeric(unit=unit, name="measure_3")
+#   measure_0 <- continuous(unit=unit, name="measure_0")
+#   measure_1 <- continuous(unit=unit, name="measure_1")
+#   measure_2 <- continuous(unit=unit, name="measure_2")
+#   measure_3 <- continuous(unit=unit, name="measure_3")
 #
 #   ## ONE 2-VARIABLE MODERATION
 #   cause_relat_0 <- causes(measure_0, measure_1)

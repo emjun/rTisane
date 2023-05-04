@@ -111,11 +111,11 @@ test_that("Ordinal/Ordered Categories measure created properly", {
   expect_s4_class(grade, "Categories")
   expect_s4_class(grade, "OrderedCategories")
   expect_true(inherits(grade, "Measure")) # inherits from Measure
-  expect_equal(condition@cardinality, 5)
+  expect_equal(grade@cardinality, 5)
   expect_equal(grade@numberOfInstances, 1)
 
   # Verify that number of instances is set to number greater than 1?
-  condition <- ordinal(unit=unit, name="condition", order=list(1, 2, 3, 4, 5), numberOfInstances=integer(5))
+  condition <- categories(unit=unit, name="condition", cardinality=5, numberOfInstances=integer(5))
   # Verify that Has relationship constructed
   expect_s4_class(condition, "Categories")
   expect_s4_class(condition, "UnorderedCategories")
@@ -124,23 +124,23 @@ test_that("Ordinal/Ordered Categories measure created properly", {
   expect_equal(grade@numberOfInstances, 1)
 
   # Should throw error since there is no cardinality specified
-   expect_error(ordinal(unit=unit, name="grade"), "*")
+   expect_error(categories(unit=unit, name="grade"), "*")
 
    # Create Participant
    participant <- Participant("pid", cardinality=40)
 
    # Specified correctly
-   grade <- ordinal(unit=participant, name="grade", order=list(1, 2, 3, 4, 5))
+   grade <- categories(unit=participant, name="grade", order=list(1, 2, 3, 4, 5))
    # Verify that Has relationship constructed
-   expect_s4_class(grade, "Ordinal")
+   expect_s4_class(grade, "OrderedCategories")
    expect_true(inherits(grade, "Measure")) # inherits from Measure
    # Verify that number of instances is set to 1 (Integer)
    # expect_s4_class(grade@repetitions, "Exactly")
 
    # Verify that number of instances is set to number greater than 1?
-   condition <- ordinal(unit=participant, name="condition", order=list(1, 2, 3, 4, 5), numberOfInstances=integer(5))
+   condition <- categories(unit=participant, name="condition", order=list(1, 2, 3, 4, 5), numberOfInstances=integer(5))
    # Verify that Has relationship constructed
-   expect_s4_class(condition, "Ordinal")
+   expect_s4_class(condition, "OrderedCategories")
    expect_true(inherits(condition, "Measure")) # inherits from Measure
 })
 

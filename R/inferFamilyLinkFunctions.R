@@ -25,12 +25,22 @@ inferFamilyFunctions <- function(dv) {
   } else if (class(dv) == "Counts") {
     familyCandidates <- append(familyCandidates, "Poisson")
     familyCandidates <- append(familyCandidates, "Negative Binomial")
-  } else {
-    stopifnot(class(dv) == "Categories")
-    if (dv@numberOfCategories == 2) {
+  } else if (class(dv) == "OrderedCategories") {
+    if (dv@cardinality == 2) {
       familyCandidates <- append(familyCandidates, "Binomial")
     } else {
-      stopifnot(dv@numberOfCategories > 2)
+      stopifnot(dv@cardinality > 2)
+      familyCandidates <- append(familyCandidates, "Multinomial")
+      familyCandidates <- append(familyCandidates, "Inverse Gaussian")
+      familyCandidates <- append(familyCandidates, "Gamma")
+      familyCandidates <- append(familyCandidates, "Gaussian")
+    }
+  } else {
+    stopifnot(class(dv) == "Categories")
+    if (dv@cardinality == 2) {
+      familyCandidates <- append(familyCandidates, "Binomial")
+    } else {
+      stopifnot(dv@cardinality > 2)
       familyCandidates <- append(familyCandidates, "Multinomial")
     }
   }

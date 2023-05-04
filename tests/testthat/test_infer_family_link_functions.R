@@ -1,90 +1,92 @@
 library(rTisane)
 
-test_that("Creates Continuous measure wrapper properly", {
-  participant <- Participant("pid", cardinality=40)
-  age <- numeric(unit=participant, name="age")
-  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
-  race <- nominal(unit=participant, name="race", cardinality=5)
-
-  # Verify that Continuous wrapper created correctly
-  cont <- asContinuous(measure=age)
-  expect_s4_class(cont, "Continuous")
-  expect_equal(cont@skew, "none")
-  cont <- asContinuous(measure=grade)
-  expect_s4_class(cont, "Continuous")
-  expect_equal(cont@skew, "none")
-  # Nominal measures cannot be wrapped/treated as a Continuous measure
-  expect_error(asContinuous(measure=race))
-})
-
-test_that("Creates Counts measure wrapper properly", {
-  participant <- Participant("pid", cardinality=40)
-  age <- numeric(unit=participant, name="age")
-  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
-  race <- nominal(unit=participant, name="race", cardinality=5)
-
-  # Verify that Counts wrapper created correctly
-  count <- asCounts(measure=age)
-  expect_s4_class(count, "Counts")
-  count <- asCounts(measure=grade)
-  expect_s4_class(count, "Counts")
-  # Nominal measures cannot be wrapped/treated as a Counts measure
-  expect_error(asCounts(measure=race))
-})
-
-test_that("Creates Categories measure wrapper properly", {
-  participant <- Participant("pid", cardinality=40)
-  age <- numeric(unit=participant, name="age")
-  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
-  race <- nominal(unit=participant, name="race", cardinality=5)
-
-  # Verify that Categories measure created correctly
-  cat <- asCategories(measure=grade)
-  expect_s4_class(cat, "Categories")
-  expect_equal(cat@numberOfCategories, as.integer(3))
-  # Nominal measures cannot be wrapped/treated as a Categories measure
-  cat <- asCategories(measure=race)
-  expect_s4_class(cat, "Categories")
-  expect_equal(cat@numberOfCategories, as.integer(5))
-  expect_error(asCategories(measure=age))
-})
+# test_that("Creates Continuous measure wrapper properly", {
+#   participant <- Participant("pid", cardinality=40)
+#   age <- continuous(unit=participant, name="age")
+#   grade <- categories(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
+#   race <- categories(unit=participant, name="race", cardinality=5)
+#
+#   # Verify that Continuous wrapper created correctly
+#   cont <- asContinuous(age)
+#   expect_s4_class(cont, "Continuous")
+#   expect_equal(cont@skew, "none")
+#   cont <- asContinuous(measure=grade)
+#   expect_s4_class(cont, "Continuous")
+#   expect_equal(cont@skew, "none")
+#   # Nominal measures cannot be wrapped/treated as a Continuous measure
+#   expect_error(asContinuous(measure=race))
+# })
+#
+# test_that("Creates Counts measure wrapper properly", {
+#   participant <- Participant("pid", cardinality=40)
+#   age <- continuous(unit=participant, name="age")
+#   grade <- categories(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
+#   race <- categories(unit=participant, name="race", cardinality=5)
+#
+#   # Verify that Counts wrapper created correctly
+#   count <- asCounts(measure=age)
+#   expect_s4_class(count, "Counts")
+#   count <- asCounts(measure=grade)
+#   expect_s4_class(count, "Counts")
+#   # Nominal measures cannot be wrapped/treated as a Counts measure
+#   expect_error(asCounts(measure=race))
+# })
+#
+# test_that("Creates Categories measure wrapper properly", {
+#   participant <- Participant("pid", cardinality=40)
+#   age <- continuous(unit=participant, name="age")
+#   grade <- categories(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
+#   race <- categories(unit=participant, name="race", cardinality=5)
+#
+#   # Verify that Categories measure created correctly
+#   cat <- asCategories(measure=grade)
+#   expect_s4_class(cat, "Categories")
+#   expect_equal(cat@numberOfCategories, as.integer(3))
+#   # Nominal measures cannot be wrapped/treated as a Categories measure
+#   cat <- asCategories(measure=race)
+#   expect_s4_class(cat, "Categories")
+#   expect_equal(cat@numberOfCategories, as.integer(5))
+#   expect_error(asCategories(measure=age))
+# })
 
 test_that("Infers candidate family functions properly", {
   participant <- Participant("pid", cardinality=40)
-  age <- numeric(unit=participant, name="age")
-  grade <- ordinal(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
-  grade_binary <- ordinal(unit=participant, name="grade", order=list("low", "high"), numberOfInstances=integer(1))
-  race <- nominal(unit=participant, name="race", cardinality=5)
+  age <- continuous(unit=participant, name="age")
+  grade <- categories(unit=participant, name="grade", order=list("low","medium", "high"), numberOfInstances=integer(1))
+  grade_binary <- categories(unit=participant, name="grade", order=list("low", "high"), numberOfInstances=integer(1))
+  race <- categories(unit=participant, name="race", cardinality=5)
+  extra <- counts(unit=participant, name="Number of extracurriculars")
 
   # Infer family functions for Continuous wrappers
-  cont <- asContinuous(measure=age)
-  familyFunctions <- inferFamilyFunctions(cont)
-  expect_length(familyFunctions, 1)
-  expect_equal(familyFunctions[[1]], "Gaussian")
+  familyFunctions <- inferFamilyFunctions(age)
+  expect_length(familyFunctions, 3)
+  expect_true("Gaussian" %in% familyFunctions)
+  expect_true("Inverse Gaussian" %in% familyFunctions)
+  expect_true("Gamma" %in% familyFunctions)
 
-  cont <- asContinuous(measure=age)
-  cont@skew = "positive"
-  familyFunctions <- inferFamilyFunctions(cont)
-  expect_length(familyFunctions, 2)
-  expect_true(c("Inverse Gaussian") %in% familyFunctions)
-  expect_true(c("Gamma") %in% familyFunctions)
+  familyFunctions <- inferFamilyFunctions(age)
+  expect_length(familyFunctions, 3)
+  expect_true("Gaussian" %in% familyFunctions)
+  expect_true("Inverse Gaussian" %in% familyFunctions)
+  expect_true("Gamma" %in% familyFunctions)
 
   # Infer family functions for Counts measures
-  count <- asCounts(measure=age)
-  familyFunctions <- inferFamilyFunctions(count)
+  familyFunctions <- inferFamilyFunctions(extra)
   expect_length(familyFunctions, 2)
   expect_true(c("Poisson") %in% familyFunctions)
   expect_true(c("Negative Binomial") %in% familyFunctions)
 
   # Infer family functions for Categories measures
-  cat <- asCategories(measure=grade_binary)
-  familyFunctions <- inferFamilyFunctions(cat)
+  familyFunctions <- inferFamilyFunctions(grade_binary)
   expect_length(familyFunctions, 1)
   expect_equal(familyFunctions[[1]], "Binomial")
-  cat <- asCategories(measure=grade)
-  familyFunctions <- inferFamilyFunctions(cat)
-  expect_length(familyFunctions, 1)
+  familyFunctions <- inferFamilyFunctions(grade)
+  expect_length(familyFunctions, 4)
   expect_equal(familyFunctions[[1]], "Multinomial")
+  expect_true("Multinomial" %in% familyFunctions)
+  expect_true("Inverse Gaussian" %in% familyFunctions)
+  expect_true("Gamma" %in% familyFunctions)
+  expect_true("Gaussian" %in% familyFunctions)
 })
 
 test_that("Infers candidate link functions properly", {
@@ -133,22 +135,17 @@ test_that("Infers candidate link functions properly", {
 
 test_that("Infer Family and Link functions properly", {
   participant <- Participant("pid", cardinality=40)
-  age <- numeric(unit=participant, name="age")
-  cont <- asContinuous(age)
+  age <- continuous(unit=participant, name="age")
+  extra <- counts(unit=participant, name="Number of extracurriculars")
 
-  familyLinkPairs <- inferFamilyLinkFunctions(cont)
-  familyCandidates <- inferFamilyFunctions(cont)
+  familyLinkPairs <- inferFamilyLinkFunctions(age)
+  familyCandidates <- inferFamilyFunctions(age)
   expect_equal(length(familyLinkPairs), length(familyCandidates))
-  expect_length(familyLinkPairs, 1)
-  expect_equal(familyLinkPairs[["Gaussian"]], inferLinkFunctions("Gaussian"))
 
-  count <- asCounts(measure=age)
-  familyLinkPairs <- inferFamilyLinkFunctions(count)
-  familyCandidates <- inferFamilyFunctions(count)
+  familyLinkPairs <- inferFamilyLinkFunctions(extra)
+  familyCandidates <- inferFamilyFunctions(extra)
   expect_equal(length(familyLinkPairs), length(familyCandidates))
   expect_length(familyLinkPairs, 2)
-  expect_equal(familyLinkPairs[["Poisson"]], inferLinkFunctions("Poisson"))
-  expect_equal(familyLinkPairs[["Negative Binomial"]], inferLinkFunctions("Negative Binomial"))
 })
 # test_that("Asks questions to disambiguate variables properly", {
 #

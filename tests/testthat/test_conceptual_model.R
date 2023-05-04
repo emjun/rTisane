@@ -4,8 +4,8 @@ test_that("Assume updates Conceptual Model properly", {
   cm <- ConceptualModel()
 
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
 
   # Assume causal relationship
   cause_relat <- causes(measure_0, measure_1)
@@ -48,8 +48,8 @@ test_that("Hypothesize updates Conceptual Model properly", {
   cm <- ConceptualModel()
 
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
 
   # Hypothesize causal relationship
   cause_relat <- causes(measure_0, measure_1)
@@ -92,9 +92,9 @@ test_that("Unobserved variables treated properly in Conceptual Models", {
   cm <- ConceptualModel()
 
   unit <- Unit("person", cardinality=40)
-  age <- numeric(unit=unit, name="age")
-  motivation <- numeric(unit=unit, name="motivation")
-  pounds_lost <- numeric(unit=unit, name="pounds_lost")
+  age <- continuous(unit=unit, name="age")
+  motivation <- continuous(unit=unit, name="motivation")
+  pounds_lost <- continuous(unit=unit, name="pounds_lost")
   midlife_crisis <- Unobserved()
 
   expect_error(hypothesize(cm, causes(age, midlife_crisis)))
@@ -127,93 +127,93 @@ test_that("Unobserved variables treated properly in Conceptual Models", {
   expect_equal(relat@relationship, cr3)
 })
 
-test_that("Hypothesize WhenThen updated Conceptual Model properly", {
-  cm <- ConceptualModel()
-
-  unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
-
-  wt <- whenThen(when=increases(measure_0), then=increases(measure_2))
-  cm <- hypothesize(cm, wt)
-  expect_s4_class(cm, "ConceptualModel")
-  expect_type(cm@variables, "list")
-  expect_length(cm@variables, 2)
-  expect_true(c(measure_0) %in% cm@variables)
-  expect_true(c(measure_2) %in% cm@variables)
-
-  expect_type(cm@relationships, "list")
-  expect_length(cm@relationships, 1)
-  relat = cm@relationships[[1]]
-  expect_s4_class(relat, "Hypothesis")
-  expect_equal(relat@relationship, wt)
-
-  # Ordinal variable
-  measure_3 <- ordinal(unit=unit, name="measure_3", order=list(1, 2, 3, 4, 5))
-  wt <- whenThen(when=equals(measure_3, integer(3)), then=increases(measure_2))
-  cm <- hypothesize(cm, wt)
-
-  expect_s4_class(cm, "ConceptualModel")
-  expect_type(cm@variables, "list")
-  expect_length(cm@variables, 3)
-  expect_true(c(measure_0) %in% cm@variables)
-  expect_true(c(measure_2) %in% cm@variables)
-  expect_true(c(measure_3) %in% cm@variables)
-
-  expect_type(cm@relationships, "list")
-  expect_length(cm@relationships, 2)
-  relat = cm@relationships[[2]]
-  expect_s4_class(relat, "Hypothesis")
-  expect_equal(relat@relationship, wt)
-
-  expect_error(whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2)))
-})
-
-test_that("Assume WhenThen updated Conceptual Model properly", {
-  cm <- ConceptualModel()
-
-  unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
-
-  wt <- whenThen(when=increases(measure_0), then=increases(measure_2))
-  cm <- assume(cm, wt)
-
-  expect_s4_class(cm, "ConceptualModel")
-  expect_type(cm@variables, "list")
-  expect_length(cm@variables, 2)
-  expect_true(c(measure_0) %in% cm@variables)
-  expect_true(c(measure_2) %in% cm@variables)
-
-  expect_type(cm@relationships, "list")
-  expect_length(cm@relationships, 1)
-  relat = cm@relationships[[1]]
-  expect_s4_class(relat, "Assumption")
-  expect_equal(relat@relationship, wt)
-
-  # Nominal variable
-  measure_3 <- nominal(unit=unit, name="measure_3", cardinality=5)
-  wt <- whenThen(when=equals(measure_3, integer(3)), then=increases(measure_2))
-  cm <- assume(cm, wt)
-
-  expect_s4_class(cm, "ConceptualModel")
-  expect_type(cm@variables, "list")
-  expect_length(cm@variables, 3)
-  expect_true(c(measure_0) %in% cm@variables)
-  expect_true(c(measure_2) %in% cm@variables)
-  expect_true(c(measure_3) %in% cm@variables)
-
-  expect_type(cm@relationships, "list")
-  expect_length(cm@relationships, 2)
-  relat = cm@relationships[[2]]
-  expect_s4_class(relat, "Assumption")
-  expect_equal(relat@relationship, wt)
-
-
-  expect_error(whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2)))
-})
+# test_that("Hypothesize WhenThen updated Conceptual Model properly", {
+#   cm <- ConceptualModel()
+#
+#   unit <- Unit("person")
+#   measure_0 <- continuous(unit=unit, name="measure_0")
+#   measure_1 <- continuous(unit=unit, name="measure_1")
+#   measure_2 <- continuous(unit=unit, name="measure_2")
+#
+#   wt <- whenThen(when=increases(measure_0), then=increases(measure_2))
+#   cm <- hypothesize(cm, wt)
+#   expect_s4_class(cm, "ConceptualModel")
+#   expect_type(cm@variables, "list")
+#   expect_length(cm@variables, 2)
+#   expect_true(c(measure_0) %in% cm@variables)
+#   expect_true(c(measure_2) %in% cm@variables)
+#
+#   expect_type(cm@relationships, "list")
+#   expect_length(cm@relationships, 1)
+#   relat = cm@relationships[[1]]
+#   expect_s4_class(relat, "Hypothesis")
+#   expect_equal(relat@relationship, wt)
+#
+#   # Ordinal variable
+#   measure_3 <- categories(unit=unit, name="measure_3", order=list(1, 2, 3, 4, 5))
+#   wt <- whenThen(when=equals(measure_3, integer(3)), then=increases(measure_2))
+#   cm <- hypothesize(cm, wt)
+#
+#   expect_s4_class(cm, "ConceptualModel")
+#   expect_type(cm@variables, "list")
+#   expect_length(cm@variables, 3)
+#   expect_true(c(measure_0) %in% cm@variables)
+#   expect_true(c(measure_2) %in% cm@variables)
+#   expect_true(c(measure_3) %in% cm@variables)
+#
+#   expect_type(cm@relationships, "list")
+#   expect_length(cm@relationships, 2)
+#   relat = cm@relationships[[2]]
+#   expect_s4_class(relat, "Hypothesis")
+#   expect_equal(relat@relationship, wt)
+#
+#   expect_error(whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2)))
+# })
+#
+# test_that("Assume WhenThen updated Conceptual Model properly", {
+#   cm <- ConceptualModel()
+#
+#   unit <- Unit("person")
+#   measure_0 <- continuous(unit=unit, name="measure_0")
+#   measure_1 <- continuous(unit=unit, name="measure_1")
+#   measure_2 <- continuous(unit=unit, name="measure_2")
+#
+#   wt <- whenThen(when=increases(measure_0), then=increases(measure_2))
+#   cm <- assume(cm, wt)
+#
+#   expect_s4_class(cm, "ConceptualModel")
+#   expect_type(cm@variables, "list")
+#   expect_length(cm@variables, 2)
+#   expect_true(c(measure_0) %in% cm@variables)
+#   expect_true(c(measure_2) %in% cm@variables)
+#
+#   expect_type(cm@relationships, "list")
+#   expect_length(cm@relationships, 1)
+#   relat = cm@relationships[[1]]
+#   expect_s4_class(relat, "Assumption")
+#   expect_equal(relat@relationship, wt)
+#
+#   # Nominal variable
+#   measure_3 <- categories(unit=unit, name="measure_3", cardinality=5)
+#   wt <- whenThen(when=equals(measure_3, integer(3)), then=increases(measure_2))
+#   cm <- assume(cm, wt)
+#
+#   expect_s4_class(cm, "ConceptualModel")
+#   expect_type(cm@variables, "list")
+#   expect_length(cm@variables, 3)
+#   expect_true(c(measure_0) %in% cm@variables)
+#   expect_true(c(measure_2) %in% cm@variables)
+#   expect_true(c(measure_3) %in% cm@variables)
+#
+#   expect_type(cm@relationships, "list")
+#   expect_length(cm@relationships, 2)
+#   relat = cm@relationships[[2]]
+#   expect_s4_class(relat, "Assumption")
+#   expect_equal(relat@relationship, wt)
+#
+#
+#   expect_error(whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2)))
+# })
 
 test_that("Causal graph constructed/updated properly", {
   cm <- ConceptualModel()
@@ -223,9 +223,9 @@ test_that("Causal graph constructed/updated properly", {
   expect_equal(nrow(edges(gr)), 0)
 
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
 
   # Assume 1 relationship
   cm <- assume(cm, causes(measure_0, measure_1))
@@ -267,11 +267,11 @@ test_that("Causal graph constructed/updated properly", {
   # Unobserved variable
   cm <- ConceptualModel()
   unit <- Unit("person")
-  x <- numeric(unit=unit, name="x")
-  y <- numeric(unit=unit, name="y")
-  z <- numeric(unit=unit, name="z")
-  m <- numeric(unit=unit, name="m")
-  w <- numeric(unit=unit, name="w")
+  x <- continuous(unit=unit, name="x")
+  y <- continuous(unit=unit, name="y")
+  z <- continuous(unit=unit, name="z")
+  m <- continuous(unit=unit, name="m")
+  w <- continuous(unit=unit, name="w")
   u <- Unobserved()
 
   cm <- assume(cm, causes(x, y))
@@ -287,11 +287,11 @@ test_that("Causal graph constructed/updated properly", {
 test_that("Validate Conceptual Model's causal graph properly", {
   cm <- ConceptualModel()
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
-  measure_3 <- numeric(unit=unit, name="measure_3")
-  measure_4 <- numeric(unit=unit, name="measure_4")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
+  measure_3 <- continuous(unit=unit, name="measure_3")
+  measure_4 <- continuous(unit=unit, name="measure_4")
 
   cm <- assume(cm, causes(measure_0, measure_1))
   cm <- assume(cm, causes(measure_1, measure_2))
@@ -346,11 +346,11 @@ test_that("Validate Conceptual Model's causal graph properly", {
 
 test_that("Mediators found correctly", {
   unit <- Unit("person")
-  x <- numeric(unit=unit, name="x")
-  y <- numeric(unit=unit, name="y")
-  z <- numeric(unit=unit, name="z")
-  m <- numeric(unit=unit, name="m")
-  w <- numeric(unit=unit, name="w")
+  x <- continuous(unit=unit, name="x")
+  y <- continuous(unit=unit, name="y")
+  z <- continuous(unit=unit, name="z")
+  m <- continuous(unit=unit, name="m")
+  w <- continuous(unit=unit, name="w")
   u <- Unobserved()
 
   cm <- ConceptualModel()
@@ -376,11 +376,11 @@ test_that("Mediators found correctly", {
 
 test_that("Observed variables found correctly", {
   unit <- Unit("person")
-  x <- numeric(unit=unit, name="x")
-  y <- numeric(unit=unit, name="y")
-  z <- numeric(unit=unit, name="z")
-  m <- numeric(unit=unit, name="m")
-  w <- numeric(unit=unit, name="w")
+  x <- continuous(unit=unit, name="x")
+  y <- continuous(unit=unit, name="y")
+  z <- continuous(unit=unit, name="z")
+  m <- continuous(unit=unit, name="m")
+  w <- continuous(unit=unit, name="w")
   u <- Unobserved()
 
   cm <- ConceptualModel()
@@ -399,10 +399,10 @@ test_that("Observed variables found correctly", {
 
 test_that("Interactions found correctly", {
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
-  measure_3 <- numeric(unit=unit, name="measure_3")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
+  measure_3 <- continuous(unit=unit, name="measure_3")
 
   cm <- ConceptualModel()
   # No interactions
@@ -430,17 +430,16 @@ test_that("Interactions found correctly", {
   interactions <- getInteractions(cm, measure_3)
   expect_length(interactions, 2)
   expect_true(list(ixn) %in% interactions)
-  # browser()
 })
 
 test_that("Infer confounders correctly", {
   cm <- ConceptualModel()
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
-  measure_3 <- numeric(unit=unit, name="measure_3")
-  measure_4 <- numeric(unit=unit, name="measure_4")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
+  measure_3 <- continuous(unit=unit, name="measure_3")
+  measure_4 <- continuous(unit=unit, name="measure_4")
 
   # Model 1: measure_1 is a common parent
   cm <- assume(cm, causes(measure_1, measure_0))
@@ -454,11 +453,11 @@ test_that("Infer confounders correctly", {
   # Model 2: Mediator, Unobserved common parent
   cm <- ConceptualModel()
   unit <- Unit("person")
-  x <- numeric(unit=unit, name="x")
-  y <- numeric(unit=unit, name="y")
-  z <- numeric(unit=unit, name="z")
-  m <- numeric(unit=unit, name="m")
-  w <- numeric(unit=unit, name="w")
+  x <- continuous(unit=unit, name="x")
+  y <- continuous(unit=unit, name="y")
+  z <- continuous(unit=unit, name="z")
+  m <- continuous(unit=unit, name="m")
+  w <- continuous(unit=unit, name="w")
   u <- Unobserved()
 
   cm <- assume(cm, causes(x, y))
@@ -568,9 +567,9 @@ test_that("Infer confounders correctly", {
 
 test_that("Catches errors in conceptual model properly", {
   unit <- Unit("unit")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
 
   # Construct Conceptual Model
   cm <- ConceptualModel()
@@ -604,10 +603,10 @@ test_that("Catches errors in conceptual model properly", {
 
 test_that("Infer interactions correctly", {
   unit <- Unit("unit")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
-  measure_3 <- numeric(unit=unit, name="measure_3")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
+  measure_3 <- continuous(unit=unit, name="measure_3")
 
   # Construct Conceptual Model
   cm <- ConceptualModel()

@@ -7,27 +7,28 @@
 # generateDVConceptualModelJSON()
 generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
   #### Generate options for DV
-  dvClass = class(dv)
-  # Create options
-  dvOptions <- list()
-  if (dvClass == "Numeric") {
-    # dvOptions <- append(dvOptions, "Continuous")
-    # dvOptions <- append(dvOptions, "Counts")
-    dvOptions <- c("Treat as a continuous measure", "Treat as counts")
-  } else if (dvClass == "Ordinal") {
-    # dvOptions <- append(dvOptions, "Continuous")
-    # dvOptions <- append(dvOptions, "Counts")
-    # dvOptions <- append(dvOptions, "Categories")
-    dvOptions <- c("Treat as a continuous measure", "Treat as counts", "Treat as categories")
-  } else {
-    # stopifnot(dvClass == "Categories")
-    # dvOptions <- append(dvOptions, "Categories")
-    dvOptions <- c("Treat as categories")
-  }
+  # dvClass = class(dv)
+  # # Create options
+  # dvOptions <- list()
+  # if (dvClass == "Numeric") {
+  #   # dvOptions <- append(dvOptions, "Continuous")
+  #   # dvOptions <- append(dvOptions, "Counts")
+  #   dvOptions <- c("Treat as a continuous measure", "Treat as counts")
+  # } else if (dvClass == "Ordinal") {
+  #   # dvOptions <- append(dvOptions, "Continuous")
+  #   # dvOptions <- append(dvOptions, "Counts")
+  #   # dvOptions <- append(dvOptions, "Categories")
+  #   dvOptions <- c("Treat as a continuous measure", "Treat as counts", "Treat as categories")
+  # } else {
+  #   # stopifnot(dvClass == "Categories")
+  #   # dvOptions <- append(dvOptions, "Categories")
+  #   dvOptions <- c("Treat as categories")
+  # }
 
   # Populate list to output
-  output <- list(dvName = dv@name, dvClass = dvClass, dvOptions = dvOptions)
+  # output <- list(dvName = dv@name, dvClass = dvClass, dvOptions = dvOptions)
 
+  output <- list()
   #### Generate options for Conceptual Model
   ambigRelationships <- c()
   ambigOptions1 <- c()
@@ -81,8 +82,9 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
   if (length(ambigRelationships) > 0) {
     output <- append(output, list(ambiguousRelationships = ambigRelationships, ambiguousOptions1 = ambigOptions1, ambiguousOptions2 = ambigOptions2))
   }
+
   # Write output to JSON file
-  jsonlite::write_json(output, path=path, auto_unbox = TRUE)
+    jsonlite::write_json(output, path=path, auto_unbox = TRUE)
 
   # Return path
   path

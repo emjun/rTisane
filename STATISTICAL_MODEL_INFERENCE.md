@@ -7,7 +7,33 @@ We follow the guidelines from [Cinelli, Forney, and Pearl, 2022](https://ftp.cs.
 This diverges from what Tisane implements, which is the [modified disjunctive criteria](https://link.springer.com/article/10.1007/s10654-019-00494-6). 
 
 To infer statistical models, we must infer confounders. To do so, we use all assumed and hypothesized relationships. This means that the confounders and statistical model are for the context of the causal graph/conceptual model specified.  
+
 ### Supported Family and Link functions
+rTisane determines the family and link functions based on the variable data types. 
+
+#### For continuous
+Families supported: 
+- Inverse Gaussian
+- Gamma
+- Gaussian
+
+#### For counts
+Families supported: 
+- Poisson
+- Negative Binomial
+
+#### For categories
+Families supported for **unordered categories**: 
+- Binomial (when only two categories)
+- Multinomial (when multiple categories)
+
+Families supported for **ordered categories**: 
+- Binomial (when only two categories)
+- Multinomial (when multiple categories)
+- Inverse Gaussian (when multiple categories)
+- Gamma (when multiple categories)
+- Gaussian (when multiple categories)
+
 GLM in base R ([From reference](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/family))
 Family: 
 binomial

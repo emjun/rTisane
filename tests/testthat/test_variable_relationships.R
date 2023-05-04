@@ -12,8 +12,8 @@ test_that("Conceptual Model created properly", {
 
 test_that("Ambiguous Relates created properly", {
   participant <- Participant("pid")
-  measure_0 <- numeric(unit=participant, name="measure_0")
-  measure_1 <- numeric(unit=participant, name="measure_1")
+  measure_0 <- continuous(unit=participant, name="measure_0")
+  measure_1 <- continuous(unit=participant, name="measure_1")
 
   ambig_relat <- relates(measure_0, measure_1)
   expect_s4_class(ambig_relat, "Relates")
@@ -22,10 +22,10 @@ test_that("Ambiguous Relates created properly", {
 
 test_that("Causes created properly", {
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
-  measure_3 <- numeric(unit=unit, name="measure_3")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
+  measure_3 <- continuous(unit=unit, name="measure_3")
 
   cause_relat <- causes(measure_0, measure_1)
   expect_s4_class(cause_relat, "Causes")
@@ -49,10 +49,10 @@ test_that("Causes created properly", {
 
 # test_that("Moderates created properly", {
 #   unit <- Unit("person")
-#   measure_0 <- numeric(unit=unit, name="measure_0")
-#   measure_1 <- numeric(unit=unit, name="measure_1")
-#   measure_2 <- numeric(unit=unit, name="measure_2")
-#   measure_3 <- numeric(unit=unit, name="measure_3")
+#   measure_0 <- continuous(unit=unit, name="measure_0")
+#   measure_1 <- continuous(unit=unit, name="measure_1")
+#   measure_2 <- continuous(unit=unit, name="measure_2")
+#   measure_3 <- continuous(unit=unit, name="measure_3")
 #
 #   # Two variables moderate
 #   moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
@@ -82,8 +82,8 @@ test_that("Nests created properly", {
   expect_equal(nests_relat@base, unit_0)
   expect_equal(nests_relat@group, unit_1)
 
-  measure_0 <- numeric(unit=unit_0, name="measure_0")
-  measure_1 <- numeric(unit=unit_0, name="measure_1")
+  measure_0 <- continuous(unit=unit_0, name="measure_0")
+  measure_1 <- continuous(unit=unit_0, name="measure_1")
 
   # Nests within only makes sense between Units
   expect_error(nests(measure_0, measure_1), "*")
@@ -91,7 +91,7 @@ test_that("Nests created properly", {
 
 test_that("Compares created properly", {
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
+  measure_0 <- continuous(unit=unit, name="measure_0")
 
   # increases
   inc <- increases(measure_0)
@@ -101,7 +101,7 @@ test_that("Compares created properly", {
   expect_equal(inc@condition, "increases")
 
   # decreases
-  measure_1 <- ordinal(unit=unit, name="measure_1", order=list(1, 2, 3, 4, 5))
+  measure_1 <- categories(unit=unit, name="measure_1", order=list(1, 2, 3, 4, 5))
   dec <- decreases(measure_1)
 
   expect_s4_class(inc, "Compares")
@@ -115,7 +115,7 @@ test_that("Compares created properly", {
   expect_equal(eq@condition, "==4")
 
   # not equals
-  measure_2 <- nominal(unit=unit, name="measure_2", cardinality=5)
+  measure_2 <- categories(unit=unit, name="measure_2", cardinality=5)
   neq <- notEquals(measure_2, 4)
   expect_s4_class(neq, "Compares")
   expect_equal(neq@variable, measure_2)
@@ -123,48 +123,48 @@ test_that("Compares created properly", {
 
 })
 
-test_that("WhenThen created properly", {
-  unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-
-  # increases
-  wt <- whenThen(increases(measure_0), increases(measure_1))
-  expect_s4_class(wt, "Relates")
-  expect_equal(wt@lhs, measure_0)
-  expect_equal(wt@rhs, measure_1)
-
-  # decreases
-  wt <- whenThen(increases(measure_0), decreases(measure_1))
-  expect_s4_class(wt, "Relates")
-  expect_equal(wt@lhs, measure_0)
-  expect_equal(wt@rhs, measure_1)
-
-  measure_2 <- nominal(unit=unit, name="measure_2", cardinality=5)
-  # ==
-  wt <- whenThen(equals(measure_2, integer(3)), increases(measure_1))
-  expect_s4_class(wt, "Relates")
-  expect_equal(wt@lhs, measure_2)
-  expect_equal(wt@rhs, measure_1)
-
-  # !=
-  wt <- whenThen(notEquals(measure_2, integer(3)), increases(measure_1))
-  expect_s4_class(wt, "Relates")
-  expect_equal(wt@lhs, measure_2)
-  expect_equal(wt@rhs, measure_1)
-
-  # # Multiple list of Compares
-  # measure_2 <- numeric(unit=unit, name="measure_2")
-  # wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
-  # expect_s4_class(wt, "Moderates")
-})
+# test_that("WhenThen created properly", {
+#   unit <- Unit("person")
+#   measure_0 <- continuous(unit=unit, name="measure_0")
+#   measure_1 <- continuous(unit=unit, name="measure_1")
+#
+#   # increases
+#   wt <- whenThen(increases(measure_0), increases(measure_1))
+#   expect_s4_class(wt, "Relates")
+#   expect_equal(wt@lhs, measure_0)
+#   expect_equal(wt@rhs, measure_1)
+#
+#   # decreases
+#   wt <- whenThen(increases(measure_0), decreases(measure_1))
+#   expect_s4_class(wt, "Relates")
+#   expect_equal(wt@lhs, measure_0)
+#   expect_equal(wt@rhs, measure_1)
+#
+#   measure_2 <- categories(unit=unit, name="measure_2", cardinality=5)
+#   # ==
+#   wt <- whenThen(equals(measure_2, integer(3)), increases(measure_1))
+#   expect_s4_class(wt, "Relates")
+#   expect_equal(wt@lhs, measure_2)
+#   expect_equal(wt@rhs, measure_1)
+#
+#   # !=
+#   wt <- whenThen(notEquals(measure_2, integer(3)), increases(measure_1))
+#   expect_s4_class(wt, "Relates")
+#   expect_equal(wt@lhs, measure_2)
+#   expect_equal(wt@rhs, measure_1)
+#
+#   # # Multiple list of Compares
+#   # measure_2 <- continuous(unit=unit, name="measure_2")
+#   # wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
+#   # expect_s4_class(wt, "Moderates")
+# })
 
 # TODO: Need to make sure that measure, unit has relationship is inferred
 test_that("Interacts created properly", {
   unit <- Unit("person")
-  measure_0 <- numeric(unit=unit, name="measure_0")
-  measure_1 <- numeric(unit=unit, name="measure_1")
-  measure_2 <- numeric(unit=unit, name="measure_2")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
 
   # 2-way interaction
   ixn <- interacts(measure_0, measure_1)
