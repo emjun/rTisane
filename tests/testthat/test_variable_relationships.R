@@ -47,31 +47,6 @@ test_that("Causes created properly", {
   expect_equal(cause_relat@effect, measure_3)
 })
 
-# test_that("Moderates created properly", {
-#   unit <- Unit("person")
-#   measure_0 <- continuous(unit=unit, name="measure_0")
-#   measure_1 <- continuous(unit=unit, name="measure_1")
-#   measure_2 <- continuous(unit=unit, name="measure_2")
-#   measure_3 <- continuous(unit=unit, name="measure_3")
-#
-#   # Two variables moderate
-#   moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
-#   expect_s4_class(moderate_relat_0, "Moderates")
-#   expect_type(moderate_relat_0@moderators, "list")
-#   expect_true(list(measure_0) %in% moderate_relat_0@moderators)
-#   expect_true(list(measure_2) %in% moderate_relat_0@moderators)
-#   expect_equal(measure_1, moderate_relat_0@on)
-#
-#   # Three variables moderate
-#   moderate_relat_1 <- moderates(var=measure_0, moderator=list(measure_2, measure_3), on=measure_1)
-#   expect_s4_class(moderate_relat_1, "Moderates")
-#   expect_type(moderate_relat_0@moderators, "list")
-#   expect_true(list(measure_0) %in% moderate_relat_1@moderators)
-#   expect_true(list(measure_2) %in% moderate_relat_1@moderators)
-#   expect_true(list(measure_3) %in% moderate_relat_1@moderators)
-#   expect_equal(measure_1, moderate_relat_1@on)
-# })
-
 test_that("Nests created properly", {
   unit_0 <- Unit("person")
   unit_1 <- Unit("group")
@@ -121,65 +96,4 @@ test_that("Compares created properly", {
   expect_equal(neq@variable, measure_2)
   expect_equal(neq@condition, "!=4")
 
-})
-
-# test_that("WhenThen created properly", {
-#   unit <- Unit("person")
-#   measure_0 <- continuous(unit=unit, name="measure_0")
-#   measure_1 <- continuous(unit=unit, name="measure_1")
-#
-#   # increases
-#   wt <- whenThen(increases(measure_0), increases(measure_1))
-#   expect_s4_class(wt, "Relates")
-#   expect_equal(wt@lhs, measure_0)
-#   expect_equal(wt@rhs, measure_1)
-#
-#   # decreases
-#   wt <- whenThen(increases(measure_0), decreases(measure_1))
-#   expect_s4_class(wt, "Relates")
-#   expect_equal(wt@lhs, measure_0)
-#   expect_equal(wt@rhs, measure_1)
-#
-#   measure_2 <- categories(unit=unit, name="measure_2", cardinality=5)
-#   # ==
-#   wt <- whenThen(equals(measure_2, integer(3)), increases(measure_1))
-#   expect_s4_class(wt, "Relates")
-#   expect_equal(wt@lhs, measure_2)
-#   expect_equal(wt@rhs, measure_1)
-#
-#   # !=
-#   wt <- whenThen(notEquals(measure_2, integer(3)), increases(measure_1))
-#   expect_s4_class(wt, "Relates")
-#   expect_equal(wt@lhs, measure_2)
-#   expect_equal(wt@rhs, measure_1)
-#
-#   # # Multiple list of Compares
-#   # measure_2 <- continuous(unit=unit, name="measure_2")
-#   # wt <- whenThen(when=list(increases(measure_0), increases(measure_1)), then=increases(measure_2))
-#   # expect_s4_class(wt, "Moderates")
-# })
-
-# TODO: Need to make sure that measure, unit has relationship is inferred
-test_that("Interacts created properly", {
-  unit <- Unit("person")
-  measure_0 <- continuous(unit=unit, name="measure_0")
-  measure_1 <- continuous(unit=unit, name="measure_1")
-  measure_2 <- continuous(unit=unit, name="measure_2")
-
-  # 2-way interaction
-  ixn <- interacts(measure_0, measure_1)
-  expect_s4_class(ixn, "Interacts")
-  expect_equal(ixn@name, "measure_0_X_measure_1")
-  expect_length(ixn@variables, 2)
-  expect_true(c(measure_0) %in% ixn@variables)
-  expect_true(c(measure_1) %in% ixn@variables)
-
-  # 3-way interaction
-  ixn <- interacts(measure_0, measure_1, measure_2)
-  expect_s4_class(ixn, "Interacts")
-  expect_equal(ixn@name, "measure_0_X_measure_1_X_measure_2")
-  expect_length(ixn@variables, 3)
-  expect_true(c(measure_0) %in% ixn@variables)
-  expect_true(c(measure_1) %in% ixn@variables)
-  expect_true(c(measure_2) %in% ixn@variables)
 })

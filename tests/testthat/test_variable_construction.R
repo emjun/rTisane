@@ -190,6 +190,39 @@ test_that("Unobserved variable properly", {
   expect_equal(midlife_crisis@name, "Unobserved")
 })
 
+test_that("Interacts created properly", {
+  unit <- Unit("person")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
+
+  # 2-way interaction
+  ixn <- interacts(measure_0, measure_1)
+  expect_s4_class(ixn, "Interacts")
+  expect_equal(ixn@name, "measure_0_X_measure_1")
+  expect_length(ixn@variables, 2)
+  expect_true(c(measure_0) %in% ixn@variables)
+  expect_true(c(measure_1) %in% ixn@variables)
+  expect_equal(unit, ixn@units[[1]])
+  expect_equal(1, length(ixn@units))
+
+  # 3-way interaction
+  ixn <- interacts(measure_0, measure_1, measure_2)
+  expect_s4_class(ixn, "Interacts")
+  expect_equal(ixn@name, "measure_0_X_measure_1_X_measure_2")
+  expect_length(ixn@variables, 3)
+  expect_true(c(measure_0) %in% ixn@variables)
+  expect_true(c(measure_1) %in% ixn@variables)
+  expect_true(c(measure_2) %in% ixn@variables)
+  expect_equal(unit, ixn@units[[1]])
+  expect_equal(1, length(ixn@units))
+
+  # TODO: Add more tests for to make sure that measure, unit has relationship is inferred
+  # especially when multiple units involved
+
+})
+
+
 # test_that("Per object created properly", {
 #   pid <- Participant("ID")
 #   year <- Time(name="year", cardinality=5) # 5 years

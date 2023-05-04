@@ -42,7 +42,7 @@ Collate:
     'number_value.R'
     'continuous.R'
     'counts.R'
-    'catgories.R'
+    'categories.R'
     'ordinal.R'
     'construct_graphs.R'
     'checkConceptualModel.R'
