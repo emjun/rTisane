@@ -155,62 +155,6 @@ Dataset <- setClass("Dataset",
     )
 )
 
-setClassUnion("AbstractVariableORUnobservedVariable", c("AbstractVariable", "UnobservedVariable"))
-#' Relates class
-#'
-#' Class for Relates relationships.
-#' Not called directly.
-#' @slot lhs AbstractVariable. A variable.
-#' @slot rhs AbstractVariable. A variable.
-#' @keywords
-Relates <- setClass("Relates",
-                   slot = c(
-                     lhs = "AbstractVariableORUnobservedVariable",
-                     rhs = "AbstractVariableORUnobservedVariable"
-                   )
-)
-
-#' Causes class
-#'
-#' Class for Causes relationships.
-#' Not called directly.
-#' @slot cause AbstractVariable. Variable that causes another.
-#' @slot effect AbstractVariable. Variable that is caused by @slot cause.
-#' @keywords
-Causes <- setClass("Causes",
-    slot = c(
-        cause = "AbstractVariableORUnobservedVariable",
-        effect = "AbstractVariableORUnobservedVariable"
-    )
-)
-
-# #' Moderates class
-# #'
-# #' Class for Moderates relationships.
-# #' Not called directly.
-# #' @slot moderators List of AbstractVariables.
-# #' @slot on AbstractVariable that the moderators moderate each other on
-# #' @keywords
-# Moderates <- setClass("Moderates",
-#     slot = c(
-#         moderators = "list",
-#         on = "AbstractVariable"
-#     ),
-#     prototype = list(
-#         moderators = NULL,
-#         on = NULL
-#     )
-# )
-# # Helper to create instances of the Moderates class
-# Moderates <- function(moderators,
-#                    on) {
-#   new("Moderates",
-#       moderators=moderators,
-#       on = on
-#   )
-# }
-
-
 setClassUnion("numberValueORExactlyORAtMostORPer", c("NumberValue", "Exactly", "AtMost", "Per"))
 setClassUnion("AbstractVariableORNull", c("AbstractVariable", "NULL"))
 #' Has class
@@ -338,44 +282,6 @@ Measure <- setClass("Measure",
     contains = "AbstractVariable"
 )
 
-
-# #' Numeric class
-# #'
-# #' Class for Numeric measures, inherits from Measure.
-# #' Not called directly. All measures are declared through Units.
-# #' @slot name Character. Name of measure, corresponds to column name in data.
-# #' @keywords
-# Numeric <- setClass("Numeric",
-#     slot = c(
-#         name = "character"
-#     ),
-#     contains = "Measure"
-# )
-
-# #' Nominal class
-# #'
-# #' Class for Nominal measures, inherits from Measure.
-# #' Not called directly. All measures are declared through Units.
-# #' @slot name Name of measure, corresponds to column name if assigning data.
-# #' @slot cardinality Integer for cardinality.
-# #' @slot categories List of categories.
-# #' @keywords
-# Nominal <- setClass("Nominal",
-#     slot = c(
-#         name = "character",
-#         cardinality = "integer",
-#         categories = "list",
-#         isInteraction= "logical"
-#     ),
-#     prototype = list(
-#         name = "",
-#         cardinality = as.integer(0),
-#         categories = list(),
-#         isInteraction= FALSE
-#     ),
-#     contains = "Measure"
-# )
-
 #' Interacts class
 #'
 #' Class for representing Interacts"effects.
@@ -394,24 +300,6 @@ Interacts <- setClass("Interacts",
     ),
     contains = "AbstractVariable"
 )
-
-
-# #' Ordinal class
-# #'
-# #' Class for Ordinal measures, inherits from Measure.
-# #' Not called directly. All measures are declared through Units.
-# #' @slot name Name of measure, corresponds to column name in data.
-# #' @slot cardinality Integer for cardinality.
-# #' @slot order Ordered list of categories.
-# #' @keywords
-# Ordinal <- setClass("Ordinal",
-#     slot = c(
-#         name = "character",
-#         order = "list",
-#         cardinality = "integer"
-#     ),
-#     contains = "Measure"
-# )
 
 #' Continuous class
 #' 
@@ -557,15 +445,53 @@ Time <- function(name,
 
 }
 
-# # Validator to ensure that the slots corroborate with each other
-# setValidity("Time", function(object) {
-#   if (length(object@order)   !=  object@cardinality) {
-#           stop("If @cardinality and @order are both provided, they need to match")
-#     } else {
-#     TRUE
-#     }
-# })
+#' Compares class
+#'
+#' Class for comparison relationships.
+#' Not called directly.
+#' @slot variable AbstractVariable. Variable that is being compared.
+#' @slot condition character. Condition to filter values of @slot variable on.
+#' @keywords
+Compares <- setClass("Compares",
+                  slot = c(
+                    variable = "AbstractVariable",
+                    condition = "character"
+                  )
+)
 
+setClassUnion("AbstractVariableORUnobservedVariable", c("AbstractVariable", "UnobservedVariable"))
+setClassUnion("ComparesORNULL", c("Compares", "NULL"))
+#' Relates class
+#'
+#' Class for Relates relationships.
+#' Not called directly.
+#' @slot lhs AbstractVariable. A variable.
+#' @slot rhs AbstractVariable. A variable.
+#' @keywords
+Relates <- setClass("Relates",
+                   slot = c(
+                     lhs = "AbstractVariableORUnobservedVariable",
+                     rhs = "AbstractVariableORUnobservedVariable",
+                     when = "ComparesORNULL",
+                     then = "ComparesORNULL"
+                   )
+)
+
+#' Causes class
+#'
+#' Class for Causes relationships.
+#' Not called directly.
+#' @slot cause AbstractVariable. Variable that causes another.
+#' @slot effect AbstractVariable. Variable that is caused by @slot cause.
+#' @keywords
+Causes <- setClass("Causes",
+    slot = c(
+        cause = "AbstractVariableORUnobservedVariable",
+        effect = "AbstractVariableORUnobservedVariable",
+        when = "ComparesORNULL",
+        then = "ComparesORNULL"
+    )
+)
 #' Nests class
 #'
 #' Class for Nesting relationships.
@@ -659,20 +585,6 @@ Design <- function(relationships=list(),
       dv=dv,
       source=source)
 }
-
-#' Compares class
-#'
-#' Class for comparison relationships.
-#' Not called directly.
-#' @slot variable AbstractVariable. Variable that is being compared.
-#' @slot condition character. Condition to filter values of @slot variable on.
-#' @keywords
-Compares <- setClass("Compares",
-                  slot = c(
-                    variable = "AbstractVariable",
-                    condition = "character"
-                  )
-)
 
 setClassUnion("relatesORcausesORInteracts", c("Relates", "Causes", "Interacts"))
 #' Assumption class

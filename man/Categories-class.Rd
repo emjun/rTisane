@@ -6,14 +6,12 @@
 \alias{Categories}
 \title{Categories class}
 \description{
-Wrapper class for Categorical measures.
-Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
+Class for (ordered, unordered) Categories
+Inherits from Measure.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{measure}}{Measure to wrap.}
-
-\item{\code{numberOfCategories}}{integer. Number of categories the measure contains.}
+\item{\code{name}}{character. Name of measure, corresponds to column name in data.}
 }}
 

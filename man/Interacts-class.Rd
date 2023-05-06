@@ -4,7 +4,7 @@
 \name{Interacts-class}
 \alias{Interacts-class}
 \alias{Interacts}
-\title{Interacts"class}
+\title{Interacts class}
 \description{
 Class for representing Interacts"effects.
 Not called directly. All interactions are declared through interacts.

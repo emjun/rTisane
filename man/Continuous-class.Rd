@@ -6,14 +6,12 @@
 \alias{Continuous}
 \title{Continuous class}
 \description{
-Wrapper class for Continuous measures.
-Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
+Class for Continuous measures (e.g., scores, temperature, time)
+Inherits from Measure.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{measure}}{Measure to wrap.}
-
-\item{\code{skew}}{character. Description of skew, options are "positive" or NULL.}
+\item{\code{name}}{character. Name of measure, corresponds to column name in data.}
 }}
 

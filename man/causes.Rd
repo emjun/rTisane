@@ -4,7 +4,7 @@
 \alias{causes}
 \title{Specify a causes relationship}
 \usage{
-causes(cause, effect)
+causes(cause, effect, when, then)
 }
 \arguments{
 \item{cause}{AbstractVariable. The cause.}

@@ -6,12 +6,12 @@
 \alias{Counts}
 \title{Counts class}
 \description{
-Wrapper class for Counts.
-Not called directly. All measures are declared through Units as either Numeric, Ordinal, or Nominal types.
+Class for Counts
+Inherits from Measure.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{measure}}{Measure to wrap.}
+\item{\code{name}}{character. Name of measure, corresponds to column name in data.}
 }}
 
