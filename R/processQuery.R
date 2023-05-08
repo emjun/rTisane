@@ -1,33 +1,10 @@
 #' Output info to JSON
 #'
 #' Writes info to a JSON file
-#' @param dv AbstractVariable to write to JSON.
 #' @import jsonlite
 #' @keywords
-# generateDVConceptualModelJSON()
-generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
-  #### Generate options for DV
-  # dvClass = class(dv)
-  # # Create options
-  # dvOptions <- list()
-  # if (dvClass == "Numeric") {
-  #   # dvOptions <- append(dvOptions, "Continuous")
-  #   # dvOptions <- append(dvOptions, "Counts")
-  #   dvOptions <- c("Treat as a continuous measure", "Treat as counts")
-  # } else if (dvClass == "Ordinal") {
-  #   # dvOptions <- append(dvOptions, "Continuous")
-  #   # dvOptions <- append(dvOptions, "Counts")
-  #   # dvOptions <- append(dvOptions, "Categories")
-  #   dvOptions <- c("Treat as a continuous measure", "Treat as counts", "Treat as categories")
-  # } else {
-  #   # stopifnot(dvClass == "Categories")
-  #   # dvOptions <- append(dvOptions, "Categories")
-  #   dvOptions <- c("Treat as categories")
-  # }
-
-  # Populate list to output
-  # output <- list(dvName = dv@name, dvClass = dvClass, dvOptions = dvOptions)
-
+# generateConceptualModelJSON()
+generateConceptualModelJSON <- function(conceptualModel, path) {
   output <- list()
   #### Generate options for Conceptual Model
   ambigRelationships <- c()
@@ -50,8 +27,6 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
         # Create options to resolve/make more specific relationship
         ambigOptions1 <- append(ambigOptions1, paste("Assume", r@lhs@name, "causes", r@rhs@name, sep=" "))
         ambigOptions2 <- append(ambigOptions2, paste("Assume", r@rhs@name, "causes", r@lhs@name, sep=" "))
-      } else if (rClass == "Moderates") {
-        cat("DO SOMETHING!")
       } else {
         stopifnot(rClass == "Causes")  # Could Moderates reach here?
         # Do nothing for causes relationships
@@ -66,16 +41,12 @@ generateDVConceptualModelJSON <- function(conceptualModel, dv, path) {
         # Create options to resolve/make more specific relationship
         ambigOptions1 <- append(ambigOptions1, paste("Hypothesize", r@lhs@name, "causes", r@rhs@name, sep=" "))
         ambigOptions2 <- append(ambigOptions2, paste("Hypothesize", r@rhs@name, "causes", r@lhs@name, sep=" "))
-      } else if (rClass == "Moderates") {
-        cat("DO SOMETHING!")
       } else {
         stopifnot(rClass == "Causes")  # Could Moderates reach here?
         # Do nothing for causes relationships
       }
     }
   }
-
-
 
   # Add to output list
   # stopifnot(length(ambigRelationships) == length(ambigOptions))
@@ -254,6 +225,21 @@ updateConceptualModel <- function(conceptualModel, values) {
   conceptualModel
 }
 
+
+refineConceptualModel <- function(conceptualModel) {
+  # Write ConceptualModel to JSON, which is read to create disambiguation GUI
+  path <- generateConceptualModelJSON(conceptualModel, "input.json")
+
+  # Start up disambiguation process
+  inputFilePath <- path
+  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path)
+
+  # Update Conceptual Model
+  cmUpdated <- updateConceptualModel(conceptualModel, updates)  
+
+  cmUpdated
+}
+
 #' Elicit any additional information about Conceptual Model (graph) if necessary
 #'
 #' This function disambiguates the Conceptual Model before using it in future query steps.
@@ -266,18 +252,18 @@ updateConceptualModel <- function(conceptualModel, values) {
 setGeneric("processQuery", function(conceptualModel, iv, dv, data) standardGeneric("processQuery"))
 setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "characterORDataframeORnull"), function(conceptualModel, iv, dv, data)
 {
-  # Write DV to JSON, which is read to create disambiguation GUI
-  path <- generateDVConceptualModelJSON(conceptualModel, dv, "input.json")
+  # Write ConceptualModel to JSON, which is read to create disambiguation GUI
+  path <- generateConceptualModelJSON(conceptualModel, "input.json")
 
   # Start up disambiguation process
   inputFilePath <- path
-  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path, data=data)
+  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path)
 
   # Update DV, Update Conceptual Model
   # dvUpdated <- updateDV(dv, updates)
   cmUpdated <- updateConceptualModel(conceptualModel, updates)
 
-  results <- list(updatedDV=dv, updatedConceptualModel=cmUpdated)
+  results <- list(updatedConceptualModel=cmUpdated)
 
   # Return updated values
   results

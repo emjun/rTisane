@@ -24,7 +24,7 @@ path = "examples/json/simpleDisambiguation.json"
 
 # Data file
 dataPath = NULL
-updates <- disambiguateConceptualModel(conceptualModel=cm, iv=iv, dv=dv, inputFilePath=path, dataPath=dataPath)
+updates <- disambiguateConceptualModel(conceptualModel=cm, iv=iv, dv=dv, inputFilePath=path)
 
 # Update DV, Update Conceptual Model
 dvUpdated <- updateDV(dv, updates)

@@ -10,6 +10,17 @@ initialCheck <- function(conceptualModel, iv, dv) {
 
 }
 
+checkAndRefine <- function(conceptualModel, iv, dv) {
+  ### Step 0: Construct causal graph from declared relationships in ConceptualModel
+  conceptualModel@graph <- updateGraph(conceptualModel)
+
+  ### Step 1: Check the conceptual model for any issues right away
+  # initialCheck(conceptualModel=conceptualModel, iv=iv, dv=dv)
+
+  ### Step 2: Refine the conceptual model for any ambiguous relationships and cycles
+  refineConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
+}
+
 #' Query a conceptual model for a statistical model
 #'
 #' Method for querying a conceptual model for a statistical model
@@ -25,11 +36,12 @@ initialCheck <- function(conceptualModel, iv, dv) {
 setGeneric("query", function(conceptualModel, iv, dv, data) standardGeneric("query"))
 setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "missingORCharacterORDataframe"), function(conceptualModel, iv, dv, data)
 {
+  ## TODO: Check that there is a hypothesized relationship IV -> DV 
 
-  ### Step 0: Update graph
+  ### Step 0: Construct causal graph from declared relationships in ConceptualModel
   conceptualModel@graph <- updateGraph(conceptualModel)
 
-  ### Step 0B: Check the conceptual model for any issues right away
+  ### Step 1: Check the conceptual model for any issues right away
   initialCheck(conceptualModel=conceptualModel, iv=iv, dv=dv)
 
 

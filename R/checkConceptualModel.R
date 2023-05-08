@@ -1,4 +1,5 @@
 #' Check Conceptual Model (graph) is valid, meaning there are no cycles and that the @param dv does not cause @param iv
+#' Use once have a query (i.e., iv and dv) of interest
 #'
 #' This function validates the Conceptual Model
 #' @param conceptualModel ConceptualModel. Causal graph to validate.
@@ -43,11 +44,11 @@ setMethod("checkConceptualModel", signature("ConceptualModel", "AbstractVariable
     return(output)
   }
 
-  # Check that there are no cycles
-  if (isFALSE(isAcyclic(gr))) {
-    output <- list(isValid=FALSE, reason="Graph is cyclic.")
-    return(output)
-  }
+  # # Check that there are no cycles
+  # if (isFALSE(isAcyclic(gr))) {
+  #   output <- list(isValid=FALSE, reason="Graph is cyclic.")
+  #   return(output)
+  # }
 
   # Return TRUE if pass all the above checks
   list(isValid=TRUE)

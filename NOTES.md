@@ -1,3 +1,24 @@
+### May 6, 2023
+
+
+#### Conceptual disambiguation 
+1. Construct graph
+2. Generate JSON for showing conceptual model in interface
+3. Refine the conceptual model in the interface
+4. Update graph based on interface interactions
+
+#### Query processing 
+1. Check conceptual model wrt IV/DV in query
+2. Conceptual disambiguation
+3. Statistical model derivation
+
+Query: 
+-...
+
+Conceptual disambiguation:
+- update ambiguous relationships for inferring statistical model
+- break cycle
+
 ## Questions for Carlos 
 - Interactions 
 - Assessing multiple variables and their influence on the same outcome. Using the recommendations, should run multiple statistical models?
