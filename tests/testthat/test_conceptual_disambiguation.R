@@ -1,0 +1,308 @@
+library(rTisane)
+
+library(jsonlite)
+
+# Generate (CM --> JSON)
+test_that("Conceptual model disambiguation options created properly", {
+  cm <- ConceptualModel()
+
+  unit <- Unit("person")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+
+  ### All causes relationships
+  cm <- ConceptualModel()
+  # Assume causal relationship
+  cause_relat <- causes(measure_0, measure_1, when=increases(measure_0), then=increases(measure_1))
+  cm <- assume(cm, cause_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 0)
+
+  # Hypothesize causal relationship
+  cause_relat <- causes(measure_0, measure_1)
+  cm <- hypothesize(cm, cause_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 0)
+
+  ### All causes with when, then
+  cm <- ConceptualModel()
+  # Assume causal relationship
+  cause_relat <- causes(measure_0, measure_1, when=increases(measure_0), then=increases(measure_1))
+  cm <- assume(cm, cause_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 0)
+
+  # Hypothesize causal relationship
+  cause_relat <- causes(measure_0, measure_1)
+  cm <- hypothesize(cm, cause_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 0)
+
+  ### All relates relationships
+  cm <- ConceptualModel()
+  ambig_relat <- relates(measure_0, measure_1)
+  # Assume relates relationship
+  cm <- assume(cm, ambig_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 1)
+  expectedKey = paste("assume", measure_0@name, "is related to", measure_1@name, sep=" ")
+  expect_true(expectedKey %in% options$ambiguousRelationships)
+  expect_length(options$ambiguousOptions1, 1)
+  expectedValue = paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions1)
+  expect_length(options$ambiguousOptions2, 1)
+  expectedValue = paste("Assume", measure_1@name, "causes", measure_0@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions2)
+
+  # Hypothesize relates relationship
+  ambig_relat <- relates(measure_0, measure_1)
+  cm <- hypothesize(cm, ambig_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 2)
+  expectedKey = paste("hypothesize", measure_0@name, "is related to", measure_1@name, sep=" ")
+  expect_true(expectedKey %in% options$ambiguousRelationships)
+  expect_length(options$ambiguousOptions1, 2)
+  expectedValue = paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions1)
+  expect_length(options$ambiguousOptions2, 2)
+  expectedValue = paste("Hypothesize", measure_1@name, "causes", measure_0@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions2)
+
+  ### All relates with when, then
+  cm <- ConceptualModel()
+  ambig_relat <- relates(measure_0, measure_1, when=decreases(measure_0), then=decreases(measure_1))
+  # Assume relates relationship
+  cm <- assume(cm, ambig_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 1)
+  expectedKey = paste("assume", measure_0@name, "is related to", measure_1@name, sep=" ")
+  expect_true(expectedKey %in% options$ambiguousRelationships)
+  expect_length(options$ambiguousOptions1, 1)
+  expectedValue = paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions1)
+  expect_length(options$ambiguousOptions2, 1)
+  expectedValue = paste("Assume", measure_1@name, "causes", measure_0@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions2)
+
+  # Hypothesize relates relationship
+  ambig_relat <- relates(measure_0, measure_1)
+  cm <- hypothesize(cm, ambig_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 2)
+  expectedKey = paste("hypothesize", measure_0@name, "is related to", measure_1@name, sep=" ")
+  expect_true(expectedKey %in% options$ambiguousRelationships)
+  expect_length(options$ambiguousOptions1, 2)
+  expectedValue = paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions1)
+  expect_length(options$ambiguousOptions2, 2)
+  expectedValue = paste("Hypothesize", measure_1@name, "causes", measure_0@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions2)
+
+  ### Mix causes, relates
+  cm <- ConceptualModel()
+  # Assume causal relationship
+  ambig_relat <- relates(measure_0, measure_1)
+  cm <- assume(cm, ambig_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 1)
+  expectedKey = paste("assume", measure_0@name, "is related to", measure_1@name, sep=" ")
+  expect_true(expectedKey %in% options$ambiguousRelationships)
+  expect_length(options$ambiguousOptions1, 1)
+  expectedValue = paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions1)
+  expect_length(options$ambiguousOptions2, 1)
+  expectedValue = paste("Assume", measure_1@name, "causes", measure_0@name, sep=" ")
+  expect_true(expectedValue %in% options$ambiguousOptions2)
+
+  # Hypothesize causal relationship
+  cause_relat <- causes(measure_0, measure_1)
+  cm <- hypothesize(cm, cause_relat)
+
+  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+
+  options <- jsonlite::read_json(path)
+
+  expect_length(options$ambiguousRelationships, 1)
+})
+
+# Disambiguate (JSON --> interface) --> NEW TEST CASE FUNCTION (see below link for shiny app testing)
+
+# Update Conceptual Model --> NEW FUNCTION
+
+
+### Separate query processing file?
+# Test checkConceptualModel (without iv/dv) -- might be in other test file
+
+# Test checkConceptualModel (with iv/dv) -- might be in other test file
+
+# Test cycleChecking in interface?
+# - Add cycle check section in Shiny
+# - Add warning about cycle
+# - Add suggestions for breaking cycle? -- How does this work if cycle is from original spec. vs induced through disambiguation? (some kind of check for no cycles + update when induce cycle; if induced, add warning about changing above; if not induced, provide suggestions below? OR change to relates and then now have to generate options above?)
+# ^ Might not have to provide all the options for breaking cycle but a few possibilities...?
+
+
+# TODO: Add tests for shiny app testing
+# https://shiny.rstudio.com/articles/testing-overview.html
+
+# test_that("Conceptual model updates after disambiguation properly", {
+#   cm <- ConceptualModel()
+#   unit <- Unit("person")
+#   measure_0 <- continuous(unit=unit, name="measure_0")
+#   measure_1 <- continuous(unit=unit, name="measure_1")
+#
+#   ## Assume
+#   relat <- relates(measure_0, measure_1)
+#   cm <- assume(cm, relat)
+#   # Update graph
+#   cm@graph <- updateGraph(cm)
+#
+#   # Values to update to
+#   uRelat <- paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
+#   dvName = measure_1@name
+#   dvType = "Continuous"
+#
+#   # Create updates list to pass to updateDV function
+#   updates <- list(dvName=dvName, dvType=dvType)
+#   updates$uncertainRelationships[[1]] = uRelat
+#   cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+#
+#   expect_s4_class(cmUpdated, "ConceptualModel")
+#   relationships <- cmUpdated@relationships
+#   expect_length(relationships, 1)
+#   assump <- relationships[[1]]
+#   expect_s4_class(assump, "Assumption")
+#   r <- assump@relationship
+#   expect_s4_class(r, "Causes")
+#   expect_equal(r@cause, relat@lhs)
+#   expect_equal(r@effect, relat@rhs)
+#
+#
+#   ## Hypothesize
+#   cm <- ConceptualModel()
+#   relat <- relates(measure_0, measure_1)
+#   cm <- hypothesize(cm, relat)
+#   # Update graph
+#   cm@graph <- updateGraph(cm)
+#
+#   # Values to update to
+#   uRelat <- paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
+#   dvName = measure_1@name
+#   dvType = "Continuous"
+#
+#   # Create updates list to pass to updateDV function
+#   updates <- list(dvName=dvName, dvType=dvType)
+#   updates$uncertainRelationships[[1]] = uRelat
+#   cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+#
+#   expect_s4_class(cmUpdated, "ConceptualModel")
+#   relationships <- cmUpdated@relationships
+#   expect_length(relationships, 1)
+#   hypo <- relationships[[1]]
+#   expect_s4_class(hypo, "Hypothesis")
+#   r <- hypo@relationship
+#   expect_s4_class(r, "Causes")
+#   expect_equal(r@cause, relat@lhs)
+#   expect_equal(r@effect, relat@rhs)
+#
+#   ## Hypothesize, reverse direction of causes
+#   cm <- ConceptualModel()
+#   relat <- relates(measure_0, measure_1)
+#   cm <- hypothesize(cm, relat)
+#   # Update graph
+#   cm@graph <- updateGraph(cm)
+#
+#   # Values to update to
+#   uRelat <- paste("Hypothesize", measure_1@name, "causes", measure_0@name, sep=" ")
+#   dvName = measure_1@name
+#   dvType = "Continuous"
+#
+#   # Create updates list to pass to updateDV function
+#   updates <- list(dvName=dvName, dvType=dvType)
+#   updates$uncertainRelationships[[1]] = uRelat
+#   cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+#
+#   expect_s4_class(cmUpdated, "ConceptualModel")
+#   relationships <- cmUpdated@relationships
+#   expect_length(relationships, 1)
+#   hypo <- relationships[[1]]
+#   expect_s4_class(hypo, "Hypothesis")
+#   r <- hypo@relationship
+#   expect_s4_class(r, "Causes")
+#   expect_equal(r@cause, relat@rhs)
+#   expect_equal(r@effect, relat@lhs)
+# })
+#
+# test_that("Statistical modeling options created properly", {
+#   cm <- ConceptualModel()
+#   unit <- Unit("person")
+#   measure_0 <- continuous(unit=unit, name="measure_0")
+#   measure_1 <- continuous(unit=unit, name="measure_1")
+#   measure_2 <- continuous(unit=unit, name="measure_2")
+#
+#   # Model 1: measure_1 is a common parent
+#   cm <- assume(cm, causes(measure_1, measure_0))
+#   cm <- assume(cm, causes(measure_0, measure_2))
+#   cm <- assume(cm, causes(measure_1, measure_2))
+#   cm@graph <- updateGraph(cm)
+#   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+#   cont <- asContinuous(measure_2)
+#   familyLinkPairs <- inferFamilyLinkFunctions(cont)
+#
+#   path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=cont)
+#
+#   options <- jsonlite::read_json(path)
+#   expect_false(is.null(options$input))
+#   input <- options$input
+#   expect_type(input$generatedMainEffects, "list")
+#   expect_length(input$generatedMainEffects, 2) # IV and confounders
+#   expect_true(measure_0@name %in% input$generatedMainEffects) # IV
+#   expect_true(measure_1@name %in% input$generatedMainEffects) # confounder
+#   expect_type(input$generatedInteractionEffects, "list")
+#   expect_length(input$generatedInteractionEffects, 0)
+#   expect_type(input$generatedRandomEffects, "list")
+#   re <- getElement(input$generatedRandomEffects, " ")
+#   expect_length(re, 0)
+#   expect_false(is.null(input$generatedFamilyLinkFunctions)) # Key exists!
+#   expect_false(is.null(input$query)) # Key exists!
+#   query <- input$query
+#   expect_equal(query$DV, measure_2@name)
+#   expect_length(query$IVs, 1)
+#   expect_equal(query$IVs[[1]], measure_0@name)
+# })
