@@ -1,0 +1,7 @@
+{
+    "relationships": ["relat1", "relat2"],
+    "choices": {
+        "relat1": [],
+        "relat2": ["option A", "option B", "option C"]
+    }
+}

@@ -39,6 +39,11 @@ options(shiny.launch.browser = .rs.invokeShinyWindowExternal)
 2. Source at the start of the R session
 ```R
 source("~/.Rprofile")
-````
+```
+
+# Should not need: To make sure rTisane finds the conceptual model disambiguation interface
+```R
+source("conceptualDisambiguation/app.R")
+```
 
 

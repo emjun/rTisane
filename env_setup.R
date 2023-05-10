@@ -6,4 +6,5 @@ library(plotly)
 # For development
 devtools::load_all()
 
-
+# For conceptual model disambiguation
+source("conceptualDisambiguation/app.R")

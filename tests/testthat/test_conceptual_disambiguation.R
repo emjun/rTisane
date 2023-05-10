@@ -162,9 +162,10 @@ test_that("Conceptual model disambiguation options created properly", {
 })
 
 # Disambiguate (JSON --> interface) --> NEW TEST CASE FUNCTION (see below link for shiny app testing)
-
-# Update Conceptual Model --> NEW FUNCTION
-
+test_that("Conceptual model disambiguation shown on interface as expected   properly", {
+  # TODO: Add tests for shiny app testing
+  #
+})
 
 ### Separate query processing file?
 # Test checkConceptualModel (without iv/dv) -- might be in other test file
@@ -177,10 +178,10 @@ test_that("Conceptual model disambiguation options created properly", {
 # - Add suggestions for breaking cycle? -- How does this work if cycle is from original spec. vs induced through disambiguation? (some kind of check for no cycles + update when induce cycle; if induced, add warning about changing above; if not induced, provide suggestions below? OR change to relates and then now have to generate options above?)
 # ^ Might not have to provide all the options for breaking cycle but a few possibilities...?
 
+### Check cycle breaking option generation
 
-# TODO: Add tests for shiny app testing
-# https://shiny.rstudio.com/articles/testing-overview.html
 
+# Update Conceptual Model --> NEW FUNCTION
 # test_that("Conceptual model updates after disambiguation properly", {
 #   cm <- ConceptualModel()
 #   unit <- Unit("person")

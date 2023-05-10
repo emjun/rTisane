@@ -2,9 +2,10 @@
 #'
 #' Writes info to a JSON file
 #' @import jsonlite
+#' @param path should be different from "input.json" only for development/testing
 #' @keywords
 # generateConceptualModelJSON()
-generateConceptualModelJSON <- function(conceptualModel, path) {
+generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
   output <- list()
   #### Generate options for Conceptual Model
   ambigRelationships <- c()
@@ -55,7 +56,7 @@ generateConceptualModelJSON <- function(conceptualModel, path) {
   }
 
   # Write output to JSON file
-    jsonlite::write_json(output, path=path, auto_unbox = TRUE)
+  jsonlite::write_json(output, path=path, auto_unbox = TRUE)
 
   # Return path
   path
@@ -228,11 +229,13 @@ updateConceptualModel <- function(conceptualModel, values) {
 
 refineConceptualModel <- function(conceptualModel) {
   # Write ConceptualModel to JSON, which is read to create disambiguation GUI
-  path <- generateConceptualModelJSON(conceptualModel, "input.json")
+  path <- generateConceptualModelJSON(conceptualModel)
 
   # Start up disambiguation process
   inputFilePath <- path
-  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path)
+  # updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, inputFilePath=path)
+  # For Conceptual Model UI development
+  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, inputFilePath="test-new-input.json")
 
   # Update Conceptual Model
   cmUpdated <- updateConceptualModel(conceptualModel, updates)  
@@ -253,7 +256,7 @@ setGeneric("processQuery", function(conceptualModel, iv, dv, data) standardGener
 setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "characterORDataframeORnull"), function(conceptualModel, iv, dv, data)
 {
   # Write ConceptualModel to JSON, which is read to create disambiguation GUI
-  path <- generateConceptualModelJSON(conceptualModel, "input.json")
+  path <- generateConceptualModelJSON(conceptualModel)
 
   # Start up disambiguation process
   inputFilePath <- path

@@ -69,7 +69,10 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
     #### Write output to JSON file
     jsonlite::write_json(output, path=path, auto_unbox = TRUE) # auto_unbox makes all atomic vectors in a list single elements in a list ("unboxes" them)
 
-    ##### Return path
+    #### Return absolute path
+    # R.utils::getAbsolutePath(path)
+
+    #### Return (relative) path
     path
 }
 
