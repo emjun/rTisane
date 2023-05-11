@@ -1,7 +1,1 @@
-{
-    "relationships": ["relat1", "relat2"],
-    "choices": {
-        "relat1": [],
-        "relat2": ["option A", "option B", "option C"]
-    }
-}
+{"relationships":["Assume measure_0 and measure_1 are related"],"choices":{"Assume measure_0 and measure_1 are related":["Assume measure_0 causes measure_1","Assume measure_1 causes measure_0"]}}

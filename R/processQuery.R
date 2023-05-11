@@ -155,6 +155,8 @@ updateConceptualModel <- function(conceptualModel, values) {
       tmp <- stringr::str_split(nr, "Assume ")[[1]]
       vars <- tmp[2]
       vars <- stringr::str_split(vars, " causes ")[[1]]
+      # print(paste("tmp:", tmp, sep=" "))
+      # print(paste("vars:", vars, sep=" "))
       stopifnot(length(vars) == 2)
 
       # Find the variables involved in the new relationship
