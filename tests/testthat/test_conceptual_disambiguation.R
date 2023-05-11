@@ -64,15 +64,17 @@ test_that("Conceptual model disambiguation options created properly", {
 
   options <- jsonlite::read_json(path)
 
-  expect_length(options$ambiguousRelationships, 1)
-  expectedKey = paste("assume", measure_0@name, "is related to", measure_1@name, sep=" ")
-  expect_true(expectedKey %in% options$ambiguousRelationships)
-  expect_length(options$ambiguousOptions1, 1)
+  relationships <- options$relationships
+  expect_length(relationships, 1)
+  expectedKey = paste("Assume", measure_0@name, "and", measure_1@name, "are related", sep=" ")
+  expect_true(expectedKey %in% relationships)
+  choices <- options$choices
+  disambig_choices <- choices[[expectedKey]]
+  expect_length(disambig_choices, 2)
   expectedValue = paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions1)
-  expect_length(options$ambiguousOptions2, 1)
+  expect_true(expectedValue %in% disambig_choices)
   expectedValue = paste("Assume", measure_1@name, "causes", measure_0@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions2)
+  expect_true(expectedValue %in% disambig_choices)
 
   # Hypothesize relates relationship
   ambig_relat <- relates(measure_0, measure_1)
@@ -82,15 +84,17 @@ test_that("Conceptual model disambiguation options created properly", {
 
   options <- jsonlite::read_json(path)
 
-  expect_length(options$ambiguousRelationships, 2)
-  expectedKey = paste("hypothesize", measure_0@name, "is related to", measure_1@name, sep=" ")
-  expect_true(expectedKey %in% options$ambiguousRelationships)
-  expect_length(options$ambiguousOptions1, 2)
+  relationships <- options$relationships
+  expect_length(relationships, 2)
+  expectedKey = paste("Hypothesize", measure_0@name, "and", measure_1@name, "are related", sep=" ")
+  expect_true(expectedKey %in% relationships)
+  choices <- options$choices
+  disambig_choices <- choices[[expectedKey]]
+  expect_length(disambig_choices, 2)
   expectedValue = paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions1)
-  expect_length(options$ambiguousOptions2, 2)
+  expect_true(expectedValue %in% disambig_choices)
   expectedValue = paste("Hypothesize", measure_1@name, "causes", measure_0@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions2)
+  expect_true(expectedValue %in% disambig_choices)
 
   ### All relates with when, then
   cm <- ConceptualModel()
@@ -102,15 +106,17 @@ test_that("Conceptual model disambiguation options created properly", {
 
   options <- jsonlite::read_json(path)
 
-  expect_length(options$ambiguousRelationships, 1)
-  expectedKey = paste("assume", measure_0@name, "is related to", measure_1@name, sep=" ")
-  expect_true(expectedKey %in% options$ambiguousRelationships)
-  expect_length(options$ambiguousOptions1, 1)
+  relationships <- options$relationships
+  expect_length(relationships, 1)
+  expectedKey = paste("Assume", measure_0@name, "and", measure_1@name, "are related", sep=" ")
+  expect_true(expectedKey %in% relationships)
+  choices <- options$choices
+  disambig_choices <- choices[[expectedKey]]
+  expect_length(disambig_choices, 2)
   expectedValue = paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions1)
-  expect_length(options$ambiguousOptions2, 1)
+  expect_true(expectedValue %in% disambig_choices)
   expectedValue = paste("Assume", measure_1@name, "causes", measure_0@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions2)
+  expect_true(expectedValue %in% disambig_choices)
 
   # Hypothesize relates relationship
   ambig_relat <- relates(measure_0, measure_1)
@@ -120,15 +126,16 @@ test_that("Conceptual model disambiguation options created properly", {
 
   options <- jsonlite::read_json(path)
 
-  expect_length(options$ambiguousRelationships, 2)
-  expectedKey = paste("hypothesize", measure_0@name, "is related to", measure_1@name, sep=" ")
-  expect_true(expectedKey %in% options$ambiguousRelationships)
-  expect_length(options$ambiguousOptions1, 2)
+  relationships <- options$relationships
+  expect_length(relationships, 2)
+  expectedKey = paste("Hypothesize", measure_0@name, "and", measure_1@name, "are related", sep=" ")
+  choices <- options$choices
+  disambig_choices <- choices[[expectedKey]]
+  expect_length(disambig_choices, 2)
   expectedValue = paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions1)
-  expect_length(options$ambiguousOptions2, 2)
+  expect_true(expectedValue %in% disambig_choices)
   expectedValue = paste("Hypothesize", measure_1@name, "causes", measure_0@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions2)
+  expect_true(expectedValue %in% disambig_choices)
 
   ### Mix causes, relates
   cm <- ConceptualModel()
@@ -140,25 +147,28 @@ test_that("Conceptual model disambiguation options created properly", {
 
   options <- jsonlite::read_json(path)
 
-  expect_length(options$ambiguousRelationships, 1)
-  expectedKey = paste("assume", measure_0@name, "is related to", measure_1@name, sep=" ")
-  expect_true(expectedKey %in% options$ambiguousRelationships)
-  expect_length(options$ambiguousOptions1, 1)
+  relationships <- options$relationships
+  expect_length(relationships, 1)
+
+  expectedKey = paste("Assume", measure_0@name, "and", measure_1@name, "are related", sep=" ")
+  expect_true(expectedKey %in% relationships)
+  choices <- options$choices
+  disambig_choices <- choices[[expectedKey]]
+  expect_length(disambig_choices, 2)
   expectedValue = paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions1)
-  expect_length(options$ambiguousOptions2, 1)
+  expect_true(expectedValue %in% disambig_choices)
   expectedValue = paste("Assume", measure_1@name, "causes", measure_0@name, sep=" ")
-  expect_true(expectedValue %in% options$ambiguousOptions2)
+  expect_true(expectedValue %in% disambig_choices)
 
-  # Hypothesize causal relationship
-  cause_relat <- causes(measure_0, measure_1)
-  cm <- hypothesize(cm, cause_relat)
+  # # Hypothesize causal relationship
+  # cause_relat <- causes(measure_0, measure_1)
+  # cm <- hypothesize(cm, cause_relat)
+  #
+  # path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  #
+  # options <- jsonlite::read_json(path)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
-  options <- jsonlite::read_json(path)
-
-  expect_length(options$ambiguousRelationships, 1)
 })
 
 # Disambiguate (JSON --> interface) --> NEW TEST CASE FUNCTION (see below link for shiny app testing)

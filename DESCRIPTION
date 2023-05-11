@@ -24,6 +24,7 @@ Imports:
     plotly
 Collate: 
     'aaa-classes.R'
+    'toString.R'
     'condition.R'
     'assign_cardinality_from_data.R'
     'associates_with.R'
@@ -59,10 +60,6 @@ Collate:
     'processQuery.R'
     'relates.R'
     'updateGraph.R'
-    'whenThen.R'
-    'asContinuous.R'
-    'asCounts.R'
-    'asCategories.R'
     'inferConfounders.R'
     'inferInteractions.R'
     'inferRandomEffects.R'

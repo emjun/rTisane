@@ -1,3 +1,21 @@
+
+#' Returns list of disambiguation choices
+#' @param relationship is a Relates or Causes object
+#' @param tag is "Assume" or "Hypothesize"
+generateDisambiguationChoices <- function(relationship, tag) {
+  choices <- list()
+
+  if (class(relationship) == "Relates") {
+    lhs <- relationship@lhs
+    rhs <- relationship@rhs
+    
+    choices <- append(choices, paste(tag, lhs@name, "causes", rhs@name, sep=" "))
+    choices <- append(choices, paste(tag, rhs@name, "causes", lhs@name, sep=" "))
+  }
+
+  choices
+}
+
 #' Output info to JSON
 #'
 #' Writes info to a JSON file
@@ -7,59 +25,54 @@
 # generateConceptualModelJSON()
 generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
   output <- list()
-  #### Generate options for Conceptual Model
-  ambigRelationships <- c()
-  ambigOptions1 <- c()
-  ambigOptions2 <- c()
+  relationships <- list()
+  choices <- list()
 
-  relatationships <- conceptualModel@relationships
-  for (relat in relatationships) {
+  for (relat in conceptualModel@relationships) {
+  
     relatClass <- class(relat)
-
-    r <- relat@relationship
-    rClass <- class(r)
-
+    
     if (relatClass == "Assumption") {
-      if (rClass == "Relates") {
-        # Create and track relationship
-        relatString <- paste("assume", r@lhs@name, "is related to", r@rhs@name, sep=" ")
-        ambigRelationships <- append(ambigRelationships, relatString)
+      r <- relat@relationship
 
-        # Create options to resolve/make more specific relationship
-        ambigOptions1 <- append(ambigOptions1, paste("Assume", r@lhs@name, "causes", r@rhs@name, sep=" "))
-        ambigOptions2 <- append(ambigOptions2, paste("Assume", r@rhs@name, "causes", r@lhs@name, sep=" "))
-      } else {
-        stopifnot(rClass == "Causes")  # Could Moderates reach here?
-        # Do nothing for causes relationships
-      }
+      # Construct Assumption string
+      str <- toString(r)
+      str <- paste("Assume", str, sep=" ")
+
+      # Append to output list of relationships
+      relationships <- append(relationships, str)
+
+      # Append to list of choices
+      disambig_choices <- generateDisambiguationChoices(r, "Assume")
+      tmp <- list()
+      tmp[[str]] <- disambig_choices
+      choices <- append(choices, tmp)
     } else {
       stopifnot(relatClass == "Hypothesis")
-      if (rClass == "Relates") {
-        # Create and track relationship
-        relatString <- paste("hypothesize", r@lhs@name, "is related to", r@rhs@name, sep=" ")
-        ambigRelationships <- append(ambigRelationships, relatString)
+      # Construct Hypothesize string
+      str <- toString(r)
+      str <- paste("Hypothesize", str, sep=" ")
 
-        # Create options to resolve/make more specific relationship
-        ambigOptions1 <- append(ambigOptions1, paste("Hypothesize", r@lhs@name, "causes", r@rhs@name, sep=" "))
-        ambigOptions2 <- append(ambigOptions2, paste("Hypothesize", r@rhs@name, "causes", r@lhs@name, sep=" "))
-      } else {
-        stopifnot(rClass == "Causes")  # Could Moderates reach here?
-        # Do nothing for causes relationships
-      }
+      # Append to output list of relationships
+      relationships <- append(relationships, str)
+
+      # Append to list of choices
+      disambig_choices <- generateDisambiguationChoices(r, "Hypothesize")
+      tmp <- list()
+      tmp[[str]] <- disambig_choices
+      choices <- append(choices, tmp)
     }
   }
 
   # Add to output list
-  # stopifnot(length(ambigRelationships) == length(ambigOptions))
-  if (length(ambigRelationships) > 0) {
-    output <- append(output, list(ambiguousRelationships = ambigRelationships, ambiguousOptions1 = ambigOptions1, ambiguousOptions2 = ambigOptions2))
-  }
+  output <- list(relationships=relationships, choices=choices)
 
   # Write output to JSON file
   jsonlite::write_json(output, path=path, auto_unbox = TRUE)
 
   # Return path
   path
+
 }
 
 #' Updates DV type
@@ -123,7 +136,8 @@ getVariable <- function(conceptualModel, name) {
 #' @keywords
 # updateConceptualModel()
 updateConceptualModel <- function(conceptualModel, values) {
-  newRelat <- values$uncertainRelationships
+  # newRelat <- values$uncertainRelationships
+  newRelat <- values
 
   # Are there any new relationships to process?
   # There are no relationships to process. Return the original conceptual model
