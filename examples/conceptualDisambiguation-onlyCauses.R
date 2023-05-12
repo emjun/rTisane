@@ -11,4 +11,4 @@ cm <- assume(cm, cause_relat)
 # Update graph
 # cm@graph <- updateGraph(cm)
 
-updatedCM <- checkAndRefine(conceptualModel=cm)
+updatedCM <- checkAndRefineConceptualModel(conceptualModel=cm)

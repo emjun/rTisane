@@ -11,5 +11,5 @@ Steps involved in answering query:
 2. `processQuery` to disambiguate how to treat the DV and resolve any ambiguity in the conceptual model before inferring a statistical model. Disambiguation is complete once all ambiguities are resolved and the conceptual model is validated (`checkConceptualModel`). Disambiguation occurs in a GUI.
 3. `updateDV` and `updateConceptualModel` based on inputs during disambiguation. 
 4. Use disambiguated DV and conceputal model to derive candidate statistical models: `inferConfounders`, `inferFamilyLinkFunctions`
-5. `processStatisticalModels` to disambiguate modeling choices. Disambiguation occurs in a GUI. 
+5. `deriveStatisticalModel` to disambiguate modeling choices. Disambiguation occurs in a GUI. 
 [See details about statistical model inference details and scope](STATISTICAL_MODEL_INFERENCE.md). 

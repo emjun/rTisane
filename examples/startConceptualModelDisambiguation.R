@@ -12,4 +12,4 @@ cm <- assume(cm, ambig_relat)
 # cm@graph <- updateGraph(cm)
 
 # Refine and Disambiguate Conceptual Model
-updatedCM <- checkAndRefine(conceptualModel=cm)
+updatedCM <- checkAndRefineConceptualModel(conceptualModel=cm)

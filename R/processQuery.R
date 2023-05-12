@@ -75,37 +75,6 @@ generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
 
 }
 
-#' Updates DV type
-#'
-#' Casts DV to be Continuous, Counts, or Categories, which is necessary to infer family and link functions
-#' @param dv AbstractVariable to cast.
-#' @param values ReactiveValues from disambiguating DV type.
-#' @import stringr
-#' @keywords
-# updateDV()
-updateDV <- function(dv, values) {
-  # Extract values from disambiguation process
-  dvName <- values$dvName
-  dvType <- values$dvType
-  stopifnot(dvName == dv@name)
-
-  # Update DV
-  updatedDv <- NULL
-  if (stringr::str_detect(dvType, "continuous")) {
-    updatedDv <- asContinuous(dv)
-  } else if (stringr::str_detect(dvType, "counts")) {
-    updatedDv <- asCounts(dv)
-  } else {
-    browser()
-    stopifnot(stringr::str_detect(dvType, "categories"))
-    updatedDv <- asCategories(dv)
-  }
-
-  # Return updated DV
-  stopifnot(!is.null(updatedDv))
-  updatedDv
-}
-
 #' Returns handle to variable whose name we know
 #'
 #' Helper function for navigating and updating a Conceptual Model. Returns handle to a variable or NULL otherwise.
@@ -282,10 +251,10 @@ setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "Abst
   # # dvUpdated <- updateDV(dv, updates)
   # cmUpdated <- updateConceptualModel(conceptualModel, updates)
 
-  updatedCM <- checkAndRefine(conceptualModel, iv, dv)
+  updatedCM <- checkAndRefineConceptualModel(conceptualModel, iv, dv)
 
-  results <- list(updatedConceptualModel=cmUpdated)
+  # results <- list(updatedConceptualModel=cmUpdated)
 
-  # Return updated values
-  results
+  # Return updated conceptual model
+  updatedCM
 })
