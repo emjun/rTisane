@@ -5,7 +5,7 @@
 ## [x] Update button reactivity - start with disabled and then submit when all relationships/changes clear
 ## [x] Graph vis
 
-## Helper
+## Helper functions
 create_disambig_id <- function(relationship) {
     idName <- trimws(relationship)
     idName <- paste(idName, "-disambig", sep="")
@@ -13,6 +13,25 @@ create_disambig_id <- function(relationship) {
     # Return 
     idName
 }
+
+hasAmbiguitiesAtStart <- function(relationships, choices) {
+    hasAmbiguities <- FALSE
+
+    for (re in relationships) {
+        re_choices <- choices[[re]]
+        
+        # Are there any choices?
+        if (length(re_choices) > 0) {
+            print(re_choices)
+            return (TRUE)
+        }
+    }
+
+    # Return 
+    hasAmbiguities
+}
+
+
 relationshipUI <- function(id, choices) {
     ns <- NS(id)
     ## TODO: Somehow cluster the text + options to be more visually related
@@ -64,13 +83,18 @@ conceptualModelSpecUI <- function(id, relationships, choices) {
     tl
 }
 
-submitButtonUI <- function(id, iv, dv) {
+submitButtonUI <- function(id, iv, dv, relationships, choices) {
     ns <- NS(id)
 
-    buttonLabel <- "Update conceptual model!"
-    if (!is.null(iv)) {
-        stopifnot(!is.null(dv))
-        buttonLabel <- "Infer statistical model!"
+    
+    if (! hasAmbiguitiesAtStart(relationships, choices)) {
+        buttonLabel <- "Continue"
+    } else {
+        buttonLabel <- "Update conceptual model!"
+        if (!is.null(iv)) {
+            stopifnot(!is.null(dv))
+            buttonLabel <- "Update conceptual model + Infer statistical model!"
+        }
     } 
     
     # Return button
@@ -199,7 +223,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                 plotOutput("graph"),
                 # textOutput("summary"),
                 
-                submitButtonUI("submit", iv, dv)
+                submitButtonUI("submit", iv, dv, relationships, choices)
             )
         )
     )
@@ -244,7 +268,8 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
         # Verify conceptual model if there is an IV, DV
         # Enable submit
         check <- reactive({
-            if (!is.null(iv) && !is.null(dv)) {
+            if (!is.null(iv)) {
+                stopifnot(!is.null(dv))
                 # if (updatedCM != conceptualModel) {
                 cmCheckResults <- checkConceptualModel(updatedCM, iv, dv)
                 isValid <- cmCheckResults$isValid
@@ -256,21 +281,38 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                     # if (reason == "cycle") {
                     #     # Do something to input/output to further disambiguate/change
                     # }
+                    shinyjs::disable(input$submit)
                 }
+
+                # Check there is no cycle
+
                 # }
+
+                # Return 
+                return (isValid)
             } else {
                 stopifnot(is.null(iv))
                 stopifnot(is.null(dv))
 
-                shinyjs::enable(input$submit)
-            }
+                # Check there is no cycle
+                return (TRUE)
+            } 
 
             # # Return TRUE
             # return (isValid = FALSE, reason = "")
         })
 
-        # TODO: Verify conceptual model does not have a cycle, which impedes ability to infer statistical model
+        # # Check conceptual model, update submit button 
+        # observe({
+        #     canContinue <- check()
+            
+        #     if (isTRUE(canContinue)) {
+        #         shinyjs::enable(input$submit)
+        #     }
+        # })
+        
 
+        # TODO: Verify conceptual model does not have a cycle, which impedes ability to infer statistical model
 
         ## Submit
         observeEvent(input$submit, {
