@@ -1,10 +1,3 @@
-## START HERE: Now that we can get conceptual model relationships to show up, write test for server
-## Get all relationships + disambiguated ones 
-## [x] Take input --> print output
-## [updateConceptualModel directly] Take input --> output to JSON? --may need to change json format
-## [x] Update button reactivity - start with disabled and then submit when all relationships/changes clear
-## [x] Graph vis
-
 ## Helper functions
 create_disambig_id <- function(relationship) {
     idName <- trimws(relationship)
