@@ -243,21 +243,21 @@ updateConceptualModel <- function(conceptualModel, values) {
 }
 
 
-refineConceptualModel <- function(conceptualModel) {
-  # Write ConceptualModel to JSON, which is read to create disambiguation GUI
-  path <- generateConceptualModelJSON(conceptualModel)
+# refineConceptualModel <- function(conceptualModel) {
+#   # Write ConceptualModel to JSON, which is read to create disambiguation GUI
+#   path <- generateConceptualModelJSON(conceptualModel)
 
-  # Start up disambiguation process
-  inputFilePath <- path
-  # updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, inputFilePath=path)
-  # For Conceptual Model UI development
-  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, inputFilePath="test-new-input.json")
+#   # Start up disambiguation process
+#   inputFilePath <- path
+#   updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, inputFilePath=path)
+#   # For Conceptual Model UI development
+#   # updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, inputFilePath="test-new-input.json")
 
-  # Update Conceptual Model
-  cmUpdated <- updateConceptualModel(conceptualModel, updates)  
+#   # Update Conceptual Model
+#   cmUpdated <- updateConceptualModel(conceptualModel, updates)  
 
-  cmUpdated
-}
+#   cmUpdated
+# }
 
 #' Elicit any additional information about Conceptual Model (graph) if necessary
 #'
@@ -271,16 +271,18 @@ refineConceptualModel <- function(conceptualModel) {
 setGeneric("processQuery", function(conceptualModel, iv, dv, data) standardGeneric("processQuery"))
 setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "characterORDataframeORnull"), function(conceptualModel, iv, dv, data)
 {
-  # Write ConceptualModel to JSON, which is read to create disambiguation GUI
-  path <- generateConceptualModelJSON(conceptualModel)
+  # # Write ConceptualModel to JSON, which is read to create disambiguation GUI
+  # path <- generateConceptualModelJSON(conceptualModel)
 
-  # Start up disambiguation process
-  inputFilePath <- path
-  updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path)
+  # # Start up disambiguation process
+  # inputFilePath <- path
+  # updates <- disambiguateConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv, inputFilePath=path)
 
-  # Update DV, Update Conceptual Model
-  # dvUpdated <- updateDV(dv, updates)
-  cmUpdated <- updateConceptualModel(conceptualModel, updates)
+  # # Update DV, Update Conceptual Model
+  # # dvUpdated <- updateDV(dv, updates)
+  # cmUpdated <- updateConceptualModel(conceptualModel, updates)
+
+  updatedCM <- checkAndRefine(conceptualModel, iv, dv)
 
   results <- list(updatedConceptualModel=cmUpdated)
 

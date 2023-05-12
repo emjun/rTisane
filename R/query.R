@@ -10,17 +10,6 @@ initialCheck <- function(conceptualModel, iv, dv) {
 
 }
 
-checkAndRefine <- function(conceptualModel, iv, dv) {
-  ### Step 0: Construct causal graph from declared relationships in ConceptualModel
-  conceptualModel@graph <- updateGraph(conceptualModel)
-
-  ### Step 1: Check the conceptual model for any issues right away
-  # initialCheck(conceptualModel=conceptualModel, iv=iv, dv=dv)
-
-  ### Step 2: Refine the conceptual model for any ambiguous relationships and cycles
-  refineConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
-}
-
 #' Query a conceptual model for a statistical model
 #'
 #' Method for querying a conceptual model for a statistical model

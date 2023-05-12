@@ -177,7 +177,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             sidebarPanel(
 
                 # "Heading"
-                p("You specified the following relationships:"),
+                h4("You specified the following relationships:"),
 
                 # Input:
                 conceptualModelSpecUI("spec", relationships, choices),
@@ -192,9 +192,13 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             # Main panel for displaying outputs ----
             mainPanel(
 
+                # "Heading"
+                h4("This is what your conceptual model looks like:"),
+
                 # Output: Graph ----
                 plotOutput("graph"),
                 # textOutput("summary"),
+                
                 submitButtonUI("submit", iv, dv)
             )
         )
