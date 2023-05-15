@@ -160,126 +160,88 @@ test_that("Conceptual model disambiguation options created properly", {
   expectedValue = paste("Assume", measure_1@name, "causes", measure_0@name, sep=" ")
   expect_true(expectedValue %in% disambig_choices)
 
-  # # Hypothesize causal relationship
-  # cause_relat <- causes(measure_0, measure_1)
-  # cm <- hypothesize(cm, cause_relat)
-  #
-  # path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
-  #
-  # options <- jsonlite::read_json(path)
-
-
 })
 
-# Disambiguate (JSON --> interface) --> NEW TEST CASE FUNCTION (see below link for shiny app testing)
-test_that("Conceptual model disambiguation shown on interface as expected   properly", {
-  # TODO: Add tests for shiny app testing
-  #
-})
-
-### Separate query processing file?
-# Test checkConceptualModel (without iv/dv) -- might be in other test file
-
-# Test checkConceptualModel (with iv/dv) -- might be in other test file
-
-# Test cycleChecking in interface?
-# - Add cycle check section in Shiny
-# - Add warning about cycle
-# - Add suggestions for breaking cycle? -- How does this work if cycle is from original spec. vs induced through disambiguation? (some kind of check for no cycles + update when induce cycle; if induced, add warning about changing above; if not induced, provide suggestions below? OR change to relates and then now have to generate options above?)
-# ^ Might not have to provide all the options for breaking cycle but a few possibilities...?
-
-### Check cycle breaking option generation
-
-
-# Update Conceptual Model --> NEW FUNCTION
-# test_that("Conceptual model updates after disambiguation properly", {
-#   cm <- ConceptualModel()
-#   unit <- Unit("person")
-#   measure_0 <- continuous(unit=unit, name="measure_0")
-#   measure_1 <- continuous(unit=unit, name="measure_1")
-#
-#   ## Assume
-#   relat <- relates(measure_0, measure_1)
-#   cm <- assume(cm, relat)
-#   # Update graph
-#   cm@graph <- updateGraph(cm)
-#
-#   # Values to update to
-#   uRelat <- paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
-#   dvName = measure_1@name
-#   dvType = "Continuous"
-#
-#   # Create updates list to pass to updateDV function
-#   updates <- list(dvName=dvName, dvType=dvType)
-#   updates$uncertainRelationships[[1]] = uRelat
-#   cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
-#
-#   expect_s4_class(cmUpdated, "ConceptualModel")
-#   relationships <- cmUpdated@relationships
-#   expect_length(relationships, 1)
-#   assump <- relationships[[1]]
-#   expect_s4_class(assump, "Assumption")
-#   r <- assump@relationship
-#   expect_s4_class(r, "Causes")
-#   expect_equal(r@cause, relat@lhs)
-#   expect_equal(r@effect, relat@rhs)
-#
-#
-#   ## Hypothesize
-#   cm <- ConceptualModel()
-#   relat <- relates(measure_0, measure_1)
-#   cm <- hypothesize(cm, relat)
-#   # Update graph
-#   cm@graph <- updateGraph(cm)
-#
-#   # Values to update to
-#   uRelat <- paste("Hypothesize", measure_0@name, "causes", measure_1@name, sep=" ")
-#   dvName = measure_1@name
-#   dvType = "Continuous"
-#
-#   # Create updates list to pass to updateDV function
-#   updates <- list(dvName=dvName, dvType=dvType)
-#   updates$uncertainRelationships[[1]] = uRelat
-#   cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
-#
-#   expect_s4_class(cmUpdated, "ConceptualModel")
-#   relationships <- cmUpdated@relationships
-#   expect_length(relationships, 1)
-#   hypo <- relationships[[1]]
-#   expect_s4_class(hypo, "Hypothesis")
-#   r <- hypo@relationship
-#   expect_s4_class(r, "Causes")
-#   expect_equal(r@cause, relat@lhs)
-#   expect_equal(r@effect, relat@rhs)
-#
-#   ## Hypothesize, reverse direction of causes
-#   cm <- ConceptualModel()
-#   relat <- relates(measure_0, measure_1)
-#   cm <- hypothesize(cm, relat)
-#   # Update graph
-#   cm@graph <- updateGraph(cm)
-#
-#   # Values to update to
-#   uRelat <- paste("Hypothesize", measure_1@name, "causes", measure_0@name, sep=" ")
-#   dvName = measure_1@name
-#   dvType = "Continuous"
-#
-#   # Create updates list to pass to updateDV function
-#   updates <- list(dvName=dvName, dvType=dvType)
-#   updates$uncertainRelationships[[1]] = uRelat
-#   cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
-#
-#   expect_s4_class(cmUpdated, "ConceptualModel")
-#   relationships <- cmUpdated@relationships
-#   expect_length(relationships, 1)
-#   hypo <- relationships[[1]]
-#   expect_s4_class(hypo, "Hypothesis")
-#   r <- hypo@relationship
-#   expect_s4_class(r, "Causes")
-#   expect_equal(r@cause, relat@rhs)
-#   expect_equal(r@effect, relat@lhs)
+# # Disambiguate (JSON --> interface) --> NEW TEST CASE FUNCTION (see below link for shiny app testing)
+# test_that("Conceptual model disambiguation shown on interface as expected   properly", {
+#   # TODO: Add tests for shiny app testing
+#   #
 # })
-#
+
+# Update Conceptual Model
+test_that("Conceptual model updates after disambiguation properly", {
+  cm <- ConceptualModel()
+  unit <- Unit("person")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+
+  ## Assume
+  relat <- relates(measure_0, measure_1)
+  cm <- assume(cm, relat)
+  # Update graph
+  cm@graph <- updateGraph(cm)
+
+  # Values to update to
+  uRelat <- paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
+
+  # Create updates list to pass to update conceptual model function
+  updates <- list("Assume measure_0 causes measure_1")
+  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+
+  expect_s4_class(cmUpdated, "ConceptualModel")
+  relationships <- cmUpdated@relationships
+  expect_length(relationships, 1)
+  assump <- relationships[[1]]
+  expect_s4_class(assump, "Assumption")
+  r <- assump@relationship
+  expect_s4_class(r, "Causes")
+  expect_equal(r@cause, relat@lhs)
+  expect_equal(r@effect, relat@rhs)
+
+
+  ## Hypothesize
+  cm <- ConceptualModel()
+  relat <- relates(measure_0, measure_1)
+  cm <- hypothesize(cm, relat)
+  # Update graph
+  cm@graph <- updateGraph(cm)
+
+  # Create updates list to pass to updateDV function
+  updates <- list("Hypothesize measure_0 causes measure_1")
+  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+
+  expect_s4_class(cmUpdated, "ConceptualModel")
+  relationships <- cmUpdated@relationships
+  expect_length(relationships, 1)
+  hypo <- relationships[[1]]
+  expect_s4_class(hypo, "Hypothesis")
+  r <- hypo@relationship
+  expect_s4_class(r, "Causes")
+  expect_equal(r@cause, relat@lhs)
+  expect_equal(r@effect, relat@rhs)
+
+  ## Hypothesize, reverse direction of causes
+  cm <- ConceptualModel()
+  relat <- relates(measure_0, measure_1)
+  cm <- hypothesize(cm, relat)
+  # Update graph
+  cm@graph <- updateGraph(cm)
+
+  # Values to update to
+  updates <- list("Hypothesize measure_1 causes measure_0")
+  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+
+  expect_s4_class(cmUpdated, "ConceptualModel")
+  relationships <- cmUpdated@relationships
+  expect_length(relationships, 1)
+  hypo <- relationships[[1]]
+  expect_s4_class(hypo, "Hypothesis")
+  r <- hypo@relationship
+  expect_s4_class(r, "Causes")
+  expect_equal(r@cause, relat@rhs)
+  expect_equal(r@effect, relat@lhs)
+})
+
 # test_that("Statistical modeling options created properly", {
 #   cm <- ConceptualModel()
 #   unit <- Unit("person")
@@ -317,3 +279,17 @@ test_that("Conceptual model disambiguation shown on interface as expected   prop
 #   expect_length(query$IVs, 1)
 #   expect_equal(query$IVs[[1]], measure_0@name)
 # })
+
+
+### Separate query processing file?
+# Test checkConceptualModel (without iv/dv) -- might be in other test file
+
+# Test checkConceptualModel (with iv/dv) -- might be in other test file
+
+# Test cycleChecking in interface?
+# - Add cycle check section in Shiny
+# - Add warning about cycle
+# - Add suggestions for breaking cycle? -- How does this work if cycle is from original spec. vs induced through disambiguation? (some kind of check for no cycles + update when induce cycle; if induced, add warning about changing above; if not induced, provide suggestions below? OR change to relates and then now have to generate options above?)
+# ^ Might not have to provide all the options for breaking cycle but a few possibilities...?
+
+### Check cycle breaking option generation

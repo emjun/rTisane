@@ -168,6 +168,9 @@ updateConceptualModel <- function(conceptualModel, values) {
       tmp <- stringr::str_split(nr, "Hypothesize ")[[1]]
       vars <- tmp[2]
       vars <- stringr::str_split(vars, " causes ")[[1]]
+      # if (length(vars) != 2) {
+      #   browser()
+      # }
       stopifnot(length(vars) == 2)
 
       # Find the variables involved in the new relationship
