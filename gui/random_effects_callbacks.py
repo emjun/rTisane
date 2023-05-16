@@ -2,7 +2,7 @@ from dash.dependencies import Output, Input, State, ALL, MATCH
 import dash
 from dash.exceptions import PreventUpdate
 from dash import html
-from gui.gui_components import GUIComponents, separateByUpperCamelCase
+from gui_components import GUIComponents, separateByUpperCamelCase # gui.gui_components
 import json
 import logging
 

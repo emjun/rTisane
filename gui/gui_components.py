@@ -1,4 +1,4 @@
-from gui.gui_helpers import (
+from gui_helpers import ( # gui.gui_helpers
     # simulate_data_dist,
     onlyAllowSupportedFamilyDistributions,
 )
@@ -15,7 +15,7 @@ import plotly.graph_objects as go
 import pandas as pd
 # import scipy.stats as stats
 import numpy as np
-from gui.gui_strings import GUIStrings
+from gui_strings import GUIStrings # gui.gui_strings
 import re
 
 log = logging.getLogger("")
@@ -938,7 +938,7 @@ class GUIComponents:
     def getInteractionEffectsCard(self):
         interactions = self.getGeneratedInteractionEffects()
         continueButton = dbc.Button(
-            "Continue", color="success", id="continue-to-random-effects", n_clicks=0
+            "Continue", color="success", id="continue-to-family-link-functions", n_clicks=0
         )
         assert self.hasDefaultExplanation(
             "no-interaction-effects"

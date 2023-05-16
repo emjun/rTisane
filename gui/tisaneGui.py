@@ -14,8 +14,8 @@ from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import webbrowser  # For autoamtically opening the browser for the CLI
 import socket  # For finding next available socket
-from gui.gui_components import GUIComponents
-from gui.callbacks import createCallbacks
+from gui_components import GUIComponents  # gui.gui_components
+from callbacks import createCallbacks # gui.callbacks
 
 external_stylesheets = [
     dbc.themes.BOOTSTRAP,
@@ -87,13 +87,18 @@ class TisaneGUI:
         # Layout components that require special formatting
         # Build progress row
 
+        # Number of tabs to show
+        # Remove random effects tab for controlled lab study focusing on GLMs
+        num_tabs = 3
+        val = 100/num_tabs
+
         progress_row = [
             dbc.Col(
                 dbc.Progress(
                     [
                         dbc.Progress(
                             self.components.strings.access("progress", "main-effects"),
-                            value=25,
+                            value=val,
                             animated=True,
                             striped=True,
                             bar=True,
@@ -101,25 +106,26 @@ class TisaneGUI:
                         ),
                         dbc.Progress(
                             self.components.strings("progress", "interaction-effects"),
-                            value=25,
+                            value=val,
                             animated=False,
                             bar=True,
                             id="interaction-effects-progress",
                             color="secondary",
                         ),
-                        dbc.Progress(
-                            self.components.strings("progress", "random-effects"),
-                            value=25,
-                            animated=False,
-                            bar=True,
-                            id="random-effects-progress",
-                            color="secondary",
-                        ),
+                        # Remove for controlled lab study focusing only on GLMs
+                        # dbc.Progress(
+                        #     self.components.strings("progress", "random-effects"),
+                        #     value=25,
+                        #     animated=False,
+                        #     bar=True,
+                        #     id="random-effects-progress",
+                        #     color="secondary",
+                        # ),
                         dbc.Progress(
                             self.components.strings(
                                 "progress", "family-link-functions"
                             ),
-                            value=25,
+                            value=val,
                             animated=False,
                             bar=True,
                             id="family-link-functions-progress",
@@ -148,7 +154,7 @@ class TisaneGUI:
                 ),
                 dcc.Store(id="added-main-effects-store"),
                 dcc.Store(id="added-interaction-effects-store"),
-                dcc.Store(id="random-effects-check-store"),
+                # dcc.Store(id="random-effects-check-store"),
             ]
             + self.components.createEffectPopovers()
             + self.components.createCodeGenerationModal(),
@@ -171,7 +177,7 @@ class TisaneGUI:
         #     ]
         # )
         # self.app = app
-        app.run_server(host="127.0.0.1", debug=False, threaded=True, port=port)
+        app.run_server(host="127.0.0.1", debug=True, threaded=True, port=port) # debugging set to True 
 
 
     def model_tabs(self):
@@ -180,7 +186,8 @@ class TisaneGUI:
 
         tab2_content = self.components.getInteractionEffectsCard()
 
-        tab3_content = self.components.getRandomEffectsCard()
+        # Remove for controlled lab study focusing on GLMs
+        # tab3_content = self.components.getRandomEffectsCard()
 
         tab4_content = self.components.getFamilyLinkFunctionsCard()
 
@@ -200,13 +207,13 @@ class TisaneGUI:
                     tab_id="tab-2",
                     id="interaction-effects-tab",
                 ),
-                dbc.Tab(
-                    tab3_content,
-                    label=self.components.strings.getRandomEffectsTabTitle(),
-                    tab_style={"marginLeft": "auto"},
-                    tab_id="tab-3",
-                    id="random-effects-tab",
-                ),
+                # dbc.Tab(
+                #     tab3_content,
+                #     label=self.components.strings.getRandomEffectsTabTitle(),
+                #     tab_style={"marginLeft": "auto"},
+                #     tab_id="tab-3",
+                #     id="random-effects-tab",
+                # ),
                 dbc.Tab(
                     tab4_content,
                     label=self.components.strings.getFamilyLinksTabTitle(),
@@ -244,7 +251,7 @@ class TisaneGUI:
                         id="added-variables-paragraph",
                     ),
                 ]
-                + self.components.getRandomEffectsAddedSection()
+                # + self.components.getRandomEffectsAddedSection()
                 + [
                     html.H5(self.components.strings("overview", "distribution")),
                     html.H6(

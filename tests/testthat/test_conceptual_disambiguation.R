@@ -256,10 +256,9 @@ test_that("Statistical modeling options created properly", {
   cm <- assume(cm, causes(measure_1, measure_2))
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
-  cont <- asContinuous(measure_2)
-  familyLinkPairs <- inferFamilyLinkFunctions(cont)
+  familyLinkPairs <- inferFamilyLinkFunctions(measure_2)
 
-  path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=cont)
+  path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
 
   options <- jsonlite::read_json(path)
   expect_false(is.null(options$input))

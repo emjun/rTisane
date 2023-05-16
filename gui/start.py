@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from gui.tisaneGui import TisaneGUI
+from tisaneGui import TisaneGUI # gui.tisaneGui
 # from helpers.statisticalModel import StatisticalModel
 # from helpers.code_generator import *
 # from tisaneGui import TisaneGUI
@@ -110,6 +110,6 @@ def generateCode(
         return path
 
 
-inputFile = "input2.json" # Output after disambiguating conceptual model
+inputFile = "input2.json" # Output after disambiguating conceptual model, could rename to "statistical_model_choices.json"
 # inputFile = "examples/json/mainEffectsOnly.json"
 tg.start_app(input=inputFile, generateCode=generateCode)

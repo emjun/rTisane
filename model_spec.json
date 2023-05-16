@@ -1,8 +1,8 @@
 {
     "dependent variable": "PINCP",
-    "family": "Gamma",
+    "family": "Inverse Gaussian",
     "interaction effects": [],
-    "link": "inverse",
+    "link": "1/mu^2",
     "main effects": [
         "AGEP",
         "SCHL",

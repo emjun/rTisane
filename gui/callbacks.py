@@ -2,11 +2,11 @@ from dash.dependencies import Output, Input, State, ALL, MATCH
 import dash
 from dash.exceptions import PreventUpdate
 from dash import html
-from gui.gui_components import GUIComponents
-from gui.family_link_function_callbacks import createFamilyLinkFunctionCallbacks
-from gui.random_effects_callbacks import createRandomEffectsCallbacks
+from gui_components import GUIComponents # gui.gui_components
+from family_link_function_callbacks import createFamilyLinkFunctionCallbacks # gui.family_link_function_callbacks
+from random_effects_callbacks import createRandomEffectsCallbacks # gui.random_effects_callbacks
 import json
-from gui.gui_helpers import getTriggeredFromContext
+from gui_helpers import getTriggeredFromContext # gui.gui_helpers
 import logging
 
 
@@ -20,23 +20,25 @@ def createCallbacks(app, comp: GUIComponents = None):
         "tab-2",
         "interaction-effects-progress",
         "continue-to-interaction-effects",
-        "continue-to-random-effects",
-        comp,
-    )
-    createProgressBarCallbacks(
-        app,
-        "tab-3",
-        "random-effects-progress",
-        "continue-to-random-effects",
         "continue-to-family-link-functions",
+        # "continue-to-random-effects",
         comp,
     )
+    # createProgressBarCallbacks(
+    #     app,
+    #     "tab-3",
+    #     "random-effects-progress",
+    #     # "continue-to-random-effects",
+    #     "continue-to-family-link-functions",
+    #     comp,
+    # )
     createTabsCallbacks(app)
     createMainEffectsChecklistCallbacks(app, comp)
     createFamilyLinkFunctionsProgressCallbacks(app, comp)
     createInteractionEffectsChecklistCallbacks(app, comp)
     createFamilyLinkFunctionCallbacks(app, comp)
-    createRandomEffectsCallbacks(app, comp)
+    # Remove random effects for controlled lab study focusing on GLMs
+    # createRandomEffectsCallbacks(app, comp)
     ## createTestDivCallbacks(app)
     pass
 
@@ -75,15 +77,15 @@ def createTransitionCallback(
 def createTabsCallbacks(app):
     logger = logging.getLogger("werkzeug")
 
-    def continueCallback(fromMain, fromInteraction, fromRandom):
+    def continueCallback(fromMain, fromInteraction): # remove fromRandom parameter
         ctx = dash.callback_context
         triggered = getTriggeredFromContext(ctx)
         logger.debug("Continue callback: {}".format(triggered))
         if triggered:
             if triggered == "continue-to-interaction-effects":
                 return "tab-2"
-            elif triggered == "continue-to-random-effects":
-                return "tab-3"
+            # elif triggered == "continue-to-random-effects":
+            #     return "tab-3"
             elif triggered == "continue-to-family-link-functions":
                 return "tab-4"
         raise PreventUpdate
@@ -91,7 +93,7 @@ def createTabsCallbacks(app):
     app.callback(
         Output("tabs", "active_tab"),
         Input("continue-to-interaction-effects", "n_clicks"),
-        Input("continue-to-random-effects", "n_clicks"),
+        # Input("continue-to-random-effects", "n_clicks"),
         Input("continue-to-family-link-functions", "n_clicks"),
     )(continueCallback)
 
@@ -329,7 +331,8 @@ def createMainEffectsProgressBarCallbacks(app, comp: GUIComponents = None):
         Output("main-effects-progress", "animated"),
         Output("main-effects-progress", "striped"),
         Input("continue-to-interaction-effects", "n_clicks"),
-        Input("continue-to-random-effects", "n_clicks"),
+        # Input("continue-to-random-effects", "n_clicks"),
+        Input("continue-to-family-link-functions", "n_clicks"),
         Input("tabs", "active_tab"),
     )(animatedCallback)
 
@@ -366,7 +369,7 @@ def createButtonCallback(app):
     app.callback(
         Output("added-variables-paragraph", "children"),
         Input("continue-to-interaction-effects", "n_clicks"),
-        Input("continue-to-random-effects", "n_clicks"),
+        # Input("continue-to-random-effects", "n_clicks"),
     )(buttonCallback)
 
 
