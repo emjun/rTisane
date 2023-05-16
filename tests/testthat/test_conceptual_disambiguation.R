@@ -242,54 +242,50 @@ test_that("Conceptual model updates after disambiguation properly", {
   expect_equal(r@effect, relat@lhs)
 })
 
-# test_that("Statistical modeling options created properly", {
-#   cm <- ConceptualModel()
-#   unit <- Unit("person")
-#   measure_0 <- continuous(unit=unit, name="measure_0")
-#   measure_1 <- continuous(unit=unit, name="measure_1")
-#   measure_2 <- continuous(unit=unit, name="measure_2")
-#
-#   # Model 1: measure_1 is a common parent
-#   cm <- assume(cm, causes(measure_1, measure_0))
-#   cm <- assume(cm, causes(measure_0, measure_2))
-#   cm <- assume(cm, causes(measure_1, measure_2))
-#   cm@graph <- updateGraph(cm)
-#   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
-#   cont <- asContinuous(measure_2)
-#   familyLinkPairs <- inferFamilyLinkFunctions(cont)
-#
-#   path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=cont)
-#
-#   options <- jsonlite::read_json(path)
-#   expect_false(is.null(options$input))
-#   input <- options$input
-#   expect_type(input$generatedMainEffects, "list")
-#   expect_length(input$generatedMainEffects, 2) # IV and confounders
-#   expect_true(measure_0@name %in% input$generatedMainEffects) # IV
-#   expect_true(measure_1@name %in% input$generatedMainEffects) # confounder
-#   expect_type(input$generatedInteractionEffects, "list")
-#   expect_length(input$generatedInteractionEffects, 0)
-#   expect_type(input$generatedRandomEffects, "list")
-#   re <- getElement(input$generatedRandomEffects, " ")
-#   expect_length(re, 0)
-#   expect_false(is.null(input$generatedFamilyLinkFunctions)) # Key exists!
-#   expect_false(is.null(input$query)) # Key exists!
-#   query <- input$query
-#   expect_equal(query$DV, measure_2@name)
-#   expect_length(query$IVs, 1)
-#   expect_equal(query$IVs[[1]], measure_0@name)
-# })
+# Check Stats JSON generation
+test_that("Statistical modeling options created properly", {
+  cm <- ConceptualModel()
+  unit <- Unit("person")
+  measure_0 <- continuous(unit=unit, name="measure_0")
+  measure_1 <- continuous(unit=unit, name="measure_1")
+  measure_2 <- continuous(unit=unit, name="measure_2")
 
+  # Model 1: measure_1 is a common parent
+  cm <- assume(cm, causes(measure_1, measure_0))
+  cm <- assume(cm, causes(measure_0, measure_2))
+  cm <- assume(cm, causes(measure_1, measure_2))
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  cont <- asContinuous(measure_2)
+  familyLinkPairs <- inferFamilyLinkFunctions(cont)
+
+  path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=cont)
+
+  options <- jsonlite::read_json(path)
+  expect_false(is.null(options$input))
+  input <- options$input
+  expect_type(input$generatedMainEffects, "list")
+  expect_length(input$generatedMainEffects, 2) # IV and confounders
+  expect_true(measure_0@name %in% input$generatedMainEffects) # IV
+  expect_true(measure_1@name %in% input$generatedMainEffects) # confounder
+  expect_type(input$generatedInteractionEffects, "list")
+  expect_length(input$generatedInteractionEffects, 0)
+  expect_type(input$generatedRandomEffects, "list")
+  re <- getElement(input$generatedRandomEffects, " ")
+  expect_length(re, 0)
+  expect_false(is.null(input$generatedFamilyLinkFunctions)) # Key exists!
+  expect_false(is.null(input$query)) # Key exists!
+  query <- input$query
+  expect_equal(query$DV, measure_2@name)
+  expect_length(query$IVs, 1)
+  expect_equal(query$IVs[[1]], measure_0@name)
+})
+
+# Check code generation -- manual inspect?
+
+
+# Add default choices for updating --> add to test script
 
 ### Separate query processing file?
 # Test checkConceptualModel (without iv/dv) -- might be in other test file
-
 # Test checkConceptualModel (with iv/dv) -- might be in other test file
-
-# Test cycleChecking in interface?
-# - Add cycle check section in Shiny
-# - Add warning about cycle
-# - Add suggestions for breaking cycle? -- How does this work if cycle is from original spec. vs induced through disambiguation? (some kind of check for no cycles + update when induce cycle; if induced, add warning about changing above; if not induced, provide suggestions below? OR change to relates and then now have to generate options above?)
-# ^ Might not have to provide all the options for breaking cycle but a few possibilities...?
-
-### Check cycle breaking option generation

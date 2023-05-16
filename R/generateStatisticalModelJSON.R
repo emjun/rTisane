@@ -64,7 +64,7 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
 
     #### Add to output list
     output <- list(generatedMainEffects=generatedMainEffects, generatedInteractionEffects=generatedInteractionEffects, generatedRandomEffects=generatedRandomEffects, generatedFamilyLinkFunctions=generatedFamilyLinkFunctions, query=query, dvInfo=dvInfo)
-    output <- list(input=output) # to conform to format that statsitical model disambiguation GUI expects
+    output <- list(input=output) # to conform to format that statistical model disambiguation GUI expects
 
     #### Write output to JSON file
     jsonlite::write_json(output, path=path, auto_unbox = TRUE) # auto_unbox makes all atomic vectors in a list single elements in a list ("unboxes" them)

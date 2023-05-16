@@ -1,3 +1,17 @@
+# May 15: Features missing robust testing
+### Code generation
+
+### Cycle checking and breaking
+Test cycleChecking in interface?
+- Add cycle check section in Shiny
+- Add warning about cycle
+- Add suggestions for breaking cycle? -- How does this work if cycle is from original spec. vs induced through disambiguation? (some kind of check for no cycles + update when induce cycle; if induced, add warning about changing above; if not induced, provide suggestions below? OR change to relates and then now have to generate options above?)
+^ Might not have to provide all the options for breaking cycle but a few possibilities...?
+
+## Check cycle breaking option generation
+
+### Interacts
+
 # Dec 4 todos 
 [ ] Update variable data types (rationale: get rid of this step in disambiguation)
     - not explicit finding in the qual lab study, but I think it would prevent confusion + remove the need for a disambiguating step. 

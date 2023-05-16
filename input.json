@@ -1,1 +1,1 @@
-{"relationships":["Assume measure_0 and measure_1 are related"],"choices":{"Assume measure_0 and measure_1 are related":["Assume measure_0 causes measure_1","Assume measure_1 causes measure_0"]}}
+{"relationships":["Assume AGEP causes PINCP","Hypothesize SCHL and PINCP are related","Hypothesize SEX and PINCP are related"],"choices":{"Assume AGEP causes PINCP":[],"Hypothesize SCHL and PINCP are related":["Hypothesize SCHL causes PINCP","Hypothesize PINCP causes SCHL"],"Hypothesize SEX and PINCP are related":["Hypothesize SEX causes PINCP","Hypothesize PINCP causes SEX"]}}

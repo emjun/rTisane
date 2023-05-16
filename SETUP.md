@@ -8,6 +8,22 @@ Note: Reticulate installs and uses miniconda from a path like "~/Library/r-minic
 install.packages("reticulate")
 library(reticulate)
 reticulate::install_miniconda() 
+# Help with install: https://github.com/rstudio/reticulate/issues/637
+```
+
+```R
+library(magrittr) # for pipe %>%
+
+# For disambiguation
+install.packages("shinyjs")
+library(shinyjs)
+library(shiny)
+
+# Use local build of rTisane (under development)
+library(devtools)
+devtools::load_all()
+# For conceptual model disambiguation
+source("conceptualDisambiguation/app.R")
 ```
 
 2. Install Python libraries/dependencies
@@ -45,5 +61,5 @@ source("~/.Rprofile")
 ```R
 source("conceptualDisambiguation/app.R")
 ```
-
-
+# Setup Python virtualenv to use in project: 
+Follow instructions: https://support.posit.co/hc/en-us/articles/360023654474-Installing-and-Configuring-Python-with-RStudio

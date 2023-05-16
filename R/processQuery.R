@@ -49,6 +49,8 @@ generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
       choices <- append(choices, tmp)
     } else {
       stopifnot(relatClass == "Hypothesis")
+      r <- relat@relationship
+
       # Construct Hypothesize string
       str <- toString(r)
       str <- paste("Hypothesize", str, sep=" ")

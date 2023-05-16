@@ -176,8 +176,6 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
     relationships <- jsonData[["relationships"]]
     choices <- jsonData[["choices"]]
 
-    global_updated_relats <- list()
-
     # for (re in relationships) {
     
     #### Define App UI -----
@@ -224,7 +222,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
     server <- function(input, output) {
         # Update global store of updated relationships
         updates <- reactive({
-            updated_relats <- global_updated_relats
+            updated_relats <- list()
             
             for (re in relationships) {
 
@@ -246,7 +244,8 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             new_relats <- updates()
             
             # Save updated relationships globally
-            global_updated_relats <- new_relats
+            # global_updated_relats <- new_relats
+            # print(global_updated_relats)
 
             # Update conceptual model based on new relationships
             updatedCM <- updateConceptualModel(conceptualModel, new_relats)            
@@ -309,8 +308,11 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
 
         ## Submit
         observeEvent(input$submit, {
+            # Save updated relationships globally
+            updated_relats <- updates()
+
             # Shut down app and return updated values
-            stopApp(global_updated_relats) # returns whatever is passed as a parameter
+            stopApp(updated_relats) # returns whatever is passed as a parameter
         })
         
     }
