@@ -916,15 +916,16 @@ class GUIComponents:
                 dcc.Markdown(self.defaultExplanations["overall-main-effects"]),
                 self.layoutFancyChecklist(
                     {
-                        me: html.Span(
-                            [
-                                me + " ",
-                                getInfoBubble(
-                                    self.variables["main effects"][me]["info-id"]
-                                ),
-                            ]
-                            + getIntermediaryWarning(me)
-                        )
+                        me: html.Span(me)
+                        #     [
+                        #         me 
+                        #         + " ",
+                        #         getInfoBubble(
+                        #             self.variables["main effects"][me]["info-id"]
+                        #         ),
+                        #     ]
+                        #     + getIntermediaryWarning(me)
+                        # )
                         for me in self.getGeneratedMainEffects()
                     },
                     self.setComponentIdForMainEffect,
@@ -998,7 +999,7 @@ class GUIComponents:
             options.append(
                 dbc.Row(
                     [
-                        dbc.Col([
+                        # dbc.Row([
                             dbc.Checkbox(
                             id=componentIdSetter(name),
                             className="form-check-input",
@@ -1010,7 +1011,7 @@ class GUIComponents:
                             html_for=componentIdSetter(name),
                             className="form-check-label",
                         ),
-                        ])
+                        # ])
                     ],
                     # check=True,
                 )
