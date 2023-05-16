@@ -177,7 +177,7 @@ class TisaneGUI:
         #     ]
         # )
         # self.app = app
-        app.run_server(host="127.0.0.1", debug=True, threaded=True, port=port) # debugging set to True 
+        app.run_server(host="127.0.0.1", debug=False, threaded=True, port=port) # debugging set to True 
 
 
     def model_tabs(self):
