@@ -21,7 +21,8 @@ Imports:
     shiny,
     reticulate,
     shinyjs,
-    plotly
+    plotly,
+    igraph
 Collate: 
     'aaa-classes.R'
     'toString.R'

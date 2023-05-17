@@ -1,3 +1,75 @@
+# Written with ChatGPT
+# Transform conceptual model graph to adjacency matrix
+#' @import dagitty
+getAdjMatrix <- function(conceptualModel) {
+  gr <- conceptualModel@graph
+
+  # Extract the adjacency list manually
+  nodes <- names(gr)
+  adjList <- vector("list", length(nodes))
+
+  for (i in 1:length(nodes)) {
+    adjList[[i]] <- parents(gr, nodes[i])
+  }
+
+  # Return
+  adjList
+}
+
+# Written with ChatGPT
+# Function to find a cycle using DFS and return the cycle path
+#' @import igraph
+findCycles <- function(conceptualModel) {
+  # Get adjacency matrix
+  adjList <- getAdjMatrix(conceptualModel)
+
+  # # Helper function for DFS traversal
+  # dfs <- function(node, visited, stack, path) {
+  #   visited[node] <- TRUE
+  #   stack[node] <- TRUE
+  #   path <- c(path, node)  # Add current node to the path
+    
+  #   # Perform DFS on adjacent nodes
+  #   for (adjNode in adjList[[node]]) {
+  #     if (isFALSE(visited[adjNode])) {
+  #       if (dfs(adjNode, visited, stack, path))
+  #         return(TRUE)
+  #     } else if (isTRUE(stack[adjNode])) {
+  #       # Cycle detected, return the path
+  #       # cycleStartIndex <- match(adjNode, path)
+  #       # cycle <- path[cycleStartIndex:length(path)]
+  #       cycle[[length(cycle) + 1]] <- adjNode
+  #       return(TRUE)
+  #     }
+  #   }
+    
+  #   stack[node] <- FALSE  # Remove node from the recursion stack
+  #   return(FALSE)
+  # }
+  
+  # # Initialize visited, recursion stack, and path
+  # numNodes <- length(adjList)
+  # visited <- rep(FALSE, numNodes)
+  # stack <- rep(FALSE, numNodes)
+  # path <- c()
+  
+  # # Perform DFS traversal from each unvisited node
+  # for (node in 1:numNodes) {
+  #   if (isFALSE(visited[node])) {
+  #     if (dfs(node)) {
+  #       cycle[[length(cycle) + 1]] <- node
+  #       return(unlist(cycle))
+  #     }
+  #   }
+  # }
+
+  
+  # return(NULL)  # No cycle found
+
+  return (list("A --> B --> C")) # a cycle
+}
+
+
 #' Check Conceptual Model (graph) is valid, meaning there are no cycles and that the @param dv does not cause @param iv
 #' Use once have a query (i.e., iv and dv) of interest
 #'

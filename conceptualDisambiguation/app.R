@@ -7,6 +7,14 @@ create_disambig_id <- function(relationship) {
     idName
 }
 
+create_cycle_breaking_id <- function(cycle) {
+    idName <- trimws(cycle)
+    idName <- paste(idName, "-breaking", sep="")
+
+    # Return 
+    idName
+}
+
 hasAmbiguitiesAtStart <- function(relationships, choices) {
     hasAmbiguities <- FALSE
 
@@ -76,6 +84,19 @@ conceptualModelSpecUI <- function(id, relationships, choices) {
     tl
 }
 
+cycleUI <- function(id, conceptualModel) {
+    ns <- NS(id)
+
+    # Info about why cycles are problems
+    tagList({
+        p("TODO: We care about cycles because...")
+        # TODO: Add a widget or small paragraph explaining why we look for/care about cycles in the graph
+        # Output
+        uiOutput("cycle")
+    })
+
+}
+
 submitButtonUI <- function(id, iv, dv, relationships, choices) {
     ns <- NS(id)
 
@@ -95,84 +116,45 @@ submitButtonUI <- function(id, iv, dv, relationships, choices) {
     # actionButton(id, label=buttonLabel, class = "btn-success", disabled=TRUE)
 }
 
-relationshipServer <- function(id) {
-    # print("In Relationship Server")
-    moduleServer(
-        id,
-        function(input, output, session) {
-            # print("Output:")
-            # print(input[[id]])
-            eventReactive(input$disambig, {
-                print("in relationship server")
-                print(input$disambig)
-            })
-            # getRelat <- observe({
-            #     val <- input$disambig
-                
-            #     return (val)
-            # })
-            # # print("=====")
 
-            # output$observeEvent(event, {
-                
-            # })
-
-            # observe({
-            #     relat <- getRelat()
-            #     # print(relat)
-
-            #     output$summary <- renderText(
-            #         relat
-            #     )
-            # })
-
-            # getRelat()
-            
-            # output$summary <- renderText({
-            #     id
-            # })
-
-            # output$summary
-        }
-    )
-}
-
-# Replace relationships with only those that are ambiguous (could return in relationshipsUI and store??)
-conceptualModelSpecServer <- function(id, relationships) {
-    # print("in ConceptualModelServer")
-    relat_servers <- list()
-    for (re in relationships) {
-        rs <- relationshipServer(re)
-        relat_servers <- append(relat_servers, rs)
+cycleBreakingUI <- function(cycles) {
+    generateCycleOptions <- function(cycle) {
+        choices <- list()
+        choices <- append(choices, "A-->B")
+        choices <- append(choices, "B-->C")
+        choices <- append(choices, "C-->A")
+        
+        # Return
+        choices
     }
-    print('in conceptual model spec server')
-    relat_servers
 
-    # moduleServer(
-    #     id,
-    #     function(input, output, session) {
-    #         print(id)
-    #     }
-    # )
+    uiElts <- list()
+    for (cy in cycles) {
+        id <- paste(trimws(cy), "-breaking", sep="")
+        cyElts <- tagList(
+            p(cy),
+            checkboxGroupInput(
+                inputId = id,
+                label = "Select at least one relationships to remove:",
+                choices = generateCycleOptions(cy)
+                # selected = c("")
+            )
+        )
+
+        uiElts <- append(uiElts, cyElts)
+    }
+    
+    # Return 
+    tagList(uiElts)
 }
 
 conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) {
     updatedCM <- conceptualModel
+
     #### Process input JSON file -----
     jsonData <- jsonlite::read_json(inputFilePath) # Relative path to input.json file
-    # print(jsonData)
     
     # Get Conceptual model info
-    graph <- conceptualModel@graph
-    cmValidationRes <- list(isValid=TRUE)
-
-    uncertainRelationships <- jsonData$ambiguousRelationships
-    options1 <- jsonData$ambiguousOptions1
-    options2 <- jsonData$ambiguousOptions2
-    stopifnot(length(uncertainRelationships) == length(options1))
-    stopifnot(length(options1) == length(options2))
-
-
     relationships <- jsonData[["relationships"]]
     choices <- jsonData[["choices"]]
 
@@ -197,6 +179,13 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                 # Input:
                 conceptualModelSpecUI("spec", relationships, choices),
 
+                br(),
+                # Heading for cycles
+                h4("Checking to see if a statistical model can be inferred from your conceptual model"),
+
+                # Output: 
+                cycleUI("spec"), 
+
                 # Output: Disambiguation questions
                 # disambiguationQuestionsUI("cmQuestions")
 
@@ -212,9 +201,10 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
 
                 # Output: Graph ----
                 plotOutput("graph"),
-                # textOutput("summary"),
                 
-                submitButtonUI("submit", iv, dv, relationships, choices)
+                # submitButtonUI("submit", iv, dv, relationships, choices)
+                # uiOutput("submit")
+                uiOutput("submit")
             )
         )
     )
@@ -235,10 +225,11 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                 }
             }
 
+            print(updated_relats)
             updated_relats
         })
 
-        # Update conceptual model based on disambiguation choices
+        # Update conceptual model graph based on disambiguation choices
         observe({
             # Get updated relationships
             new_relats <- updates()
@@ -248,7 +239,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             # print(global_updated_relats)
 
             # Update conceptual model based on new relationships
-            updatedCM <- updateConceptualModel(conceptualModel, new_relats)            
+            updatedCM <- updateConceptualModel(conceptualModel, new_relats)
 
             # Update graph 
             gr <- updatedCM@graph
@@ -257,59 +248,110 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             })
         })
 
-        # Verify conceptual model if there is an IV, DV
-        # Enable submit
-        check <- reactive({
-            if (!is.null(iv)) {
-                stopifnot(!is.null(dv))
-                # if (updatedCM != conceptualModel) {
-                cmCheckResults <- checkConceptualModel(updatedCM, iv, dv)
-                isValid <- cmCheckResults$isValid
-                reason <- cmCheckResults$reason
+        # Update cycle breaking questions based on disambiguation choices 
+        observe({
+            # Get updated relationships
+            new_relats <- updates()
 
-                # We can't infer a statistical model from the conceptual model yet
-                if(!isValid) {
-                    # Do things if the graph is not valid
-                    # if (reason == "cycle") {
-                    #     # Do something to input/output to further disambiguate/change
-                    # }
-                    shinyjs::disable(input$submit)
+            # Update conceptual model based on new relationships
+            updatedCM <- updateConceptualModel(conceptualModel, new_relats)
+
+            # Update cycleUI
+            gr <- updatedCM@graph
+            cycles <- findCycles(updatedCM)
+
+            # There are cycles
+            if (length(cycles) > 0) {
+                warningText <- "There is 1 cycle:"
+                if (length(cycles) > 1) {
+                    warningText <- "There are multiple cycles:"
                 }
-
-                # Check there is no cycle
-
-                # }
-
-                # Return 
-                return (isValid)
+                # Create cycle breaking UI 
+                output$cycle <- renderUI({
+                    tagList(
+                        p(warningText),
+                        cycleBreakingUI(cycles)
+                    )
+                })
+                output$submit <- renderUI({
+                    actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
+                })
             } else {
-                stopifnot(is.null(iv))
-                stopifnot(is.null(dv))
-
-                # Check there is no cycle
-                return (TRUE)
-            } 
-
-            # # Return TRUE
-            # return (isValid = FALSE, reason = "")
+                output$cycle <- renderUI({
+                    tagList(
+                        p("✅ There are no cycles!")    
+                    )
+                })
+                output$submit <- renderUI({
+                    actionButton("submit", label="Continue", class = "btn-success")
+                })
+            }
         })
 
-        # # Check conceptual model, update submit button 
-        # observe({
-        #     canContinue <- check()
+        # Verify conceptual model does not have a cycle, which impedes ability to infer statistical model
+        checkForCycles <- reactive({
+            removals <- list()
             
-        #     if (isTRUE(canContinue)) {
-        #         shinyjs::enable(input$submit)
-        #     }
-        # })
-        
+            # Go through cycles 
+            cycles <- findCycles(updatedCM)
 
-        # TODO: Verify conceptual model does not have a cycle, which impedes ability to infer statistical model
+            if (length(cycles) > 0) {
+                for (cy in cycles) {
+                    idName <- create_cycle_breaking_id(cy)
+
+                    removal <- input[[idName]]
+                    if (!is.null(removal) && length(removal) > 0) {
+                        # Add to update list
+                        for (re in removal) {
+                            re_val <- paste("Remove", re, sep=" ")
+                            removals <- append(removals, re_val)
+                        }
+                    } else {
+                        # Issue warning
+                        showNotification(paste("There is a cycle still"), type="error")
+                    }
+                }
+                # output$submit <- renderUI({
+                #     actionButton("submit", label="Continue", class = "btn-success")
+                # })
+            }
+
+            # Return 
+            removals
+        })
+
+        # Show submit button if all cycles broken
+        observe({
+            cycles <- findCycles(updatedCM)
+        
+            allCyclesBroken <- TRUE
+            if (length(cycles) > 0) {
+                for (cy in cycles) {
+                    idName <- create_cycle_breaking_id(cy)
+
+                    removal <- input[[idName]]
+                    if (is.null(removal)) {
+                        allCyclesBroken <- FALSE
+                    }
+                }
+            }
+
+            if (isTRUE(allCyclesBroken)) {
+                output$submit <- renderUI({
+                    actionButton("submit", label="Continue", class = "btn-success")
+                })
+            }
+        })
 
         ## Submit
         observeEvent(input$submit, {
-            # Save updated relationships globally
+            # Get updated relationships
             updated_relats <- updates()
+            removals <- checkForCycles()
+
+            updated_relats <- append(updated_relats, unlist(removals))
+
+            print(updated_relats)
 
             # Shut down app and return updated values
             stopApp(updated_relats) # returns whatever is passed as a parameter
