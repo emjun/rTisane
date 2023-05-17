@@ -7,7 +7,33 @@ create_disambig_id <- function(relationship) {
     idName
 }
 
-create_cycle_string <- function(cycle) {
+create_cycle_description <- function(cycle) {
+    stopifnot(class(cycle) == "list")
+    cy_str <- unlist(cycle)
+    
+    desc <- ""
+
+
+    for (i in 1:length(cy_str)) {
+        if (i < length(cy_str)) {
+            phrase <- paste(cy_str[i], cy_str[i+1], sep=" causes ")
+        } else {
+            phrase <- paste(cy_str[i], cy_str[1], sep= " causes ")
+        }
+        
+        if (desc != "") {
+            desc <- paste(desc, phrase, sep=", ")
+        } else {
+            desc <- phrase
+        }
+    }
+
+    # Return 
+    desc
+}
+
+create_cycle_breaking_id <- function(cycle) {
+    
     stopifnot(class(cycle) == "list")
     cy_str <- unlist(cycle)
     idName <- ""
@@ -21,12 +47,6 @@ create_cycle_string <- function(cycle) {
     }
 
     idName <- trimws(idName)
-    # Return 
-    idName
-}
-create_cycle_breaking_id <- function(cycle) {
-    
-    idName <- create_cycle_string(cycle)
     idName <- paste(idName, "-breaking", sep="")
 
     # Return 
@@ -139,22 +159,29 @@ cycleBreakingUI <- function(cycles) {
     generateCycleOptions <- function(cycle) {
         choices <- list()
         
-        c1 <- paste(cycle[1], cycle[2], sep=" causes ")
-        choices <- append(choices, c1)
-        # choices <- append(choices, "B-->C")
-        # choices <- append(choices, "C-->A")
-        
+        for (i in 1:length(cycle)) {
+            if (i < length(cycle)) {
+                ch <- paste(cycle[i], cycle[i+1], sep=" causes ")
+                choices <- append(choices, ch)
+            } else {
+                # browser()
+                stopifnot(i == length(cycle))
+                ch <- paste(cycle[i], cycle[1], sep=" causes ")
+                choices <- append(choices, ch)
+            }
+        }
+
         # Return
         choices
     }
 
     uiElts <- list()
     for (cy in cycles) {
-        cy_str <- create_cycle_string(cy)
+        cy_desc <- create_cycle_description(cy)
         id <- create_cycle_breaking_id(cy)
 
         cyElts <- tagList(
-            p(cy_str),
+            p(cy_desc),
             checkboxGroupInput(
                 inputId = id,
                 label = "Select at least one relationships to remove:",
