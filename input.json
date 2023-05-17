@@ -1,1 +1,1 @@
-{"relationships":["Assume AGEP causes PINCP","Hypothesize PINCP causes AGEP"],"choices":{"Assume AGEP causes PINCP":[],"Hypothesize PINCP causes AGEP":[]}}
+{"relationships":["Assume AGEP causes PINCP","Hypothesize SCHL causes AGEP","Hypothesize PINCP causes SCHL"],"choices":{"Assume AGEP causes PINCP":[],"Hypothesize SCHL causes AGEP":[],"Hypothesize PINCP causes SCHL":[]}}

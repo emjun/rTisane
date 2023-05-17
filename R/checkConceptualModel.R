@@ -53,7 +53,7 @@ findCycles <- function(conceptualModel) {
       if (isFALSE(visited[adjNodeIdx])) {
         tmp <- dfs(adjNodeIdx, adjNode, visited)
         # path[[node]] <- append(unlist(tmp), nodeName)
-        path <- append(tmp, nodeName)
+        path <- append(nodeName, tmp)
 
         # if (is.null(path[[node]])) {
         #   path[[node]] <- append(unlist(path[[node]]), nodeName)

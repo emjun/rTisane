@@ -235,28 +235,29 @@ updateConceptualModel <- function(conceptualModel, values) {
           if (identical(relat@cause, cause) && identical(relat@effect, effect)) {
             index = i
             print("Found relat: cause --> effect")
+          } else if (identical(relat@effect, cause) && identical(relat@cause, effect)) {
+            index = i
+            print("Found relat: effect --> cause")
           }
-          # } else 
-          # if (identical(relat@effect, cause) && identical(relat@cause, effect)) {
-          #   index = i
-          #   print("Found relat: effect --> cause")
-          #   conceptualModel@relationships[[index]] = NULL
-          # }
           # print("Index: ")
           # print(index)
         }
       }
       stopifnot(!is.null(index))
+      # if(is.null(index))  {
+      #   browser()
+      #   ## START HERE: Spec and graph dont seem to align??
+      # }
       conceptualModel@relationships[[index]] = NULL
       # Add the relationship to the Conceptual Model
-      if (tag == "Assumption") {
-        print("Assumption")
-        conceptualModel <- assume(conceptualModel, causes(effect, cause))
-      } else {
-        stopifnot(tag == "Hypothesis")
-        print("Hypothesis")
-        conceptualModel <- hypothesize(conceptualModel, causes(effect, cause))
-      }
+      # if (tag == "Assumption") {
+      #   print("Assumption")
+      #   conceptualModel <- assume(conceptualModel, causes(effect, cause))
+      # } else {
+      #   stopifnot(tag == "Hypothesis")
+      #   print("Hypothesis")
+      #   conceptualModel <- hypothesize(conceptualModel, causes(effect, cause))
+      # }
     }
   }
   # Update the Conceptual Model to reflect new relationships

@@ -364,9 +364,14 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
 
             # Update graph 
             gr <- updatedCM@graph
-            output$graph <- renderPlot({
-                plot(graphLayout(gr))
-            })
+            if (length(updatedCM@relationships) > 0) {
+                print("Rendering graph")
+                output$graph <- renderPlot({
+                    plot(graphLayout(gr))
+                })   
+            } else {
+                output$graph <- renderText("No relationships in your conceptual model!")
+            }
         })
 
         # Show submit button if all cycles broken
@@ -376,21 +381,24 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             allCyclesBroken <- TRUE
             # Are there any cycles?
             if (length(cycles) > 0) {
-                
                 for (cy in cycles) {
                     # cy is a list
-                #     idName <- create_cycle_breaking_id(cy)
+                    idName <- create_cycle_breaking_id(cy)
 
-                #     removal <- input[[idName]]
-                #     if (is.null(removal)) {
-                #         allCyclesBroken <- FALSE
-                #     }
+                    removal <- input[[idName]]
+                    if (is.null(removal)) {
+                        allCyclesBroken <- FALSE
+                    }
                 }
             }
 
             if (isTRUE(allCyclesBroken)) {
                 output$submit <- renderUI({
                     actionButton("submit", label="Continue", class = "btn-success")
+                })
+            } else {
+                output$submit <- renderUI({
+                    actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
                 })
             }
         })
