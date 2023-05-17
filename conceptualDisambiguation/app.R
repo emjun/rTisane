@@ -247,40 +247,30 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
 
         # App title ----
         titlePanel("🌺 rTisane"),
+        fluidRow(
+            column(4,
+                div (style="background-color:#e6e6e6;  border-radius: 3px !important; padding: 10px",
+                    # "Heading"
+                    h4("You specified the following relationships:"),
 
-        # Sidebar layout with input and output definitions ----
-        sidebarLayout(
-
-            # Sidebar panel for inputs ----
-            sidebarPanel(
-
-                # "Heading"
-                h4("You specified the following relationships:"),
-
-                # Input:
-                conceptualModelSpecUI("spec", relationships, choices),
-
+                    # Input:
+                    conceptualModelSpecUI("spec", relationships, choices),
+                ),
                 br(),
-
-                cycleUI(iv, dv),
-                
-
+                div (style="background-color:#e6e6e6;  border-radius: 3px !important; padding: 10px",
+                    cycleUI(iv, dv)
+                )
             ),
-
-            # Main panel for displaying outputs ----
-            mainPanel(
-
+            column(8, 
                 # "Heading"
                 h4("This is what your conceptual model looks like:"),
 
                 # Output: Graph ----
                 plotOutput("graph"),
                 
-                # submitButtonUI("submit", iv, dv, relationships, choices)
-                # uiOutput("submit")
                 uiOutput("submit")
             )
-        )
+        ),
     )
 
     server <- function(input, output) {
