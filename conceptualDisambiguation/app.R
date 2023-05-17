@@ -1,4 +1,8 @@
 ## Helper functions
+# Is there a query for a statistical model or are we just refining the conceptual model? 
+isQuery <- function(iv, dv) {
+    return (!is.null(iv) && !is.null(dv))
+}
 create_disambig_id <- function(relationship) {
     idName <- trimws(relationship)
     idName <- paste(idName, "-disambig", sep="")
@@ -71,6 +75,8 @@ hasAmbiguitiesAtStart <- function(relationships, choices) {
 }
 
 
+
+
 relationshipUI <- function(id, choices) {
     ns <- NS(id)
     ## TODO: Somehow cluster the text + options to be more visually related
@@ -122,7 +128,7 @@ conceptualModelSpecUI <- function(id, relationships, choices) {
     tl
 }
 
-cycleUI <- function(id, conceptualModel) {
+cycleExplanationUI <- function(id, conceptualModel) {
     ns <- NS(id)
 
     # Info about why cycles are problems
@@ -154,6 +160,23 @@ submitButtonUI <- function(id, iv, dv, relationships, choices) {
     # actionButton(id, label=buttonLabel, class = "btn-success", disabled=TRUE)
 }
 
+cycleUI <- function(iv, dv) {
+    tl <- NULL
+    
+    if (isQuery(iv, dv)) {
+        tl <- tagList(
+            # Heading for cycles
+            h4("To derive a statistical model from your conceptual model..."),
+            # Output: 
+            cycleExplanationUI("spec")
+        )
+    } else {
+        tl <- tagList()
+    }
+
+    # Return 
+    tl
+}
 
 cycleBreakingUI <- function(cycles) {
     generateCycleOptions <- function(cycle) {
@@ -184,7 +207,7 @@ cycleBreakingUI <- function(cycles) {
             p(cy_desc),
             checkboxGroupInput(
                 inputId = id,
-                label = "Select at least one relationships to remove:",
+                label = "Select at least one relationship to remove:",
                 choices = generateCycleOptions(cy)
                 # selected = c("")
             )
@@ -229,16 +252,9 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                 conceptualModelSpecUI("spec", relationships, choices),
 
                 br(),
-                # Heading for cycles
-                h4("Checking to see if a statistical model can be inferred from your conceptual model"),
 
-                # Output: 
-                cycleUI("spec"), 
-
-                # Output: Disambiguation questions
-                # disambiguationQuestionsUI("cmQuestions")
-
-                # Output: Cycle breaking questions
+                cycleUI(iv, dv),
+                
 
             ),
 
@@ -259,7 +275,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
     )
 
     server <- function(input, output) {
-        # Update global store of updated relationships
+        # Gather and return updated relationships
         updates <- reactive({
             updated_relats <- list()
             
@@ -273,8 +289,6 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                     updated_relats <- append(updated_relats,r )
                 }
             }
-
-            print(updated_relats)
             updated_relats
         })
 
@@ -288,33 +302,36 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
 
             # Update cycleUI
             gr <- updatedCM@graph
-            cycles <- findCycles(updatedCM)
+            
+            if (isQuery(iv, dv)) {
+                cycles <- findCycles(updatedCM)
 
-            # There are cycles
-            if (length(cycles) > 0) {
-                warningText <- "There is 1 cycle:"
-                if (length(cycles) > 1) {
-                    warningText <- "There are multiple cycles:"
+                # There are cycles
+                if (length(cycles) > 0) {
+                    warningText <- "There is 1 cycle:"
+                    if (length(cycles) > 1) {
+                        warningText <- "There are multiple cycles:"
+                    }
+                    # Create cycle breaking UI 
+                    output$cycle <- renderUI({
+                        tagList(
+                            p(warningText),
+                            cycleBreakingUI(cycles)
+                        )
+                    })
+                    output$submit <- renderUI({
+                        actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
+                    })
+                } else {
+                    output$cycle <- renderUI({
+                        tagList(
+                            p("✅ There are no cycles!")    
+                        )
+                    })
+                    output$submit <- renderUI({
+                        actionButton("submit", label="Continue", class = "btn-success")
+                    })
                 }
-                # Create cycle breaking UI 
-                output$cycle <- renderUI({
-                    tagList(
-                        p(warningText),
-                        cycleBreakingUI(cycles)
-                    )
-                })
-                output$submit <- renderUI({
-                    actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
-                })
-            } else {
-                output$cycle <- renderUI({
-                    tagList(
-                        p("✅ There are no cycles!")    
-                    )
-                })
-                output$submit <- renderUI({
-                    actionButton("submit", label="Continue", class = "btn-success")
-                })
             }
         })
 
@@ -355,13 +372,17 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
         observe({
             # Get updated relationships
             new_relats <- updates()
-            removals <- checkForCycles()
-
             # Update conceptual model based on new relationships
-            # Update relationships before removing some
             updatedCM <- updateConceptualModel(conceptualModel, new_relats)
-            updatedCM <- updateConceptualModel(updatedCM, removals)
 
+            # Are we deriving statistical models? So, therefore, do we need to break cycles that impede our ability to derive statistical models?
+            if (isQuery(iv, dv)) {
+                # Check which relationships to remove
+                removals <- checkForCycles()
+                # Remove them to break cycles
+                updatedCM <- updateConceptualModel(updatedCM, removals)
+            }
+    
             # Update graph 
             gr <- updatedCM@graph
             if (length(updatedCM@relationships) > 0) {
@@ -374,45 +395,80 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             }
         })
 
-        # Show submit button if all cycles broken
+        # Show submit button if all relationships disambiguated and cycles broken
         observe({
-            cycles <- findCycles(updatedCM) # list of lists 
-        
-            allCyclesBroken <- TRUE
-            # Are there any cycles?
-            if (length(cycles) > 0) {
-                for (cy in cycles) {
-                    # cy is a list
-                    idName <- create_cycle_breaking_id(cy)
+            enableButton <- FALSE
 
-                    removal <- input[[idName]]
-                    if (is.null(removal)) {
-                        allCyclesBroken <- FALSE
-                    }
+            allAmbigAnswered <- TRUE
+            for (re in relationships) {
+                # Create object id name
+                idName <- create_disambig_id(re)
+    
+                r <- input[[idName]]
+                if (is.null(r)) {
+                    enableButton <- FALSE
                 }
             }
 
-            if (isTRUE(allCyclesBroken)) {
+            if(isTRUE(allAmbigAnswered)) {
+                enableButton <- TRUE
+            }
+
+            if (isQuery(iv, dv)) {
+                cycles <- findCycles(updatedCM) # list of lists 
+        
+                allCyclesBroken <- TRUE
+                # Are there any cycles?
+                if (length(cycles) > 0) {
+                    for (cy in cycles) {
+                        # cy is a list
+                        idName <- create_cycle_breaking_id(cy)
+
+                        removal <- input[[idName]]
+                        if (is.null(removal)) {
+                            allCyclesBroken <- FALSE
+                        }
+                    }
+                }
+
+                if (isTRUE(allCyclesBroken)) {
+                    enableButton <- TRUE 
+                } else {
+                    # output$submit <- renderUI({
+                    #     actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
+                    # })
+                    enableButton <- FALSE
+                }
+            } 
+            # else {
+                # output$submit <- renderUI({
+                #         actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
+                #     })
+            # }
+
+            if (isTRUE(enableButton)) {
                 output$submit <- renderUI({
-                    actionButton("submit", label="Continue", class = "btn-success")
-                })
+                        actionButton("submit", label="Continue", class = "btn-success")
+                    })
             } else {
                 output$submit <- renderUI({
-                    actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
-                })
+                        actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
+                    })
             }
+
         })
 
         ## Submit
         observeEvent(input$submit, {
             # Get updated relationships
             updated_relats <- updates()
-            removals <- checkForCycles()
 
-            updated_relats <- append(updated_relats, unlist(removals))
-
-            print(updated_relats)
-
+            if (isQuery(iv, dv)) {
+                removals <- checkForCycles()
+                updated_relats <- append(updated_relats, unlist(removals))
+                print(updated_relats)
+            }
+            
             # Shut down app and return updated values
             stopApp(updated_relats) # returns whatever is passed as a parameter
         })

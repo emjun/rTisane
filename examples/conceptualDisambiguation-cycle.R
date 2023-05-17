@@ -13,5 +13,5 @@ cm <- ConceptualModel() %>%
   hypothesize(causes(edu, age)) %>%
   hypothesize(causes(income, edu))
   
-updatedCM <- checkAndRefineConceptualModel(conceptualModel=cm)
+updatedCM <- checkAndRefineConceptualModel(conceptualModel=cm, iv=age, dv=income)
 print(updatedCM@graph)
