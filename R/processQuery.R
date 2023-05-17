@@ -163,9 +163,7 @@ updateConceptualModel <- function(conceptualModel, values) {
       # }
       # Add the relationship to the Conceptual Model
       conceptualModel <- assume(conceptualModel, causes(cause, effect))
-    } else {
-      stringr::str_detect(nr, "Hypothesize ")
-
+    } else if (stringr::str_detect(nr, "Hypothesize ")) {
       # Parse the relationship
       tmp <- stringr::str_split(nr, "Hypothesize ")[[1]]
       vars <- tmp[2]
@@ -205,11 +203,65 @@ updateConceptualModel <- function(conceptualModel, values) {
       conceptualModel@relationships[[index]] = NULL
       # Add the relationship to the Conceptual Model
       conceptualModel <- hypothesize(conceptualModel, causes(cause, effect))
+    } else {
+      stopifnot(stringr::str_detect(nr, "Remove "))
+      stopifnot(stringr::str_detect(nr, " causes "))
+      tmp <- stringr::str_split(nr, "Remove ")[[1]]
+      vars <- tmp[2]
+      vars <- stringr::str_split(vars, " causes ")[[1]]
+      
+      stopifnot(length(vars) == 2)
+
+      # Find the variables involved in the new relationship
+      cause <- getVariable(conceptualModel, vars[1])
+      effect <- getVariable(conceptualModel, vars[2])
+
+      # Make sure the variables already exist in the Conceptual Model
+      variables <- conceptualModel@variables
+      stopifnot(c(cause) %in% variables)
+      stopifnot(c(effect) %in% variables)
+
+      # Remove the older relationship
+      tag <- NULL
+      index = NULL
+      # print("Look for relationship")
+      for (i in 1:length(conceptualModel@relationships)) {
+        r <- conceptualModel@relationships[[i]]
+        tag <- class(r)
+        # Does this relationship match the one we are trying to replace?
+        if (class(r@relationship) == "Causes") {
+          relat <- r@relationship
+          # print(relat)
+          if (identical(relat@cause, cause) && identical(relat@effect, effect)) {
+            index = i
+            print("Found relat: cause --> effect")
+          }
+          # } else 
+          # if (identical(relat@effect, cause) && identical(relat@cause, effect)) {
+          #   index = i
+          #   print("Found relat: effect --> cause")
+          #   conceptualModel@relationships[[index]] = NULL
+          # }
+          # print("Index: ")
+          # print(index)
+        }
+      }
+      stopifnot(!is.null(index))
+      conceptualModel@relationships[[index]] = NULL
+      # Add the relationship to the Conceptual Model
+      if (tag == "Assumption") {
+        print("Assumption")
+        conceptualModel <- assume(conceptualModel, causes(effect, cause))
+      } else {
+        stopifnot(tag == "Hypothesis")
+        print("Hypothesis")
+        conceptualModel <- hypothesize(conceptualModel, causes(effect, cause))
+      }
     }
   }
-
   # Update the Conceptual Model to reflect new relationships
   conceptualModel@graph <- updateGraph(conceptualModel)
+  # print(conceptualModel@graph)
 
   # Return updated Conceptual Model
   stopifnot(!is.null(conceptualModel))

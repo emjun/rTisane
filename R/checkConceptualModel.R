@@ -1,19 +1,25 @@
 # Written with ChatGPT
 # Transform conceptual model graph to adjacency matrix
 #' @import dagitty
-getAdjMatrix <- function(conceptualModel) {
+getAdjList <- function(conceptualModel) {
   gr <- conceptualModel@graph
-
-  # Extract the adjacency list manually
-  nodes <- names(gr)
-  adjList <- vector("list", length(nodes))
-
-  for (i in 1:length(nodes)) {
-    adjList[[i]] <- parents(gr, nodes[i])
+  adjList <- list() 
+  
+  for (node in names(gr)) {
+    childNodes <- children(gr, node)
+    adjList[node] <- childNodes
   }
-
-  # Return
+  # Return 
   adjList
+}
+
+# Written with ChatGPT
+createStringIndexMap <- function(strings) {
+  indexMap <- list()
+  for (i in seq_along(strings)) {
+    indexMap[[strings[i]]] <- i
+  }
+  indexMap
 }
 
 # Written with ChatGPT
@@ -21,52 +27,81 @@ getAdjMatrix <- function(conceptualModel) {
 #' @import igraph
 findCycles <- function(conceptualModel) {
   # Get adjacency matrix
-  adjList <- getAdjMatrix(conceptualModel)
+  adjList <- getAdjList(conceptualModel)
 
-  # # Helper function for DFS traversal
-  # dfs <- function(node, visited, stack, path) {
-  #   visited[node] <- TRUE
-  #   stack[node] <- TRUE
-  #   path <- c(path, node)  # Add current node to the path
-    
-  #   # Perform DFS on adjacent nodes
-  #   for (adjNode in adjList[[node]]) {
-  #     if (isFALSE(visited[adjNode])) {
-  #       if (dfs(adjNode, visited, stack, path))
-  #         return(TRUE)
-  #     } else if (isTRUE(stack[adjNode])) {
-  #       # Cycle detected, return the path
-  #       # cycleStartIndex <- match(adjNode, path)
-  #       # cycle <- path[cycleStartIndex:length(path)]
-  #       cycle[[length(cycle) + 1]] <- adjNode
-  #       return(TRUE)
-  #     }
-  #   }
-    
-  #   stack[node] <- FALSE  # Remove node from the recursion stack
-  #   return(FALSE)
-  # }
-  
-  # # Initialize visited, recursion stack, and path
-  # numNodes <- length(adjList)
-  # visited <- rep(FALSE, numNodes)
-  # stack <- rep(FALSE, numNodes)
-  # path <- c()
-  
-  # # Perform DFS traversal from each unvisited node
-  # for (node in 1:numNodes) {
-  #   if (isFALSE(visited[node])) {
-  #     if (dfs(node)) {
-  #       cycle[[length(cycle) + 1]] <- node
-  #       return(unlist(cycle))
-  #     }
-  #   }
-  # }
+  gr <- conceptualModel@graph
+
+  nodeNames <- names(gr)
+  nodeNames_to_idx <- createStringIndexMap(nodeNames)
+
+  numNodes <- length(adjList)
+  visited <- rep(FALSE, numNodes)
+  # path <- vector("list", numNodes)
+  # path <- NULL
+  cycles <- vector("list")
+  numCycles <- 0
 
   
-  # return(NULL)  # No cycle found
+  dfs <- function(node, nodeName, visited) {
+    stopifnot(nodeNames[node] == nodeName)
 
-  return (list("A --> B --> C")) # a cycle
+    visited[node] <- TRUE
+    # path[[node]] <- list()
+
+    for (adjNode in adjList[[nodeName]]) {
+      adjNodeIdx <- nodeNames_to_idx[[adjNode]]
+      if (isFALSE(visited[adjNodeIdx])) {
+        tmp <- dfs(adjNodeIdx, adjNode, visited)
+        # path[[node]] <- append(unlist(tmp), nodeName)
+        path <- append(tmp, nodeName)
+
+        # if (is.null(path[[node]])) {
+        #   path[[node]] <- append(unlist(path[[node]]), nodeName)
+        # }
+      } else {
+        # # Empty path? 
+        # if (is.null(path[[node]])) {
+        #   path[[node]] <- list()
+        # } 
+        # path[[node]] <- append(unlist(path[[node]]), adjNode)
+        # path[[node]] <- list(adjNode, nodeName)
+        path <- list(nodeName)
+        # else {
+        #   tmp <- append(unlist(path[[node]]), adjNode)
+        #   path[[node]] <- append(unlist(tmp), nodeName)
+        #   print(node)
+        #   print(path[[node]])
+        #   print("====")
+        # }
+        # print(path)
+      }
+    }
+
+    # Return 
+    # print("Path:")
+    # print(path)
+    # print(class(path))
+    # print("===")
+    stopifnot(class(path) == "list")
+    path
+  }
+
+  for (node in 1:numNodes) {
+    nodeName <- nodeNames[node]
+    if (isFALSE(visited[node])) {
+      cy <- dfs(node, nodeName, visited)
+      stopifnot(class(cy) == "list")
+      idx <- numCycles + 1
+      cycles[[idx]] <- cy
+      idx <- idx + 1
+    }
+  }
+  # print("Cycles:")
+  # print(cycles)
+  # print("===")
+  
+  # Return 
+  cycles
 }
 
 

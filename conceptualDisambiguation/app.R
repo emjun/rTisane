@@ -7,8 +7,26 @@ create_disambig_id <- function(relationship) {
     idName
 }
 
+create_cycle_string <- function(cycle) {
+    stopifnot(class(cycle) == "list")
+    cy_str <- unlist(cycle)
+    idName <- ""
+
+    for (i in 1:length(cy_str)) {
+        if (idName == "") {
+            idName <- cy_str[i]
+        } else {
+            idName <- paste(idName, cy_str[i], sep=" causes ")
+        }
+    }
+
+    idName <- trimws(idName)
+    # Return 
+    idName
+}
 create_cycle_breaking_id <- function(cycle) {
-    idName <- trimws(cycle)
+    
+    idName <- create_cycle_string(cycle)
     idName <- paste(idName, "-breaking", sep="")
 
     # Return 
@@ -120,9 +138,11 @@ submitButtonUI <- function(id, iv, dv, relationships, choices) {
 cycleBreakingUI <- function(cycles) {
     generateCycleOptions <- function(cycle) {
         choices <- list()
-        choices <- append(choices, "A-->B")
-        choices <- append(choices, "B-->C")
-        choices <- append(choices, "C-->A")
+        
+        c1 <- paste(cycle[1], cycle[2], sep=" causes ")
+        choices <- append(choices, c1)
+        # choices <- append(choices, "B-->C")
+        # choices <- append(choices, "C-->A")
         
         # Return
         choices
@@ -130,9 +150,11 @@ cycleBreakingUI <- function(cycles) {
 
     uiElts <- list()
     for (cy in cycles) {
-        id <- paste(trimws(cy), "-breaking", sep="")
+        cy_str <- create_cycle_string(cy)
+        id <- create_cycle_breaking_id(cy)
+
         cyElts <- tagList(
-            p(cy),
+            p(cy_str),
             checkboxGroupInput(
                 inputId = id,
                 label = "Select at least one relationships to remove:",
@@ -229,25 +251,6 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             updated_relats
         })
 
-        # Update conceptual model graph based on disambiguation choices
-        observe({
-            # Get updated relationships
-            new_relats <- updates()
-            
-            # Save updated relationships globally
-            # global_updated_relats <- new_relats
-            # print(global_updated_relats)
-
-            # Update conceptual model based on new relationships
-            updatedCM <- updateConceptualModel(conceptualModel, new_relats)
-
-            # Update graph 
-            gr <- updatedCM@graph
-            output$graph <- renderPlot({
-                plot(graphLayout(gr))
-            })
-        })
-
         # Update cycle breaking questions based on disambiguation choices 
         observe({
             # Get updated relationships
@@ -294,6 +297,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             
             # Go through cycles 
             cycles <- findCycles(updatedCM)
+            
 
             if (length(cycles) > 0) {
                 for (cy in cycles) {
@@ -306,33 +310,54 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                             re_val <- paste("Remove", re, sep=" ")
                             removals <- append(removals, re_val)
                         }
-                    } else {
-                        # Issue warning
-                        showNotification(paste("There is a cycle still"), type="error")
-                    }
+                    } 
+                    # else {
+                    #     # Issue warning
+                    #     showNotification(paste("There is a cycle still"), type="error")
+                    # }
                 }
-                # output$submit <- renderUI({
-                #     actionButton("submit", label="Continue", class = "btn-success")
-                # })
+                output$submit <- renderUI({
+                    actionButton("submit", label="Continue", class = "btn-success")
+                })
             }
-
             # Return 
             removals
         })
 
+        # Update conceptual model graph based on disambiguation choices and cycle breaking
+        observe({
+            # Get updated relationships
+            new_relats <- updates()
+            removals <- checkForCycles()
+
+            # Update conceptual model based on new relationships
+            # Update relationships before removing some
+            updatedCM <- updateConceptualModel(conceptualModel, new_relats)
+            updatedCM <- updateConceptualModel(updatedCM, removals)
+
+            # Update graph 
+            gr <- updatedCM@graph
+            output$graph <- renderPlot({
+                plot(graphLayout(gr))
+            })
+        })
+
         # Show submit button if all cycles broken
         observe({
-            cycles <- findCycles(updatedCM)
+            cycles <- findCycles(updatedCM) # list of lists 
         
             allCyclesBroken <- TRUE
+            # Are there any cycles?
             if (length(cycles) > 0) {
+                
                 for (cy in cycles) {
-                    idName <- create_cycle_breaking_id(cy)
+                    # cy is a list
+                #     idName <- create_cycle_breaking_id(cy)
 
-                    removal <- input[[idName]]
-                    if (is.null(removal)) {
-                        allCyclesBroken <- FALSE
-                    }
+                #     removal <- input[[idName]]
+                #     if (is.null(removal)) {
+                #         allCyclesBroken <- FALSE
+                #     }
                 }
             }
 

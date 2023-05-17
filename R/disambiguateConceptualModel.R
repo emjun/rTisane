@@ -4,6 +4,7 @@ disambiguateConceptualModel <- function(conceptualModel, iv=NULL, dv=NULL, input
   # Disambiguate conceptual model
   interface <- conceptualDisambiguationApp(conceptualModel, iv, dv, inputFilePath)
   updated_relats <- shiny::runApp(interface)
+  # print(updated_relats)
 
   # Update conceptual model with disambiguation choices
   updatedCM <- updateConceptualModel(conceptualModel, updated_relats)
