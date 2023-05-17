@@ -37,3 +37,6 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+tisaner.Rcheck/
+tisaner*.tar.gz
+tisaner*.tgz
