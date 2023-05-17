@@ -132,12 +132,16 @@ cycleExplanationUI <- function(id, conceptualModel) {
     ns <- NS(id)
 
     # Info about why cycles are problems
-    tagList({
-        p("TODO: We care about cycles because...")
-        # TODO: Add a widget or small paragraph explaining why we look for/care about cycles in the graph
-        # Output
+    tl <- tagList({
+        h5("🚨 There are circular relationships!")
+        p("Circular relationships impede rTisane's ability to derive a statistical model because the direction of influence among variables is unclear.")
+        p("Did you forget to specify some relationships? If so, consider re-visiting your input program.")
+        p("Alternatively, you can consider removing one or more relationships below.")
         uiOutput("cycle")
     })
+
+    # Return 
+    tl
 
 }
 
@@ -166,9 +170,14 @@ cycleUI <- function(iv, dv) {
     if (isQuery(iv, dv)) {
         tl <- tagList(
             # Heading for cycles
-            h4("To derive a statistical model from your conceptual model..."),
+            h4("To derive a statistical model..."),
             # Output: 
-            cycleExplanationUI("spec")
+            # cycleExplanationUI("spec")
+            h5("🚨 There are circular relationships!"),
+            p("Circular relationships impede rTisane's ability to derive a statistical model because the direction of influence among variables is unclear."),
+            p("Did you forget to specify some relationships? If so, consider re-visiting your input program."),
+            p("Alternatively, you can consider removing one or more circular relationships below."),
+            uiOutput("cycle")
         )
     } else {
         tl <- tagList()
@@ -308,14 +317,14 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
 
                 # There are cycles
                 if (length(cycles) > 0) {
-                    warningText <- "There is 1 cycle:"
-                    if (length(cycles) > 1) {
-                        warningText <- "There are multiple cycles:"
-                    }
+                    # warningText <- "There is 1 cycle:"
+                    # if (length(cycles) > 1) {
+                    #     warningText <- "There are multiple cycles:"
+                    # }
                     # Create cycle breaking UI 
                     output$cycle <- renderUI({
                         tagList(
-                            p(warningText),
+                            p("Circular relationship:"),
                             cycleBreakingUI(cycles)
                         )
                     })
@@ -471,8 +480,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             
             # Shut down app and return updated values
             stopApp(updated_relats) # returns whatever is passed as a parameter
-        })
-        
+        })        
     }
 
     # Return handle to Shiny App for conceptual model disambiguation
