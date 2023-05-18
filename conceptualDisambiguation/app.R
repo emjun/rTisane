@@ -1,5 +1,5 @@
 ## Helper functions
-# Is there a query for a statistical model or are we just refining the conceptual model? 
+# Is there a query for a statistical model or are we just refining the conceptual model?
 isQuery <- function(iv, dv) {
     return (!is.null(iv) && !is.null(dv))
 }
@@ -7,14 +7,14 @@ create_disambig_id <- function(relationship) {
     idName <- trimws(relationship)
     idName <- paste(idName, "-disambig", sep="")
 
-    # Return 
+    # Return
     idName
 }
 
 create_cycle_description <- function(cycle) {
     stopifnot(class(cycle) == "list")
     cy_str <- unlist(cycle)
-    
+
     desc <- ""
 
 
@@ -24,7 +24,7 @@ create_cycle_description <- function(cycle) {
         } else {
             phrase <- paste(cy_str[i], cy_str[1], sep= " causes ")
         }
-        
+
         if (desc != "") {
             desc <- paste(desc, phrase, sep=", ")
         } else {
@@ -32,12 +32,12 @@ create_cycle_description <- function(cycle) {
         }
     }
 
-    # Return 
+    # Return
     desc
 }
 
 create_cycle_breaking_id <- function(cycle) {
-    
+
     stopifnot(class(cycle) == "list")
     cy_str <- unlist(cycle)
     idName <- ""
@@ -53,7 +53,7 @@ create_cycle_breaking_id <- function(cycle) {
     idName <- trimws(idName)
     idName <- paste(idName, "-breaking", sep="")
 
-    # Return 
+    # Return
     idName
 }
 
@@ -62,7 +62,7 @@ hasAmbiguitiesAtStart <- function(relationships, choices) {
 
     for (re in relationships) {
         re_choices <- choices[[re]]
-        
+
         # Are there any choices?
         if (length(re_choices) > 0) {
             print(re_choices)
@@ -70,7 +70,7 @@ hasAmbiguitiesAtStart <- function(relationships, choices) {
         }
     }
 
-    # Return 
+    # Return
     hasAmbiguities
 }
 
@@ -85,7 +85,7 @@ relationshipUI <- function(id, choices) {
         p(id),
         # br()
     )
-    
+
     # Create object id name
     idName <- create_disambig_id(id)
 
@@ -98,10 +98,10 @@ relationshipUI <- function(id, choices) {
         )
 
         # Append input (for disambiguation) to text describing relationship
-        tl <- append(tl, disambig_dropdown)    
+        tl <- append(tl, disambig_dropdown)
     } else {
         # store id somewhere can access during Server
-    } 
+    }
 
     # Return tag list
     tl
@@ -112,7 +112,7 @@ conceptualModelSpecUI <- function(id, relationships, choices) {
     for (re in relationships) {
         # print(paste("Considering: ", re))
         re_choices <- choices[[re]]
-        
+
         rel_ui <- relationshipUI(re, re_choices)
         tl <- append(tl, rel_ui)
     }
@@ -121,10 +121,10 @@ conceptualModelSpecUI <- function(id, relationships, choices) {
     #     div()
     # )
     print(id)
-    tl <- tags$div(id=id, 
+    tl <- tags$div(id=id,
         tl
     )
-    
+
     tl
 }
 
@@ -140,7 +140,7 @@ cycleExplanationUI <- function(id, conceptualModel) {
         uiOutput("cycle")
     })
 
-    # Return 
+    # Return
     tl
 
 }
@@ -148,7 +148,7 @@ cycleExplanationUI <- function(id, conceptualModel) {
 submitButtonUI <- function(id, iv, dv, relationships, choices) {
     ns <- NS(id)
 
-    
+
     if (! hasAmbiguitiesAtStart(relationships, choices)) {
         buttonLabel <- "Continue"
     } else {
@@ -157,8 +157,8 @@ submitButtonUI <- function(id, iv, dv, relationships, choices) {
             stopifnot(!is.null(dv))
             buttonLabel <- "Update conceptual model + Infer statistical model!"
         }
-    } 
-    
+    }
+
     # Return button
     actionButton(id, label=buttonLabel, class = "btn-success")
     # actionButton(id, label=buttonLabel, class = "btn-success", disabled=TRUE)
@@ -166,12 +166,12 @@ submitButtonUI <- function(id, iv, dv, relationships, choices) {
 
 cycleUI <- function(iv, dv) {
     tl <- NULL
-    
+
     if (isQuery(iv, dv)) {
         tl <- tagList(
             # Heading for cycles
             h4("To derive a statistical model..."),
-            # Output: 
+            # Output:
             # cycleExplanationUI("spec")
             h5("🚨 There are circular relationships!"),
             p("Circular relationships impede rTisane's ability to derive a statistical model because the direction of influence among variables is unclear."),
@@ -183,14 +183,14 @@ cycleUI <- function(iv, dv) {
         tl <- tagList()
     }
 
-    # Return 
+    # Return
     tl
 }
 
 cycleBreakingUI <- function(cycles) {
     generateCycleOptions <- function(cycle) {
         choices <- list()
-        
+
         for (i in 1:length(cycle)) {
             if (i < length(cycle)) {
                 ch <- paste(cycle[i], cycle[i+1], sep=" causes ")
@@ -224,8 +224,8 @@ cycleBreakingUI <- function(cycles) {
 
         uiElts <- append(uiElts, cyElts)
     }
-    
-    # Return 
+
+    # Return
     tagList(uiElts)
 }
 
@@ -234,13 +234,13 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
 
     #### Process input JSON file -----
     jsonData <- jsonlite::read_json(inputFilePath) # Relative path to input.json file
-    
+
     # Get Conceptual model info
     relationships <- jsonData[["relationships"]]
     choices <- jsonData[["choices"]]
 
     # for (re in relationships) {
-    
+
     #### Define App UI -----
     ui <- fluidPage(
         shinyjs::useShinyjs(),
@@ -261,13 +261,13 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                     cycleUI(iv, dv)
                 )
             ),
-            column(8, 
+            column(8,
                 # "Heading"
                 h4("This is what your conceptual model looks like:"),
 
                 # Output: Graph ----
                 plotOutput("graph"),
-                
+
                 uiOutput("submit")
             )
         ),
@@ -277,12 +277,12 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
         # Gather and return updated relationships
         updates <- reactive({
             updated_relats <- list()
-            
+
             for (re in relationships) {
 
                 # Create object id name
                 idName <- create_disambig_id(re)
-    
+
                 r <- input[[idName]]
                 if (!is.null(r)) {
                     updated_relats <- append(updated_relats,r )
@@ -291,7 +291,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             updated_relats
         })
 
-        # Update cycle breaking questions based on disambiguation choices 
+        # Update cycle breaking questions based on disambiguation choices
         observe({
             # Get updated relationships
             new_relats <- updates()
@@ -301,7 +301,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
 
             # Update cycleUI
             gr <- updatedCM@graph
-            
+
             if (isQuery(iv, dv)) {
                 cycles <- findCycles(updatedCM)
 
@@ -311,7 +311,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                     # if (length(cycles) > 1) {
                     #     warningText <- "There are multiple cycles:"
                     # }
-                    # Create cycle breaking UI 
+                    # Create cycle breaking UI
                     output$cycle <- renderUI({
                         tagList(
                             p("Circular relationship:"),
@@ -324,7 +324,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                 } else {
                     output$cycle <- renderUI({
                         tagList(
-                            p("✅ There are no cycles!")    
+                            p("✅ There are no cycles!")
                         )
                     })
                     output$submit <- renderUI({
@@ -337,10 +337,10 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
         # Verify conceptual model does not have a cycle, which impedes ability to infer statistical model
         checkForCycles <- reactive({
             removals <- list()
-            
-            # Go through cycles 
+
+            # Go through cycles
             cycles <- findCycles(updatedCM)
-            
+
 
             if (length(cycles) > 0) {
                 for (cy in cycles) {
@@ -353,7 +353,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                             re_val <- paste("Remove", re, sep=" ")
                             removals <- append(removals, re_val)
                         }
-                    } 
+                    }
                     # else {
                     #     # Issue warning
                     #     showNotification(paste("There is a cycle still"), type="error")
@@ -363,7 +363,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                     actionButton("submit", label="Continue", class = "btn-success")
                 })
             }
-            # Return 
+            # Return
             removals
         })
 
@@ -381,14 +381,19 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                 # Remove them to break cycles
                 updatedCM <- updateConceptualModel(updatedCM, removals)
             }
-    
-            # Update graph 
+
+            # Update graph
             gr <- updatedCM@graph
             if (length(updatedCM@relationships) > 0) {
-                print("Rendering graph")
-                output$graph <- renderPlot({
-                    plot(graphLayout(gr))
-                })   
+              print("Rendering graph")
+              # Use igraph instead of dagitty for graph layout on Posit Cloud due to V8 crash issues:
+              # https://github.com/r-causal/ggdag/issues/55
+              edgeList <- as.matrix(edges(gr)[1:2])
+              igr <- igraph::graph_from_edgelist(edgeList)
+              output$graph <- renderPlot({
+                plot(igr, layout=igraph::layout_with_drl)
+                # plot(graphLayout(gr))
+              })
             } else {
                 output$graph <- renderText("No relationships in your conceptual model!")
             }
@@ -402,7 +407,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             for (re in relationships) {
                 # Create object id name
                 idName <- create_disambig_id(re)
-    
+
                 r <- input[[idName]]
                 if (is.null(r)) {
                     enableButton <- FALSE
@@ -414,8 +419,8 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             }
 
             if (isQuery(iv, dv)) {
-                cycles <- findCycles(updatedCM) # list of lists 
-        
+                cycles <- findCycles(updatedCM) # list of lists
+
                 allCyclesBroken <- TRUE
                 # Are there any cycles?
                 if (length(cycles) > 0) {
@@ -431,14 +436,14 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                 }
 
                 if (isTRUE(allCyclesBroken)) {
-                    enableButton <- TRUE 
+                    enableButton <- TRUE
                 } else {
                     # output$submit <- renderUI({
                     #     actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
                     # })
                     enableButton <- FALSE
                 }
-            } 
+            }
             # else {
                 # output$submit <- renderUI({
                 #         actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
@@ -467,10 +472,10 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                 updated_relats <- append(updated_relats, unlist(removals))
                 print(updated_relats)
             }
-            
+
             # Shut down app and return updated values
             stopApp(updated_relats) # returns whatever is passed as a parameter
-        })        
+        })
     }
 
     # Return handle to Shiny App for conceptual model disambiguation

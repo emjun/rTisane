@@ -1,2 +1,5 @@
 ^rTisane\.Rproj$
 ^\.Rproj\.user$
+^rTisane\.Rcheck$
+^rTisane.*\.tar\.gz$
+^rTisane.*\.tgz$

@@ -1,0 +1,2 @@
+from tisanecodegenerator.statisticalModel import StatisticalModel
+from tisanecodegenerator.codeGenerator import CodeGenerator

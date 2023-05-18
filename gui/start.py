@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-from tisaneGui import TisaneGUI # gui.tisaneGui
+from gui.tisaneGui import TisaneGUI # gui.tisaneGui
 # from helpers.statisticalModel import StatisticalModel
 # from helpers.code_generator import *
 # from tisaneGui import TisaneGUI
-from tisanecodegenerator import CodeGenerator, StatisticalModel
+from gui.tisanecodegenerator import CodeGenerator, StatisticalModel
 
 
 import dash
