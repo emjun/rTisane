@@ -1,0 +1,22 @@
+{
+    "installs": {
+        "tidyverse": "install.packages('tidyverse')",
+        "lme4": "install.packages('lme4')"
+    },
+    "imports": {
+        "tidyverse": "library(tidyverse)",
+        "lme4": "library(lme4)"
+    },
+    "data": {
+        "load csv": "data <- read.csv('{path}')"
+    },
+    "glm": {
+        "formula": "glm(formula={dv} ~ {ivs}, family={family}(link='{link}'), data={data})"
+    }, 
+    "glmer": {
+        "formula": ""
+    }, 
+    "summary": {
+
+    }
+}
