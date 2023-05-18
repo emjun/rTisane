@@ -63,3 +63,7 @@ source("conceptualDisambiguation/app.R")
 ```
 # Setup Python virtualenv to use in project: 
 Follow instructions: https://support.posit.co/hc/en-us/articles/360023654474-Installing-and-Configuring-Python-with-RStudio
+
+
+## To set up 
+Create python virtualenv
