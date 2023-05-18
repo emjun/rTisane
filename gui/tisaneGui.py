@@ -14,8 +14,8 @@ from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import webbrowser  # For autoamtically opening the browser for the CLI
 import socket  # For finding next available socket
-from gui_components import GUIComponents  # gui.gui_components
-from callbacks import createCallbacks # gui.callbacks
+from gui.gui_components import GUIComponents  # gui.gui_components
+from gui.callbacks import createCallbacks # gui.callbacks
 
 external_stylesheets = [
     dbc.themes.BOOTSTRAP,

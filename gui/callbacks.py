@@ -2,11 +2,11 @@ from dash.dependencies import Output, Input, State, ALL, MATCH
 import dash
 from dash.exceptions import PreventUpdate
 from dash import html
-from gui_components import GUIComponents # gui.gui_components
-from family_link_function_callbacks import createFamilyLinkFunctionCallbacks # gui.family_link_function_callbacks
-from random_effects_callbacks import createRandomEffectsCallbacks # gui.random_effects_callbacks
+from gui.gui_components import GUIComponents # gui.gui_components
+from gui.family_link_function_callbacks import createFamilyLinkFunctionCallbacks # gui.family_link_function_callbacks
+from gui.random_effects_callbacks import createRandomEffectsCallbacks # gui.random_effects_callbacks
 import json
-from gui_helpers import getTriggeredFromContext # gui.gui_helpers
+from gui.gui_helpers import getTriggeredFromContext # gui.gui_helpers
 import logging
 
 

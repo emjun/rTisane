@@ -5,14 +5,14 @@ from dash.exceptions import PreventUpdate
 from dash import html
 from dash import dcc
 import dash_bootstrap_components as dbc
-from gui_components import GUIComponents, separateByUpperCamelCase # gui.gui_components
+from gui.gui_components import GUIComponents, separateByUpperCamelCase # gui.gui_components
 import numpy as np
 import plotly.graph_objects as go
 # import tweedie
 # from scipy.special import logit
 # from scipy import stats
 import pandas as pd
-from gui_helpers import getTriggeredFromContext # gui.gui_helpers
+from gui.gui_helpers import getTriggeredFromContext # gui.gui_helpers
 import json
 import os
 import signal

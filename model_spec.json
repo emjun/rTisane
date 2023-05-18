@@ -4,9 +4,7 @@
     "interaction effects": [],
     "link": "inverse",
     "main effects": [
-        "AGEP",
-        "SCHL",
-        "SEX"
+        "AGEP"
     ],
     "random effects": {}
 }
