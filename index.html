@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <title>GitHub Pages Tabs</title>
+  <style>
+    .tab-content {
+      margin: 30px auto;
+      max-width: 800px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Intro</a>
+      <a class="nav-item nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Step 1</a>
+      <a class="nav-item nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Step 2</a>
+      <a class="nav-item nav-link" id="tab4-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false">Step 3</a>
+      <a class="nav-item nav-link" id="tab5-tab" data-toggle="tab" href="#tab5" role="tab" aria-controls="tab5" aria-selected="false">FAQs</a>
+      <a class="nav-item nav-link" id="tab6-tab" data-toggle="tab" href="#tab6" role="tab" aria-controls="tab6" aria-selected="false">Tips</a>
+    </div>
+  </nav>
+
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+      <div id="tab1-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+      <div id="tab2-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+      <div id="tab3-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+      <div id="tab4-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="tab5-tab">
+      <div id="tab5-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="tab6-tab">
+      <div id="tab6-content"></div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    $(function () {
+      $('#nav-tab a').on('click', function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+      });
+    });
+  </script>
+  <script>
+  function renderMarkdown(elementId, markdownUrl) {
+    fetch(markdownUrl)
+      .then(response => response.text())
+      .then(text => {
+        const html = marked.parse(text);
+        document.getElementById(elementId).innerHTML = html;
+      });
+  }
+
+  renderMarkdown('tab1-content', 'tutorial/intro.md');
+  renderMarkdown('tab2-content', 'tutorial/step1.md');
+  renderMarkdown('tab3-content', 'tutorial/step2.md');
+  renderMarkdown('tab4-content', 'tutorial/step3.md');
+  renderMarkdown('tab5-content', 'tutorial/faqs.md');
+  renderMarkdown('tab6-content', 'tutorial/tips.md');
+</script>
+
+</body>
+
+</html>
