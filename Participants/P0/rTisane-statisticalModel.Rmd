@@ -2,6 +2,7 @@
 
 1. Copy and paste your conceptual model below. 
 ```{r}
+library(rTisane)
 # Add here
 ```
 

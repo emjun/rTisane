@@ -2,7 +2,7 @@
 
 1. Express your conceptual model using rTisane.
 ```{r}
-librar(rTisane)
+library(rTisane)
 # Add here
 ```
 
