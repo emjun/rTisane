@@ -5,17 +5,16 @@
 # Add here
 ```
 
-2. Add the following line to the end of your program above: 
+2. Query for a statistical model using your conceptual model.
 ```{r}
 # Copy and paste above 
 # Replace <conceptualModel> with the conceptual model's variable name
 # Replace <iv> with an independent variable of interest
 # Replace <dv> with the dependent variable of interest. In this case, the variable for income. 
-script <- deriveStatisticalModel(conceptualModel=<conceptualModel>, iv=<iv>, dv=<dv>)
+script <- query(concpetualModel=<conceptualModel>, iv=<iv>, <dv>)
 ```
 
 3. Run your program! Hit the green play button on the first code cell containing your conceptual model.
-
 
 4. Open, edit, and run your statistical modeling script! 
 
