@@ -1,0 +1,6 @@
+# Statistical analysis
+Summarize the results of your analysis.
+
+```{r}
+# Add here
+```
