@@ -10,6 +10,30 @@ initialCheck <- function(conceptualModel, iv, dv) {
 
 }
 
+#' Derive statistical model 
+#' Should be called after checkAndRefineConceptualModel
+deriveStatisticalModel <- function(updatedCM, iv, dv) {
+  confounders <- inferConfounders(conceptualModel=updatedCM, iv=iv, dv=dv)
+  # main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
+
+  interactions <- inferInteractions(conceptualModel=updatedCM, iv=iv, dv=dv, confounders=confounders)
+  # interaction_effects <- infer_interaction_effects_with_explanations(causal_gr, associative_gr, design, main_effects)
+  randomEffects <- inferRandomEffects(confounders=confounders, interactions=interactions, conceptualModel=updatedCM, iv=iv, dv=dv)
+  # random_effects <- infer_random_effects_with_explanations(measurement_gr, nests_gr, design, all_relationships, main_effects, interaction_effects)
+
+  familyLinkFunctions <- inferFamilyLinkFunctions(dv)
+
+  ### Step 3: Statistical Model Disambiguation (GUI)
+  ## Call Python script to create and run disambiguation process
+  codePath <- deriveStatisticalModel(confounders=confounders, interactions=interactions, randomEffects=randomEffects, familyLinkFunctions=familyLinkFunctions, iv=iv, dv=dv, data=data)
+  
+  ### Step 4: Code generation
+  # TODO: Generate code
+
+  # Return path to statistical model script
+  codePath
+}
+
 #' Query a conceptual model for a statistical model
 #'
 #' Method for querying a conceptual model for a statistical model
