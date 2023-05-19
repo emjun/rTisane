@@ -1,3 +1,5 @@
+> *Scenario* You want to know the influence of tutoring on student test performance. To this end, you conduct a study involving 100 students. For each student, you collect data about their race, socioeconomic background, number of extra-curriculars, and test score. Additionally, you randomly assign each student to one of two tutoring conditions: online tutoring vs. in-person tutoring.
+
 ## Step 1: Declare variables 
 There are two kinds of variables in rTisane: (i) Units and (ii) Measures. 
 

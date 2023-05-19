@@ -1,0 +1,22 @@
+# Statistical analysis
+
+1. Copy and paste your conceptual model below. 
+```{r}
+# Add here
+```
+
+2. Add the following line to the end of your program above: 
+```{r}
+# Copy and paste above 
+# Replace <conceptualModel> with the conceptual model's variable name
+# Replace <iv> with an independent variable of interest
+# Replace <dv> with the dependent variable of interest. In this case, the variable for income. 
+script <- deriveStatisticalModel(conceptualModel=<conceptualModel>, iv=<iv>, dv=<dv>)
+```
+
+3. Run your program! Hit the green play button on the first code cell containing your conceptual model.
+
+
+4. Open, edit, and run your statistical modeling script! 
+
+5. Summarize the results of your analysis.

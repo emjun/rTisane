@@ -1,3 +1,5 @@
+> *Scenario* You want to know the influence of tutoring on student test performance. To this end, you conduct a study involving 100 students. For each student, you collect data about their race, socioeconomic background, number of extra-curriculars, and test score. Additionally, you randomly assign each student to one of two tutoring conditions: online tutoring vs. in-person tutoring.
+
 ## Step 2: Specify conceptual model
 A conceptual model is a graph with variables (nodes) and conceptual relationships between variables (edges). The conceptual model should accurately represent your background knowledge about the domain. The conceptual model is used to produce a statistical model.
 
@@ -52,12 +54,12 @@ causes(causes=tutoring, effect=testScore, when=equals(tutoring, 'in-person'), th
 relates(lhs=tutoring, rhs=testScore, when=equals(tutoring, 'in-person'), then=increases(testScore))
 ```
 
-To add detail to conceptual relationships involving interactions, specify values corresponding to each of the interacting Measures. For example, 
+<!-- To add detail to conceptual relationships involving interactions, specify values corresponding to each of the interacting Measures. For example, 
 ```R 
 ixn <- interacts(ses,tutoring)
 # ses == "high", tutoring == "in-person"
 causes(when=equals(ixn, list("high", "in-person")), then=increases(testScore))
-```
+``` -->
 
 There are four types of comparisons you can include in `when` and `then`, depending on the kind of Measure you have:
 - `increases(measure)`
@@ -71,7 +73,8 @@ There are four types of comparisons you can include in `when` and `then`, depend
     - measure: Categories, Counts, or Continuous
     - value: character, int, float, or list
 
-*Important note:* The change described in the `then` parameter is in comparison to a baseline. More precisely, the example `whenThen` statement above states that the average of `testScores` for `"Black"` students is higher than the average of `testScores` for `"White"` students (the baseline specified when `race` was declared.) The baseline for Counts and Continuous variables is 0 unless otherwise specified. The baseline for Categorical interactions is the product of baseline values from the interacting Measures. 
+*Important note:* The change described in the `then` parameter is in comparison to a baseline. More precisely, the example `whenThen` statement above states that the average of `testScores` for `"Black"` students is higher than the average of `testScores` for `"White"` students (the baseline specified when `race` was declared.) The baseline for Counts and Continuous variables is 0 unless otherwise specified. 
+<!-- The baseline for Categorical interactions is the product of baseline values from the interacting Measures.  -->
 
 You may want to include `when` and `then` parameters if they help you keep track of or think through your conceptual model. In `relates` statements, the parameters are used to more highly suggest graphical structures that you might mean. 
 
@@ -110,4 +113,10 @@ cm <- ConceptualModel()
 ...
 cr <- causes(tutoring, testScore)
 hypothesize(cm, cr) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
+```
+
+## For this task in the study...
+To see and refine your conceptual model, you can run the following line: 
+```R
+updatedCM <- checkAndRefine(cm) # cm is the Conceptual Model you have defined
 ```
