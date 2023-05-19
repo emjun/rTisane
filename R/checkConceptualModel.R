@@ -7,7 +7,12 @@ getAdjList <- function(conceptualModel) {
   
   for (node in names(gr)) {
     childNodes <- children(gr, node)
-    adjList[node] <- childNodes
+    # There are no children
+    if (length(childNodes) == 0)  {
+      adjList[node] <- NULL
+    } else {
+      adjList[node] <- childNodes
+    }
   }
   # Return 
   adjList
@@ -26,82 +31,129 @@ createStringIndexMap <- function(strings) {
 # Function to find a cycle using DFS and return the cycle path
 #' @import igraph
 findCycles <- function(conceptualModel) {
+  print("Start findCycles")
   # Get adjacency matrix
-  adjList <- getAdjList(conceptualModel)
+  # adjList <- getAdjList(conceptualModel)
+  # numNodes <- length(adjList)
+  # visited <- rep(FALSE, numNodes)
+  # cycles <- vector("list")
+  # numCycles <- 0
 
   gr <- conceptualModel@graph
-
   nodeNames <- names(gr)
   nodeNames_to_idx <- createStringIndexMap(nodeNames)
-
-  numNodes <- length(adjList)
-  visited <- rep(FALSE, numNodes)
-  # path <- vector("list", numNodes)
-  # path <- NULL
-  cycles <- vector("list")
-  numCycles <- 0
-
   
-  dfs <- function(node, nodeName, visited) {
-    stopifnot(nodeNames[node] == nodeName)
-
-    visited[node] <- TRUE
-    # path[[node]] <- list()
-
-    for (adjNode in adjList[[nodeName]]) {
-      adjNodeIdx <- nodeNames_to_idx[[adjNode]]
-      if (isFALSE(visited[adjNodeIdx])) {
-        tmp <- dfs(adjNodeIdx, adjNode, visited)
-        # path[[node]] <- append(unlist(tmp), nodeName)
-        path <- append(nodeName, tmp)
-
-        # if (is.null(path[[node]])) {
-        #   path[[node]] <- append(unlist(path[[node]]), nodeName)
-        # }
-      } else {
-        # # Empty path? 
-        # if (is.null(path[[node]])) {
-        #   path[[node]] <- list()
-        # } 
-        # path[[node]] <- append(unlist(path[[node]]), adjNode)
-        # path[[node]] <- list(adjNode, nodeName)
-        path <- list(nodeName)
-        # else {
-        #   tmp <- append(unlist(path[[node]]), adjNode)
-        #   path[[node]] <- append(unlist(tmp), nodeName)
-        #   print(node)
-        #   print(path[[node]])
-        #   print("====")
-        # }
-        # print(path)
+  edgeList <- as.matrix(edges(gr)[1:2])
+  g <- igraph::graph_from_edgelist(edgeList)
+  
+  # Adapted from https://stackoverflow.com/questions/55091438/r-igraph-find-all-cycles
+  Cycles = NULL
+  for(v1 in igraph::V(g)) {
+      if(igraph::degree(g, v1, mode="in") == 0) { next }
+      GoodNeighbors = igraph::neighbors(g, v1, mode="out")
+      GoodNeighbors = GoodNeighbors[GoodNeighbors > v1]
+      for(v2 in GoodNeighbors) {
+          TempCyc = lapply(igraph::all_simple_paths(g, v2,v1, mode="out"), function(p) c(v1,p))
+          TempCyc = TempCyc[which(sapply(TempCyc, length) > 2)]
+        TempCyc = TempCyc[sapply(TempCyc, min) == sapply(TempCyc, `[`, 1)]
+        Cycles  = c(Cycles, TempCyc)
       }
-    }
-
-    # Return 
-    # print("Path:")
-    # print(path)
-    # print(class(path))
-    # print("===")
-    stopifnot(class(path) == "list")
-    path
   }
 
-  for (node in 1:numNodes) {
-    nodeName <- nodeNames[node]
-    if (isFALSE(visited[node])) {
-      cy <- dfs(node, nodeName, visited)
-      stopifnot(class(cy) == "list")
-      idx <- numCycles + 1
-      cycles[[idx]] <- cy
-      idx <- idx + 1
+  # Transform indices into names 
+  named_cycles <- NULL
+  idx <- 1
+  for (cy in Cycles) {
+    tmp <- NULL
+    for (i in 1:length(cy)) {
+      nodeIdx <- cy[i]
+      tmp <- append(tmp, nodeNames[nodeIdx])
     }
+    stopifnot(length(tmp) == length(cy))
+    named_cycles[[idx]] <- tmp
+    idx <- idx + 1
   }
-  # print("Cycles:")
-  # print(cycles)
-  # print("===")
-  
+  # Cycles
   # Return 
-  cycles
+  named_cycles
+
+  
+  # dfs <- function(node, nodeName, visited) {
+  #   stopifnot(nodeNames[node] == nodeName)
+
+  #   visited[node] <- TRUE
+  #   path <- list()
+
+  #   # 
+  #   for (adjNode in adjList[[nodeName]]) {
+  #     adjNodeIdx <- nodeNames_to_idx[[adjNode]]
+  #     if (isFALSE(visited[adjNodeIdx])) {
+  #       tmp <- dfs(adjNodeIdx, adjNode, visited)
+  #       path <- append(nodeName, tmp)
+  #     } else {
+  #       path <- list(nodeName)
+  #     }
+  #   }
+
+  #   all_paths <- list()
+  #   curr_path <- list()
+
+  #   all_cycles_from_node(curr_node, cycles, curr_path, visited) {
+  #     visited[curr_node] <- TRUE # mark as visited
+
+  #     for (child in children) {
+  #       curr_path <- append(curr_path, child)
+  #       if (visited(child)) {
+          
+  #         cycles <- append(cycles, append(curr_path, child))
+          
+  #         # all_paths <- child + curr
+  #         # curr_path <- append(child, curr_path) curr_node
+  #       } else {
+  #         cycles <- all_cycles_from_node(child, copy(cycles), copy(curr_path), visited)
+  #         # path <- function_name()
+  #         # child + path
+          
+  #       }
+  #     }
+  #     cycles
+  #   }
+
+  #   all_cycles_from_node(A, [], [], [])
+    
+
+  #   # Return 
+  #   # print("Path:")
+  #   # print(path)
+  #   # print(class(path))
+  #   # print("===")
+  #   stopifnot(class(path) == "list")
+  #   path
+  # }
+
+  # for (node in 1:numNodes) {
+  #   nodeName <- nodeNames[node]
+  #   if (isFALSE(visited[node])) {
+  #     cy <- dfs(node, nodeName, visited)
+  #     # browser()
+  #     stopifnot(class(cy) == "list")
+  #     # Is there a cycle?
+  #     if (length(cy) > 0 ) {
+  #       idx <- numCycles + 1
+  #       cycles[[idx]] <- cy
+  #       idx <- idx + 1
+  #     }
+  #   }
+  # }
+  # # print("Cycles:")
+  # # print(cycles)
+  # # print("===")
+  
+  # # Return 
+  # # browser()
+  # print(paste("cycles:", cycles, sep=" "))
+  # print("End findCycles")
+  # cycles
 }
 
 

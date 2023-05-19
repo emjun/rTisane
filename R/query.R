@@ -70,5 +70,5 @@ setMethod("query", signature("ConceptualModel", "AbstractVariable", "AbstractVar
   # TODO: Generate code
 
   # Return path to statistical model script
-  smScriptPath
+  codePath
 })

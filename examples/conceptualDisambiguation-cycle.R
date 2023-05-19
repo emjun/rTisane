@@ -14,5 +14,5 @@ cm <- ConceptualModel() %>%
   hypothesize(causes(income, edu))
 
 # updatedCM <- checkAndRefineConceptualModel(conceptualModel=cm)
-updatedCM <- query(conceptualModel=cm, iv=age, dv=income)
-print(updatedCM@graph)
+codePath <- query(conceptualModel=cm, iv=age, dv=income)
+# print(updatedCM@graph)

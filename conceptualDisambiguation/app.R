@@ -12,18 +12,14 @@ create_disambig_id <- function(relationship) {
 }
 
 create_cycle_description <- function(cycle) {
-    stopifnot(class(cycle) == "list")
+    
     cy_str <- unlist(cycle)
 
     desc <- ""
 
-
-    for (i in 1:length(cy_str)) {
-        if (i < length(cy_str)) {
-            phrase <- paste(cy_str[i], cy_str[i+1], sep=" causes ")
-        } else {
-            phrase <- paste(cy_str[i], cy_str[1], sep= " causes ")
-        }
+    for (i in 1:(length(cy_str)-1)) {
+        print(i)
+        phrase <- paste(cy_str[i], cy_str[i+1], sep=" causes ")
 
         if (desc != "") {
             desc <- paste(desc, phrase, sep=", ")
@@ -38,7 +34,6 @@ create_cycle_description <- function(cycle) {
 
 create_cycle_breaking_id <- function(cycle) {
 
-    stopifnot(class(cycle) == "list")
     cy_str <- unlist(cycle)
     idName <- ""
 
@@ -173,10 +168,6 @@ cycleUI <- function(iv, dv) {
             h4("To derive a statistical model..."),
             # Output:
             # cycleExplanationUI("spec")
-            h5("🚨 There are circular relationships!"),
-            p("Circular relationships impede rTisane's ability to derive a statistical model because the direction of influence among variables is unclear."),
-            p("Did you forget to specify some relationships? If so, consider re-visiting your input program."),
-            p("Alternatively, you can consider removing one or more circular relationships below."),
             uiOutput("cycle")
         )
     } else {
@@ -191,16 +182,9 @@ cycleBreakingUI <- function(cycles) {
     generateCycleOptions <- function(cycle) {
         choices <- list()
 
-        for (i in 1:length(cycle)) {
-            if (i < length(cycle)) {
-                ch <- paste(cycle[i], cycle[i+1], sep=" causes ")
-                choices <- append(choices, ch)
-            } else {
-                # browser()
-                stopifnot(i == length(cycle))
-                ch <- paste(cycle[i], cycle[1], sep=" causes ")
-                choices <- append(choices, ch)
-            }
+        for (i in 1:(length(cycle)-1)) {
+            ch <- paste(cycle[i], cycle[i+1], sep=" causes ")
+            choices <- append(choices, ch)
         }
 
         # Return
@@ -208,6 +192,7 @@ cycleBreakingUI <- function(cycles) {
     }
 
     uiElts <- list()
+    # browser()
     for (cy in cycles) {
         cy_desc <- create_cycle_description(cy)
         id <- create_cycle_breaking_id(cy)
@@ -303,6 +288,7 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             gr <- updatedCM@graph
 
             if (isQuery(iv, dv)) {
+                print("Updating cycle breaking questions")
                 cycles <- findCycles(updatedCM)
 
                 # There are cycles
@@ -314,17 +300,21 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                     # Create cycle breaking UI
                     output$cycle <- renderUI({
                         tagList(
+                            h5("🚨 There are circular relationships!"),
+                            p("Circular relationships impede rTisane's ability to derive a statistical model because the direction of influence among variables is unclear."),
+                            p("Did you forget to specify some relationships? If so, consider re-visiting your input program."),
+                            p("Alternatively, you can consider removing one or more circular relationships below."),
                             p("Circular relationship:"),
                             cycleBreakingUI(cycles)
                         )
                     })
                     output$submit <- renderUI({
-                        actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
+                        actionButton("submit", label="Continue", class = "btn-success") #, disabled=TRUE)
                     })
                 } else {
                     output$cycle <- renderUI({
                         tagList(
-                            p("✅ There are no cycles!")
+                            p("✅ You have resolved all circular relationships!")
                         )
                     })
                     output$submit <- renderUI({
@@ -332,15 +322,18 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                     })
                 }
             }
+            print("Finish updating cycle breaking questions")
         })
 
         # Verify conceptual model does not have a cycle, which impedes ability to infer statistical model
         checkForCycles <- reactive({
+            
             removals <- list()
 
             # Go through cycles
-            cycles <- findCycles(updatedCM)
-
+            print("Checking for cycles")
+            cm@graph <- updateGraph(cm) # Some race condition? Make sure to update graph before finding cycles
+            cycles <- findCycles(cm)
 
             if (length(cycles) > 0) {
                 for (cy in cycles) {
@@ -354,25 +347,20 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                             removals <- append(removals, re_val)
                         }
                     }
-                    # else {
-                    #     # Issue warning
-                    #     showNotification(paste("There is a cycle still"), type="error")
-                    # }
                 }
-                output$submit <- renderUI({
-                    actionButton("submit", label="Continue", class = "btn-success")
-                })
             }
             # Return
             removals
         })
 
         # Update conceptual model graph based on disambiguation choices and cycle breaking
-        observe({
+        updateGraph <- observe({
+            print("Start graph update")
             # Get updated relationships
             new_relats <- updates()
             # Update conceptual model based on new relationships
             updatedCM <- updateConceptualModel(conceptualModel, new_relats)
+            # browser()
 
             # Are we deriving statistical models? So, therefore, do we need to break cycles that impede our ability to derive statistical models?
             if (isQuery(iv, dv)) {
@@ -419,7 +407,9 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
             }
 
             if (isQuery(iv, dv)) {
+                print("Updating button")
                 cycles <- findCycles(updatedCM) # list of lists
+                # browser()
 
                 allCyclesBroken <- TRUE
                 # Are there any cycles?
@@ -455,12 +445,15 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
                         actionButton("submit", label="Continue", class = "btn-success")
                     })
             } else {
+                # browser()
                 output$submit <- renderUI({
-                        actionButton("submit", label="Continue", class = "btn-success", disabled=TRUE)
+                        actionButton("submit", label="Continue", class = "btn-success")#, disabled=TRUE)
                     })
             }
 
         })
+
+        
 
         ## Submit
         observeEvent(input$submit, {
