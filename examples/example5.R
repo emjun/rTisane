@@ -23,5 +23,4 @@ cm <- ConceptualModel() %>%
 
 # Education is IV, Income is DV
 # Need to disambiguate relationship between Education and Income, between Sex and Income in conceptual model
-# Random effects:
 query(conceptualModel=cm, iv=edu, dv=income) # No data
