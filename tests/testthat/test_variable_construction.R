@@ -195,25 +195,32 @@ test_that("Interacts created properly", {
   measure_0 <- continuous(unit=unit, name="measure_0")
   measure_1 <- continuous(unit=unit, name="measure_1")
   measure_2 <- continuous(unit=unit, name="measure_2")
+  measure_3 <- continuous(unit=unit, name="measure_3")
+
+  cm <- ConceptualModel()
 
   # 2-way interaction
-  ixn <- interacts(measure_0, measure_1)
-  expect_s4_class(ixn, "Interacts")
-  expect_equal(ixn@name, "measure_0_X_measure_1")
+  updatedCM <- interacts(cm, measure_0, measure_1, dv=measure_2)
+  expect_s4_class(updatedCM, "ConceptualModel")
+  ixn <- updatedCM@relationships[[1]]
+  expect_equal(ixn@name, "measure_0*measure_1")
   expect_length(ixn@variables, 2)
   expect_true(c(measure_0) %in% ixn@variables)
   expect_true(c(measure_1) %in% ixn@variables)
+  expect_equal(measure_2, ixn@dv)
   expect_equal(unit, ixn@units[[1]])
   expect_equal(1, length(ixn@units))
 
   # 3-way interaction
-  ixn <- interacts(measure_0, measure_1, measure_2)
-  expect_s4_class(ixn, "Interacts")
-  expect_equal(ixn@name, "measure_0_X_measure_1_X_measure_2")
+  updatedCM <- interacts(updatedCM, measure_0, measure_1, measure_2, dv=measure_3)
+  expect_s4_class(updatedCM, "ConceptualModel")
+  ixn <- updatedCM@relationships[[2]]
+  expect_equal(ixn@name, "measure_0*measure_1*measure_2")
   expect_length(ixn@variables, 3)
   expect_true(c(measure_0) %in% ixn@variables)
   expect_true(c(measure_1) %in% ixn@variables)
   expect_true(c(measure_2) %in% ixn@variables)
+  expect_equal(measure_3, ixn@dv)
   expect_equal(unit, ixn@units[[1]])
   expect_equal(1, length(ixn@units))
 

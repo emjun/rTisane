@@ -249,10 +249,10 @@ test_that("Validate Conceptual Model's causal graph properly", {
   cm <- assume(cm, causes(measure_2, measure_0))
   cm@graph <- updateGraph(cm)
   res <- checkConceptualModel(cm, measure_0, measure_2)
-  expect_named(res, c("isValid", "reason"))
+  expect_named(res, c("isValid"))
   expect_false(res$isValid)
   res <- checkConceptualModel(cm, measure_2, measure_0)
-  expect_named(res, c("isValid", "reason"))
+  expect_named(res, c("isValid"))
   expect_false(res$isValid)
 })
 
@@ -326,22 +326,29 @@ test_that("Interactions found correctly", {
   expect_length(interactions, 0)
 
   # 1 interaction
-  ixn <- interacts(measure_0, measure_1)
-  cm <- assume(cm, causes(ixn, measure_3))
+  cm <- interacts(cm, measure_0, measure_1, dv=measure_3)
   cm@graph <- updateGraph(cm)
 
   interactions <- getInteractions(cm, measure_3)
   expect_length(interactions, 1)
-  expect_true(list(ixn) %in% interactions)
+  ixn <- interactions[[1]]
+  expect_equal(ixn@name, "measure_0*measure_1")
+  expect_equal(ixn@dv, measure_3)
 
   # 2 interactions
-  ixn <- interacts(measure_0, measure_1, measure_2)
-  cm <- assume(cm, causes(ixn, measure_3))
+  cm <- interacts(cm, measure_0, measure_1, dv=measure_2)
   cm@graph <- updateGraph(cm)
 
   interactions <- getInteractions(cm, measure_3)
-  expect_length(interactions, 2)
-  expect_true(list(ixn) %in% interactions)
+  expect_length(interactions, 1)
+  ixn <- interactions[[1]]
+  expect_equal(ixn@name, "measure_0*measure_1")
+  expect_equal(ixn@dv, measure_3)
+  interactions <- getInteractions(cm, measure_2)
+  expect_length(interactions, 1)
+  ixn <- interactions[[1]]
+  expect_equal(ixn@name, "measure_0*measure_1")
+  expect_equal(ixn@dv, measure_2)
 })
 
 test_that("Infer confounders correctly", {
@@ -537,23 +544,21 @@ test_that("Infer interactions correctly", {
   expect_length(interactions, 0)
 
   # There is 1 interaction
-  cm <- assume(cm, causes(interacts(measure_0, measure_1), measure_2))
-
+  cm <- interacts(cm, measure_0, measure_1, dv=measure_2)
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 1)
 
   # There is only 1 interaction with the applicable DV
-  cm <- assume(cm, causes(interacts(measure_1, measure_2), measure_3))
-
+  cm <- interacts(cm, measure_1, measure_2, dv=measure_3)
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 1)
 
   # There are 2 interactions
-  cm <- assume(cm, causes(interacts(measure_1, measure_2), measure_2))
+  cm <- interacts(cm, measure_1, measure_3, dv=measure_2)
 
   cm@graph <- updateGraph(cm)
   confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)

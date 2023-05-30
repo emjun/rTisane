@@ -295,8 +295,8 @@ Interacts <- setClass("Interacts",
     slot = c(
         name = "character",
         units = "list", # List of Units
-        # cardinality = "integer",
-        variables = "list" # List of AbstractVariables
+        variables = "list", # List of AbstractVariables
+        dv = "AbstractVariable" # dependent or outcome variable for 
     ),
     contains = "AbstractVariable"
 )
