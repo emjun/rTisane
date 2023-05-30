@@ -210,6 +210,10 @@ test_that("Interacts created properly", {
   expect_equal(measure_2, ixn@dv)
   expect_equal(unit, ixn@units[[1]])
   expect_equal(1, length(ixn@units))
+  expect_equal(3, length(updatedCM@variables))
+  expect_true(c(measure_0) %in% updatedCM@variables)
+  expect_true(c(measure_1) %in% updatedCM@variables)
+  expect_true(c(measure_2) %in% updatedCM@variables)
 
   # 3-way interaction
   updatedCM <- interacts(updatedCM, measure_0, measure_1, measure_2, dv=measure_3)
@@ -223,6 +227,11 @@ test_that("Interacts created properly", {
   expect_equal(measure_3, ixn@dv)
   expect_equal(unit, ixn@units[[1]])
   expect_equal(1, length(ixn@units))
+  expect_equal(4, length(updatedCM@variables))
+  expect_true(c(measure_0) %in% updatedCM@variables)
+  expect_true(c(measure_1) %in% updatedCM@variables)
+  expect_true(c(measure_2) %in% updatedCM@variables)
+  expect_true(c(measure_3) %in% updatedCM@variables)
 
   # TODO: Add more tests for to make sure that measure, unit has relationship is inferred
   # especially when multiple units involved
