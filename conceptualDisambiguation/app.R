@@ -376,11 +376,11 @@ conceptualDisambiguationApp <- function(conceptualModel, iv, dv, inputFilePath) 
               print("Rendering graph")
               # Use igraph instead of dagitty for graph layout on Posit Cloud due to V8 crash issues:
               # https://github.com/r-causal/ggdag/issues/55
-              edgeList <- as.matrix(edges(gr)[1:2])
-              igr <- igraph::graph_from_edgelist(edgeList)
+            #   edgeList <- as.matrix(edges(gr)[1:2])
+            #   igr <- igraph::graph_from_edgelist(edgeList)
               output$graph <- renderPlot({
-                plot(igr, layout=igraph::layout_with_drl)
-                # plot(graphLayout(gr))
+            #     plot(igr, layout=igraph::layout_with_drl)
+                plot(graphLayout(gr))
               })
             } else {
                 output$graph <- renderText("No relationships in your conceptual model!")
