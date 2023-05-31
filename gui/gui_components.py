@@ -973,12 +973,12 @@ class GUIComponents:
                             me: html.Span(
                                 [
                                     me + " ",
-                                    html.I(
-                                        className="bi bi-info-circle",
-                                        id=self.variables["interaction effects"][me][
-                                            "info-id"
-                                        ],
-                                    ),
+                                    # html.I(
+                                    #     className="bi bi-info-circle",
+                                    #     id=self.variables["interaction effects"][me][
+                                    #         "info-id"
+                                    #     ],
+                                    # ),
                                 ]
                             )
                             for me in self.getGeneratedInteractionEffects()
