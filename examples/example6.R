@@ -15,7 +15,7 @@ income <- continuous(unit=pid, name="PINCP")
 # Construct Conceptual Model
 cm <- ConceptualModel() %>%
 # Specify conceptual relationships
-  assume(causes(age, income)) %>%
+#   assume(causes(age, income)) %>%
   hypothesize(relates(edu, income)) %>%
   hypothesize(relates(sex, income, when=equals(sex, 1.0), then=increases(income))) %>% 
   interacts(sex, edu, dv=income)
