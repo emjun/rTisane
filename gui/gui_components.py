@@ -994,44 +994,34 @@ class GUIComponents:
         )
 
     def layoutFancyChecklist(self, labelDict, componentIdSetter, valueDict):
-        print("layout fancy checklist")
+        print("2 Back to original fancy checklist")
         # flex wrap = no wrap
         options = []
-        # for name, label in labelDict.items():
-        #     options.append(
-        #         dbc.Row(
-        #             [
-        #                 dbc.Row([
-        #                     dbc.Checkbox(
-        #                     id=componentIdSetter(name),
-        #                     className="form-check-input",
-        #                     # value=valueDict[name],
-        #                     value=True, 
-        #                     label=label
-        #                 ),
-        #                 # dbc.Label(
-        #                 #     label,
-        #                 #     html_for=componentIdSetter(name),
-        #                 #     className="form-check-label",
-        #                 # ),
-        #                 ], 
-        #                 style="in-line")
-        #             ],
-        #             # check=True,
-        #         )
-        #     )
-            # options.append(
-            #     # dbc.Checklist(
-            #         # options=[
-            #             {"label": label, "value": componentIdSetter(name)}
-            #         # ]
-            #     # )
-            # )
-            # pass
+        for name, label in labelDict.items():
+            options.append(
+                dbc.Row(
+                    [
+                        # dbc.Row([
+                            dbc.Checkbox(
+                            id=componentIdSetter(name),
+                            className="form-check-input",
+                            # value=valueDict[name],
+                            value=True, 
+                            # label=label
+                        ),
+                        dbc.Label(
+                            label,
+                            html_for=componentIdSetter(name),
+                            className="form-check-label",
+                        )
+                        ], 
+                        style={"flex-wrap": "nowrap"}
+                    # ],
+                    # check=True,
+                )
+            )
+            pass
         return html.Div(options)
-        # print("creating checklist")
-        # print(options)
-        # return dbc.Checklist(options=options)
 
     def makeFancyCheckbox(self, value=False, label=None, id=None):
         if label:

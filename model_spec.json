@@ -4,9 +4,8 @@
     "interaction effects": [
         "SEX*SCHL"
     ],
-    "link": "identity",
+    "link": "inverse",
     "main effects": [
-        "AGEP",
         "SCHL",
         "SEX"
     ],
