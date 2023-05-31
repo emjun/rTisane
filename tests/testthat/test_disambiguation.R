@@ -278,6 +278,36 @@ test_that("Statistical modeling options created properly", {
   expect_equal(query$DV, measure_2@name)
   expect_length(query$IVs, 1)
   expect_equal(query$IVs[[1]], measure_0@name)
+
+  # Introduce an interaction
+  cm <- interacts(cm, measure_0, measure_1, dv=measure_2)
+  cm@graph <- updateGraph(cm)
+  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  familyLinkPairs <- inferFamilyLinkFunctions(measure_2)
+
+  path <- generateStatisticalModelJSON(confounders=confounders, interactions=interactions, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
+
+  options <- jsonlite::read_json(path)
+  expect_false(is.null(options$input))
+  input <- options$input
+  expect_type(input$generatedMainEffects, "list")
+  expect_length(input$generatedMainEffects, 2) # IV and confounders
+  expect_true(measure_0@name %in% input$generatedMainEffects) # IV
+  expect_true(measure_1@name %in% input$generatedMainEffects) # confounder
+  expect_type(input$generatedInteractionEffects, "list")
+  expect_length(input$generatedInteractionEffects, 1)
+  ixn <- input$generatedInteractionEffects[[1]]
+  expect_equal("measure_0*measure_1", ixn)
+  expect_type(input$generatedRandomEffects, "list")
+  re <- getElement(input$generatedRandomEffects, " ")
+  expect_length(re, 0)
+  expect_false(is.null(input$generatedFamilyLinkFunctions)) # Key exists!
+  expect_false(is.null(input$query)) # Key exists!
+  query <- input$query
+  expect_equal(query$DV, measure_2@name)
+  expect_length(query$IVs, 1)
+  expect_equal(query$IVs[[1]], measure_0@name)
 })
 
 # Check code generation -- manual inspect?
