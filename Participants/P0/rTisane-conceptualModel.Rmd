@@ -4,6 +4,24 @@
 ```{r}
 library(rTisane)
 # Add here
+student <- Unit(name="student", cardinality=100)
+race <- categories(unit=student, name="Race", cardinality=5, baseline="White")
+tutoring <- categories(unit=student, name="Tutoring", cardinality=2, baseline="in-person")
+
+ses <- categories(unit=student, name="SES", order=list("lower", "middle", "upper"))
+
+extra <- counts(unit=student, name="Num Extra-curriculars")
+
+testScore <- continuous(unit=student, name="Test score")
+ixn <- interacts(ses, tutoring)
+
+
+cm <- ConceptualModel()
+causes(causes=tutoring, effect=testScore)
+relates(lhs=tutoring, rhs=testScore)
+causes(causes=tutoring, effect=testScore, when=equals(tutoring, 'in-person'), then=increases(testScore))
+
+
 ```
 
 2. Add the following line to the end of your program above: 
