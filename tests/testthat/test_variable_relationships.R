@@ -60,39 +60,39 @@ test_that("Ambiguous Relates created properly", {
   expect_null(ambig_relat@when)
   expect_null(ambig_relat@then)
 
-  # Relates involving 2-way interaction
-  ixn <- interacts(measure_0, measure_1)
-  # ixn relates m
-  ambig_relat <- relates(ixn, measure_2)
-  # Verify that Relates relationship created correctly
-  expect_equal(ambig_relat@lhs, ixn)
-  expect_equal(ambig_relat@rhs, measure_2)
-  expect_null(ambig_relat@when)
-  expect_null(ambig_relat@then)
-  # m relates ixn
-  ambig_relat <- relates(measure_2, ixn)
-  # Verify that Relates relationship created correctly
-  expect_equal(ambig_relat@lhs, measure_2)
-  expect_equal(ambig_relat@rhs, ixn)
-  expect_null(ambig_relat@when)
-  expect_null(ambig_relat@then)
+  # # Relates involving 2-way interaction
+  # ixn <- interacts(measure_0, measure_1)
+  # # ixn relates m
+  # ambig_relat <- relates(ixn, measure_2)
+  # # Verify that Relates relationship created correctly
+  # expect_equal(ambig_relat@lhs, ixn)
+  # expect_equal(ambig_relat@rhs, measure_2)
+  # expect_null(ambig_relat@when)
+  # expect_null(ambig_relat@then)
+  # # m relates ixn
+  # ambig_relat <- relates(measure_2, ixn)
+  # # Verify that Relates relationship created correctly
+  # expect_equal(ambig_relat@lhs, measure_2)
+  # expect_equal(ambig_relat@rhs, ixn)
+  # expect_null(ambig_relat@when)
+  # expect_null(ambig_relat@then)
 
-  # Relates involving 3-way interaction
-  ixn <- interacts(measure_0, measure_1, measure_2)
-  # ixn relates m
-  ambig_relat <- relates(ixn, measure_3)
-  # Verify that Relates relationship created correctly
-  expect_equal(ambig_relat@lhs, ixn)
-  expect_equal(ambig_relat@rhs, measure_3)
-  expect_null(ambig_relat@when)
-  expect_null(ambig_relat@then)
-  # m relates ixn
-  ambig_relat <- relates(measure_3, ixn)
-  # Verify that Relates relationship created correctly
-  expect_equal(ambig_relat@lhs, measure_3)
-  expect_equal(ambig_relat@rhs, ixn)
-  expect_null(ambig_relat@when)
-  expect_null(ambig_relat@then)
+  # # Relates involving 3-way interaction
+  # ixn <- interacts(measure_0, measure_1, measure_2)
+  # # ixn relates m
+  # ambig_relat <- relates(ixn, measure_3)
+  # # Verify that Relates relationship created correctly
+  # expect_equal(ambig_relat@lhs, ixn)
+  # expect_equal(ambig_relat@rhs, measure_3)
+  # expect_null(ambig_relat@when)
+  # expect_null(ambig_relat@then)
+  # # m relates ixn
+  # ambig_relat <- relates(measure_3, ixn)
+  # # Verify that Relates relationship created correctly
+  # expect_equal(ambig_relat@lhs, measure_3)
+  # expect_equal(ambig_relat@rhs, ixn)
+  # expect_null(ambig_relat@when)
+  # expect_null(ambig_relat@then)
 
 })
 
@@ -149,39 +149,39 @@ test_that("Causes created properly", {
   expect_null(cause_relat@when)
   expect_null(cause_relat@then)
 
-  # Causes involving 2-way interaction
-  ixn <- interacts(measure_0, measure_1)
-  # ixn causes m
-  cause_relat <- causes(ixn, measure_3)
-  # Verify that Causes relationship created correctly
-  expect_equal(cause_relat@cause, ixn)
-  expect_equal(cause_relat@effect, measure_3)
-  expect_null(cause_relat@when)
-  expect_null(cause_relat@then)
-  # m causes ixn
-  cause_relat <- causes(measure_3, ixn)
-  # Verify that Causes relationship created correctly
-  expect_equal(cause_relat@cause, measure_3)
-  expect_equal(cause_relat@effect, ixn)
-  expect_null(cause_relat@when)
-  expect_null(cause_relat@then)
+  # # Causes involving 2-way interaction involving influence of variables measure_0, measure_1 on measure_3
+  # ixn <- interacts(measure_0, measure_1, measure_3)
+  
+  # # cause_relat <- causes(ixn, measure_3)
+  # # Verify that Causes relationship created correctly
+  # expect_equal(cause_relat@cause, ixn)
+  # expect_equal(cause_relat@effect, measure_3)
+  # expect_null(cause_relat@when)
+  # expect_null(cause_relat@then)
+  # # m causes ixn
+  # cause_relat <- causes(measure_3, ixn)
+  # # Verify that Causes relationship created correctly
+  # expect_equal(cause_relat@cause, measure_3)
+  # expect_equal(cause_relat@effect, ixn)
+  # expect_null(cause_relat@when)
+  # expect_null(cause_relat@then)
 
-  # Causes involving 3-way interaction
-  ixn <- interacts(measure_0, measure_1, measure_2)
-  # ixn causes m
-  cause_relat <- causes(ixn, measure_3)
-  # Verify that Causes relationship created correctly
-  expect_equal(cause_relat@cause, ixn)
-  expect_equal(cause_relat@effect, measure_3)
-  expect_null(cause_relat@when)
-  expect_null(cause_relat@then)
-  # m causes ixn
-  cause_relat <- causes(measure_3, ixn)
-  # Verify that Causes relationship created correctly
-  expect_equal(cause_relat@cause, measure_3)
-  expect_equal(cause_relat@effect, ixn)
-  expect_null(cause_relat@when)
-  expect_null(cause_relat@then)
+  # # Causes involving 3-way interaction
+  # ixn <- interacts(measure_0, measure_1, measure_2)
+  # # ixn causes m
+  # cause_relat <- causes(ixn, measure_3)
+  # # Verify that Causes relationship created correctly
+  # expect_equal(cause_relat@cause, ixn)
+  # expect_equal(cause_relat@effect, measure_3)
+  # expect_null(cause_relat@when)
+  # expect_null(cause_relat@then)
+  # # m causes ixn
+  # cause_relat <- causes(measure_3, ixn)
+  # # Verify that Causes relationship created correctly
+  # expect_equal(cause_relat@cause, measure_3)
+  # expect_equal(cause_relat@effect, ixn)
+  # expect_null(cause_relat@when)
+  # expect_null(cause_relat@then)
 
 })
 

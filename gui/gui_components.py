@@ -973,12 +973,12 @@ class GUIComponents:
                             me: html.Span(
                                 [
                                     me + " ",
-                                    html.I(
-                                        className="bi bi-info-circle",
-                                        id=self.variables["interaction effects"][me][
-                                            "info-id"
-                                        ],
-                                    ),
+                                    # html.I(
+                                    #     className="bi bi-info-circle",
+                                    #     id=self.variables["interaction effects"][me][
+                                    #         "info-id"
+                                    #     ],
+                                    # ),
                                 ]
                             )
                             for me in self.getGeneratedInteractionEffects()
@@ -994,6 +994,8 @@ class GUIComponents:
         )
 
     def layoutFancyChecklist(self, labelDict, componentIdSetter, valueDict):
+        print("2 Back to original fancy checklist")
+        # flex wrap = no wrap
         options = []
         for name, label in labelDict.items():
             options.append(
@@ -1004,15 +1006,17 @@ class GUIComponents:
                             id=componentIdSetter(name),
                             className="form-check-input",
                             # value=valueDict[name],
-                            value=True
+                            value=True, 
+                            # label=label
                         ),
                         dbc.Label(
                             label,
                             html_for=componentIdSetter(name),
                             className="form-check-label",
-                        ),
-                        # ])
-                    ],
+                        )
+                        ], 
+                        style={"flex-wrap": "nowrap"}
+                    # ],
                     # check=True,
                 )
             )
