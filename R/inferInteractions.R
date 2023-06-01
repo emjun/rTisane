@@ -1,21 +1,30 @@
 # Helper method 
+# Returns a list of interactions that involve the @param dv
 getInteractions <- function(conceptualModel, dv) {
     interactions <- list()     
     gr <- conceptualModel@graph
-    dvParents <- parents(gr, dv@name)
+    # dvParents <- parents(gr, dv@name)
+    relationships <- conceptualModel@relationships
 
     stopifnot(is(conceptualModel, "ConceptualModel")) 
 
-    for (var in conceptualModel@variables) {
-        # Is the variable an Interaction?
-        if (is(var, "Interacts")) {
-            # Does the interaction cause the @param dv? 
-            if (var@name %in% dvParents) {
-                interactions <- append(interactions, var)
+    for (r in relationships) {
+        if (is(r, "Interacts")) {
+            if (identical(r@dv, dv)) {
+                interactions <- append(interactions, r)
             }
-            
-        }        
+        }
     }
+    # for (var in conceptualModel@variables) {
+    #     # Is the variable an Interaction?
+    #     if (is(var, "Interacts")) {
+    #         # Does the interaction cause the @param dv? 
+    #         if (var@name %in% dvParents) {
+    #             interactions <- append(interactions, var)
+    #         }
+            
+    #     }        
+    # }
 
     # Return interactions 
     interactions
@@ -32,27 +41,31 @@ getInteractions <- function(conceptualModel, dv) {
 #' @keywords
 # inferInteractions()
 inferInteractions <- function(conceptualModel, iv, dv, confounders) {
-    interactions = list() # interactions that should be considered as candidates given the @param iv and @param confounders
+    # interactions = list() # interactions that should be considered as candidates given the @param iv and @param confounders
 
-    allInteractions = getInteractions(conceptualModel=conceptualModel, dv=dv)
+    interactions = getInteractions(conceptualModel=conceptualModel, dv=dv)
 
-    allMainEffects = append(iv, confounders)
-    allInteractionVarsAsMain = TRUE
-    for (ixn in allInteractions) {
-        # TODO: Check that the IXN is ON the DV 
+    # allMainEffects = append(iv, confounders)
+    # allInteractionVarsAsMain = TRUE
+    # for (ixn in allInteractions) {
+    #     browser()
 
-        for (var in ixn@variables) {
-            # A variable involved in the interaction ixn is not found as a main effect
-            if (!(list(var) %in% allMainEffects)) {
-                FALSE
-            }
-        }
+    #     if (ixn@dv == dv) {
+    #         interactions <- append(interactions, ixn)
+    #     }
 
-        # All the variables involved in an interaction effect are included as main effects
-        if (allInteractionVarsAsMain) {
-            interactions = append(interactions, ixn)
-        }
-    }
+    #     # for (var in ixn@variables) {
+    #     #     # A variable involved in the interaction ixn is not found as a main effect
+    #     #     if (!(list(var) %in% allMainEffects)) {
+    #     #         FALSE
+    #     #     }
+    #     # }
+
+    #     # # All the variables involved in an interaction effect are included as main effects
+    #     # if (allInteractionVarsAsMain) {
+    #     #     interactions = append(interactions, ixn)
+    #     # }
+    # }
 
     # Return interactions
     interactions

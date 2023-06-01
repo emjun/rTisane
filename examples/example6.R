@@ -11,17 +11,14 @@ age <- continuous(unit=pid, name="AGEP")
 edu <- categories(unit=pid, name="SCHL", cardinality=10)
 sex <- categories(unit=pid, name="SEX", cardinality=2)
 income <- continuous(unit=pid, name="PINCP")
-ixn <- interacts(edu, sex)
 
 # Construct Conceptual Model
 cm <- ConceptualModel() %>%
 # Specify conceptual relationships
-  assume(causes(age, income)) %>%
+#   assume(causes(age, income)) %>%
   hypothesize(relates(edu, income)) %>%
-  hypothesize(relates(sex, income, when=equals(sex, 1.0), then=increases(income))) %>%
-  hypothesize(relates(ixn, income))
-  # conditions <- list(equals(sex, 1.0), increases(edu))
-  # cm <- hypothesize(whenThen(when=conditions, then=increases(income)), cm)
+  hypothesize(relates(sex, income, when=equals(sex, 1.0), then=increases(income))) %>% 
+  interacts(sex, edu, dv=income)
 
 # Education is IV, Income is DV
 # Need to disambiguate relationship between Education and Income, between Sex and Income in conceptual model

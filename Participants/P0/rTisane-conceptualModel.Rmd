@@ -1,8 +1,14 @@
 # Conceptual model
 
-1. Express your conceptual model using rTisane.
+1. Declare your variables.
 ```{r}
 library(rTisane)
+
+# Add here 
+```
+
+2. Specify your conceptual model. 
+```{r}
 # Add here
 student <- Unit(name="student", cardinality=100)
 race <- categories(unit=student, name="Race", cardinality=5, baseline="White")
@@ -24,11 +30,8 @@ causes(causes=tutoring, effect=testScore, when=equals(tutoring, 'in-person'), th
 
 ```
 
-2. Add the following line to the end of your program above: 
+3. Update the below line with the name of your conceptual model's variable. Then, run the above code snippets before running this one:
 ```{r}
-# Copy and paste above 
 # Replace <conceptualModel> with your conceptual model's variable name
 updatedCM <- checkAndRefine(<conceptualModel>)
 ```
-
-3. Run your program! Hit the green play button on the first code cell containing your conceptual model.

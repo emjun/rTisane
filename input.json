@@ -1,1 +1,0 @@
-{"relationships":["Assume AGEP causes PINCP","Hypothesize SCHL and PINCP are related","Hypothesize SEX and PINCP are related"],"choices":{"Assume AGEP causes PINCP":[],"Hypothesize SCHL and PINCP are related":["Hypothesize SCHL causes PINCP","Hypothesize PINCP causes SCHL"],"Hypothesize SEX and PINCP are related":["Hypothesize SEX causes PINCP","Hypothesize PINCP causes SEX"]}}

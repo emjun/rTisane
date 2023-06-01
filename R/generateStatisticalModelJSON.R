@@ -22,13 +22,20 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
     # output <- list(generatedMainEffects=generatedMainEffects)
 
     #### Generate options for interaction effects
-    generatedInteractionEffects = list()
+    generatedInteractionEffects <- list()
+    if (!is.null(interactions)) {
+        stopifnot(class(interactions) == "list")
+        stopifnot(length(interactions) > 0)
 
-    # Are there interaction effects to consider?
-    if (length(interactions) > 0) {
-        cat('IMPLEMENT interactions')
-        browser()
+        for (ixn in interactions) {
+            generatedInteractionEffects <-  append(generatedInteractionEffects, ixn@name)
+        }
     }
+
+    # # Are there interaction effects to consider?
+    # if (length(interactions) > 0) {
+    #     generatedInteractionEffects <- generatedInteractionEffects
+    # }
 
     #### Generate options for random effects
     # generatedRandomEffects = data.frame(randomSlopes=c("", ""), randomIntercepts=c("", ""))

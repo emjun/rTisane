@@ -11,6 +11,27 @@
       margin: 30px auto;
       max-width: 800px;
     }
+    .copy-button {
+      margin-left: auto;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #333;
+      height: 2.5em;
+      align-self: flex-start;
+    }
+    pre {
+      display: flex;
+      background-color: #e2e2e2;
+      padding: 5px;
+      overflow: auto;
+    }
+    .language-R {
+      overflow: auto;
+    }
   </style>
 </head>
 
@@ -68,12 +89,45 @@
       });
   }
 
-  renderMarkdown('tab1-content', 'docs/intro.md');
-  renderMarkdown('tab2-content', 'docs/step1.md');
-  renderMarkdown('tab3-content', 'docs/step2.md');
-  renderMarkdown('tab4-content', 'docs/step3.md');
-  renderMarkdown('tab5-content', 'docs/faqs.md');
-  renderMarkdown('tab6-content', 'docs/tips.md');
+  renderMarkdown('tab1-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/intro.md');
+  renderMarkdown('tab2-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/step1.md');
+  renderMarkdown('tab3-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/step2.md');
+  renderMarkdown('tab4-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/step3.md');
+  renderMarkdown('tab5-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/faqs.md');
+  renderMarkdown('tab6-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/tips.md');
+</script>
+
+
+<script>
+  // Add a copy to clipboard button to all <code> blocks
+  function addCopyButtonToCodeBlocks() {
+    var codeBlocks = document.querySelectorAll('code.language-R');
+  
+    for (var i = 0; i < codeBlocks.length; i++) {
+      var codeBlock = codeBlocks[i];
+  
+      // Create the copy button
+      var copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.textContent = 'Copy';
+  
+      // Add click event listener to copy the code
+      copyButton.addEventListener('click', function () {
+        var code = this.parentNode.textContent;
+        navigator.clipboard.writeText(code).then(function () {
+          // alert('Code copied to clipboard!');
+        }).catch(function (error) {
+          console.error('Failed to copy code: ', error);
+        });
+      });
+  
+      // Append the copy button to the code block
+      codeBlock.parentNode.append(copyButton);
+    }
+  }
+  
+  // Call the function when the page is loaded
+  window.addEventListener('load', setTimeout(addCopyButtonToCodeBlocks, 1000));
 </script>
 
 </body>

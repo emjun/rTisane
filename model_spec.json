@@ -1,10 +1,11 @@
 {
     "dependent variable": "PINCP",
     "family": "Gamma",
-    "interaction effects": [],
+    "interaction effects": [
+        "SEX*SCHL"
+    ],
     "link": "inverse",
     "main effects": [
-        "AGEP",
         "SCHL",
         "SEX"
     ],

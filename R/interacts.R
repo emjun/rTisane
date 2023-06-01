@@ -2,13 +2,14 @@
 #'
 #' Method for constructing an interaction between two or more variables.
 #' Returns the Interacts"constructed.
-#' @param lhs AbstractVariable.
-#' @param rhs AbstractVariable.
+#' @param conceptualModel ConceptualModel.
+#' @param ... AbstractVariables.
+#' @param dv AbstractVariable.
 #' @keywords
 #' @export
 # interacts()
 # setGeneric("interacts", function(...) standardGeneric("interacts"))
-interacts <- function(...){
+interacts <- function(conceptualModel, ..., dv){
   vars = c(...)
   # Check that every variable passed as a parameter is an AbstractVariable
   for (r in vars) {
@@ -20,7 +21,7 @@ interacts <- function(...){
     if (name == "") {
         name = r@name
     } else {
-        name = paste(name, r@name, sep="_X_")
+        name = paste(name, r@name, sep="*")
     }
   }
   # create a list of units
@@ -30,14 +31,31 @@ interacts <- function(...){
   }
   # filter out duplicate units 
   units = runits[!duplicated(runits)]
+  
   # create list of variables 
   variables = list() 
   for (r in vars) {
     variables = append(variables, r)
-  }
-  # create an Interacts"relationship obj
-  relat = Interacts(name=name, units=units, variables=variables)
 
-  # Return cause relationship
-  relat
+    # Is the variable involved in the interaction in the Conceptual Model?
+    if (!(c(r) %in% conceptualModel@variables)) {
+      # Add variables to Conceptual Model 
+      conceptualModel@variables <- append(conceptualModel@variables, r)
+    }
+  }
+
+  # Is the dv in the Conceptual Model?
+  if (!(c(dv) %in% conceptualModel@variables)) {
+    # Add dv to Conceptual Model 
+    conceptualModel@variables <- append(conceptualModel@variables, dv)
+  }
+
+  # create an Interacts relationship obj
+  ixn = Interacts(name=name, units=units, variables=variables, dv=dv)
+
+  # Add relationship to ConceptualModel 
+  conceptualModel@relationships <- append(conceptualModel@relationships, ixn)
+
+  # Return updated ConceptualModel
+  conceptualModel
 }

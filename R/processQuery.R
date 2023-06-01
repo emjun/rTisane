@@ -47,8 +47,8 @@ generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
       tmp <- list()
       tmp[[str]] <- disambig_choices
       choices <- append(choices, tmp)
-    } else {
-      stopifnot(relatClass == "Hypothesis")
+    } else if (relatClass == "Hypothesis") {
+      
       r <- relat@relationship
 
       # Construct Hypothesize string
@@ -63,6 +63,9 @@ generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
       tmp <- list()
       tmp[[str]] <- disambig_choices
       choices <- append(choices, tmp)
+    } else {
+      stopifnot(relatClass == "Interacts")
+      # pass
     }
   }
 
