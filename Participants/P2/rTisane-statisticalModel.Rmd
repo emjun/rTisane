@@ -1,4 +1,5 @@
 # Statistical analysis
+Relying on your conceptual model alone, use rTisane to implement a statistical model that assesses the influence of variables you believe to be important (in the context of additional potentially influential factors) on income.
 
 1. Copy and paste your variables and conceptual model from before. 
 ```{r}

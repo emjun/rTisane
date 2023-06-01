@@ -1,6 +1,6 @@
 # Conceptual model
 
-1. Declare your variables. Below, we've declared the variables for you. 
+1. Your team is able to collect data about the below variables. The data that your team has collected can be found [here](https://homes.cs.washington.edu/~emjun/summative_eval/income.csv).
 ```{r}
 library(rTisane)
 age <- continuous("Age")
