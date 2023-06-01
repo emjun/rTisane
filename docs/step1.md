@@ -64,22 +64,3 @@ In the scenario, test score is a continuous measure:
 ```R 
 testScore <- continuous(unit=student, name="Test score")
 ```
-
-### Interactions
-Interacting variables influence an outcome beyond their additive influence. To express an interaction, use `interacts`, which takes the following parameters:
-- `lhs`: Measure.
-- `rhs`: Measure.
-- `...` : Measure (optional, for more than 2-way interactions)
-
-`interacts` returns a new Measure that is the multiplicative result of all the parameter Measures. 
-
-Like any other Measure, an interaction can be `categories`, `counts`, or `continuous`. rTisane follows these rules: 
-- If one or more of the interacting Measures are Categories, the returned variable will also be of type Categories. By default, the returned variable will have no order.
-- If all interacting Measures are Counts, the returned Measure will also be Counts. 
-- If all interacting Measures are Continuous, the returned Measure will be Continuous. 
-- If some interacting Measures are Counts and others are Continuous, the returned Measure will be Continuous. 
-
-In the scenario, if we think that the effect of tutoring (on test score) will depend on socioeconomic background, we could create an interaction between tutoring and socioeconomic background. 
-```R
-ixn <- interacts(ses, tutoring)
-```

@@ -1,22 +1,22 @@
 # Statistical analysis
 
-1. Copy and paste your conceptual model below. 
+1. Copy and paste your variables and conceptual model from before. 
 ```{r}
 library(rTisane)
+
 # Add here
 ```
 
-2. Query for a statistical model using your conceptual model.
+2. Fill in the query with your variable names. Run the above code snippet before running this one below.
 ```{r}
 # Copy and paste above 
 # Replace <conceptualModel> with the conceptual model's variable name
 # Replace <iv> with an independent variable of interest
 # Replace <dv> with the dependent variable of interest. In this case, the variable for income. 
-script <- query(concpetualModel=<conceptualModel>, iv=<iv>, <dv>)
+# data: The dataset is available at the relative path "../income.csv"
+script <- query(concpetualModel=<conceptualModel>, iv=<iv>, <dv>, data="../income.csv")
 ```
 
-3. Run your program! Hit the green play button on the first code cell containing your conceptual model.
+3. Open, edit (if you desire), and run your statistical modeling script! 
 
-4. Open, edit, and run your statistical modeling script! 
-
-5. Summarize the results of your analysis.
+4. Summarize the results of your analysis below: 

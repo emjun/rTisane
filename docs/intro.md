@@ -3,7 +3,7 @@
 
 **What you will learn:** will use rTisane to author a statistical model without a priori knowing how exactly to formulate it. 
 
-In five steps (!!!), rTisane will help you leverage what you know about your domain in order to mathematically formulate a statistical model and implement it in code.
+In three steps (!!!), rTisane will help you leverage what you know about your domain in order to mathematically formulate a statistical model and implement it in code.
 
 Note: Although a dataset is not required to use rTisane, if included, a dataset must be in long format. Furthermore, if a dataset is used, some [parameters for declaring variables become optional](step1.md#measures). rTisane will infer them from the dataset. 
 

@@ -29,7 +29,7 @@ causes(causes=tutoring, effect=testScore)
 ```
 
 #### Relates
-Use `relates` th specify that two variables are related but you are uncertain about the direction of influence. 
+Use `relates` to specify that two variables are related but you are uncertain about the direction of influence. 
 
 `relates` takes the following parameters: 
 - `lhs`: Measure
@@ -119,4 +119,20 @@ hypothesize(cm, cr) # cm refers to the Conceptual Model you declared previously 
 To see and refine your conceptual model, you can run the following line: 
 ```R
 updatedCM <- checkAndRefine(cm) # cm is the Conceptual Model you have defined
+```
+
+## Additional annotations: Interactions
+As you think through conceptual relationships, you may become aware of interactions between variables. Interactions may explain how variables influence an outcome beyond their additive influence. To express an interaction, use `interacts`, which takes the following parameters:
+- `conceptualModel`: ConceptualModel. Your conceptual model
+- `...`: Measures. Two or more variables you think interact
+- `dv` : Measure.
+
+`interacts` expects you to have specified a conceptual relationship between each of the measures in `...` and the `dv` already. `interacts` adds an annotation about these variables to your conceptual model and will return an updated conceptual model. 
+
+To derive statistical models, rTisane will suggest including any interactions that involve a dependent variable of interest.
+
+In the scenario, if we think that the effect of tutoring (on test score) will depend on socioeconomic background, we could create and add an interaction between tutoring and socioeconomic background to our conceptual model.
+```R
+
+cm <- interacts(cm, ses, tutoring, dv=testScore)
 ```
