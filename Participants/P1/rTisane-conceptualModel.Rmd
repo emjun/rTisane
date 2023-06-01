@@ -3,7 +3,6 @@
 1. Declare your variables.
 ```{r}
 library(rTisane)
-
 # Add here 
 ```
 
