@@ -18,7 +18,7 @@ script <- query(conceptualModel=cm, dv=testScore, iv=tutoring, data="data.csv")
 script <- query(conceptualModel=cm, dv=testScore, iv=tutoring, data=df) 
 ```
 
-*Important note:* In order to infer a statistical model, there must be a hypothesized relationship between the `iv` and `dv`.
+*Important:* In order to infer a statistical model, there must be a hypothesized relationship between the `iv` and `dv`.
 
 Executing the `query` will initiate an interactive process to clarify the input conceptual model and present you with a few follow-up questions necessary to infer a statistical model. 
 
