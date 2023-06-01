@@ -7,7 +7,10 @@ Note: This example is adapted from Cohen, Cohen, West, Aiken 2003.
 
 ## Step 1: Declare variables
 ```R
-# Type in here
+student <- Unit(name="student", cardinality=100)
+race <- categories(unit=student, name="Race", cardinality=5, baseline="White")
+tutoring <- categories(unit=student, name="Tutoring", cardinality=2, baseline="in-person")
+
 ```
 
 ## Step 2: Specify conceptual relationships 
