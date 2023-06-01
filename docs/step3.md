@@ -29,3 +29,5 @@ The last thing to do is to specify data in your script (when you have it) and ru
 ```R
 source("model.R") # You can copy and paste the script path that rTisane gives you, which should be something like "model.R"
 ```
+
+*Important: You can have multiple queries involving the same conceptual model but different IVs and DVs!* Each query will output a separate `model.R` file. You may want to issue multiple queries and compare the statistical models rTisane provides as output, especially if you have multiple variables of interest. 
