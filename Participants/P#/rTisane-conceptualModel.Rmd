@@ -1,0 +1,24 @@
+# Conceptual model
+
+1. Declare your variables. Below, we've declared the variables for you. 
+```{r}
+library(rTisane)
+age <- continuous("Age")
+race <- categories("Race")
+edu <- categories("Education")
+occupation <- categories("Occupation")
+sex <- categories("Sex")
+income <- continuous("Income")
+```
+
+2. Specify your conceptual model. 
+```{r}
+cm <- ConceptualModel()
+
+# Add conceptual relationships here
+```
+
+3. Run the above code snippets before running this one:
+```{r}
+updatedCM <- checkAndRefine(cm) # Check and refine your conceptual model
+```
