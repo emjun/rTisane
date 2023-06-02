@@ -3,6 +3,9 @@
 ## Step 2: Specify conceptual model
 A conceptual model is a graph with variables (nodes) and conceptual relationships between variables (edges). The conceptual model should accurately represent your background knowledge about the domain. The conceptual model is used to produce a statistical model.
 
+In this tutorial, you'll construct a conceptual model that looks like this:
+<img src="https://raw.githubusercontent.com/emjun/rTisane/study/docs/graph.png" >
+
 First, construct a conceptual model and then add conceptual relationships to it.
 ```R
 cm <- ConceptualModel()
