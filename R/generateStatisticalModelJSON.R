@@ -25,10 +25,12 @@ generateStatisticalModelJSON <- function(confounders, interactions, randomEffect
     generatedInteractionEffects <- list()
     if (!is.null(interactions)) {
         stopifnot(class(interactions) == "list")
-        stopifnot(length(interactions) > 0)
+        # stopifnot(length(interactions) > 0)
 
-        for (ixn in interactions) {
+        if (length(interactions) > 0) {
+            for (ixn in interactions) {
             generatedInteractionEffects <-  append(generatedInteractionEffects, ixn@name)
+        }
         }
     }
 
