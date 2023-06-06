@@ -4,7 +4,20 @@ Relying on your conceptual model alone, use rTisane to implement a statistical m
 1. Copy and paste your variables and conceptual model from before. 
 ```{r}
 library(rTisane)
+person <- Unit(name = "person")
+age <- continuous(unit = person, "Age")
+race <- categories(unit = person, "Race", cardinality = 5)
+edu <- categories(unit = person, "Education",cardinality = 5)
+occupation <- categories(unit = person, "Occupation",cardinality = 5)
+sex <- categories(unit = person, "Sex",cardinality = 5)
+income <- continuous(unit = person, "Income")
 
+cm <- ConceptualModel()
+cm <- assume(cm,causes(cause=occupation, effect=income))
+cm <- hypothesize(cm,relates(age, occupation))
+cm <- hypothesize(cm,relates(race, occupation))
+cm <- assume(cm,causes(cause = edu, effect = occupation))
+cm <- hypothesize(cm,relates(sex, occupation))
 # Add here
 ```
 
@@ -14,7 +27,7 @@ library(rTisane)
 # Replace <iv> with an independent variable of interest
 # Replace <dv> with the dependent variable of interest. In this case, the variable for income. 
 # data: The dataset is available at the relative path "../income.csv"
-script <- query(concpetualModel=cm, iv=<iv>, <dv>, data="../income.csv")
+script <- query(conceptualModel=cm, iv=occupation, dv = income, data="../income.csv")
 ```
 
 3. Open, edit (if you desire), and run your statistical modeling script! 
