@@ -77,10 +77,18 @@ readr::write_csv(filtered_data, "Dataset/income_final.csv")
 
 # Read data back in 
 output_data <- readr::read_csv("Dataset/income_final.csv")
+# Rename Other 
+output_data$Race[output_data$Race == "Other race, nec"] <- "Other"
+output_data$Race[output_data$Race == "Two major races"] <- "Mixed race"
+output_data$Race[output_data$Race == "Three or more major races"] <- "Mixed race"
 # Replace AAPI labels
-output_data$Race[filtered_data$Race == "Other Asian or Pacific Islander"] <- "Asian or Pacific Islander"
-output_data$Race[filtered_data$Race == "Chinese"] <- "Asian or Pacific Islander"
-output_data$Race[filtered_data$Race == "Japanese"] <- "Asian or Pacific Islander"
+output_data$Race[output_data$Race == "Other Asian or Pacific Islander"] <- "Asian or Pacific Islander"
+output_data$Race[output_data$Race == "Chinese"] <- "Asian or Pacific Islander"
+output_data$Race[output_data$Race == "Japanese"] <- "Asian or Pacific Islander"
+
+print(paste("Unique Race:", length(unique(output_data$Race))))
+print(unique(output_data$Race))
+print("====")
 
 
 # Rewrite data
