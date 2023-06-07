@@ -1,0 +1,23 @@
+---
+title: "Upwork - Data Analysis Study"
+output: html_document
+date: "2023-06-05"
+---
+
+
+
+```{r}
+data <- read.csv("income.csv")
+lm1 <- lm(data$Income ~ data$Occupation)
+model <- aov(lm1)
+summary(model)
+
+lm2 <- lm(data$Income ~ data$Occupation + data$Age + data$Race + data$Education + data$Sex + data$Age*data$Occupation + data$Race*data$Occupation + data$Education*data$Occupation + data$Sex*data$Occupation)
+
+summary(lm2)
+
+
+
+```
+
+
