@@ -23,10 +23,10 @@ income <- continuous(unit = person, "Income")
 ```{r}
 cm <- ConceptualModel()
 cel<-causes(cause=edu, effect=income, when=equals(edu, 'Grade 12'), then=decreases(income))
-assume(cm, cel) # strong belief that a grade 12 participant will have low income
+cm<-assume(cm, cel) # strong belief that a grade 12 participant will have low income
 
 ceh<-causes(cause=edu, effect=income, when=equals(edu, '5+ years of college'), then=increases(income))
-hypothesize(cm, ceh) # participant with 5+ years of experience after college should have higher income 
+cm<-hypothesize(cm, ceh) # participant with 5+ years of experience after college should have higher income 
 
 # Add conceptual relationships here
 ```
