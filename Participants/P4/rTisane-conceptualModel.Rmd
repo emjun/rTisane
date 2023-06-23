@@ -21,8 +21,18 @@ income <- continuous(unit = person, "Income")
 
 2. Specify your conceptual model. 
 ```{r}
-cm <- ConceptualModel()
+cm <- ConceptualModel() %>%
+  hypothesize(causes(age, income, increases(age), increases(income)))
+  
+cm <- hypothesize(cm, causes(race, income))
+cm <- assume(cm, causes(edu, income, increase(edu), increases(income)))
+cm <- hypothesize(cm, causes(sex, income, equals(sex, "Female"), decreases(income)))
+cm <- assume(cm, causes(employ, income, equals(employ, "NA"), decreases(income)))
+cm <- hypothesize(cm, causes(employ, income, when = equals(employ, "Self-employed")))
+cm <- interacts(cm, edu, sex, dv = income)
+  
 
+#checkAndRefine(cm)
 # Add conceptual relationships here
 ```
 
