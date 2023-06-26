@@ -76,8 +76,9 @@ There are four types of comparisons you can include in `when` and `then`, depend
     - measure: Categories, Counts, or Continuous
     - value: character, int, float, or list
 
-*Important note:* The change described in the `then` parameter is in comparison to a baseline. More precisely, the example `whenThen` statement above states that the average of `testScores` for `"Black"` students is higher than the average of `testScores` for `"White"` students (the baseline specified when `race` was declared.) The baseline for Counts and Continuous variables is 0 unless otherwise specified. 
-<!-- The baseline for Categorical interactions is the product of baseline values from the interacting Measures.  -->
+*Important note:* The change described in the `then` parameter is in comparison to a baseline. The baseline for Counts and Continuous variables is 0 unless otherwise specified. 
+ <!-- More precisely, the example `whenThen` statement above states that the average of `testScores` for `"Black"` students is higher than the average of `testScores` for `"White"` students (the baseline specified when `race` was declared.)  -->
+ <!-- The baseline for Categorical interactions is the product of baseline values from the interacting Measures.  -->
 
 You may want to include `when` and `then` parameters if they help you keep track of or think through your conceptual model. In `relates` statements, the parameters are used to more highly suggest graphical structures that you might mean. 
 
