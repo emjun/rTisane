@@ -4,6 +4,8 @@ Relying on your conceptual model alone, use rTisane to implement a statistical m
 1. Copy and paste your variables and conceptual model from before. 
 ```{r}
 library(rTisane)
+# devtools::load_all()
+source("conceptualDisambiguation/app.R")
 
 # Add here
 ```

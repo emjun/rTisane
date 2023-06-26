@@ -3,6 +3,8 @@
 1. Your team is able to collect data about the below variables. The data that your team has collected can be found [here](https://homes.cs.washington.edu/~emjun/income_final.csv).
 ```{r}
 library(rTisane)
+# devtools::load_all()
+source("conceptualDisambiguation/app.R")
 
 person <- Unit(name = "person")
 # Age: Continuous measure
