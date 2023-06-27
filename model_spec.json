@@ -1,11 +1,13 @@
 {
-    "dependent variable": "Spending",
+    "dependent variable": "Income",
     "family": "Gaussian",
     "interaction effects": [],
     "link": "identity",
     "main effects": [
-        "Educ",
-        "Income",
+        "Age",
+        "Education",
+        "Employment",
+        "Race",
         "Sex"
     ],
     "random effects": {}
