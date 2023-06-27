@@ -35,7 +35,7 @@ cm <- hypothesize(cm, relates(race, income))
 # Copy and paste above 
 # Replace <iv> with an independent variable of interest
 # Replace <dv> with the dependent variable of interest. In this case, the variable for income. 
-script <- query(conceptualModel=cm, iv=race, dv=income, data="../income_final.csv")
+script <- query(conceptualModel=cm, iv=race, dv=income, data="/Users/cse-loaner/Git/rTisane/Participants/income_final.csv")
 ```
 
 3. Copy and paste your statistical modeling script below:  
