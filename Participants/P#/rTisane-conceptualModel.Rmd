@@ -4,7 +4,7 @@
 ```{r}
 library(rTisane)
 # devtools::load_all()
-source("conceptualDisambiguation/app.R")
+source("~/Git/rTisane/conceptualDisambiguation/app.R")
 
 person <- Unit(name = "person")
 # Age: Continuous measure

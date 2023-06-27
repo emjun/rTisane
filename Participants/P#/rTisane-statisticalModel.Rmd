@@ -5,7 +5,7 @@ Relying on your conceptual model alone, use rTisane to implement a statistical m
 ```{r}
 library(rTisane)
 # devtools::load_all()
-source("conceptualDisambiguation/app.R")
+source("~/Git/rTisane/conceptualDisambiguation/app.R")
 
 # Add here
 ```
@@ -25,6 +25,6 @@ script <- query(conceptualModel=cm, iv=<iv>, <dv>)
 
 ```
 
-4. Run the above snippet!
+4. Run the above snippet (you may want to call "summary" to summarize the output)!
 
 5. Summarize the results of your analysis below: 
