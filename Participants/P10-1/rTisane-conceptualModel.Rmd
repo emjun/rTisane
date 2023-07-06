@@ -3,6 +3,8 @@
 1. Your team is able to collect data about the below variables. The data that your team has collected can be found [here](https://homes.cs.washington.edu/~emjun/income_final.csv).
 ```{r}
 library(rTisane)
+# devtools::load_all()
+source("~/Git/rTisane/conceptualDisambiguation/app.R")
 
 person <- Unit(name = "person")
 # Age: Continuous measure
@@ -21,19 +23,32 @@ income <- continuous(unit = person, "Income")
 
 2. Specify your conceptual model. 
 ```{r}
-cm <- ConceptualModel() %>%
-  hypothesize(causes(age, income, increases(age), increases(income)))
-  
-cm <- hypothesize(cm, causes(race, income))
-cm <- assume(cm, causes(edu, income, increases(edu), increases(income)))
-cm <- hypothesize(cm, causes(sex, income, equals(sex, "Female"), decreases(income)))
-cm <- assume(cm, causes(employ, income, equals(employ, "NA"), decreases(income)))
-cm <- hypothesize(cm, causes(employ, income))
-cm <- interacts(cm, edu, sex, dv = income)
-  
+cm <- ConceptualModel()
 
-#checkAndRefine(cm)
 # Add conceptual relationships here
+# age & income have relationships
+cr <- relates(age, income)
+# update cm
+cm <- hypothesize(cm, cr)
+# education & income:
+cr2 <- causes(edu, income, when = increases(edu), then = increases(income))
+# UPDATE cm:
+cm <- assume(cm, cr2)
+# employ & income:
+cr3 <- relates(employ, income)
+#update cm:
+cm <- hypothesize(cm, cr3)
+# sex & income:
+cr4 <- relates(sex, income)
+# update:
+cm <- hypothesize(cm, cr4)
+# interact:
+cr5 <- relates(age, edu)
+# update:
+cm <- hypothesize(cm, cr5)
+# interact:
+cm <- interacts(cm, sex, edu, dv= income)
+
 ```
 
 3. Run the above code snippets before running this one:

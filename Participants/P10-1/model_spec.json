@@ -1,0 +1,15 @@
+{
+    "dependent variable": "Income",
+    "family": "Gaussian",
+    "interaction effects": [
+        "Sex*Education"
+    ],
+    "link": "identity",
+    "main effects": [
+        "Age",
+        "Education",
+        "Employment",
+        "Sex"
+    ],
+    "random effects": {}
+}
