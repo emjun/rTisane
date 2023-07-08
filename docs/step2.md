@@ -124,7 +124,7 @@ In the scenario, you `hypothesize` that tutoring causes test scores.
 cm <- ConceptualModel()
 ...
 cr <- causes(tutoring, testScore)
-hypothesize(cm, cr) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
+cm <- hypothesize(cm, cr) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
 ```
 
 ## For this task in the study...
