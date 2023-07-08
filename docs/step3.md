@@ -11,11 +11,22 @@ The `query` captures the relationship you are interested in assessing.
 
 For example, you can specify
 ```R
-script <- query(conceptualModel=cm, dv=testScore, iv=tutoring)
+script <- query(
+  conceptualModel=cm,
+  dv=testScore,
+  iv=tutoring)
 # with a path to data 
-script <- query(conceptualModel=cm, dv=testScore, iv=tutoring, data="data.csv")
+script <- query(
+  conceptualModel=cm,
+  dv=testScore,
+  iv=tutoring,
+  data="data.csv")
 # with a dataframe (df) that you have already imported
-script <- query(conceptualModel=cm, dv=testScore, iv=tutoring, data=df) 
+script <- query(
+  conceptualModel=cm,
+  dv=testScore,
+  iv=tutoring,
+  data=df) 
 ```
 
 *Important:* In order to infer a statistical model, there must be a hypothesized relationship between the `iv` and `dv`.
