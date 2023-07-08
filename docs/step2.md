@@ -28,7 +28,7 @@ In the graph, `causes` introduces a directed edge from `cause` to `effect`.
 
 For example, you can specify that tutoring causes test scores. 
 ```R
-causes(causes=tutoring, effect=testScore)
+causes(cause=tutoring, effect=testScore)
 ```
 
 #### Relates
