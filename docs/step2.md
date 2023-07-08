@@ -103,7 +103,7 @@ For example, you can say that based on prior work, you assume socioeconomic back
 cm <- ConceptualModel()
 ...
 cr <- causes(ses, testScore)
-assume(cm, cr) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
+cm <- assume(cm, cr) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
 
 # Alternative syntax: nested function calls
 cm <- ConceptualModel()
