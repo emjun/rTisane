@@ -34,13 +34,19 @@ Categories can be unordered (e.g., race) or ordered (e.g., socioeconomic backgro
 
 In the scenario, race and tutoring are *unordered* categories: 
 ```R
-race <- categories(unit=student, name="Race", cardinality=5, baseline="White")
-tutoring <- categories(unit=student, name="Tutoring", cardinality=2, baseline="in-person")
+race <- categories(
+  unit=student, name="Race",
+  cardinality=5, baseline="White")
+tutoring <- categories(
+  unit=student, name="Tutoring",
+  cardinality=2, baseline="in-person")
 ```
 
 In the scenario, socioeconomic background is an *ordered* category: 
 ```R
-ses <- categories(unit=student, name="SES", order=list("lower", "middle", "upper"))
+ses <- categories(
+  unit=student, name="SES",
+  order=list("lower", "middle", "upper"))
 ```
 
 #### Counts
