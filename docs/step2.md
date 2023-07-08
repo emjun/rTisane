@@ -108,7 +108,7 @@ assume(cm, cr) # cm refers to the Conceptual Model you declared previously and a
 # Alternative syntax: nested function calls
 cm <- ConceptualModel()
 ...
-cr <- assume(cm, causes(ses, testScore))
+cm <- assume(cm, causes(ses, testScore))
 
 # Alternative syntax: Pipe
 cm <- ConceptualModel() %>%
