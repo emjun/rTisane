@@ -52,16 +52,24 @@ rTisane will guide you through possible graphical structures that a bi-direction
 #### Optional: `when` and `then` 
 For both `causes` and `relates`, you may want to describe in greater detail how the relationship "behaves" by including `when` and `then` parameters. For instance, if you mean that when tutoring is in-person, then test scores increase, you may specify
 ```R
-causes(causes=tutoring, effect=testScore, when=equals(tutoring, 'in-person'), then=increases(testScore))
+causes(
+    cause=tutoring, effect=testScore,
+    when=equals(tutoring, 'in-person'),
+    then=increases(testScore))
 # or
-relates(lhs=tutoring, rhs=testScore, when=equals(tutoring, 'in-person'), then=increases(testScore))
+relates(
+    lhs=tutoring, rhs=testScore,
+    when=equals(tutoring, 'in-person'),
+    then=increases(testScore))
 ```
 
 <!-- To add detail to conceptual relationships involving interactions, specify values corresponding to each of the interacting Measures. For example, 
 ```R 
 ixn <- interacts(ses,tutoring)
 # ses == "high", tutoring == "in-person"
-causes(when=equals(ixn, list("high", "in-person")), then=increases(testScore))
+causes(
+    when=equals(ixn, list("high", "in-person")), 
+    then=increases(testScore))
 ``` -->
 
 There are four types of comparisons you can include in `when` and `then`, depending on the kind of Measure you have:
