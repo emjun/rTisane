@@ -23,9 +23,15 @@ income <- continuous(unit = person, "Income")
 
 2. Specify your conceptual model. 
 ```{r}
-cm <- ConceptualModel()
 
 # Add conceptual relationships here
+cm <- ConceptualModel()
+
+cm <- cm %>% assume(causes(edu, income)) %>% assume(causes(age,income))  
+
+cm <- cm %>% assume(relates(lhs= race, rhs = income)) %>% assume(relates(lhs=sex, rhs = income)) 
+
+cm <- hypothesize(cm, causes(employ,income) )
 ```
 
 3. Run the above code snippets before running this one:
