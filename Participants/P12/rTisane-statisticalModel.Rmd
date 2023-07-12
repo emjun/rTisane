@@ -45,7 +45,7 @@ cm <- assume(cm, agecause)
 # Copy and paste above 
 # Replace <iv> with an independent variable of interest
 # Replace <dv> with the dependent variable of interest. In this case, the variable for income. 
-script <- query(conceptualModel=cm, igiv=age, income)
+script <- query(conceptualModel=cm, iv=age, income)
 ```
 
 ```{r}
