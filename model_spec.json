@@ -2,13 +2,9 @@
     "dependent variable": "Income",
     "family": "Gaussian",
     "interaction effects": [],
-    "link": "identity",
+    "link": "log",
     "main effects": [
-        "Age",
-        "Education",
-        "Employment",
-        "Race",
-        "Sex"
+        "Age"
     ],
     "random effects": {}
 }
