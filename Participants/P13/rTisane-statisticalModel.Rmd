@@ -1,0 +1,54 @@
+# Statistical analysis
+Relying on your conceptual model alone, use rTisane to implement a statistical model that assesses the influence of variables you believe to be important (in the context of additional potentially influential factors) on income.
+
+1. Copy and paste your variables and conceptual model from before. 
+```{r}
+library(rTisane)
+# devtools::load_all()
+source("~/Git/rTisane/conceptualDisambiguation/app.R")
+
+# Add here
+# Age race Gender Interact
+# Education & employment interact 
+# TO cause income
+```
+
+2. Fill in the query with your variable names. Run the above code snippet before running this one below.
+```{r}
+cm <- ConceptualModel()
+# causes(
+#     cause=edu, effect=income,
+#     when=equals(edu, '5+ years of college'),
+#     then=increases(income))
+# 
+# relates(
+#     lhs=edu, rhs=income,
+#     when=equals(edu, '4 years of college'),
+#     then=increases(income))
+# # Add conceptual relationships here
+# 
+# cm <- ConceptualModel()
+# ...
+cr <- causes(edu, income)
+cm <- hypothesize(cm, cr) # cm refers to the Conceptual Model you declared previously and are adding this relationship to
+cr <- causes(employ, income)
+cm <- hypothesize(cm, cr)
+
+cm <- interacts(cm, age, race,sex, dv=income)
+cm <- interacts(cm, edu,employ, dv=income)
+# Copy and paste above 
+# Replace <iv> with an independent variable of interest
+# Replace <dv> with the dependent variable of interest. In this case, the variable for income. 
+script <- query(conceptualModel=cm, iv=edu, income)
+```
+
+3. Copy and paste your statistical modeling script below:  
+> Note: You may need to update the path to "/Users/cse-loaner/Git/rTisane/Participants/income_final.csv"
+```{r}
+# Add statistical model here
+
+```
+
+4. Run the above snippet (you may want to call "summary" to summarize the output)!
+
+5. Summarize the results of your analysis below: 
