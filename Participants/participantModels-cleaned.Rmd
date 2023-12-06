@@ -1,0 +1,259 @@
+# Load data, wrangle data
+```{r}
+data <- read.csv("Dataset/income_final.csv")
+data$Education <- factor(data$Education, order=TRUE, levels = c("Grade 12", "1 year of college", "2 years of college", "4 years of college", "5+ years of college"))
+```
+# Without rTisane
+```{r}
+# Re-implementation of P2
+p2_model <- lm(data$Income ~ data$Employment + data$Age + data$Race + data$Education + data$Sex + data$Age*data$Employment + data$Race*data$Employment + data$Education*data$Employment + data$Sex*data$Employment)
+summary(p2_model)
+AIC(p2_model)
+BIC(p2_model)
+```
+
+```{r}
+# P3
+p3_model <- NULL
+```
+
+```{r}
+# Re-implementation of P4
+p4_model <- lm(Income ~ Age + Education + Employment + Race + Sex, data=data)
+summary(p4_model)
+AIC(p4_model)
+BIC(p4_model)
+```
+
+```{r}
+# P5
+p5_model <- NULL
+```
+
+```{r}
+# P6 Re-implementation from Python to R
+# Original: model = LogisticRegression(solver='liblinear', random_state=0).fit(X,Y), did not finish
+p6_model <- NULL
+```
+
+```{r}
+# Re-implementation of P7
+p7_model <- lm(formula = data$Income ~ data$Age + data$Race + data$Education + data$Employment + data$Sex, 
+    data = data)
+summary(p7_model)
+AIC(p7_model)
+BIC(p7_model)
+```
+
+```{r}
+# P8
+p8_model <- lm(data$Income ~ data$Sex*data$Race + data$Employment + data$Education + data$Race*data$Sex + data$Age, data = data)
+summary(p8_model)
+AIC(p8_model)
+BIC(p8_model)
+```
+
+```{r}
+# Re-implementation of P9 
+# Original in Python:
+# lm1 = smf.OLS("Income ~ Age + C(Race) + C(Education) + C(Employment) + C(Sex)", data=df)
+# Re-implementation:
+p9_model <- lm(Income ~ Age + as.factor(Race) + as.factor(Education) + as.factor(Employment) + as.factor(Sex), data=data) 
+summary(p9_model)
+AIC(p9_model)
+BIC(p9_model)
+```
+
+```{r}
+# Re-implementation of P10
+# Original in Python: 
+# model = sm.OLS.from_formula("Income ~ Age", data= df)
+# Re-implementation: 
+p10_model <- lm(Income ~ Age, data=data)
+summary(p10_model)
+AIC(p10_model)
+BIC(p10_model)
+```
+
+```{r}
+# P11
+log_income <- log(data$Income + 1)
+p11_model <- glm(log_income ~ Employment + Race + Age + Education + Sex, family = "gaussian", data=data)
+summary(p11_model)
+AIC(p11_model)
+BIC(p11_model)
+```
+
+```{r}
+# P12
+p12_model <- NULL
+```
+
+```{r}
+# P13
+p13_model <- glm(Income ~ Age*factor(Race)*factor(Sex)+factor(Education)*factor(Employment), family="gaussian", data)
+summary(p13_model)
+AIC(p13_model)
+BIC(p13_model)
+```
+
+
+# With rTisane (Output model from rTisane)
+```{r}
+# P2 
+p2_rTisane <- glm(formula=Income ~ Employment, family=gaussian(link='identity'), data=data)
+summary(p2_rTisane)
+AIC(p2_rTisane)
+BIC(p2_rTisane)
+```
+
+```{r}
+p3_rTisane <- NULL
+```
+
+```{r}
+# P4
+p4_rTisane <- glm(formula=Income ~ Education+Age+Education*Sex+Employment+Race+Sex, family=gaussian(link='identity'), data=data)
+summary(p4_rTisane)
+AIC(p4_rTisane)
+BIC(p4_rTisane)
+```
+
+```{r}
+# P5
+p5_rTisane <- glm(formula=Income ~ Sex+Education+Employment, 
+                  family=gaussian(link='identity'), data=data)
+summary(p5_rTisane)
+AIC(p5_rTisane)
+BIC(p5_rTisane)
+```
+
+```{r}
+# P6
+p6_rTisane <- glm(formula=Income ~ Race+Sex, family=gaussian(link='identity'), data=data)
+summary(p6_rTisane)
+AIC(p6_rTisane)
+BIC(p6_rTisane)
+```
+
+```{r}
+# P7
+p7_rTisane <- glm(formula=Income ~ Sex+Age+Employment+Race+Education, family=gaussian(link='identity'), data=data)
+summary(p7_rTisane)
+AIC(p7_rTisane)
+BIC(p7_rTisane)
+```
+
+```{r}
+# P8
+# Model 3
+p8_rTisane <- glm(formula=Income ~ Age+Race*Sex+Employment+Age*Education, family=gaussian(link='identity'), data=data)
+summary(p8_rTisane)
+AIC(p8_rTisane)
+BIC(p8_rTisane)
+```
+
+```{r}
+# P9
+p9_rTisane <- glm(formula=Income ~ Employment+Race+Sex+Education+Age, family=gaussian(link='identity'), data=data)
+summary(p9_rTisane)
+AIC(p9_rTisane)
+BIC(p9_rTisane)
+```
+
+```{r}
+# P10
+p10_rTisane <- glm(formula=Income ~ Employment+Sex+Education+Age+Sex*Education, family=gaussian(link='identity'), data=data)
+summary(p10_rTisane)
+AIC(p10_rTisane)
+BIC(p10_rTisane)
+```
+
+```{r}
+# P11
+p11_rTisane <- glm(formula=Income ~ Employment+Race+Sex+Education+Age, family=gaussian(link='identity'), data=data)
+summary(p11_rTisane)
+AIC(p11_rTisane)
+BIC(p11_rTisane)
+```
+
+```{r}
+# P12
+p12_rTisane <- glm(formula=Income ~ Age, 
+                   family=gaussian(link='identity'), data=data)
+summary(p12_rTisane)
+AIC(p12_rTisane)
+BIC(p12_rTisane)
+```
+
+```{r}
+# P13
+p13_rTisane <- glm(formula=Income ~ Employment+Age*Race*Sex+Education*Employment+Education, family=gaussian(link='identity'), data=data)
+summary(p13_rTisane)
+AIC(p13_rTisane)
+BIC(p13_rTisane)
+```
+
+# Print values of interest in a table
+```{r}
+# This code chunk was written with ChatGPT
+
+# install.packages('knitr')
+library(knitr)
+
+data_table <- data.frame(
+  PID = numeric(), 
+  Tool = character(), 
+  AIC = numeric(), 
+  BIC = numeric()
+)
+
+add_row_to_data <- function(pid, tool, model) {
+  if (is.null(model)) {
+    data_table <<- rbind(data_table, data.frame(PID=pid, Tool=tool, AIC=-1, BIC=-1))
+  } else {
+    aic = AIC(model)
+    bic = BIC(model)
+    data_table <<- rbind(data_table, data.frame(PID=pid, Tool=tool, AIC=aic, BIC=bic)) 
+  }
+}
+
+
+add_row_to_data("P2", "None", p2_model)
+add_row_to_data("P2", "rTisane", p2_rTisane)
+add_row_to_data("P3", "None", p3_model)
+add_row_to_data("P3", "rTisane", p3_rTisane)
+add_row_to_data("P4", "None", p4_model)
+add_row_to_data("P4", "rTisane", p4_rTisane)
+add_row_to_data("P5", "None", p5_model)
+add_row_to_data("P5", "rTisane", p5_rTisane)
+add_row_to_data("P6", "None", p6_model)
+add_row_to_data("P6", "rTisane", p6_rTisane)
+add_row_to_data("P7", "None", p7_model)
+add_row_to_data("P7", "rTisane", p7_rTisane)
+add_row_to_data("P8", "None", p8_model)
+add_row_to_data("P8", "rTisane", p8_rTisane)
+add_row_to_data("P9", "None", p9_model)
+add_row_to_data("P9", "rTisane", p9_rTisane)
+add_row_to_data("P10", "None", p10_model)
+add_row_to_data("P10", "rTisane", p10_rTisane)
+add_row_to_data("P11", "None", p11_model)
+add_row_to_data("P11", "rTisane", p11_rTisane)
+add_row_to_data("P12", "None", p12_model)
+add_row_to_data("P12", "rTisane", p12_rTisane)
+add_row_to_data("P13", "None", p13_model)
+add_row_to_data("P13", "rTisane", p13_rTisane)
+
+
+# Print table
+kable(data_table, format = "markdown", caption = "Summary of results")
+# Write out as CSVs
+write.csv(data_table, "stats_models_summary.csv")
+```
+
+```{r}
+# Get all the DF info 
+
+AIC(p2_model, p4_model, p7_model, p8_model, p9_model, p10_model, p11_model, p13_model)
+AIC(p2_rTisane, p4_rTisane, p5_rTisane, p6_rTisane, p7_rTisane, p8_rTisane, p9_rTisane, p10_rTisane, p11_rTisane, p12_rTisane, p13_rTisane)
+```

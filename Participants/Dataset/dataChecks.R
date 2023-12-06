@@ -75,9 +75,9 @@ print(paste("Number of observations:", nrow(filtered_data)))
 # Write out data
 readr::write_csv(filtered_data, "Dataset/income_final.csv")
 
-# Read data back in 
+# Read data back in
 output_data <- readr::read_csv("Dataset/income_final.csv")
-# Rename Other 
+# Rename Other
 output_data$Race[output_data$Race == "Other race, nec"] <- "Other"
 output_data$Race[output_data$Race == "Two major races"] <- "Mixed race"
 output_data$Race[output_data$Race == "Three or more major races"] <- "Mixed race"
