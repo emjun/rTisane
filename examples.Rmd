@@ -1,0 +1,83 @@
+---
+title: "rTisane examples"
+output: html_document
+date: "2024-04-23"
+---
+
+```{r setup, include=FALSE}
+library(rTisane)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Variables
+Variables that are used in below examples: 
+```{r}
+## Variables
+person <- Unit(name = "person")
+# Age: Continuous measure
+age <- continuous(unit = person, "Age")
+# Race: There are 5 categories: White, Black/African American, American Indian or Alaska Native, Asian or Pacific Islander, Mixed Race
+race <- categories(unit = person, "Race", cardinality = 9)
+# Highest Education Completed: 5 categories: Grade 12, 1 year of college, 2 years of college, 4 years of college, 5+ years of colleges
+edu <- categories(unit = person, "Education", order=list("Grade 12", "1 year of college", "2 years of college", "4 years of college", "5+ years of college"))
+# Current Employment Status: 3 categories: N/A, Works for wage, Self-employed
+employ <- categories(unit=person, "Employment", cardinality=2)
+# Sex: 2 categories: Male, Female
+sex <- categories(unit = person, "Sex",cardinality = 2)
+# Income: Continuous measure
+income <- continuous(unit = person, "Income")
+```
+
+# Simplest conceptual model: Only causes
+```{r}
+## Conceptual model
+cm <- ConceptualModel()%>%
+assume(causes(edu, income))%>%
+assume(causes(sex, income))%>%
+hypothesize(causes(employ, income))
+
+## Query
+script <- query(conceptualModel=cm, dv=income, iv=employ)
+```
+
+# Simple conceptual model: Multiple relates, no direct relationships between "IVs", no circular relationships
+This example is adapted from a participant's program from the evaluation study.
+```{r}
+## Conceptual model
+cm <- ConceptualModel()%>%
+assume(relates(edu, income))%>%
+assume(relates(sex, income))%>%
+hypothesize(relates(employ, income))
+
+## Query for statistical model
+script <- query(conceptualModel=cm, dv=income, iv=employ)
+```
+Conceptual disambiguation: Need to specify all relates relationships
+
+# Simple conceptual model: Multiple relates and cause, no direct relationships between "IVs", no circular relationships
+```{r}
+## Variables: same as above
+
+## Conceptual model
+cm <- ConceptualModel()%>%
+assume(relates(edu, income))%>%
+assume(relates(sex, income))%>%
+hypothesize(causes(employ, income))
+
+## Query for statistical model
+script <- query(conceptualModel=cm, dv=income, iv=employ)
+```
+# Circular relationships
+```{r}
+## Variables: same as above
+
+## Conceptual model
+cm <- ConceptualModel()%>%
+assume(relates(edu, income))%>%
+assume(relates(sex, income))%>%
+assume(relates(edu, sex))%>%
+hypothesize(relates(employ, income))
+
+## Query for statistical model
+script <- query(conceptualModel=cm, dv=income, iv=employ)
+```

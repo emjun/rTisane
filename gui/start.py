@@ -3,7 +3,7 @@
 
 import os
 CWD = os.getcwd()
-os.chdir('/Users/cse-loaner/Git/rTisane')
+# os.chdir('/Users/cse-loaner/Git/rTisane')
 from gui.tisaneGui import TisaneGUI # gui.tisaneGui
 # from helpers.statisticalModel import StatisticalModel
 # from helpers.code_generator import *
