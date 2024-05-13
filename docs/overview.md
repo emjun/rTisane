@@ -1,6 +1,6 @@
 # rTisane
 
-**rTisane is an R library and interactive system for authoring statistical models from domain knowledge.** rTisane provides (i) a [domain-specific language](#rtisane-dsl) for expressing domain knowledge and (ii) an [interactive disambiguation process](#two-phase-interactive-disambiguation) for deriving an output statistical model. 
+**rTisane is an [open-source R library](https://github.com/emjun/rTisane/) and interactive system for authoring statistical models from domain knowledge.** rTisane provides (i) a [domain-specific language](#rtisane-dsl) for expressing domain knowledge and (ii) an [interactive disambiguation process](#two-phase-interactive-disambiguation) for deriving an output statistical model. 
 
 rTisane is designed for analysts who have domain expertise, are not statistical experts, and are comfortable with minimal programming (e.g., many researchers). Currently, rTisane supports authoring generalized linear models. 
 
