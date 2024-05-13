@@ -1,16 +1,74 @@
-Package: tisaner
-Title: Tisane for R: Authoring Statistical Models via Formal Reasoning from Conceptual and Data Relationships 
+Package: rTisane
+Title: Authoring Statistical Models from Conceptual Models
 Version: 0.0.1
 Authors@R: 
     person("Eunice", "Jun", , "eunice.m.jun@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4050-4284"))
     person("Audrey", "Seo", , "audreyleeseo@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2928-3721"))
-Description: Specification language for generating Generalized Linear Models (with or without mixed effects) from conceptual models 
+Description: Domain-specific language for generating Generalized Linear Models from conceptual models 
 License: Apache-2.0 License
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2.9000
+RoxygenNote: 7.2.0
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Imports: 
+    jsonlite,
+    dagitty,
+    stringr,
+    shiny,
+    reticulate,
+    shinyjs,
+    plotly,
+    igraph
+Collate: 
+    'aaa-classes.R'
+    'toString.R'
+    'condition.R'
+    'assign_cardinality_from_data.R'
+    'associates_with.R'
+    'calculate_cardinality.R'
+    'interacts.R'
+    'causes.R'
+    'get_cardinality.R'
+    'has.R'
+    'get_all_vars.R'
+    'infer_has_relationships.R'
+    'infer_model.R'
+    'infer_statistical_model_from_design.R'
+    'moderates.R'
+    'nests.R'
+    'nominal.R'
+    'number_value.R'
+    'continuous.R'
+    'counts.R'
+    'categories.R'
+    'ordinal.R'
+    'construct_graphs.R'
+    'checkConceptualModel.R'
+    'infers_main_effects_with_explanations.R'
+    'infer_interaction_effects_with_explanations.R'
+    'infer_random_effects_with_explanations.R'
+    'assess.R'
+    'assume.R'
+    'decreases.R'
+    'equals.R'
+    'hypothesize.R'
+    'increases.R'
+    'notEquals.R'
+    'processQuery.R'
+    'relates.R'
+    'updateGraph.R'
+    'inferConfounders.R'
+    'inferInteractions.R'
+    'inferRandomEffects.R'
+    'inferFamilyLinkFunctions.R'
+    'disambiguateConceptualModel.R'
+    'disambiguateStatisticalModel.R'
+    'deriveStatisticalModel.R'
+    'query.R'
+    'checkEquals.R'
+    'checkGreaterThan.R'
+    'per.R'

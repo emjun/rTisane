@@ -4,8 +4,7 @@
 #' @param design 
 #' @keywords statistical model
 #' @export
-#' @examples
-#' infer_model()
+# infer_model()
 infer_model <- function(design){
-  tisaner::infer_statistical_model_from_design(design=design)
+  rTisane::infer_statistical_model_from_design(design=design)
 }

@@ -1,4 +1,9 @@
 library(testthat)
-library(tisaner)
+library(rTisane)
 
-test_check("tisaner")
+test_dir(
+  "./testthat",
+  env = shiny::loadSupport(),
+  reporter = c("progress", "fail")
+)
+test_check("rTisane")

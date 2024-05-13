@@ -1,0 +1,17 @@
+# Helper to create instances of the Unit class
+Person <- function(given, family,
+                   age = NA_real_,
+                   role = NA_character_,
+                   email = NA_character_,
+                   comment = NA_character_) {
+  age <- as.double(age)
+
+  new("Person",
+      age = age,
+      given = given,
+      family = family,
+      role = role,
+      email = email,
+      comment = comment
+  )
+}
