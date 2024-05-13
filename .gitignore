@@ -46,6 +46,12 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+<<<<<<< HEAD
 rTisane.Rcheck/
 rTisane*.tar.gz
 rTisane*.tgz
+=======
+tisaner.Rcheck/
+tisaner*.tar.gz
+tisaner*.tgz
+>>>>>>> main
