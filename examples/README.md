@@ -15,7 +15,3 @@ Notes:
 Relationships: Assume Causes, Assume Relates, Hypothesize whenThen 
 Data: [WA income data](examples/data/2019_WA_income.csv)
 Script: [example2.R](examples/example2.R)
-
-# TODO: 
-- CHECK CONCEPTUAL MODEL PRIOR TO DISAMBIGUATION!
-- Examples where there no hypothesize (invalidate early check)
