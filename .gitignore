@@ -1,4 +1,11 @@
 R/.DS_Store
+.Rhistory
+
+# Files generated from running rTisane program
+input.json
+input2.json
+model.R
+model_spec.json
 
 # History files
 .Rhistory

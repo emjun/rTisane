@@ -38,4 +38,4 @@ options(shiny.launch.browser = .rs.invokeShinyWindowExternal)
 ## Code generation 
 Note: The code generation module relies on a separate Python package, [tisanecodegenerator](https://github.com/emjun/tisaneCodeGenerator). If there are bugs in the code generator module, [file issues here](https://github.com/emjun/tisaneCodeGenerator/issues). 
 
-If the bug or unexpected behavior is not found in the code generation module and related to how the input JSON to or the output code from the module are used...
+<!-- If the bug or unexpected behavior is not found in the code generation module and related to how the input JSON to or the output code from the module are used... -->

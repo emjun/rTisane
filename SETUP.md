@@ -58,27 +58,6 @@ library(dagitty)
 library(igraph)
 ```
 
-<!-- 4. Install Python libraries/dependencies
-```R
-py_install("dash", pip=TRUE)
-py_install("dash_daq", pip=TRUE)
-py_install("dash_bootstrap_components", pip=TRUE)
-py_install("flask", pip=TRUE)
-py_install("plotly", pip=TRUE)
-py_install("tisanecodegenerator", pip=TRUE)
-
-import("dash")
-import("dash_daq")
-import("dash_bootstrap_components")
-import("flask")
-import("plotly")
-import("tisanecodegenerator")
-
-# TODO: Get rid of this dependency
-py_install("pandas", pip=TRUE)
-import("pandas")
-``` -->
-
 ### Use rTisane!
 1. Always show disambiguation interfaces in the browser
 ```R
@@ -130,6 +109,7 @@ py_install("dash_bootstrap_components", pip=TRUE)
 py_install("flask", pip=TRUE)
 py_install("plotly", pip=TRUE)
 py_install("tisanecodegenerator", pip=TRUE)
+py_install("pandas", pip=TRUE)
 
 import("dash")
 import("dash_daq")
@@ -137,9 +117,6 @@ import("dash_bootstrap_components")
 import("flask")
 import("plotly")
 import("tisanecodegenerator")
-
-# TODO: Get rid of this dependency
-py_install("pandas", pip=TRUE)
 import("pandas")
 ```
 

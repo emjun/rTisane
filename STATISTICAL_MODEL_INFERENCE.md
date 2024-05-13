@@ -59,7 +59,7 @@ Not currently supported in rTisane:
 - quasibinomial family: logit (logistic), probit (normal), cauchit (Cauchy), log and cloglog (complementary log-log)
 - quasipoisson: log, identity, sqrt
 
-GLMER in lme4 ([see lme4 reference](https://github.com/lme4/lme4/blob/master/src/glmFamily.h))
+<!-- GLMER in lme4 ([see lme4 reference](https://github.com/lme4/lme4/blob/master/src/glmFamily.h))
 Family: 
 - Binomial Distribution
 - Gamma
@@ -77,11 +77,12 @@ Link functions:
 - Logit
 - Probit
 - Sqrt
-- 1/mu^2
+- 1/mu^2 -->
 
 ### Notes about code generation: 
 - Negative Binomial: glm.nb, glmer.nb
 
 ### Programming idiom 
 1. Create ConceptualModel 
-3. Call updateGraph
+2. Call updateGraph
+3. Infer statistical model(s)
