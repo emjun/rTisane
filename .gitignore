@@ -1,3 +1,12 @@
+R/.DS_Store
+.Rhistory
+
+# Files generated from running rTisane program
+input.json
+input2.json
+model.R
+model_spec.json
+
 # History files
 .Rhistory
 .Rapp.history
@@ -37,6 +46,6 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
-tisaner.Rcheck/
-tisaner*.tar.gz
-tisaner*.tgz
+rTisane.Rcheck/
+rTisane*.tar.gz
+rTisane*.tgz
