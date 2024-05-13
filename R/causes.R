@@ -1,31 +1,58 @@
-#' Causes class 
-#'
-#' Class for Causes relationships. 
-#' Not called directly.
-#' @param cause AbstractVariable. Variable that causes another. 
-#' @param effect AbstractVariable. Variable that is caused by @param cause.
-#' @keywords
-#' @examples
-#' Causes()
-setClass("Causes", representation(cause = "AbstractVariable", effect = "AbstractVariable"))
-
 #' Specify a causes relationship
 #'
-#' Method for constructing a causes relationship between two variables. 
-#' Updates the relationships for each variable to include the newly constructed Causes relationship. 
-#' @param cause AbstractVariable. The cause. 
-#' @param effect AbstractVariable. The effect. 
+#' Method for constructing a causes relationship between two variables.
+#' Returns the Causes relationship constructed.
+#' @param cause AbstractVariable. The cause.
+#' @param effect AbstractVariable. The effect.
 #' @keywords
 #' @export
-#' @examples
-#' causes()
-setGeneric("causes", function(cause, effect) standardGeneric("causes"))
-setMethod("causes", signature("AbstractVariable", "AbstractVariable"), function(cause, effect)
+# causes()
+setGeneric("causes", function(cause, effect, when, then) standardGeneric("causes"))
+setMethod("causes", signature("AbstractVariableORUnobservedVariable", "AbstractVariableORUnobservedVariable", "missing", "missing"), function(cause, effect, when, then)
 {
   # create a Causes relationship obj
-  relat = Causes(cause=cause, effect=effect)
-  # append the Causes relationship obj to both @param cause and effect variables
-  cause@relationships <- append(cause@relationships, relat)
-  effect@relationships <- append(effect@relationships, relat)
-})
+  relat = Causes(cause=cause, effect=effect, when=NULL, then=NULL)
 
+  # Return cause relationship
+  relat
+})
+setMethod("causes", signature("AbstractVariableORUnobservedVariable", "AbstractVariableORUnobservedVariable", "Compares", "Compares"), function(cause, effect, when, then)
+{
+  # create a Causes relationship obj
+  relat = Causes(cause=cause, effect=effect, when=when, then=then)
+
+  # Return cause relationship
+  relat
+})
+setMethod("causes", signature("Interacts", "AbstractVariableORUnobservedVariable", "missing", "missing"), function(cause, effect, when, then)
+{
+  # create a Causes relationship obj
+  relat = Causes(cause=cause, effect=effect, when=NULL, then=NULL)
+
+  # Return cause relationship
+  relat
+})
+setMethod("causes", signature("Interacts", "AbstractVariableORUnobservedVariable", "Compares", "Compares"), function(cause, effect, when, then)
+{
+  # create a Causes relationship obj
+  relat = Causes(cause=cause, effect=effect, when=when, then=then)
+
+  # Return cause relationship
+  relat
+})
+setMethod("causes", signature("AbstractVariableORUnobservedVariable", "Interacts", "missing", "missing"), function(cause, effect, when, then)
+{
+  # create a Causes relationship obj
+  relat = Causes(cause=cause, effect=effect, when=NULL, then=NULL)
+
+  # Return cause relationship
+  relat
+})
+setMethod("causes", signature("AbstractVariableORUnobservedVariable", "Interacts", "Compares", "Compares"), function(cause, effect, when, then)
+{
+  # create a Causes relationship obj
+  relat = Causes(cause=cause, effect=effec, when=when, then=then)
+
+  # Return cause relationship
+  relat
+})

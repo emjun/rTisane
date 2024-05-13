@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <title>GitHub Pages Tabs</title>
+  <style>
+    .tab-content {
+      margin: 30px auto;
+      max-width: 800px;
+    }
+    .copy-button {
+      margin-left: auto;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #333;
+      height: 2.5em;
+      align-self: flex-start;
+    }
+    pre {
+      display: flex;
+      background-color: #e2e2e2;
+      padding: 5px;
+      overflow: auto;
+    }
+    .language-R {
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">rTisane</a>
+      <a class="nav-item nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Install</a>
+      <a class="nav-item nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Tutorial</a>
+      <!-- <a class="nav-item nav-link" id="tab4-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false">Code</a> -->
+      <a class="nav-item nav-link" id="tab5-tab" data-toggle="tab" href="#tab5" role="tab" aria-controls="tab5" aria-selected="false">Research</a>
+      <a class="nav-item nav-link" id="tab6-tab" data-toggle="tab" href="#tab6" role="tab" aria-controls="tab6" aria-selected="false">About</a>
+    </div>
+  </nav>
+
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+      <div id="tab1-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+      <div id="tab2-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+      <div id="tab3-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+      <div id="tab4-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="tab5-tab">
+      <div id="tab5-content"></div>
+    </div>
+    <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="tab6-tab">
+      <div id="tab6-content"></div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    $(function () {
+      $('#nav-tab a').on('click', function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+      });
+    });
+  </script>
+  <script>
+  function renderMarkdown(elementId, markdownUrl) {
+    fetch(markdownUrl)
+      .then(response => response.text())
+      .then(text => {
+        const html = marked.parse(text);
+        document.getElementById(elementId).innerHTML = html;
+      });
+  }
+
+  renderMarkdown('tab1-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/overview.md');
+  renderMarkdown('tab2-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/install.md');
+  renderMarkdown('tab3-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/tutorial.md');
+  // renderMarkdown('tab4-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/code.md');
+  renderMarkdown('tab5-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/research.md');
+  renderMarkdown('tab6-content', 'https://raw.githubusercontent.com/emjun/rTisane/study/docs/about.md');
+</script>
+
+
+<script>
+  // Add a copy to clipboard button to all <code> blocks
+  function addCopyButtonToCodeBlocks() {
+    var codeBlocks = document.querySelectorAll('code.language-R');
+  
+    for (var i = 0; i < codeBlocks.length; i++) {
+      var codeBlock = codeBlocks[i];
+  
+      // Create the copy button
+      var copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.textContent = 'Copy';
+  
+      // Add click event listener to copy the code
+      copyButton.addEventListener('click', function () {
+        var code = this.previousSibling.textContent;
+        navigator.clipboard.writeText(code).then(function () {
+          // alert('Code copied to clipboard!');
+        }).catch(function (error) {
+          console.error('Failed to copy code: ', error);
+        });
+      });
+  
+      // Append the copy button to the code block
+      codeBlock.parentNode.append(copyButton);
+    }
+  }
+  
+  // Call the function when the page is loaded
+  window.addEventListener('load', setTimeout(addCopyButtonToCodeBlocks, 1000));
+</script>
+
+</body>
+
+</html>

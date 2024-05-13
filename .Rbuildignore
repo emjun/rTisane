@@ -1,5 +1,11 @@
-^tisaner\.Rproj$
+^rTisane\.Rproj$
 ^\.Rproj\.user$
+<<<<<<< HEAD
+^rTisane\.Rcheck$
+^rTisane.*\.tar\.gz$
+^rTisane.*\.tgz$
+=======
 ^tisaner\.Rcheck$
 ^tisaner.*\.tar\.gz$
 ^tisaner.*\.tgz$
+>>>>>>> main

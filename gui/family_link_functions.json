@@ -1,0 +1,53 @@
+{
+  "Binomial" : {
+    "default" : "logit",
+    "links" : [
+      "logit",
+      "probit",
+      "cauchit",
+      "log",
+      "cloglog"
+    ]
+  },
+  "Gamma" : {
+    "default" : "inverse",
+    "links" : [
+      "inverse",
+      "identity",
+      "log"
+    ]
+  },
+  "Gaussian" : {
+    "default" : "identity",
+    "links" : [
+      "identity",
+      "log",
+      "inverse"
+    ]
+  },
+  "Inverse Gaussian" : {
+    "default" : "1/mu^2",
+    "links" : [
+      "1/mu^2",
+      "inverse",
+      "identity",
+      "log"
+    ]
+  },
+  "Negative Binomial" : {
+    "default" : "log",
+    "links" : [
+      "log",
+      "sqrt",
+      "identity"
+    ]
+  }, 
+  "Poisson" : {
+    "default" : "log",
+    "links" : [
+      "log",
+      "identity",
+      "sqrt"
+    ]
+  }
+}

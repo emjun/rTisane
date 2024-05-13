@@ -1,0 +1,88 @@
+{
+  "main-effects": {
+    "titles": {
+      "tab": "IVs",
+      "page": "Main Independent Variables",
+      "page-no": "No Main Effects"
+    },
+    "headers": {
+      "added": {
+        "yes": "Main effects added:",
+        "no": "No main effects to add",
+        "id": "",
+        "comment": "these headers sections don't actually do anything at the moment, just an idea"
+      }
+    },
+    "associative-warning": {
+      "header": "Warning: `{var}` suggested due to associative relationship",
+      "body": "If `{var}` may actually be **caused by** the dependent variable, `{dv}`, adding this variable could invalidate your results.\n\nProceed with caution!"
+    }
+  },
+  "interaction-effects": {
+    "titles": {
+      "tab": "IVs: Interactions",
+      "page": "IVs: Interactions",
+      "page-no": "No interactions"
+    },
+    "headers": {
+
+    }
+  },
+  "random-effects": {
+    "titles": {
+      "tab": "Clustering",
+      "page": "Accounting for data clustering",
+      "page-no": "No clusters to account for"
+    },
+    "headers": {
+
+    }
+  },
+  "family-link-functions": {
+    "titles": {
+      "tab": "Family and Link Functions",    
+      "page": "Choose a distribution of the errors: family and link functions.",
+      "page-sub-title": "_Your dependent variable `{dv}` has a{indef_article} `{dv_type}` data type. You want to treat it as `{dv_treat_as}.` Based on this, Tisane has narrowed the possible family and link functions._"
+    },
+    "headers": {
+    }
+  },
+  "overview": {
+    "vars-in-query": "Variables expressed in query:",
+    "ivs": "IVs:",
+    "vars-added": "Variables added:",
+    "main-effects-added": "IVs added:",
+    "interaction-effects-added": "Interactions added:",
+    "interaction-effects-no-add": "No interactions to add",
+    "random-effects-added": "Clustering:",
+    "random-effects-no-add": "No clustering to add",
+    "distribution": "Data Distribution:",
+    "family": "Family:",
+    "link": "Link:"
+  },
+  "progress": {
+    "main-effects": "Review independent variables",
+    "interaction-effects": "Review IVs: Interactions",
+    "random-effects": "Review data clustering",
+    "family-link-functions": "Pick data distributions"
+  },
+  "types-of-data": {
+    "follow-ups": {
+      "default": "(First answer the question above)",
+      "has positive skew": "Does the data have a positive skew?",
+      "has lots of zeros": "Does the data have lots of zeros?"
+    },
+    "display-types": {
+      "treat as continuous": "Continuous",
+      "treat as counts": "Counts",
+      "treat as categories": "Categories",
+      "continuous": "Continuous",
+      "counts": "Counts",
+      "categories": "Categories",
+      "true": "Yes",
+      "false": "No",
+      "yes": "Yes",
+      "no": "No"
+    }
+  }
+}
