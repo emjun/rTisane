@@ -4,10 +4,10 @@
 \alias{generateConceptualModelJSON}
 \title{Output info to JSON}
 \usage{
-generateConceptualModelJSON(conceptualModel, dv, path)
+generateConceptualModelJSON(conceptualModel, path = "input.json")
 }
 \arguments{
-\item{dv}{AbstractVariable to write to JSON.}
+\item{path}{should be different from "input.json" only for development/testing}
 }
 \description{
 Writes info to a JSON file

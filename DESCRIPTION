@@ -6,23 +6,25 @@ Authors@R:
            comment = c(ORCID = "0000-0002-4050-4284"))
     person("Audrey", "Seo", , "audreyleeseo@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2928-3721"))
+    person("Edward", "Misback", , "elmisback@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0003-9474-0826"))
 Description: Domain-specific language for generating Generalized Linear Models from conceptual models 
 License: Apache-2.0 License
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     jsonlite,
-    dagitty,
     stringr,
     shiny,
     reticulate,
     shinyjs,
     plotly,
-    igraph
+    igraph,
+    dagitty
 Collate: 
     'aaa-classes.R'
     'toString.R'
@@ -46,11 +48,17 @@ Collate:
     'counts.R'
     'categories.R'
     'ordinal.R'
+    'asCategories.R'
+    'asContinuous.R'
+    'asCounts.R'
     'construct_graphs.R'
     'checkConceptualModel.R'
+    'checkAndRefine.R'
     'infers_main_effects_with_explanations.R'
     'infer_interaction_effects_with_explanations.R'
     'infer_random_effects_with_explanations.R'
+    'generateStatisticalModelJSON.R'
+    'processStatisticalModels.R'
     'assess.R'
     'assume.R'
     'decreases.R'
@@ -60,6 +68,7 @@ Collate:
     'notEquals.R'
     'processQuery.R'
     'relates.R'
+    'whenThen.R'
     'updateGraph.R'
     'inferConfounders.R'
     'inferInteractions.R'
@@ -67,7 +76,6 @@ Collate:
     'inferFamilyLinkFunctions.R'
     'disambiguateConceptualModel.R'
     'disambiguateStatisticalModel.R'
-    'deriveStatisticalModel.R'
     'query.R'
     'checkEquals.R'
     'checkGreaterThan.R'

@@ -7,8 +7,7 @@
 #' @param familyLinkFunctions list of family and link functions to consider.
 #' @param iv AbstractVariable whose influence on @param dv we are interested in.
 #' @param dv AbstractVariable whose outcome we are interested in.
-#' @return
-#' @keywords
+#' @return path to generated code
 # deriveStatisticalModel()
 setGeneric("deriveStatisticalModel", function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, data) standardGeneric("deriveStatisticalModel"))
 setMethod("deriveStatisticalModel", signature("list", "list", "list", "list", "AbstractVariable", "ContinuousORCountsORCategories", "characterORDataframeORnull"), function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, data)

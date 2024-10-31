@@ -4,7 +4,6 @@
 #' Returns the Hypothesis created.
 #' @param conceptualModel ConceptualModel to which we should add the Hypothesized relationship.
 #' @param relationship Relationship to assume.
-#' @keywords
 #' @export
 # hypothesize()
 setGeneric("hypothesize", function(conceptualModel, relationship) standardGeneric("hypothesize"))

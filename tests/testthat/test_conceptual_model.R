@@ -132,7 +132,7 @@ test_that("Causal graph constructed/updated properly", {
   # Test empty graph
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
-  expect_equal(nrow(edges(gr)), 0)
+  expect_equal(nrow(dagitty::edges(gr)), 0)
 
   unit <- Unit("person")
   measure_0 <- continuous(unit=unit, name="measure_0")
@@ -143,38 +143,38 @@ test_that("Causal graph constructed/updated properly", {
   cm <- assume(cm, causes(measure_0, measure_1))
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
-  expect_equal(nrow(edges(gr)), 1)
-  expect_equal(edges(gr)[[1]][1], measure_0@name)
-  expect_equal(edges(gr)[[2]][1], measure_1@name)
-  expect_equal(edges(gr)[[3]][1], "->")
+  expect_equal(nrow(dagitty::edges(gr)), 1)
+  expect_equal(dagitty::edges(gr)[[1]][1], measure_0@name)
+  expect_equal(dagitty::edges(gr)[[2]][1], measure_1@name)
+  expect_equal(dagitty::edges(gr)[[3]][1], "->")
 
   # Add an assume relationship
   cm <- assume(cm, causes(measure_1, measure_2))
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
-  expect_equal(nrow(edges(gr)), 2)
-  expect_equal(edges(gr)[[1]][1], measure_0@name)
-  expect_equal(edges(gr)[[2]][1], measure_1@name)
-  expect_equal(edges(gr)[[3]][1], "->")
-  expect_equal(edges(gr)[[1]][2], measure_1@name)
-  expect_equal(edges(gr)[[2]][2], measure_2@name)
-  expect_equal(edges(gr)[[3]][2], "->")
+  expect_equal(nrow(dagitty::edges(gr)), 2)
+  expect_equal(dagitty::edges(gr)[[1]][1], measure_0@name)
+  expect_equal(dagitty::edges(gr)[[2]][1], measure_1@name)
+  expect_equal(dagitty::edges(gr)[[3]][1], "->")
+  expect_equal(dagitty::edges(gr)[[1]][2], measure_1@name)
+  expect_equal(dagitty::edges(gr)[[2]][2], measure_2@name)
+  expect_equal(dagitty::edges(gr)[[3]][2], "->")
 
   # Add a hypothesized relationship
   # Should not matter if relationship is assumed vs. hypothesized
   cm <- hypothesize(cm, causes(measure_0, measure_2))
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
-  expect_equal(nrow(edges(gr)), 3)
-  expect_equal(edges(gr)[[1]][1], measure_0@name)
-  expect_equal(edges(gr)[[2]][1], measure_1@name)
-  expect_equal(edges(gr)[[3]][1], "->")
-  expect_equal(edges(gr)[[1]][2], measure_0@name) # alpha-numeric ordering
-  expect_equal(edges(gr)[[2]][2], measure_2@name)
-  expect_equal(edges(gr)[[3]][2], "->")
-  expect_equal(edges(gr)[[1]][3], measure_1@name)
-  expect_equal(edges(gr)[[2]][3], measure_2@name)
-  expect_equal(edges(gr)[[3]][3], "->")
+  expect_equal(nrow(dagitty::edges(gr)), 3)
+  expect_equal(dagitty::edges(gr)[[1]][1], measure_0@name)
+  expect_equal(dagitty::edges(gr)[[2]][1], measure_1@name)
+  expect_equal(dagitty::edges(gr)[[3]][1], "->")
+  expect_equal(dagitty::edges(gr)[[1]][2], measure_0@name) # alpha-numeric ordering
+  expect_equal(dagitty::edges(gr)[[2]][2], measure_2@name)
+  expect_equal(dagitty::edges(gr)[[3]][2], "->")
+  expect_equal(dagitty::edges(gr)[[1]][3], measure_1@name)
+  expect_equal(dagitty::edges(gr)[[2]][3], measure_2@name)
+  expect_equal(dagitty::edges(gr)[[3]][3], "->")
 
   # Unobserved variable
   cm <- ConceptualModel()
@@ -192,7 +192,7 @@ test_that("Causal graph constructed/updated properly", {
   cm <- assume(cm, causes(z, x))
   gr <- updateGraph(cm)
   expect_true(is.dagitty(gr))
-  expect_equal(nrow(edges(gr)), 4)
+  expect_equal(nrow(dagitty::edges(gr)), 4)
   expect_length(names(gr), 4)
 })
 

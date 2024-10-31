@@ -7,7 +7,6 @@
 #' @param var AbstractVariable. Variable that moderates the effect of @param moderator on @param on variable. 
 #' @param moderator AbstractVariable.
 #' @param on AbstractVariable.
-#' @keywords
 #' @export
 setGeneric("moderates", function(var, moderator, on) standardGeneric("moderates"))
 setMethod("moderates", signature("AbstractVariable", "AbstractVariable", "AbstractVariable"), function(var, moderator, on)
@@ -30,7 +29,6 @@ setMethod("moderates", signature("AbstractVariable", "AbstractVariable", "Abstra
 #' @param var AbstractVariable. Variable that moderates the effect of @param moderator on @param on variable. 
 #' @param moderator List of AbstractVaraibles.
 #' @param on AbstractVariable.
-#' @keywords
 #' @export
 setMethod("moderates", signature("AbstractVariable", "list", "AbstractVariable"), function(var, moderator, on)
 {

@@ -25,12 +25,11 @@ setMethod("isObserved", signature("ConceptualModel", "UnobservedVariable"), func
 #'
 #' This function finds Observed mediators on paths between @param x and @param y
 #' Helper function to follow recommendations from Cinelli, Forney, and Pearl 2020
-#' @param ConceptualModel.
+#' @param ConceptualModel Conceptual model whose graph to analyze
 #' @param x character. Name of AbstractVariable in @param graph.
 #' @param y character. Name of AbstractVariable in @param graph.
 #' @return list of Observed mediators.
 #' @import dagitty
-#' @keywords
 # getMediators()
 getMediators <- function(conceptualModel, x, y) {
   graph = conceptualModel@graph
@@ -74,7 +73,6 @@ getMediators <- function(conceptualModel, x, y) {
 #' @param dv AbstractVariable. Dependent variable that should not cause the @param iv.
 #' @return list of confounders to include.
 #' @import dagitty
-#' @keywords
 # inferConfounders()
 setGeneric("inferConfounders", function(conceptualModel, iv, dv) standardGeneric("inferConfounders"))
 setMethod("inferConfounders", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)

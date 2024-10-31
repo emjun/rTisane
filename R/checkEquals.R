@@ -1,12 +1,10 @@
 #' Checks if two values, treated as integers, are equal. 
 #'
 #' Returns TRUE if the values are equal. FALSE otherwise.
-#' @param variable
-#' @param value
-#' @keywords
+#' @param variable Variable object with a value to compare
+#' @param value numeric value
 #' @export
 # checkEquals()
-
 setGeneric("checkEquals", function(variable, value) standardGeneric("checkEquals"))
 setMethod("checkEquals", signature(variable = "numeric", value = "numeric"), function(variable, value)
 {

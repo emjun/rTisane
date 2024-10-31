@@ -2,7 +2,6 @@
 #'
 #' Returns the Compares relationship constructed.
 #' @param variable numericORordinal. The variable increasing.
-#' @keywords
 #' @export
 # increases()
 setGeneric("increases", function(variable) standardGeneric("increases"))

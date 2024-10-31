@@ -2,7 +2,8 @@
 % Please edit documentation in R/checkConceptualModel.R
 \name{checkConceptualModel}
 \alias{checkConceptualModel}
-\title{Check Conceptual Model (graph) is valid, meaning there are no cycles and that the @param dv does not cause @param iv}
+\title{Check Conceptual Model (graph) is valid, meaning there are no cycles and that the @param dv does not cause @param iv
+Use once have a query (i.e., iv and dv) of interest}
 \usage{
 checkConceptualModel(conceptualModel, iv, dv)
 }

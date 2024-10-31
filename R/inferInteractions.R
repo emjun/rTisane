@@ -38,7 +38,6 @@ getInteractions <- function(conceptualModel, dv) {
 #' @param confounders List. List of confounders to account for in order to estimate the causal effect of @param iv accurately.
 #' @return List of interaction/moderation effects and their explanations.
 #' @import dagitty
-#' @keywords
 # inferInteractions()
 inferInteractions <- function(conceptualModel, iv, dv, confounders) {
     # interactions = list() # interactions that should be considered as candidates given the @param iv and @param confounders

@@ -1,9 +1,8 @@
 #' Constructs a Per object. 
 #'
 #' Returns TRUE if @param value is greater than @param variable.
-#' @param value
-#' @param variable
-#' @keywords
+#' @param value numeric value
+#' @param variable Variable object with a value to compare
 #' @export
 # per()
 setGeneric("per", function(value, variable, cardinality) standardGeneric("per"))

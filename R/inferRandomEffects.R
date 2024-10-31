@@ -8,7 +8,6 @@
 #' @param dv AbstractVariable whose outcome we are interested in estimating in a statsitical model.
 #' @return List of random effects to include.
 #' @import dagitty
-#' @keywords
 # inferRandomEffects
 inferRandomEffects <- function(confounders, interactions, conceptualModel, iv, dv) {
     randomEffects = list()

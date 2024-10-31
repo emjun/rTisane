@@ -4,7 +4,6 @@
 #' Returns the Causes relationship constructed.
 #' @param cause AbstractVariable. The cause.
 #' @param effect AbstractVariable. The effect.
-#' @keywords
 #' @export
 # causes()
 setGeneric("causes", function(cause, effect, when, then) standardGeneric("causes"))

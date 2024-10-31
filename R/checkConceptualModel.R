@@ -31,6 +31,7 @@ createStringIndexMap <- function(strings) {
 # Function to find a cycle using DFS and return the cycle path
 #' @import igraph
 findCycles <- function(conceptualModel) {
+  # namespaceImportFrom(dagitty, edges)
   print("Start findCycles")
   # Get adjacency matrix
   # adjList <- getAdjList(conceptualModel)
@@ -43,7 +44,7 @@ findCycles <- function(conceptualModel) {
   nodeNames <- names(gr)
   nodeNames_to_idx <- createStringIndexMap(nodeNames)
   
-  edgeList <- as.matrix(edges(gr)[1:2])
+  edgeList <- as.matrix(dagitty::edges(gr)[1:2])
   g <- igraph::graph_from_edgelist(edgeList)
   
   # Adapted from https://stackoverflow.com/questions/55091438/r-igraph-find-all-cycles
@@ -166,7 +167,6 @@ findCycles <- function(conceptualModel) {
 #' @param dv AbstractVariable. Dependent variable that should not cause the @param iv.
 #' @return TRUE if the Conceptual Model is valid, FALSE otherwise
 #' @import dagitty
-#' @keywords
 # checkConceptualModel()
 setGeneric("checkConceptualModel", function(conceptualModel, iv, dv) standardGeneric("checkConceptualModel"))
 setMethod("checkConceptualModel", signature("ConceptualModel", "AbstractVariable", "AbstractVariable"), function(conceptualModel, iv, dv)

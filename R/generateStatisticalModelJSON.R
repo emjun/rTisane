@@ -9,7 +9,6 @@
 #' @param dv Continuous, Counts, or Categories. 
 #' @param path Path-like or character. Path to write out the JSON.
 #' @import jsonlite
-#' @keywords
 # generateStatisticalModelJSON()
 generateStatisticalModelJSON <- function(confounders, interactions, randomEffects, familyLinkFunctions, iv, dv, path) {
     #### Generate main effects list from confounders

@@ -3,7 +3,6 @@
 #' Method for constructing a Categories wrapper.
 #' @param measure. Measure to wrap. Must be either Ordinal or Nominal.
 #' @return Continuous variable wrapped around @param measure.
-#' @keywords
 #' @export
 setGeneric("asCategories", function(measure) standardGeneric("asCategories"))
 setMethod("asCategories", signature("Measure"), function(measure)

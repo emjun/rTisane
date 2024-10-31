@@ -3,7 +3,6 @@
 #' Abstract super class for declaring variables
 #' @slot name Name of variable, which should correspond with the column name for variable's data (must be in long format)
 #' @slot relationships List of relationships this variable has with other variables
-#' @keywords
 #' @export AbstractVariable
 #' @examples
 #' AbstractVariable(name="name", relationships=list())
@@ -29,7 +28,6 @@ AbstractVariable <- function(name,
 #' UnobservedVariable class
 #'
 #' Class for Unobserved variables.
-#' @keywords
 #' @export
 UnobservedVariable <- setClass("UnobservedVariable",
                                slot = c(
@@ -49,7 +47,6 @@ Unobserved <- function() {
 #'
 #' Internal use only. Abstract super class for number values, used for numberOfInstances that a Unit has of a Measure
 #' @slot value Number value
-#' @keywords
 #' @export NumberValue
 #' @exportClass NumberValue
 NumberValue <- setClass("NumberValue",
@@ -62,7 +59,6 @@ NumberValue <- setClass("NumberValue",
 #'
 #' Wrapper class for exact number values. Extends NumberValue class.
 #' @slot value Number value
-#' @keywords
 #' @export Exactly
 #' @examples
 #' Exactly(as.integer(3))
@@ -86,7 +82,6 @@ Exactly <- function(value=as.integer(1)) {
 #'
 #' Wrapper class for upperbound of number values. Extends NumberValue class.
 #' @slot value Number value
-#' @keywords
 #' @export AtMost
 #' @examples
 #' AtMost(as.integer(1))
@@ -111,10 +106,7 @@ AtMost <- function(value=as.integer(1)) {
 #' Wrapper class for ratios between number values. Extends NumberValue class.
 #' @slot number NumberValue
 #' @slot variable AbstractVariable that contains
-#' @slot cardinality
-# ' @slot numberOfInstances
-#' @slot value
-#' @keywords
+#' @slot cardinality cardinality
 Per <- setClass("Per",
     slots = c(
         number = "NumberValue",
@@ -143,7 +135,6 @@ setClassUnion("missingORintegerORAbstractVariableORAtMostORPer", c("missing", "n
 #'
 #' Class for Dataset
 #' @slot df DataFrame.
-#' @keywords
 #' @export Dataset
 #' @exportClass Dataset
 Dataset <- setClass("Dataset",
@@ -165,7 +156,6 @@ setClassUnion("AbstractVariableORNull", c("AbstractVariable", "NULL"))
 #' @slot measure AbstractVariable. Variable that @slot variable has. For example, the Measure a Unit has.
 #' @slot repetitions NumberValue. Number of times that @slot variable has @slot measure.
 #' @slot according_to AbstractVariable. Variable whose unique values differentiate the repeated instances of @slot measure.
-#' @keywords
 Has <- setClass("Has",
     slot = c(
         variable = "AbstractVariable",
@@ -197,7 +187,6 @@ setClassUnion("AbstractVariableORListORNull", c("AbstractVariable", "list", "NUL
 #' @slot name Name of Unit, corresponds to column name if assigning data
 #' @slot integer Integer for cardinality, optional. Only required if no data is assigned
 #' @slot nestsWithin Unit if this unit is nested within another (e.g., hierarchical relationship). Optional.
-#' @keywords
 #' @export
 Unit <- setClass("Unit",
     slot = c(
@@ -236,7 +225,6 @@ Unit <- function(name,
 #' Class for Participant variables
 #' @slot name Name of Participant, corresponds to column name if assigning data
 #' @slot integer Integer for cardinality, optional. Only required if no data is assigned
-#' @keywords
 #' @export
 Participant <- setClass("Participant",
     slot = c(
@@ -273,7 +261,6 @@ Participant <- function(name,
 #'
 #' Super class for measure variables
 #' Not called directly. Measures are declared through Units.
-#' @keywords
 Measure <- setClass("Measure",
     slot = c(
         unit = "Unit",
@@ -290,7 +277,6 @@ Measure <- setClass("Measure",
 #' @slot units List of Units, may only be one unit if the moderation is constructed from Measures from the same Unit
 # #' @slot cardinality Integer for cardinality.
 #' @slot variables List of AbstractVariables or UnobservedVariables that interact with each other
-#' @keywords
 Interacts <- setClass("Interacts",
     slot = c(
         name = "character",
@@ -307,7 +293,6 @@ Interacts <- setClass("Interacts",
 #' Inherits from Measure.
 #' @slot name character. Name of measure, corresponds to column name in data.
 # @slot baseline numeric. Optional. By default, 0.
-#' @keywords
 Continuous <- setClass("Continuous",
     slot = c(
         name = "character"
@@ -323,7 +308,6 @@ Continuous <- setClass("Continuous",
 #' Inherits from Measure. 
 #' @slot name character. Name of measure, corresponds to column name in data.
 # @slot baseline numeric. Optional. By default, 0.
-#' @keywords
 Counts <- setClass("Counts",
     slot = c(
         name = "character" 
@@ -338,7 +322,6 @@ Counts <- setClass("Counts",
 #' Inherits from Measure. 
 #' @slot name character. Name of measure, corresponds to column name in data.
 # @slot baseline character. Specific category that the other categories in this measure are compared against. If @param order is provided, @param baseline is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
-#' @keywords
 Categories <- setClass("Categories",
     slot = c(
     name = "character"
@@ -353,7 +336,6 @@ Categories <- setClass("Categories",
 #' @slot name character. Name of measure, corresponds to column name in data.
 #' @slot cardinality integer. Number of unique categories. If @param order is provided, @param cardinality is not needed and will be set to the length of @param order
 # @slot baseline character. Specific category that the other categories in this measure are compared against. If @param order is provided, @param baseline is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
-#' @keywords
 UnorderedCategories <- setClass("UnorderedCategories",
     slot = c(
         name = "character",
@@ -371,7 +353,6 @@ setClassUnion("listORNULL", c("list", "NULL"))
 #' @slot cardinality integer. Number of unique categories. If @param order is provided, @param cardinality is not needed and will be set to the length of @param order
 #' @slot order list. Optional. List of categories in order from "lowest" to "highest"
 # @slot baseline character. Specific category that the other categories in this measure are compared against. If @param order is provided, @param baseline is set to the lowest (left-most) value. Otherwise, by default, the first value in the dataset; `baseline` is useful for `whenThen` statements
-#' @keywords
 OrderedCategories <- setClass("OrderedCategories",
     slot = c(
     name = "character",
@@ -387,7 +368,6 @@ OrderedCategories <- setClass("OrderedCategories",
 #' @slot name Name of Time, corresponds to column name if assigning data
 #' @slot order Optional. Order of categories if the Time variable represents an ordinal value (e.g., week of the month)
 #' @slot cardinality Optional. Cardinality of Time variable if itrepresents a nominal or ordinal value (e.g., trial identifier)
-#' @keywords
 #' @export
 Time <- setClass("Time",
     slot = c(
@@ -451,7 +431,6 @@ Time <- function(name,
 #' Not called directly.
 #' @slot variable AbstractVariable. Variable that is being compared.
 #' @slot condition character. Condition to filter values of @slot variable on.
-#' @keywords
 Compares <- setClass("Compares",
                   slot = c(
                     variable = "AbstractVariable",
@@ -467,7 +446,6 @@ setClassUnion("ComparesORNULL", c("Compares", "NULL"))
 #' Not called directly.
 #' @slot lhs AbstractVariable. A variable.
 #' @slot rhs AbstractVariable. A variable.
-#' @keywords
 Relates <- setClass("Relates",
                    slot = c(
                      lhs = "AbstractVariableORUnobservedVariable",
@@ -483,7 +461,6 @@ Relates <- setClass("Relates",
 #' Not called directly.
 #' @slot cause AbstractVariable. Variable that causes another.
 #' @slot effect AbstractVariable. Variable that is caused by @slot cause.
-#' @keywords
 Causes <- setClass("Causes",
     slot = c(
         cause = "AbstractVariableORUnobservedVariable",
@@ -498,7 +475,6 @@ Causes <- setClass("Causes",
 #' Not called directly.
 #' @slot base AbstractVariable. Variable that is nested within another.
 #' @slot group AbstractVariable. Variable that contains multiple instances of @slot base.
-#' @keywords
 Nests <- setClass("Nests",
     slot = c(
         base = "Unit",
@@ -512,7 +488,6 @@ setOldClass("dagitty")
 #' ConceptualModel class
 #'
 #' Class for Conceptual Models
-#' @keywords
 #' @import dagitty
 #' @export
 ConceptualModel <- setClass("ConceptualModel",
@@ -545,7 +520,6 @@ setClassUnion("dfOrNull", c("list", "NULL"))
 #' @slot ivs List of AbstractVariables. Varibale that are independent variables.
 #' @slot dv AbstractVariable. Variable that is the dependent variable.
 #' @slot source Data frame containing data for Design.
-#' @keywords
 Design <- setClass("Design",
     slot = c(
         relationships = "list",
@@ -592,7 +566,6 @@ setClassUnion("relatesORcausesORInteracts", c("Relates", "Causes", "Interacts"))
 #' Class for Assumptions.
 #' @slot relationship. Relationship to assume.
 #' @slot conceptualModel ConceptualModel to which this Assumption belongs.
-#' @keywords
 #' @export
 Assumption <- setClass("Assumption",
                         slot = c(
@@ -619,7 +592,6 @@ Assumption <- function(relationship=new("Relates", lhs=Unobserved(), rhs=Unobser
 #' Class for Hypotheses.
 #' @slot relationship. Relationship to hypothesize.
 #' @slot conceptualModel ConceptualModel to which this Hypothesis belongs.
-#' @keywords
 #' @export
 Hypothesis <- setClass("Hypothesis",
                        slot = c(
@@ -641,7 +613,6 @@ Hypothesis <- function(relationship,
 #' RandomEffect class.
 #'
 #' Abstract super class for declaring random effects.
-#' @keywords
 #' @export
 RandomEffect <- setClass("RandomEffect")
 
@@ -650,7 +621,6 @@ RandomEffect <- setClass("RandomEffect")
 #' Class for declaring random slopes
 #' @slot variable Measure whose observations we want to calculate a slope for.
 #' @slot group Unit whose observations we want to pool.
-#' @keywords
 #' @export
 RandomSlope <- setClass("RandomSlope",
     slots = c(
@@ -672,7 +642,6 @@ setClassUnion("UnitORTime", c("Unit", "Time"))
 #'
 #' Class for declaring random intercepts
 #' @slot group Unit whose observations we want to pool.
-#' @keywords
 #' @export
 RandomIntercept <- setClass("RandomIntercept",
     slots = c(

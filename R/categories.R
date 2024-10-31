@@ -7,7 +7,6 @@
 #' @param order. List. Optional. List of categories in order from "lowest" to "highest".
 #' @param numberOfInstances Integer or AbstractVariable or AtMost or Per. Number of instances of the measure the @param unit has. Default is 1.
 #' @return handle to Categories measure
-#' @keywords
 #' @export
 # categories()
 setGeneric("categories", function(unit, name, cardinality, order, numberOfInstances=1) standardGeneric("categories"))

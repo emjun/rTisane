@@ -5,7 +5,6 @@
 # #' Returns the Moderates relationship constructed if @param when is a list of Compares/involves multiple variables.
 #' @param when Compares.
 #' @param then Compares.
-#' @keywords
 #' @export
 # whenThen()
 setGeneric("whenThen", function(when, then) standardGeneric("whenThen"))

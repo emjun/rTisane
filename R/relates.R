@@ -4,7 +4,6 @@
 #' Returns the Relates relationship constructed.
 #' @param lhs AbstractVariable. A variable.
 #' @param rhs AbstractVariable. A variable.
-#' @keywords
 #' @export
 # relates()
 setGeneric("relates", function(lhs, rhs, when, then) standardGeneric("relates"))

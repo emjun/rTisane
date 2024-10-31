@@ -7,7 +7,6 @@
 #' @param cardinality. Integer. Optional. Only required if no data is assigned. If provided, value to make sure @param cardinality == length(@param order)
 #' @param numberOfInstances Integer or AbstractVariable or AtMost or Per. Number of instances of the measure the @param unit has. Default is 1.
 #' @return Has Relationship representing Unit having the Nominal Measure.
-#' @keywords
 #' @export
 # ordinal()
 setGeneric("ordinal", function(unit, name, order, numberOfInstances) standardGeneric("ordinal"))

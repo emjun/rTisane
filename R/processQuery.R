@@ -21,7 +21,6 @@ generateDisambiguationChoices <- function(relationship, tag) {
 #' Writes info to a JSON file
 #' @import jsonlite
 #' @param path should be different from "input.json" only for development/testing
-#' @keywords
 # generateConceptualModelJSON()
 generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
   output <- list()
@@ -86,7 +85,6 @@ generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
 #' precondition: There must be a variable with the @param name in the @param conceptualModel.
 #' @param conceptualModel ConceptualModel with a variable of interest.
 #' @param name character. Name of variable we would like a handle to.
-#' @keywords
 # getVariable()
 getVariable <- function(conceptualModel, name) {
   for (v in conceptualModel@variables) {
@@ -107,7 +105,6 @@ getVariable <- function(conceptualModel, name) {
 #' @param conceptualModel ConceptualModel to update.
 #' @param values ReactiveValues from disambiguating DV type.
 #' @import stringr
-#' @keywords
 # updateConceptualModel()
 updateConceptualModel <- function(conceptualModel, values) {
   # newRelat <- values$uncertainRelationships
@@ -295,8 +292,7 @@ updateConceptualModel <- function(conceptualModel, values) {
 #' @param conceptualModel ConceptualModel. Contains causal graph to process.
 #' @param iv AbstractVariable. Independent variable whose influence on @param dv we want to assess.
 #' @param dv AbstractVariable. Dependent variable.
-#' @return
-#' @keywords
+#' @return updated conceptual model 
 # processQuery()
 setGeneric("processQuery", function(conceptualModel, iv, dv, data) standardGeneric("processQuery"))
 setMethod("processQuery", signature("ConceptualModel", "AbstractVariable", "AbstractVariable", "characterORDataframeORnull"), function(conceptualModel, iv, dv, data)

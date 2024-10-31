@@ -2,7 +2,6 @@
 #'
 #' This function infers has relationships from a study design.
 #' @param design 
-#' @keywords
 # infer_has_relationships()
 infer_has_relationships <- function(design){
     # Get all variables in design

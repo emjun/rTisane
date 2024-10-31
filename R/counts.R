@@ -4,7 +4,6 @@
 #' @param unit Unit object. Unit that has/contributes the Counts measure.
 #' @param name Character. Name of measure, corresponds to column name in data.
 #' @return handle to Counts measure.
-#' @keywords
 #' @export
 # counts()
 setGeneric("counts", function(unit, name, numberOfInstances=1) standardGeneric("counts"))

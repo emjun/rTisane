@@ -3,7 +3,6 @@
 #' Returns the Compares relationship constructed.
 #' @param variable nominalORordinal The variable whose value may equal @param value.
 #' @param value integerORnumericORcharacter. The value to look for/filter on in @param variable.
-#' @keywords
 #' @export
 # equals()
 setGeneric("equals", function(variable, value) standardGeneric("equals"))

@@ -4,7 +4,6 @@
 #' Updates the relationships for each variable to include the newly constructed Nests relationship. 
 #' @param base Unit. Variable that is nested within another. 
 #' @param group Unit. Variable that contains multiple instances of @param base.
-#' @keywords
 #' @export
 # nests()
 setGeneric("nests", function(base, group) standardGeneric("nests"))

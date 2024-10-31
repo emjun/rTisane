@@ -3,9 +3,7 @@
 #' Method for constructing a Continuous wrapper.
 #' @param measure. Measure to wrap. Must be either Numeric or Ordinal.
 #' @return Continuous variable wrapped around @param measure.
-#' @keywords
 #' @export
-#' s
 #' asCounts()
 setGeneric("asCounts", function(measure) standardGeneric("asCounts"))
 setMethod("asCounts", signature("Measure"), function(measure)

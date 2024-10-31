@@ -4,7 +4,6 @@
 #' @param unit Unit object. Unit that has/contributes the Continuous measure.
 #' @param name Character. Name of measure, corresponds to column name in data.
 #' @return handle to Continuous measure.
-#' @keywords
 #' @export
 # continuous()
 setGeneric("continuous", function(unit, name, numberOfInstances=1) standardGeneric("continuous"))

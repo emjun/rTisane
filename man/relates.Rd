@@ -4,7 +4,7 @@
 \alias{relates}
 \title{Specify a relates (ambiguous) relationship}
 \usage{
-relates(lhs, rhs)
+relates(lhs, rhs, when, then)
 }
 \arguments{
 \item{lhs}{AbstractVariable. A variable.}

@@ -4,12 +4,14 @@
 \alias{interacts}
 \title{Specify an interaction relationship}
 \usage{
-interacts(...)
+interacts(conceptualModel, ..., dv)
 }
 \arguments{
-\item{lhs}{AbstractVariable.}
+\item{conceptualModel}{ConceptualModel.}
 
-\item{rhs}{AbstractVariable.}
+\item{...}{AbstractVariables.}
+
+\item{dv}{AbstractVariable.}
 }
 \description{
 Method for constructing an interaction between two or more variables.

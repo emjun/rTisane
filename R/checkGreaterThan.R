@@ -1,9 +1,8 @@
 #' Checks if a value is greater than another value. 
 #'
 #' Returns TRUE if @param lhs is greater than @param rhs.
-#' @param lhs
-#' @param rhs
-#' @keywords
+#' @param lhs numeric value
+#' @param rhs numeric value
 #' @export
 # checkGreaterThan()
 setGeneric("checkGreaterThan", function(lhs, rhs) standardGeneric("checkGreaterThan"))

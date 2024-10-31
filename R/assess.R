@@ -5,9 +5,7 @@
 #' Returns a script for running the statistical models
 #' @param conceptualModel ConceptualModel to test.
 #' @param data Dataset. Data to assess.
-#' @keywords
 #' @export
-#' s
 #' assess()
 setGeneric("assess", function(conceptualModel, data) standardGeneric("assess"))
 setMethod("assess", signature("ConceptualModel", "Dataset"), function(conceptualModel, data)

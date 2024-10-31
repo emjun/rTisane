@@ -4,7 +4,6 @@
 #' Returns the Assumption created.
 #' @param conceptualModel ConceptualModel to which we should add the Assumption.
 #' @param relationship Relationship to assume.
-#' @keywords
 #' @export
 setGeneric("assume", function(conceptualModel, relationship) standardGeneric("assume"))
 setMethod("assume", signature("ConceptualModel", "relatesORcausesORInteracts"), function(conceptualModel, relationship)

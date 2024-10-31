@@ -43,7 +43,6 @@ deriveStatisticalModel <- function(updatedCM, iv, dv) {
 #' @param iv AbstractVariable. Which variable whose effect on @param dv we want to evaluate.
 #' @param dv AbstractVariable. Variable whose outcome we want to assess.
 #' @import reticulate
-#' @keywords
 #' @export
 # query()
 setGeneric("query", function(conceptualModel, iv, dv, data) standardGeneric("query"))
