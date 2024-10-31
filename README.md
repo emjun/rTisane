@@ -1,4 +1,7 @@
 # rTisane
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/emjun/rTisane/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/emjun/rTisane/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
 rTisane is an R library and interactive system for authoring statistical models from domain knowledge.rTisane provides (i) a domain-specific language for expressing conceptual assumptions and (ii) an interactive disambiguation process for deriving an output statistical model. 
 
