@@ -1,4 +1,5 @@
 library(rTisane)
+library(dagitty)
 
 test_that("Assume updates Conceptual Model properly", {
   cm <- ConceptualModel()
@@ -95,7 +96,7 @@ test_that("Unobserved variables treated properly in Conceptual Models", {
   age <- continuous(unit=unit, name="age")
   motivation <- continuous(unit=unit, name="motivation")
   pounds_lost <- continuous(unit=unit, name="pounds_lost")
-  midlife_crisis <- Unobserved()
+  midlife_crisis <- rTisane:::Unobserved()
 
   expect_error(hypothesize(cm, causes(age, midlife_crisis)))
 
@@ -131,7 +132,7 @@ test_that("Causal graph constructed/updated properly", {
   cm <- ConceptualModel()
   # Test empty graph
   gr <- rTisane:::updateGraph(cm)
-  expect_true(is.dagitty(gr))
+  expect_true(dagitty::is.dagitty(gr))
   expect_equal(nrow(dagitty::edges(gr)), 0)
 
   unit <- Unit("person")
@@ -184,7 +185,7 @@ test_that("Causal graph constructed/updated properly", {
   z <- continuous(unit=unit, name="z")
   m <- continuous(unit=unit, name="m")
   w <- continuous(unit=unit, name="w")
-  u <- Unobserved()
+  u <- rTisane:::Unobserved()
 
   cm <- assume(cm, causes(x, y))
   cm <- assume(cm, causes(u, y))
@@ -210,7 +211,7 @@ test_that("Validate Conceptual Model's causal graph properly", {
   cm <- hypothesize(cm, causes(measure_0, measure_2))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  isValid <- checkConceptualModel(cm, measure_0, measure_2)
+  isValid <- rTisane:::checkConceptualModel(cm, measure_0, measure_2)
   expect_type(isValid, "list")
   expect_named(isValid, c("isValid"))
   expect_true(isValid$isValid)
@@ -220,10 +221,10 @@ test_that("Validate Conceptual Model's causal graph properly", {
   cm <- ConceptualModel()
   cm <- assume(cm, causes(measure_0, measure_1))
   cm@graph <- rTisane:::updateGraph(cm)
-  res <- checkConceptualModel(cm, measure_0, measure_2)
+  res <- rTisane:::checkConceptualModel(cm, measure_0, measure_2)
   expect_false(res$isValid)
   # IV is not in the Conceptual Model/graph
-  res <- checkConceptualModel(cm, measure_2, measure_0)
+  res <- rTisane:::checkConceptualModel(cm, measure_2, measure_0)
   expect_false(res$isValid)
 
   # No path between IV and DV!
@@ -232,14 +233,14 @@ test_that("Validate Conceptual Model's causal graph properly", {
   cm <- assume(cm, causes(measure_1, measure_2))
   cm <- assume(cm, causes(measure_3, measure_4))
   cm@graph <- rTisane:::updateGraph(cm)
-  res <- checkConceptualModel(cm, measure_0, measure_4)
+  res <- rTisane:::checkConceptualModel(cm, measure_0, measure_4)
   expect_named(res, c("isValid", "reason"))
 
   # DV causes IV!
   cm <- ConceptualModel()
   cm <- assume(cm, causes(measure_0, measure_2))
   cm@graph <- rTisane:::updateGraph(cm)
-  res <- checkConceptualModel(cm, measure_2, measure_0)
+  res <- rTisane:::checkConceptualModel(cm, measure_2, measure_0)
   expect_named(res, c("isValid", "reason"))
   expect_false(res$isValid)
 
@@ -248,10 +249,10 @@ test_that("Validate Conceptual Model's causal graph properly", {
   cm <- assume(cm, causes(measure_0, measure_2))
   cm <- assume(cm, causes(measure_2, measure_0))
   cm@graph <- rTisane:::updateGraph(cm)
-  res <- checkConceptualModel(cm, measure_0, measure_2)
+  res <- rTisane:::checkConceptualModel(cm, measure_0, measure_2)
   expect_named(res, c("isValid"))
   expect_true(res$isValid)
-  res <- checkConceptualModel(cm, measure_2, measure_0)
+  res <- rTisane:::checkConceptualModel(cm, measure_2, measure_0)
   expect_named(res, c("isValid"))
   expect_true(res$isValid)
 })
@@ -263,7 +264,7 @@ test_that("Mediators found correctly", {
   z <- continuous(unit=unit, name="z")
   m <- continuous(unit=unit, name="m")
   w <- continuous(unit=unit, name="w")
-  u <- Unobserved()
+  u <- rTisane:::Unobserved()
 
   cm <- ConceptualModel()
   cm <- assume(cm, causes(x, m))
@@ -293,7 +294,7 @@ test_that("Observed variables found correctly", {
   z <- continuous(unit=unit, name="z")
   m <- continuous(unit=unit, name="m")
   w <- continuous(unit=unit, name="w")
-  u <- Unobserved()
+  u <- rTisane:::Unobserved()
 
   cm <- ConceptualModel()
   cm <- assume(cm, causes(x, m))
@@ -322,14 +323,14 @@ test_that("Interactions found correctly", {
   cm <- assume(cm, causes(measure_1, measure_3))
   cm@graph <- rTisane:::updateGraph(cm)
 
-  interactions <- getInteractions(cm, measure_3)
+  interactions <- rTisane:::getInteractions(cm, measure_3)
   expect_length(interactions, 0)
 
   # 1 interaction
   cm <- interacts(cm, measure_0, measure_1, dv=measure_3)
   cm@graph <- rTisane:::updateGraph(cm)
 
-  interactions <- getInteractions(cm, measure_3)
+  interactions <- rTisane:::getInteractions(cm, measure_3)
   expect_length(interactions, 1)
   ixn <- interactions[[1]]
   expect_equal(ixn@name, "measure_0*measure_1")
@@ -339,12 +340,12 @@ test_that("Interactions found correctly", {
   cm <- interacts(cm, measure_0, measure_1, dv=measure_2)
   cm@graph <- rTisane:::updateGraph(cm)
 
-  interactions <- getInteractions(cm, measure_3)
+  interactions <- rTisane:::getInteractions(cm, measure_3)
   expect_length(interactions, 1)
   ixn <- interactions[[1]]
   expect_equal(ixn@name, "measure_0*measure_1")
   expect_equal(ixn@dv, measure_3)
-  interactions <- getInteractions(cm, measure_2)
+  interactions <- rTisane:::getInteractions(cm, measure_2)
   expect_length(interactions, 1)
   ixn <- interactions[[1]]
   expect_equal(ixn@name, "measure_0*measure_1")
@@ -365,7 +366,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(measure_0, measure_2))
   cm <- assume(cm, causes(measure_1, measure_2))
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   expect_length(confounders, 1)
   expect_true(measure_1@name %in% confounders)
 
@@ -377,7 +378,7 @@ test_that("Infer confounders correctly", {
   z <- continuous(unit=unit, name="z")
   m <- continuous(unit=unit, name="m")
   w <- continuous(unit=unit, name="w")
-  u <- Unobserved()
+  u <- rTisane:::Unobserved()
 
   cm <- assume(cm, causes(x, y))
   cm <- assume(cm, causes(u, y))
@@ -385,7 +386,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(z, x))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
@@ -397,7 +398,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(z, y))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
@@ -409,7 +410,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(z, m))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
@@ -422,7 +423,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(z, m))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
@@ -435,7 +436,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(u, m))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
@@ -445,7 +446,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(z, y))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
@@ -456,7 +457,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(z, w))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
@@ -466,7 +467,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(x, z))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 
@@ -479,7 +480,7 @@ test_that("Infer confounders correctly", {
   cm <- assume(cm, causes(u, y))
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=x, dv=y)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=x, dv=y)
   expect_length(confounders, 1)
   expect_true(z@name %in% confounders)
 })
@@ -503,21 +504,21 @@ test_that("Infer interactions correctly", {
 
   # There are no interactions
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 0)
 
   # There is 1 interaction
   cm <- interacts(cm, measure_0, measure_1, dv=measure_2)
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 1)
 
   # There is only 1 interaction with the applicable DV
   cm <- interacts(cm, measure_1, measure_2, dv=measure_3)
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 1)
 
@@ -525,7 +526,7 @@ test_that("Infer interactions correctly", {
   cm <- interacts(cm, measure_1, measure_3, dv=measure_2)
 
   cm@graph <- rTisane:::updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 2)
 })

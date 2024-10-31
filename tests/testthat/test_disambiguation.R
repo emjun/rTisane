@@ -179,7 +179,7 @@ test_that("Conceptual model updates after disambiguation properly", {
   relat <- relates(measure_0, measure_1)
   cm <- assume(cm, relat)
   # Update graph
-  cm@graph <- updateGraph(cm)
+  cm@graph <- rTisane:::updateGraph(cm)
 
   # Values to update to
   uRelat <- paste("Assume", measure_0@name, "causes", measure_1@name, sep=" ")
@@ -204,7 +204,7 @@ test_that("Conceptual model updates after disambiguation properly", {
   relat <- relates(measure_0, measure_1)
   cm <- hypothesize(cm, relat)
   # Update graph
-  cm@graph <- updateGraph(cm)
+  cm@graph <- rTisane:::updateGraph(cm)
 
   # Create updates list to pass to updateDV function
   updates <- list("Hypothesize measure_0 causes measure_1")
@@ -225,7 +225,7 @@ test_that("Conceptual model updates after disambiguation properly", {
   relat <- relates(measure_0, measure_1)
   cm <- hypothesize(cm, relat)
   # Update graph
-  cm@graph <- updateGraph(cm)
+  cm@graph <- rTisane:::updateGraph(cm)
 
   # Values to update to
   updates <- list("Hypothesize measure_1 causes measure_0")
@@ -254,8 +254,8 @@ test_that("Statistical modeling options created properly", {
   cm <- assume(cm, causes(measure_1, measure_0))
   cm <- assume(cm, causes(measure_0, measure_2))
   cm <- assume(cm, causes(measure_1, measure_2))
-  cm@graph <- updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  cm@graph <- rTisane:::updateGraph(cm)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   familyLinkPairs <- inferFamilyLinkFunctions(measure_2)
 
   path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
@@ -281,8 +281,8 @@ test_that("Statistical modeling options created properly", {
 
   # Introduce an interaction
   cm <- interacts(cm, measure_0, measure_1, dv=measure_2)
-  cm@graph <- updateGraph(cm)
-  confounders <- inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
+  cm@graph <- rTisane:::updateGraph(cm)
+  confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   familyLinkPairs <- inferFamilyLinkFunctions(measure_2)
 

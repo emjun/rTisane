@@ -39,7 +39,6 @@ UnobservedVariable <- setClass("UnobservedVariable",
 )
 # Helper to create instances of the Unobserved class
 # Used internally only
-#' @export
 Unobserved <- function() {
   new("UnobservedVariable")
 }
