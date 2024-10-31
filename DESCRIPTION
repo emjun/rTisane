@@ -1,6 +1,6 @@
 Package: rTisane
 Title: Authoring Statistical Models from Conceptual Models
-Version: 0.0.1
+Version: 1.0.0
 Authors@R: 
     person("Eunice", "Jun", , "eunice.m.jun@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4050-4284"))
