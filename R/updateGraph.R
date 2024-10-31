@@ -4,6 +4,7 @@
 #' @param conceptualModel ConceptualModel. Conceptual Model for which to create a causal graph.
 #' @return Dagitty DAG representing causal graph.
 #' @import dagitty
+#' @export
 # updateGraph()
 updateGraph <- function(conceptualModel){
   # Get variable names
