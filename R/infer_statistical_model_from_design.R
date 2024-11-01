@@ -3,7 +3,6 @@
 #' This function infers a statistical model from a study design.
 #' @param design 
 #' @keywords statistical model
-#' @export
 # infer_statistical_model_from_design()
 infer_statistical_model_from_design <- function(design){
     ### Step 0: Construct graph

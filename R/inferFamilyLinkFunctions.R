@@ -100,7 +100,6 @@ inferLinkFunctions <- function(family) {
 #' Infers possible family and link function pairs for dependent variable
 #' Returns a list of possible family and link function pairs.
 #' @param dv ContinuousORCountsORCategories. Wrapped Measure whose outcome we want to assess.
-#' @export
 # inferFamilyLinkFunctions()
 setGeneric("inferFamilyLinkFunctions", function(dv) standardGeneric("inferFamilyLinkFunctions"))
 setMethod("inferFamilyLinkFunctions", signature("ContinuousORCountsORCategories"), function(dv)

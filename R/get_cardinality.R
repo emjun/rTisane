@@ -2,7 +2,6 @@
 #'
 #' Method for getting the cardinality of an AbstractVariable
 #' @param variable AbstractVariable to inspect
-#' @export
 # get_cardinality()
 setGeneric("get_cardinality", function(variable) standardGeneric("get_cardinality"))
 setMethod("get_cardinality", signature("AbstractVariable"), function(variable)

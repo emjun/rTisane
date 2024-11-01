@@ -3,7 +3,6 @@
 #' Returns TRUE if @param lhs is greater than @param rhs.
 #' @param lhs numeric value
 #' @param rhs numeric value
-#' @export
 # checkGreaterThan()
 setGeneric("checkGreaterThan", function(lhs, rhs) standardGeneric("checkGreaterThan"))
 setMethod("checkGreaterThan", signature(lhs = "numeric", rhs = "numeric"), function(lhs, rhs) 

@@ -3,7 +3,6 @@
 #' Abstract super class for declaring variables
 #' @slot name Name of variable, which should correspond with the column name for variable's data (must be in long format)
 #' @slot relationships List of relationships this variable has with other variables
-#' @export AbstractVariable
 #' @examples
 #' AbstractVariable(name="name", relationships=list())
 AbstractVariable <- setClass("AbstractVariable",
@@ -47,8 +46,6 @@ Unobserved <- function() {
 #'
 #' Internal use only. Abstract super class for number values, used for numberOfInstances that a Unit has of a Measure
 #' @slot value Number value
-#' @export NumberValue
-#' @exportClass NumberValue
 NumberValue <- setClass("NumberValue",
     slots = c(
         value = "integer"
@@ -566,7 +563,6 @@ setClassUnion("relatesORcausesORInteracts", c("Relates", "Causes", "Interacts"))
 #' Class for Assumptions.
 #' @slot relationship. Relationship to assume.
 #' @slot conceptualModel ConceptualModel to which this Assumption belongs.
-#' @export
 Assumption <- setClass("Assumption",
                         slot = c(
                           relationship = "relatesORcausesORInteracts",
@@ -592,7 +588,6 @@ Assumption <- function(relationship=new("Relates", lhs=Unobserved(), rhs=Unobser
 #' Class for Hypotheses.
 #' @slot relationship. Relationship to hypothesize.
 #' @slot conceptualModel ConceptualModel to which this Hypothesis belongs.
-#' @export
 Hypothesis <- setClass("Hypothesis",
                        slot = c(
                          relationship = "relatesORcausesORInteracts",
@@ -613,7 +608,6 @@ Hypothesis <- function(relationship,
 #' RandomEffect class.
 #'
 #' Abstract super class for declaring random effects.
-#' @export
 RandomEffect <- setClass("RandomEffect")
 
 #' RandomSlope class.
@@ -621,7 +615,6 @@ RandomEffect <- setClass("RandomEffect")
 #' Class for declaring random slopes
 #' @slot variable Measure whose observations we want to calculate a slope for.
 #' @slot group Unit whose observations we want to pool.
-#' @export
 RandomSlope <- setClass("RandomSlope",
     slots = c(
             variable = "Measure",
@@ -642,7 +635,6 @@ setClassUnion("UnitORTime", c("Unit", "Time"))
 #'
 #' Class for declaring random intercepts
 #' @slot group Unit whose observations we want to pool.
-#' @export
 RandomIntercept <- setClass("RandomIntercept",
     slots = c(
             group = "UnitORTime"

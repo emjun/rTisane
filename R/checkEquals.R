@@ -3,7 +3,6 @@
 #' Returns TRUE if the values are equal. FALSE otherwise.
 #' @param variable Variable object with a value to compare
 #' @param value numeric value
-#' @export
 # checkEquals()
 setGeneric("checkEquals", function(variable, value) standardGeneric("checkEquals"))
 setMethod("checkEquals", signature(variable = "numeric", value = "numeric"), function(variable, value)
