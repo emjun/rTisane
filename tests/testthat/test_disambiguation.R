@@ -256,7 +256,7 @@ test_that("Statistical modeling options created properly", {
   cm <- assume(cm, causes(measure_1, measure_2))
   cm@graph <- rTisane:::updateGraph(cm)
   confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
-  familyLinkPairs <- inferFamilyLinkFunctions(measure_2)
+  familyLinkPairs <- rTisane:::inferFamilyLinkFunctions(measure_2)
 
   path <- rTisane:::generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
 
@@ -283,8 +283,8 @@ test_that("Statistical modeling options created properly", {
   cm <- interacts(cm, measure_0, measure_1, dv=measure_2)
   cm@graph <- rTisane:::updateGraph(cm)
   confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
-  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
-  familyLinkPairs <- inferFamilyLinkFunctions(measure_2)
+  interactions <- rTisane:::inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  familyLinkPairs <- rTisane:::inferFamilyLinkFunctions(measure_2)
 
   path <- rTisane:::generateStatisticalModelJSON(confounders=confounders, interactions=interactions, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
 

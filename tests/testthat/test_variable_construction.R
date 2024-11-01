@@ -184,7 +184,7 @@ test_that("Condition constructed properly", {
 
 
 test_that("Unobserved variable properly", {
-  midlife_crisis <- Unobserved()
+  midlife_crisis <- rTisane:::Unobserved()
 
   expect_s4_class(midlife_crisis, "UnobservedVariable")
   expect_equal(midlife_crisis@name, "Unobserved")

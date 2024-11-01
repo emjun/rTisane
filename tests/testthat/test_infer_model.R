@@ -19,7 +19,7 @@ test_that("Design created properly", {
 
   cause_relat = causes(measure_0, measure_1)
 
-  design <- Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
+  design <- rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
   expect_s4_class(design, "Design")
   expect_type(design@relationships, "list")
   expect_equal(length(design@relationships), 1)
@@ -32,12 +32,12 @@ test_that("Design created properly", {
   expect_null(design@source)
 
   # IVs can be a single variable, too
-  expect_error(Design(relationships=list(cause_relat), ivs=measure_0, dv=measure_1))
+  expect_error(rTisane:::Design(relationships=list(cause_relat), ivs=measure_0, dv=measure_1))
 
   # Verify that parameters are set correctly
-  expect_error(Design(relationships=list(), ivs=list(measure_0), dv=measire_1))
-  expect_error(Design(relationships=list(cause_relat), ivs=list(), dv=measure_1))
-  expect_error(Design(relationships=list(cause_relat), ivs=list(measure_0)))
+  expect_error(rTisane:::Design(relationships=list(), ivs=list(measure_0), dv=measire_1))
+  expect_error(rTisane:::Design(relationships=list(cause_relat), ivs=list(), dv=measure_1))
+  expect_error(rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0)))
 
 })
 
@@ -47,7 +47,7 @@ test_that("Infer has relationships", {
   measure_1 <- continuous(unit=unit, name="measure_1")
 
   cause_relat = causes(measure_0, measure_1)
-  design <- Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
+  design <- rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
 
   relationships <- infer_has_relationships(design)
 
@@ -65,7 +65,7 @@ test_that("Causal graphs constructed correctly", {
   measure_1 <- continuous(unit=unit, name="measure_1")
 
   cause_relat = causes(measure_0, measure_1)
-  design <- Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
+  design <- rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
 
   # Infer has relationships
   has_relationships <- infer_has_relationships(design=design)
@@ -91,7 +91,7 @@ test_that("Causal graphs constructed correctly", {
 #
 #   ## Two variables moderate
 #   moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
-#   design <- Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
+#   design <- rTisane:::Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
 #   # Infer has relationships
 #   has_relationships <- infer_has_relationships(design=design)
 #   # Combine all relationships
@@ -116,7 +116,7 @@ test_that("Causal graphs constructed correctly", {
 #   ## Three variables moderate
 #   measure_3 <- continuous(unit=unit, name="measure_3")
 #   moderate_relat_1 <- moderates(var=measure_0, moderator=list(measure_2, measure_3), on=measure_1)
-#   design1 <- Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
+#   design1 <- rTisane:::Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
 #   # Infer has relationships
 #   has_relationships <- infer_has_relationships(design=design1)
 #   # Combine all relationships
@@ -147,7 +147,7 @@ test_that("Main effects inferred correctly", {
 
   ## ONLY ONE CAUSAL RELATIONSHIP
   cause_relat <- causes(measure_0, measure_1)
-  design <- Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
+  design <- rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
 
   graphs <- get_graphs(design)
 
@@ -160,7 +160,7 @@ test_that("Main effects inferred correctly", {
   ## ONE CAUSAL ANCESTOR
   measure_2 <- continuous(unit=unit, name="measure_2")
   cause_ancestor <- causes(measure_2, measure_0)
-  design1 <- Design(relationships=list(cause_relat, cause_ancestor), ivs=list(measure_0), dv=measure_1)
+  design1 <- rTisane:::Design(relationships=list(cause_relat, cause_ancestor), ivs=list(measure_0), dv=measure_1)
 
   graphs <- get_graphs(design1)
   causal_gr <- graphs[[1]]
@@ -173,7 +173,7 @@ test_that("Main effects inferred correctly", {
   ## ONE CAUSAL OMISSION
   measure_3 <- continuous(unit=unit, name="measure_3")
   cause_omission <- causes(measure_3, measure_1)
-  design2 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission), ivs=list(measure_0), dv=measure_1)
+  design2 <- rTisane:::Design(relationships=list(cause_relat, cause_ancestor, cause_omission), ivs=list(measure_0), dv=measure_1)
 
   graphs <- get_graphs(design2)
   causal_gr <- graphs[[1]]
@@ -187,7 +187,7 @@ test_that("Main effects inferred correctly", {
   ## ONE ASSOCIATIVE RELATIONSHIP
   # measure_4 <- continuous(unit=unit, name="measure_4")
   # assoc <- associates_with(measure_0, measure_4)
-  # design3 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc), ivs=list(measure_0), dv=measure_1)
+  # design3 <- rTisane:::Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc), ivs=list(measure_0), dv=measure_1)
   #
   # graphs <- get_graphs(design3)
   # causal_gr <- graphs[[1]]
@@ -201,7 +201,7 @@ test_that("Main effects inferred correctly", {
   # ## ONE ASSOCIATIVE INTERMEDIARY
   # assoc_ <- associates_with(measure_0, measure_4) # IV
   # assoc_intermediary <- associates_with(measure_1, measure_4) # DV
-  # design4 <- Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc_, assoc_intermediary), ivs=list(measure_0), dv=measure_1)
+  # design4 <- rTisane:::Design(relationships=list(cause_relat, cause_ancestor, cause_omission, assoc_, assoc_intermediary), ivs=list(measure_0), dv=measure_1)
   #
   # graphs <- get_graphs(design4)
   # causal_gr <- graphs[[1]]
@@ -226,7 +226,7 @@ test_that("Main effects inferred correctly", {
 #   cause_relat_0 <- causes(measure_0, measure_1)
 #   cause_relat_1 <- causes(measure_2, measure_1)
 #   moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
-#   design <- Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_0), ivs=list(measure_0, measure_2), dv=measure_1)
+#   design <- rTisane:::Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_0), ivs=list(measure_0, measure_2), dv=measure_1)
 #   graphs <- get_graphs(design)
 #   causal_gr <- graphs[[1]]
 #   associative_gr <- graphs[[2]]
@@ -235,7 +235,7 @@ test_that("Main effects inferred correctly", {
 #   expect_equal(length(interaction_effects), 1)
 #
 #   ### FILTERED OUT
-#   design_f <- Design(relationships=list(cause_relat_0, moderate_relat_0), ivs=list(measure_0), dv=measure_1)
+#   design_f <- rTisane:::Design(relationships=list(cause_relat_0, moderate_relat_0), ivs=list(measure_0), dv=measure_1)
 #   graphs <- get_graphs(design_f)
 #   causal_gr <- graphs[[1]]
 #   associative_gr <- graphs[[2]]
@@ -246,7 +246,7 @@ test_that("Main effects inferred correctly", {
 #   ## TWO 2-VARIABLE MODERATIONS
 #   cause_relat_2 <- causes(measure_3, measure_1)
 #   moderate_relat_1 <- moderates(var=measure_0, moderator=list(measure_3), on=measure_1)
-#   design1 <- Design(relationships=list(cause_relat_0, cause_relat_1, cause_relat_2, moderate_relat_0, moderate_relat_1), ivs=list(measure_0, measure_2, measure_3), dv=measure_1)
+#   design1 <- rTisane:::Design(relationships=list(cause_relat_0, cause_relat_1, cause_relat_2, moderate_relat_0, moderate_relat_1), ivs=list(measure_0, measure_2, measure_3), dv=measure_1)
 #   graphs <- get_graphs(design1)
 #   causal_gr <- graphs[[1]]
 #   associative_gr <- graphs[[2]]
@@ -255,7 +255,7 @@ test_that("Main effects inferred correctly", {
 #   expect_equal(length(interaction_effects), 2)
 #
 #   ### FILTERED OUT
-#   design1 <- Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_0, moderate_relat_1), ivs=list(measure_0, measure_2), dv=measure_1)
+#   design1 <- rTisane:::Design(relationships=list(cause_relat_0, cause_relat_1, moderate_relat_0, moderate_relat_1), ivs=list(measure_0, measure_2), dv=measure_1)
 #   graphs <- get_graphs(design1)
 #   causal_gr <- graphs[[1]]
 #   associative_gr <- graphs[[2]]
@@ -265,7 +265,7 @@ test_that("Main effects inferred correctly", {
 #
 #   # ## ONE 3-VARIABLE MODERATION
 #   moderate_relat_2 <- moderates(var=measure_0, moderator=list(measure_2, measure_3), on=measure_1)
-#   design2 <- Design(relationships=list(cause_relat_0, cause_relat_1, cause_relat_2, moderate_relat_2), ivs=list(measure_0), dv=measure_1)
+#   design2 <- rTisane:::Design(relationships=list(cause_relat_0, cause_relat_1, cause_relat_2, moderate_relat_2), ivs=list(measure_0), dv=measure_1)
 #   graphs <- get_graphs(design2)
 #   causal_gr <- graphs[[1]]
 #   associative_gr <- graphs[[2]]
