@@ -3,7 +3,7 @@ library("rTisane")
 # Helper function
 get_graphs <- function(design) {
   # Infer has relationships
-  has_relationships <- infer_has_relationships(design=design)
+  has_relationships <- rTisane:::infer_has_relationships((design=design)
   # Combine all relationships
   all_relationships <- append(design@relationships, has_relationships)
 
@@ -49,7 +49,7 @@ test_that("Infer has relationships", {
   cause_relat = causes(measure_0, measure_1)
   design <- rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
 
-  relationships <- infer_has_relationships(design)
+  relationships <- rTisane:::infer_has_relationships((design)
 
   expect_type(relationships, "list")
   expect_equal(length(relationships), 2)
@@ -68,7 +68,7 @@ test_that("Causal graphs constructed correctly", {
   design <- rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
 
   # Infer has relationships
-  has_relationships <- infer_has_relationships(design=design)
+  has_relationships <- rTisane:::infer_has_relationships((design=design)
   # Combine all relationships
   all_relationships <- append(design@relationships, has_relationships)
 
@@ -93,7 +93,7 @@ test_that("Causal graphs constructed correctly", {
 #   moderate_relat_0 <- moderates(var=measure_0, moderator=measure_2, on=measure_1)
 #   design <- rTisane:::Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
 #   # Infer has relationships
-#   has_relationships <- infer_has_relationships(design=design)
+#   has_relationships <- rTisane:::infer_has_relationships((design=design)
 #   # Combine all relationships
 #   all_relationships <- append(design@relationships, has_relationships)
 #
@@ -118,7 +118,7 @@ test_that("Causal graphs constructed correctly", {
 #   moderate_relat_1 <- moderates(var=measure_0, moderator=list(measure_2, measure_3), on=measure_1)
 #   design1 <- rTisane:::Design(relationships=list(moderate_relat_0), ivs=list(measure_0), dv=measure_1)
 #   # Infer has relationships
-#   has_relationships <- infer_has_relationships(design=design1)
+#   has_relationships <- rTisane:::infer_has_relationships((design=design1)
 #   # Combine all relationships
 #   all_relationships <- append(design1@relationships, has_relationships)
 #

@@ -12,7 +12,7 @@ test_that("toString for Relates works properly", {
     # Relates involving measures only
     ambig_relat <- relates(measure_0, measure_1)
 
-    str <- toString(ambig_relat)
+    str <- rTisane::toString(ambig_relat)
     expect_equal(str, "measure_0 and measure_1 are related")
 })
 
@@ -28,7 +28,7 @@ test_that("toString for Causes works properly", {
     # Relates involving measures only
     cause_relat <- causes(measure_0, measure_1)
 
-    str <- toString(cause_relat)
+    str <- rTisane::toString(cause_relat)
     expect_equal(str, "measure_0 causes measure_1")
 })
 # test_that("toString for Assumption works properly", {
@@ -46,7 +46,7 @@ test_that("toString for Causes works properly", {
 #     cm <- ConceptualModel()
 #     assump <- assume(cm, ambig_relat)
 
-#     str <- toString(assump)
+#     str <- rTisane::toString(assump)
 #     expect_equal(str, "Assume measure_0 and measure_1 are related")
 # })
 
@@ -65,6 +65,6 @@ test_that("toString for Causes works properly", {
 #     cm <- ConceptualModel()
 #     hypo <- hypothesize(cm, cause_relat)
 
-#     str <- toString(hypo)
+#     str <- rTisane::toString(hypo)
 #     expect_equal(str, "Hypothesize measure_0 causes measure_1")
 # })
