@@ -3,7 +3,7 @@ library("rTisane")
 # Helper function
 get_graphs <- function(design) {
   # Infer has relationships
-  has_relationships <- rTisane:::infer_has_relationships((design=design)
+  has_relationships <- rTisane:::infer_has_relationships((design=design))
   # Combine all relationships
   all_relationships <- append(design@relationships, has_relationships)
 
