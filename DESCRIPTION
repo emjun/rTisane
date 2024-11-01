@@ -27,7 +27,7 @@ Imports:
     dagitty
 Collate: 
     'aaa-classes.R'
-    'toString.R'
+    'pretty_print.R'
     'condition.R'
     'assign_cardinality_from_data.R'
     'associates_with.R'

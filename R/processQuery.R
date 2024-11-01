@@ -35,7 +35,7 @@ generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
       r <- relat@relationship
 
       # Construct Assumption string
-      str <- toString(r)
+      str <- pretty_print(r)
       str <- paste("Assume", str, sep=" ")
 
       # Append to output list of relationships
@@ -51,7 +51,7 @@ generateConceptualModelJSON <- function(conceptualModel, path="input.json") {
       r <- relat@relationship
 
       # Construct Hypothesize string
-      str <- toString(r)
+      str <- pretty_print(r)
       str <- paste("Hypothesize", str, sep=" ")
 
       # Append to output list of relationships

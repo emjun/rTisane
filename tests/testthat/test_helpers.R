@@ -1,6 +1,6 @@
 library(rTisane)
 
-test_that("toString for Relates works properly", {
+test_that("pretty_print for Relates works properly", {
     participant <- Participant("pid")
     measure_0 <- continuous(unit=participant, name="measure_0")
     measure_1 <- continuous(unit=participant, name="measure_1")
@@ -12,11 +12,11 @@ test_that("toString for Relates works properly", {
     # Relates involving measures only
     ambig_relat <- relates(measure_0, measure_1)
 
-    str <- rTisane::toString(ambig_relat)
+    str <- rTisane::pretty_print(ambig_relat)
     expect_equal(str, "measure_0 and measure_1 are related")
 })
 
-test_that("toString for Causes works properly", {
+test_that("pretty_print for Causes works properly", {
     participant <- Participant("pid")
     measure_0 <- continuous(unit=participant, name="measure_0")
     measure_1 <- continuous(unit=participant, name="measure_1")
@@ -28,10 +28,10 @@ test_that("toString for Causes works properly", {
     # Relates involving measures only
     cause_relat <- causes(measure_0, measure_1)
 
-    str <- rTisane::toString(cause_relat)
+    str <- rTisane::pretty_print(cause_relat)
     expect_equal(str, "measure_0 causes measure_1")
 })
-# test_that("toString for Assumption works properly", {
+# test_that("pretty_print for Assumption works properly", {
 #     participant <- Participant("pid")
 #     measure_0 <- continuous(unit=participant, name="measure_0")
 #     measure_1 <- continuous(unit=participant, name="measure_1")
@@ -46,11 +46,11 @@ test_that("toString for Causes works properly", {
 #     cm <- ConceptualModel()
 #     assump <- assume(cm, ambig_relat)
 
-#     str <- rTisane::toString(assump)
+#     str <- rTisane::pretty_print(assump)
 #     expect_equal(str, "Assume measure_0 and measure_1 are related")
 # })
 
-# test_that("toString for Hypothesize works properly", {
+# test_that("pretty_print for Hypothesize works properly", {
 #     participant <- Participant("pid")
 #     measure_0 <- continuous(unit=participant, name="measure_0")
 #     measure_1 <- continuous(unit=participant, name="measure_1")
@@ -65,6 +65,6 @@ test_that("toString for Causes works properly", {
 #     cm <- ConceptualModel()
 #     hypo <- hypothesize(cm, cause_relat)
 
-#     str <- rTisane::toString(hypo)
+#     str <- rTisane::pretty_print(hypo)
 #     expect_equal(str, "Hypothesize measure_0 causes measure_1")
 # })

@@ -49,7 +49,7 @@ test_that("Infer has relationships", {
   cause_relat = causes(measure_0, measure_1)
   design <- rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
 
-  relationships <- rTisane:::infer_has_relationships((design)
+  relationships <- rTisane:::infer_has_relationships((design))
 
   expect_type(relationships, "list")
   expect_equal(length(relationships), 2)
