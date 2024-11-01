@@ -16,7 +16,7 @@ test_that("Conceptual model disambiguation options created properly", {
   cause_relat <- causes(measure_0, measure_1, when=increases(measure_0), then=increases(measure_1))
   cm <- assume(cm, cause_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -26,7 +26,7 @@ test_that("Conceptual model disambiguation options created properly", {
   cause_relat <- causes(measure_0, measure_1)
   cm <- hypothesize(cm, cause_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -38,7 +38,7 @@ test_that("Conceptual model disambiguation options created properly", {
   cause_relat <- causes(measure_0, measure_1, when=increases(measure_0), then=increases(measure_1))
   cm <- assume(cm, cause_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -48,7 +48,7 @@ test_that("Conceptual model disambiguation options created properly", {
   cause_relat <- causes(measure_0, measure_1)
   cm <- hypothesize(cm, cause_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -60,7 +60,7 @@ test_that("Conceptual model disambiguation options created properly", {
   # Assume relates relationship
   cm <- assume(cm, ambig_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -80,7 +80,7 @@ test_that("Conceptual model disambiguation options created properly", {
   ambig_relat <- relates(measure_0, measure_1)
   cm <- hypothesize(cm, ambig_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -102,7 +102,7 @@ test_that("Conceptual model disambiguation options created properly", {
   # Assume relates relationship
   cm <- assume(cm, ambig_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -122,7 +122,7 @@ test_that("Conceptual model disambiguation options created properly", {
   ambig_relat <- relates(measure_0, measure_1)
   cm <- hypothesize(cm, ambig_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -143,7 +143,7 @@ test_that("Conceptual model disambiguation options created properly", {
   ambig_relat <- relates(measure_0, measure_1)
   cm <- assume(cm, ambig_relat)
 
-  path <- generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
+  path <- rTisane:::generateConceptualModelJSON(conceptualModel=cm, "test_input.json")
 
   options <- jsonlite::read_json(path)
 
@@ -186,7 +186,7 @@ test_that("Conceptual model updates after disambiguation properly", {
 
   # Create updates list to pass to update conceptual model function
   updates <- list("Assume measure_0 causes measure_1")
-  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+  cmUpdated <- rTisane:::updateConceptualModel(conceptualModel=cm, values=updates)
 
   expect_s4_class(cmUpdated, "ConceptualModel")
   relationships <- cmUpdated@relationships
@@ -208,7 +208,7 @@ test_that("Conceptual model updates after disambiguation properly", {
 
   # Create updates list to pass to updateDV function
   updates <- list("Hypothesize measure_0 causes measure_1")
-  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+  cmUpdated <- rTisane:::updateConceptualModel(conceptualModel=cm, values=updates)
 
   expect_s4_class(cmUpdated, "ConceptualModel")
   relationships <- cmUpdated@relationships
@@ -229,7 +229,7 @@ test_that("Conceptual model updates after disambiguation properly", {
 
   # Values to update to
   updates <- list("Hypothesize measure_1 causes measure_0")
-  cmUpdated <- updateConceptualModel(conceptualModel=cm, values=updates)
+  cmUpdated <- rTisane:::updateConceptualModel(conceptualModel=cm, values=updates)
 
   expect_s4_class(cmUpdated, "ConceptualModel")
   relationships <- cmUpdated@relationships
@@ -258,7 +258,7 @@ test_that("Statistical modeling options created properly", {
   confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
   familyLinkPairs <- inferFamilyLinkFunctions(measure_2)
 
-  path <- generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
+  path <- rTisane:::generateStatisticalModelJSON(confounders=confounders, interactions=NULL, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
 
   options <- jsonlite::read_json(path)
   expect_false(is.null(options$input))
@@ -286,7 +286,7 @@ test_that("Statistical modeling options created properly", {
   interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   familyLinkPairs <- inferFamilyLinkFunctions(measure_2)
 
-  path <- generateStatisticalModelJSON(confounders=confounders, interactions=interactions, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
+  path <- rTisane:::generateStatisticalModelJSON(confounders=confounders, interactions=interactions, randomEffects=NULL, familyLinkFunctions=familyLinkPairs, path="test_input2.json", iv=measure_0, dv=measure_2)
 
   options <- jsonlite::read_json(path)
   expect_false(is.null(options$input))

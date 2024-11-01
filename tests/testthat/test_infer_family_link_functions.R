@@ -58,29 +58,29 @@ test_that("Infers candidate family functions properly", {
   extra <- counts(unit=participant, name="Number of extracurriculars")
 
   # Infer family functions for Continuous wrappers
-  familyFunctions <- inferFamilyFunctions(age)
+  familyFunctions <- rTisane:::inferFamilyFunctions(age)
   expect_length(familyFunctions, 3)
   expect_true("Gaussian" %in% familyFunctions)
   expect_true("Inverse Gaussian" %in% familyFunctions)
   expect_true("Gamma" %in% familyFunctions)
 
-  familyFunctions <- inferFamilyFunctions(age)
+  familyFunctions <- rTisane:::inferFamilyFunctions(age)
   expect_length(familyFunctions, 3)
   expect_true("Gaussian" %in% familyFunctions)
   expect_true("Inverse Gaussian" %in% familyFunctions)
   expect_true("Gamma" %in% familyFunctions)
 
   # Infer family functions for Counts measures
-  familyFunctions <- inferFamilyFunctions(extra)
+  familyFunctions <- rTisane:::inferFamilyFunctions(extra)
   expect_length(familyFunctions, 2)
   expect_true(c("Poisson") %in% familyFunctions)
   expect_true(c("Negative Binomial") %in% familyFunctions)
 
   # Infer family functions for Categories measures
-  familyFunctions <- inferFamilyFunctions(grade_binary)
+  familyFunctions <- rTisane:::inferFamilyFunctions(grade_binary)
   expect_length(familyFunctions, 1)
   expect_equal(familyFunctions[[1]], "Binomial")
-  familyFunctions <- inferFamilyFunctions(grade)
+  familyFunctions <- rTisane:::inferFamilyFunctions(grade)
   expect_length(familyFunctions, 4)
   expect_equal(familyFunctions[[1]], "Multinomial")
   expect_true("Multinomial" %in% familyFunctions)
@@ -90,7 +90,7 @@ test_that("Infers candidate family functions properly", {
 })
 
 test_that("Infers candidate link functions properly", {
-  linkFunctions <- inferLinkFunctions("Binomial")
+  linkFunctions <- rTisane:::inferLinkFunctions("Binomial")
   expect_length(linkFunctions, 5)
   expect_true(c("logit") %in% linkFunctions)
   expect_true(c("probit") %in% linkFunctions)
@@ -98,38 +98,38 @@ test_that("Infers candidate link functions properly", {
   expect_true(c("log") %in% linkFunctions)
   expect_true(c("cloglog") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("Gamma")
+  linkFunctions <- rTisane:::inferLinkFunctions("Gamma")
   expect_length(linkFunctions, 3)
   expect_true(c("inverse") %in% linkFunctions)
   expect_true(c("identity") %in% linkFunctions)
   expect_true(c("log") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("Gaussian")
+  linkFunctions <- rTisane:::inferLinkFunctions("Gaussian")
   expect_length(linkFunctions, 3)
   expect_true(c("identity") %in% linkFunctions)
   expect_true(c("log") %in% linkFunctions)
   expect_true(c("inverse") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("Inverse Gaussian")
+  linkFunctions <- rTisane:::inferLinkFunctions("Inverse Gaussian")
   expect_length(linkFunctions, 4)
   expect_true(c("1/mu^2") %in% linkFunctions)
   expect_true(c("inverse") %in% linkFunctions)
   expect_true(c("identity") %in% linkFunctions)
   expect_true(c("log") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("Negative Binomial")
+  linkFunctions <- rTisane:::inferLinkFunctions("Negative Binomial")
   expect_length(linkFunctions, 3)
   expect_true(c("log") %in% linkFunctions)
   expect_true(c("sqrt") %in% linkFunctions)
   expect_true(c("identity") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("Poisson")
+  linkFunctions <- rTisane:::inferLinkFunctions("Poisson")
   expect_length(linkFunctions, 3)
   expect_true(c("log") %in% linkFunctions)
   expect_true(c("identity") %in% linkFunctions)
   expect_true(c("sqrt") %in% linkFunctions)
 
-  linkFunctions <- inferLinkFunctions("Multinomial")
+  linkFunctions <- rTisane:::inferLinkFunctions("Multinomial")
   expect_length(linkFunctions, 0)
 })
 
@@ -139,11 +139,11 @@ test_that("Infer Family and Link functions properly", {
   extra <- counts(unit=participant, name="Number of extracurriculars")
 
   familyLinkPairs <- inferFamilyLinkFunctions(age)
-  familyCandidates <- inferFamilyFunctions(age)
+  familyCandidates <- rTisane:::inferFamilyFunctions(age)
   expect_equal(length(familyLinkPairs), length(familyCandidates))
 
   familyLinkPairs <- inferFamilyLinkFunctions(extra)
-  familyCandidates <- inferFamilyFunctions(extra)
+  familyCandidates <- rTisane:::inferFamilyFunctions(extra)
   expect_equal(length(familyLinkPairs), length(familyCandidates))
   expect_length(familyLinkPairs, 2)
 })

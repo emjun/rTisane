@@ -271,7 +271,7 @@ test_that("Mediators found correctly", {
   cm <- assume(cm, causes(m, y))
   cm@graph <- rTisane:::updateGraph(cm)
 
-  mediators <- getMediators(cm, x@name, y@name)
+  mediators <- rTisane:::getMediators(cm, x@name, y@name)
   expect_length(mediators, 1)
   expect_true(m@name %in% mediators)
 
@@ -282,7 +282,7 @@ test_that("Mediators found correctly", {
   cm <- assume(cm, causes(z, m))
   cm@graph <- rTisane:::updateGraph(cm)
 
-  mediators <- getMediators(cm, x@name, y@name)
+  mediators <- rTisane:::getMediators(cm, x@name, y@name)
   expect_length(mediators, 1)
   expect_true(m@name %in% mediators)
 })
@@ -303,11 +303,11 @@ test_that("Observed variables found correctly", {
   cm@graph <- rTisane:::updateGraph(cm)
 
 
-  expect_true(isObserved(cm, x))
-  expect_true(isObserved(cm, y))
-  expect_true(isObserved(cm, m))
-  expect_null(isObserved(cm, unit))
-  expect_false(isObserved(cm, u))
+  expect_true(rTisane:::isObserved(cm, x))
+  expect_true(rTisane:::isObserved(cm, y))
+  expect_true(rTisane:::isObserved(cm, m))
+  expect_null(rTisane:::isObserved(cm, unit))
+  expect_false(rTisane:::isObserved(cm, u))
 })
 
 test_that("Interactions found correctly", {
@@ -505,21 +505,21 @@ test_that("Infer interactions correctly", {
   # There are no interactions
   cm@graph <- rTisane:::updateGraph(cm)
   confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
-  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  interactions <- rTisane:::inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 0)
 
   # There is 1 interaction
   cm <- interacts(cm, measure_0, measure_1, dv=measure_2)
   cm@graph <- rTisane:::updateGraph(cm)
   confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
-  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  interactions <- rTisane:::inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 1)
 
   # There is only 1 interaction with the applicable DV
   cm <- interacts(cm, measure_1, measure_2, dv=measure_3)
   cm@graph <- rTisane:::updateGraph(cm)
   confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
-  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  interactions <- rTisane:::inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 1)
 
   # There are 2 interactions
@@ -527,7 +527,7 @@ test_that("Infer interactions correctly", {
 
   cm@graph <- rTisane:::updateGraph(cm)
   confounders <- rTisane:::inferConfounders(conceptualModel=cm, iv=measure_0, dv=measure_2)
-  interactions <- inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
+  interactions <- rTisane:::inferInteractions(conceptualModel=cm, iv=measure_0, dv=measure_2, confounders=confounders)
   expect_length(interactions, 2)
 })
 

@@ -6,8 +6,8 @@ test_that("toString for Relates works properly", {
     measure_1 <- continuous(unit=participant, name="measure_1")
     measure_2 <- continuous(unit=participant, name="measure_2")
     measure_3 <- continuous(unit=participant, name="measure_3")
-    u_0 <- Unobserved()
-    u_1 <- Unobserved()
+    u_0 <- rTisane:::Unobserved()
+    u_1 <- rTisane:::Unobserved()
 
     # Relates involving measures only
     ambig_relat <- relates(measure_0, measure_1)
@@ -22,8 +22,8 @@ test_that("toString for Causes works properly", {
     measure_1 <- continuous(unit=participant, name="measure_1")
     measure_2 <- continuous(unit=participant, name="measure_2")
     measure_3 <- continuous(unit=participant, name="measure_3")
-    u_0 <- Unobserved()
-    u_1 <- Unobserved()
+    u_0 <- rTisane:::Unobserved()
+    u_1 <- rTisane:::Unobserved()
 
     # Relates involving measures only
     cause_relat <- causes(measure_0, measure_1)
@@ -37,8 +37,8 @@ test_that("toString for Causes works properly", {
 #     measure_1 <- continuous(unit=participant, name="measure_1")
 #     measure_2 <- continuous(unit=participant, name="measure_2")
 #     measure_3 <- continuous(unit=participant, name="measure_3")
-#     u_0 <- Unobserved()
-#     u_1 <- Unobserved()
+#     u_0 <- rTisane:::Unobserved()
+#     u_1 <- rTisane:::Unobserved()
 
 #     # Relates involving measures only
 #     ambig_relat <- relates(measure_0, measure_1)
@@ -56,8 +56,8 @@ test_that("toString for Causes works properly", {
 #     measure_1 <- continuous(unit=participant, name="measure_1")
 #     measure_2 <- continuous(unit=participant, name="measure_2")
 #     measure_3 <- continuous(unit=participant, name="measure_3")
-#     u_0 <- Unobserved()
-#     u_1 <- Unobserved()
+#     u_0 <- rTisane:::Unobserved()
+#     u_1 <- rTisane:::Unobserved()
 
 #     # Relates involving measures only
 #     cause_relat <- causes(measure_0, measure_1)

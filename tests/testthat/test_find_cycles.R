@@ -15,7 +15,7 @@ test_that("Finding cycles works properly", {
     hypothesize(causes(edu, age)) %>%
     hypothesize(causes(income, edu))
 
-    cm@graph <- updateGraph(cm)
+    cm@graph <- rTisane:::updateGraph(cm)
     cycles <- findCycles(cm)
     expect_equal(length(cycles), 2)
 
@@ -24,7 +24,7 @@ test_that("Finding cycles works properly", {
     assume(causes(age, income)) %>%
     hypothesize(causes(income, age))
 
-    cm@graph <- updateGraph(cm)
+    cm@graph <- rTisane:::updateGraph(cm)
     cycles <- findCycles(cm)
     expect_equal(length(cycles), 1)
 })
