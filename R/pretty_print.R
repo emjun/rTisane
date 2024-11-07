@@ -2,7 +2,6 @@
 #'
 #' Returns string describing what type of relationship the @param obj is
 #' @param obj Relates or Causes object
-#' @export
 # pretty_print()
 setGeneric("pretty_print", function(obj) standardGeneric("pretty_print"))
 setMethod("pretty_print", signature("Relates"), function(obj)
@@ -15,7 +14,6 @@ setMethod("pretty_print", signature("Relates"), function(obj)
     # Return str
     str
 })
-#' @export
 setMethod("pretty_print", signature("Causes"), function(obj)
 {
     if (!is(obj, "Causes")) stop("Object is not of class 'Causes'")

@@ -32,7 +32,7 @@ createStringIndexMap <- function(strings) {
 #' @import igraph
 findCycles <- function(conceptualModel) {
   # namespaceImportFrom(dagitty, edges)
-  print("Start findCycles")
+  # print("Start findCycles")
   # Get adjacency matrix
   # adjList <- getAdjList(conceptualModel)
   # numNodes <- length(adjList)
