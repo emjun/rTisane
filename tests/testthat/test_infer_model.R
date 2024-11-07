@@ -9,7 +9,7 @@ get_graphs <- function(design) {
 
   # Construct graph from relationships
   vars <- rTisane:::get_all_vars(design=design)
-  graphs <- construct_graphs(all_relationships, vars)
+  graphs <- rTisane:::construct_graphs(all_relationships, vars)
 }
 
 test_that("Design created properly", {
@@ -74,7 +74,7 @@ test_that("Causal graphs constructed correctly", {
 
   # Construct graph from relationships
   vars <- rTisane:::get_all_vars(design=design)
-  graphs <- construct_graphs(all_relationships, vars)
+  graphs <- rTisane:::construct_graphs(all_relationships, vars)
 
   causal_gr <- graphs[[1]]
   expect_equal(length(names(causal_gr)), 2)
@@ -153,7 +153,7 @@ test_that("Main effects inferred correctly", {
 
   causal_gr <- graphs[[1]]
   associative_gr <- graphs[[2]]
-  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design)
+  main_effects <- rTisane:::infer_main_effects_with_explanations(causal_gr, associative_gr, design)
   expect_equal(length(main_effects), 1)
   expect_true(measure_0@name %in% main_effects)
 
@@ -165,7 +165,7 @@ test_that("Main effects inferred correctly", {
   graphs <- get_graphs(design1)
   causal_gr <- graphs[[1]]
   associative_gr <- graphs[[2]]
-  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design1)
+  main_effects <- rTisane:::infer_main_effects_with_explanations(causal_gr, associative_gr, design1)
   expect_equal(length(main_effects), 2)
   expect_true(measure_0@name %in% main_effects)
   expect_true(measure_2@name %in% main_effects)
@@ -178,7 +178,7 @@ test_that("Main effects inferred correctly", {
   graphs <- get_graphs(design2)
   causal_gr <- graphs[[1]]
   associative_gr <- graphs[[2]]
-  main_effects <- infer_main_effects_with_explanations(causal_gr, associative_gr, design2)
+  main_effects <- rTisane:::infer_main_effects_with_explanations(causal_gr, associative_gr, design2)
   expect_equal(length(main_effects), 3)
   expect_true(measure_0@name %in% main_effects)
   expect_true(measure_2@name %in% main_effects)
