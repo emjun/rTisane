@@ -36,8 +36,8 @@ UnobservedVariable <- setClass("UnobservedVariable",
                                  name = "Unobserved"
                                )
 )
-# Helper to create instances of the Unobserved class
-# Used internally only
+#' Helper to create instances of the Unobserved class
+#' Used internally only
 Unobserved <- function() {
   new("UnobservedVariable")
 }
@@ -168,6 +168,14 @@ Has <- setClass("Has",
     )
 )
 # Helper to create instances of the AbstractVariable class
+#' Helper function for constructing Has class objects
+#' 
+#' Constructor for Has objects
+#' @param variable Variable 
+#' @param measure Measure
+#' @param repetitions Number of times that @param variable has @param measure
+#' @param according_to Variable that differentaites/delineates repetitve instances of @param measure
+# Has()
 Has <- function(variable, measure, repetitions, according_to) {
   new("Has",
       variable = variable,

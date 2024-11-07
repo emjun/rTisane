@@ -1,6 +1,11 @@
-# Written with ChatGPT
-# Transform conceptual model graph to adjacency matrix
+#' Transform conceptual model graph to adjacency matrix
+#'
+#' This function takes a graph and represents its adjacency matrix representation
+#' @param conceptualModel ConceptualModel
+#' @return list of lists representing adjacency matrix of graph
 #' @import dagitty
+# getAdjList()
+# Written with ChatGPT
 getAdjList <- function(conceptualModel) {
   gr <- conceptualModel@graph
   adjList <- list() 
@@ -18,6 +23,12 @@ getAdjList <- function(conceptualModel) {
   adjList
 }
 
+#' Generate map from strings to indices
+#'
+#' This function helps map variable names to their numeric representation in the underlying graph
+#' @param strings list of variable names
+#' @return Dict of variable names (keys) to their corresponding indices (values)
+# createStringIndexMap()
 # Written with ChatGPT
 createStringIndexMap <- function(strings) {
   indexMap <- list()
@@ -27,9 +38,15 @@ createStringIndexMap <- function(strings) {
   indexMap
 }
 
-# Written with ChatGPT
-# Function to find a cycle using DFS and return the cycle path
+
+#' Find a cycle using DFS and return the cycle path
+#'
+#' This function searches for a cycle
+#' @param conceptualModel ConceptualModel that may contain a cycle
+#' @return Return cycles (using variable names) in graph
 #' @import igraph
+#' findCycles()
+# Written with ChatGPT
 findCycles <- function(conceptualModel) {
   # namespaceImportFrom(dagitty, edges)
   # print("Start findCycles")

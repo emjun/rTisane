@@ -1,5 +1,10 @@
 # Helper method 
-# Returns a list of interactions that involve the @param dv
+#' Returns a list of interactions that involve the @param dv
+#' 
+#' Finds and returns interaction effects involving @param dv
+#' @param conceptualModel ConceptualModel to reason about
+#' @param dv Variable whose interactions we care about
+# getInteractions()
 getInteractions <- function(conceptualModel, dv) {
     interactions <- list()     
     gr <- conceptualModel@graph

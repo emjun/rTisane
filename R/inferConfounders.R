@@ -1,3 +1,4 @@
+#' Returns if the variable is Observed
 setGeneric("isObserved", function(conceptualModel, variable) standardGeneric("isObserved"))
 setMethod("isObserved", signature("ConceptualModel", "AbstractVariable"), function(conceptualModel, variable)
 {

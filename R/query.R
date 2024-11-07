@@ -1,3 +1,4 @@
+#' Helper function for checking that a conceptual model is valid
 initialCheck <- function(conceptualModel, iv, dv) {
   validationResults <- checkConceptualModel(conceptualModel=conceptualModel, iv=iv, dv=dv)
   isValid <- validationResults$isValid

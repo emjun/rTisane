@@ -3,7 +3,7 @@
 #' This function gathers a list of all variables in a study design. 
 #' @param design Design. 
 #' @return List of all variables
-# infer_has_relationships()
+# get_all_vars()
 get_all_vars <- function(design){
     # Combine all variables in design
     vars <- append(design@ivs, design@dv)

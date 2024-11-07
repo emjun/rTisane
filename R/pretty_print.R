@@ -14,6 +14,11 @@ setMethod("pretty_print", signature("Relates"), function(obj)
     # Return str
     str
 })
+#' Prints a relationship
+#'
+#' Returns string describing what type of relationship the @param obj is
+#' @param obj Relates or Causes object
+# pretty_print()
 setMethod("pretty_print", signature("Causes"), function(obj)
 {
     if (!is(obj, "Causes")) stop("Object is not of class 'Causes'")
