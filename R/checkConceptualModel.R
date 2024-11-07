@@ -28,7 +28,7 @@ getAdjList <- function(conceptualModel) {
 #' This function helps map variable names to their numeric representation in the underlying graph
 #' @param strings list of variable names
 #' @return Dict of variable names (keys) to their corresponding indices (values)
-# createStringIndexMap()
+#' createStringIndexMap()
 # Written with ChatGPT
 createStringIndexMap <- function(strings) {
   indexMap <- list()
