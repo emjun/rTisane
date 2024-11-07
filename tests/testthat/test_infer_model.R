@@ -8,7 +8,7 @@ get_graphs <- function(design) {
   all_relationships <- append(design@relationships, has_relationships)
 
   # Construct graph from relationships
-  vars <- get_all_vars(design=design)
+  vars <- rTisane:::get_all_vars(design=design)
   graphs <- construct_graphs(all_relationships, vars)
 }
 
@@ -73,7 +73,7 @@ test_that("Causal graphs constructed correctly", {
   all_relationships <- append(design@relationships, has_relationships)
 
   # Construct graph from relationships
-  vars <- get_all_vars(design=design)
+  vars <- rTisane:::get_all_vars(design=design)
   graphs <- construct_graphs(all_relationships, vars)
 
   causal_gr <- graphs[[1]]
