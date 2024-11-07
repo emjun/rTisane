@@ -15,6 +15,7 @@ setMethod("pretty_print", signature("Relates"), function(obj)
     # Return str
     str
 })
+#' @export
 setMethod("pretty_print", signature("Causes"), function(obj)
 {
     if (!is(obj, "Causes")) stop("Object is not of class 'Causes'")

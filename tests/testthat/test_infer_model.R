@@ -68,7 +68,7 @@ test_that("Causal graphs constructed correctly", {
   design <- rTisane:::Design(relationships=list(cause_relat), ivs=list(measure_0), dv=measure_1)
 
   # Infer has relationships
-  has_relationships <- rTisane:::infer_has_relationships((design=design)
+  has_relationships <- rTisane:::infer_has_relationships((design=design))
   # Combine all relationships
   all_relationships <- append(design@relationships, has_relationships)
 
